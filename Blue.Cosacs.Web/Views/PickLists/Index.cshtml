@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "Code Lists";
+}
+@model IEnumerable<Blue.IPickListProvider>
+<ul>
+    @foreach (var provider in Model) { 
+        <li><a href='@Url.Action("Details", new { id = provider.Id })'><span style="font-weight: bold">@provider.Id</span></a>&nbsp; @provider.Name&nbsp;(@provider.GetType().FullName)</li>
+    }
+</ul>

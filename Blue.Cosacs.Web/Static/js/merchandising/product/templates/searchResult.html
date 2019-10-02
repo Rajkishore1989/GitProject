@@ -1,0 +1,68 @@
+<h4>Search Results</h4>
+<div class="panel panel-default buffer bottom" ng-repeat="result in displayResults">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-lg-8">
+                <h4><span class="panel-title"><a ng-href="{{'Merchandising/Products/Details/' + result.ProductId | pbResolveLink}}">#{{result.Sku}} - {{result.LongDescription}}</a></span></h4>
+            </div>
+            <div class="col-lg-4">
+               <h4><span class="panel-title">{{result.LocationName}}</span></h4>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-body centre-section">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div><b>Product Type</b></div>
+                        <div><b>Product Status</b></div>
+                        <div ng-visible="result.RepossessedCondition"><b>Repossessed Condition</b></div>
+                        <div><b>Created Date</b></div>
+                    </div>
+                    <div class="col-lg-6 result-panel">
+                        <div>{{result.ProductType | humanize | titleize}}</div>
+                        <div>{{result.ProductStatus | humanize | titleize}}</div>
+                        <div>{{result.RepossessedCondition || '&nbsp;'}}</div>
+                        <div>{{result.CreatedOn | pbDate : true }}</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div><b>Location</b></div>
+                        <div><b>Fascia</b></div>
+                        <div><b>Warehouse</b></div>
+                    </div>
+                    <div class="col-lg-9 result-panel">
+                        <div>{{result.LocationName}}</div>
+                        <div>{{result.Fascia}}</div>
+                        <div>{{result.Warehouse}}</div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div><b>Stock Available</b></div>
+                        <div><b>Stock On Hand</b></div>
+                        <div><b>Stock On Order</b></div>
+                        <div><b>Stock Allocated</b></div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div>{{result.StockAvailable || 0}}</div>
+                        <div>{{result.StockOnHand || 0}}</div>
+                        <div>{{result.StockOnOrder || 0}}</div>
+                        <div>{{result.StockAllocated || 0}}</div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

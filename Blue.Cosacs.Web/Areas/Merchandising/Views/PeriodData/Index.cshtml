@@ -1,0 +1,41 @@
+﻿@model string
+@{ ViewBag.Title = "Period Data"; }
+<div class="period-data" data-module="merchandising/perioddata/init" ng-controller="PeriodDataController" ng-cloak data-merchandising-data="@Model">
+
+    <div class="form-horizontal ng-pristine ng-valid">
+        <div class="form-group">
+            <label for="filterEffectiveDateStart" class="col col-lg-2 control-label">Year</label>
+            <div class="col col-lg-4">
+                <list scope="Years" ng-model="Year" placeholder="Select the year">
+                </list>
+            </div> 
+            <div class="col col-lg-6">
+                <button class="btn btn-primary" ng-disabled="checkErrors()" ng-hide="readonly" ng-click="save()">Save</button>  
+            </div>
+            <div ng-show="dateGenerated()" class="pull-right" style="color: red">These dates have been generated and not saved. Please review and save.</div>
+        </div>
+    </div>
+    <table class="data table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                <td>Period</td><td>Week</td><td>Start Date</td><td>End Date</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat='period in periodData.periods' ng-form="repeatForm">
+                <td>{{period.PeriodNo}}</td>
+                <td>{{period.Week}}</td>
+                <td class="date" name="td_StartDate">
+                    <div class="field date" id="week_{{$index}}_StartDate" ng-class="{'has-error': !period.StartDate}">
+                        <input class=" date form-control" type="date" ng-model="period.StartDate" name="week_{{$index}}_StartDate" placeholder="Select Start Date"  />
+                    </div>
+                </td>
+                <td class="date" name="td_EndDate">
+                    <div class="field date" id="week_{{$index}}_EndDate" ng-class="{'has-error': !period.EndDate}">
+                        <input class="date form-control" type="date" ng-model="period.EndDate" name="week_{{$index}}_EndDate" placeholder="Select End Date"  />
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

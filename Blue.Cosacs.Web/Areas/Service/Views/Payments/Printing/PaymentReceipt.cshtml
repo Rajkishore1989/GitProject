@@ -1,0 +1,92 @@
+﻿@{
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+<div data-module="service/paymentReceipt" ng-controller="paymentReceiptController" class="ng-scope" ng-cloak>
+    <div>{{ data.branchName }}</div>
+    <div>{{ data.branchAddress1 }}</div>
+    <div>{{ data.branchAddress2 }}</div>
+    <div>{{ data.branchAddress3 }}</div>
+    <div>{{ data.branchAddress4 }}</div>
+    <div>&nbsp;</div>
+    <div>Bringing Value Home!!</div>
+    <div>&nbsp;</div><div>&nbsp;</div>
+    <div>VAT Registration No:{{ data.vatRegistration }}</div>
+    <div>&nbsp;</div>
+    <div>Payment Receipt</div>
+    <div style="border-top: dashed 1px #000000">&nbsp;</div>
+    <table>
+        <tr>
+            <td class="col-lg-2">Customer Name</td>
+            <td class="col-lg-2">{{ data.customerName }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>Customer Address</td>
+            <td class="col-lg-2">>{{ data.customerAddress1 }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">></td>
+            <td class="col-lg-2">>{{ data.customerAddress2 }}</td>
+        </tr>
+        <tr ng-hide="!data.customerAddress3">
+            <td class="col-lg-2">></td>
+            <td class="col-lg-2">>{{ data.customerAddress3 }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>&nbsp;</td>
+            <td class="col-lg-2">>&nbsp;</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>Credit Limit</td>
+            <td class="col-lg-2">>{{ data.creditLimit | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>Available Spend</td>
+            <td class="col-lg-2">>{{ data.availableSpend | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>Reference Number</td>
+            <td class="col-lg-2">>{{ data.referenceNumber }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>Date Paid</td>
+            <td class="col-lg-2">>{{ data.datePaid | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>Payment Total</td>
+            <td class="col-lg-2">>{{ data.paymentTotal | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">>Balance Total</td>
+            <td class="col-lg-2">>{{ data.balanceTotal | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+        </tr>
+    </table>
+    <div>&nbsp;</div>
+    <div>Payments</div>
+    <div style="border-top: dashed 1px #000000">&nbsp;</div>
+    <table>
+        <tr>
+            <td class="col-lg-2">Account Number</td>
+            <td class="col-lg-2">{{ data.accountNumber }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-2">Agreement Total</td>
+            <td class="col-lg-2">{{ data.agreementTotal | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td class="col-lg-3">Type</td>
+            <td class="col-lg-3">{{ data.type }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-3">Amount</td>
+            <td class="col-lg-3">{{ data.amount | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+        </tr>
+        <tr>
+            <td class="col-lg-3">Balance</td>
+            <td class="col-lg-3">{{ data.balance | currency : culture.CurrencySymbol : culture.DecimalPlaces  }}</td>
+        </tr>
+    </table>
+    <div style="border-top: dashed 1px #000000">&nbsp;</div>
+</div>

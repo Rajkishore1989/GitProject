@@ -1,0 +1,95 @@
+﻿@using Blue.Cosacs.Merchandising.Helpers
+@model Blue.Cosacs.Financial.Models.FinanacialQueryPrintModel
+@{
+    var rows = Model.Results;
+    var query = Model.Query;
+    var pageSize = 30;
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+<h3>Financial Query @DateTime.Now.ToPrintDateString()</h3>
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table>
+                <tbody>
+                    @if (query.LocationId != null)
+                    {
+                        <tr>
+                            <th class="col-sm">Location</th>
+                            <td>@(rows.Any() ? rows.First().Location : query.LocationId.ToString())</td>
+                        </tr>}
+                    @if (!string.IsNullOrEmpty(query.TransactionCode))
+                    {
+                        <tr>
+                            <th class="col-sm">Transaction Code</th>
+                            <td>@query.TransactionCode</td>
+                        </tr>}
+                    @if (query.RunNumber != null)
+                    {
+                        <tr>
+                            <th class="col-sm">Run Number</th>
+                            <td>@query.RunNumber</td>
+                        </tr>}
+
+                    @if (!string.IsNullOrEmpty(query.AccountNumber))
+                    {
+                        <tr>
+                            <th class="col-sm">Account Number</th>
+                            <td>@query.AccountNumber</td>
+                        </tr>}
+                    @if (query.FromDate != null)
+                    {
+                        <tr>
+                            <th class="col-sm">Created From</th>
+                            <td>@query.FromDate.ToPrintDateString()</td>
+                        </tr>}
+                    @if (query.ToDate != null)
+                    {
+                        <tr>
+                            <th class="col-sm">Created To</th>
+                            <td>@query.ToDate.ToPrintDateString()</td>
+                        </tr>}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="buffer-sm bottom">
+    @if (rows.Any())
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="main bordered small">
+                    @for (var p = 0; p < ((double)rows.Count / pageSize); p++)
+                    {
+
+                        <tbody class="pageBreak">
+                            <tr>
+                                <th class="col-sm">Run Number</th>
+                                <th class="col-sm">Account Number</th>
+                                <th class="col-sm">Location</th>
+                                <th class="col-sm">Transaction Code</th>
+                                <th class="col-sm currency">Transaction Value</th>
+                                <th class="col-sm date">Transaction Date</th>
+                                <th class="col-sm">Original Transaction Id</th>
+                            </tr>
+                            @foreach (var row in rows.Skip(p * pageSize).Take(pageSize))
+                            {
+                                <tr>
+                                    <td>@row.RunNumber</td>
+                                    <td>@row.AccountNumber</td>
+                                    <td>@row.Location</td>
+                                    <td>@row.TransactionCode</td>
+                                    <td class="currency">@row.TransactionValue.ToCurrencyWithSymbol()</td>
+                                    <td class="date">@row.TransactionDate.ToPrintDateString()</td>
+                                    <td>@row.OriginalTransactionId</td>
+                                </tr>
+                            }
+                        </tbody>
+                    }
+                </table>
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,159 @@
+.warranty-structure, .destination-selector {
+
+	.tags {
+
+		.tag {
+
+			background-color: @neutral-color;
+			margin: 3px;
+			padding: 5px;
+			position: relative;
+			/*height: 40px;*/
+
+			.name {
+				line-height: 2em;
+				font-size: 1em;
+				font-weight: normal;
+				overflow: hidden;
+				position: relative;
+				transition: height 0.5s ease;
+				-o-transition: height 0.5s ease;
+				-moz-transition: height 0.5s ease;
+				-webkit-transition: height 0.5s ease;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			&.no-products, &.new {
+				background-color: @lightgrey-hover;
+
+				&:hover {
+					background-color: @neutral-color;
+				}
+			}
+
+			.actions {
+				background-color: @neutral-color;
+				position: absolute;
+				display: none;
+				width: 100%;
+				padding: 5px;
+				bottom: -25px;
+				left: 0px;
+				opacity: 0;
+				transition: opacity 0.5s ease;
+				-o-transition: opacity 0.5s ease;
+				-moz-transition: opacity 0.5s ease;
+				-webkit-transition: opacity 0.5s ease;
+			}
+
+			&.active {
+				.actions {
+					opacity: 1;
+					display: block;
+					z-index: 2;
+				  	.box-shadow(0 6px 12px rgba(0,0,0,.175));
+				}
+			}
+		}
+	}
+}
+
+.destination-selector {
+	.tags {
+		.tag {
+			&.selected {
+				background-color: @bb-contrast;
+				color: #fff;
+			}
+		}
+	}
+}
+
+.warranty-return-percentage-module {
+	.warranty-returns {
+		.existing {
+			td.action, th.action {
+				width: 10%;
+			}
+
+			td.months, td.percentage, th.months, th.percentage {
+				width: 15%;
+			}
+
+			table.filterstable {
+				width: 100%;
+				border: none;
+				td {
+					border: none;
+					padding: 1px 4px 1px 4px;
+				}
+				.level-name {
+					width: 30%;
+				}
+			}
+		}
+		.RowTemplate {
+			td.filters, td.months, td.percentage {
+				border-left: none;
+				border-right: none;
+			}
+		}
+	}
+}
+
+.warranty-promotions-module {
+	.warranty-promotions {
+		.existing {
+			td.action, th.action {
+				width: 10%;
+			}
+
+			td.date, td.price, th.date, th.price {
+				width: 15%;
+			}
+
+			table.filterstable {
+				width: 100%;
+				border: none;
+				td {
+					border: none;
+					padding: 1px 4px 1px 4px;
+				}
+				.level-name {
+					width: 30%;
+				}
+			}
+		}
+		.RowTemplate {
+			td.filters, td.months, td.percentage {
+				border-left: none;
+				border-right: none;
+			}
+		}
+	}
+}
+
+.table-striped {
+  > tbody > tr:nth-child(odd) {
+    > td,
+    > th {
+      background-color: @table-bg;
+    }
+  }
+  > tbody > tr:nth-child(even) {
+    > td,
+    > th {
+      background-color: @table-bg-accent;
+    }
+  }
+}
+
+.inline-bottons {
+  white-space: nowrap;
+}
+
+.bulk-edit .modal-dialog {
+  width: 65%;
+}

@@ -1,0 +1,87 @@
+﻿@model List<Blue.Cosacs.Warehouse.PickListView>
+@using Blue.Cosacs.Warehouse.Utils
+@using Blue.Cosacs
+@{
+    ViewBag.Title = string.Format("{0} Load", Model[0].TruckName);
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+<style type="text/css">
+    td { text-align: left; }
+    .orderBox
+    {
+        border: 1px solid;
+        display: block;
+        width: 50px;
+        height: 50px;
+    }
+    .signbox
+    {
+        border-bottom: 10px;
+        font-size: 16px;
+    }
+    li { margin: 0px; }
+    .verticalCentre { vertical-align: middle; }
+    .textcentre { text-align: center; }
+    .divcentre { margin: 0px auto; }
+    
+</style>
+@{var now = DateTime.Now.ToString("g");}
+
+@{
+    var DeliveryCount = 0;
+    var CollectionCount = 0;
+    
+    for(var i = 0; i < Model.Count; i++)
+    {
+         if(Model[i].DeliveryOrCollection == "D")
+         {
+             DeliveryCount = DeliveryCount + 1;
+         }
+         else if(Model[i].DeliveryOrCollection == "C")
+         {
+             CollectionCount = CollectionCount + 1;
+         }
+    }
+
+}
+
+<div data-module="warehouse/loadPrinting">
+    <header>
+        <div style="float: left">
+            <div class="document-id">
+                <div>
+                    <div class="ref">Truck Load: @Model[0].TruckName</div>
+                    <div class="barcode"></div>
+                </div>
+                <div>
+                    <div class="createdOn">@DateTime.Now.ToString("f")</div>
+                    <div class="createdBy">@User.Identity.Name - @ViewBag.UserName</div>    
+                </div>
+            </div>
+        </div>
+        <div style="float: right">
+            <table class="header-info">
+                <tr><th>Scheduling Branch:</th><td class="branchNo">@ViewBag.DeliveryBranch</td></tr>
+                <tr><th>Number of Deliveries:</th><td>@DeliveryCount</td></tr>
+                <tr><th>Number of Collections:</th><td>@CollectionCount</td></tr>
+            </table>
+        </div>
+        <div class="clear"></div>
+    </header>  
+    @{
+        var pagesize = 3;
+        var totalPageCount = Convert.ToInt16( Math.Ceiling((decimal)Model.Count / (decimal)pagesize)).ToString();
+    }
+    @for (var x = 0; x < Model.Count; x += pagesize)
+    {
+        @Html.Partial("Printing/LoadPage", Model.Skip(x).Take(pagesize).ToList());
+        <div class="leftFooter">
+            @string.Format("{0} Load", Model[0].TruckName)
+        </div>
+        <div class="rightFooter">
+            Page @((x / pagesize) + 1) of @totalPageCount
+        </div>
+        <div class="pageBreak">
+        </div>
+    }
+</div>

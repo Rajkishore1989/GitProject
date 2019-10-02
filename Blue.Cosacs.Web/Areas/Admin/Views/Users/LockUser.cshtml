@@ -1,0 +1,16 @@
+﻿@model Blue.Cosacs.Web.Areas.Admin.Models.LockUser
+<div id="divLockUser" data-module="admin/lockUser">
+    <div class="control-label col-lg-4">
+        <button id="buttonLockUser" value="@this.Model.UserId.ToString()" islocked="@Json.Encode(this.Model.IsLocked)"
+                class="btn btn-default">
+            @if (this.Model.IsLocked)
+            {
+            @Html.Raw("Unlock User")
+            }
+            else
+            {
+            @Html.Raw("Lock User")
+            }
+        </button>
+    </div>
+</div>

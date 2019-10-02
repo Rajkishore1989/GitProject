@@ -1,0 +1,105 @@
+﻿@model StockCountPrintModel
+
+@{
+    ViewBag.Title = string.IsNullOrWhiteSpace(ViewBag.Title) ? "Stock Count " + Model.Id : ViewBag.Title;
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+@section Head
+{
+    <style type="text/css">
+        .reject {
+            white-space: nowrap;
+        }
+
+            .reject span {
+                margin-left: 5px;
+            }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+
+@for (var x = 0; x < Model.Hierarchys.Count; x++)
+{
+    <div>
+    <header>
+        <div style="width:100%;display:inline-block;margin:0 0 20px 0;">
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    <tr><th>Location:</th><td>@Model.Location</td></tr>
+                    <tr><th>Manager on Duty:</th><td></td></tr>
+                    <tr><th>Branch Personel:</th><td></td></tr>
+                    <tr><th>Finance Personel:</th><td></td></tr>
+                    <tr><th>Terminal Id:</th><td></td></tr>
+                </table>
+            </div>      
+                 
+            <div style="display:inline-block;vertical-align:top;float:right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Stock Count #@Model.Id</div>
+                        <div class="barcode">@Html.Barcode("SC$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@Model.StartedDate.ToServerTime().ToPrintDateString()</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+       @Html.Partial("PrintHierarchy", Model.Hierarchys.Skip(x).Take(1).ToList())
+       @if (x < Model.Hierarchys.Count)
+       {
+        <div class="pageBreak"></div>
+       }
+    </div>
+}

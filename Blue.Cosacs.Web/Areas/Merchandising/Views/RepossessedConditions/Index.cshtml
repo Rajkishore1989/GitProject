@@ -1,0 +1,47 @@
+﻿@model List<EditRepossessedCondition>
+
+@{
+    ViewBag.Title = "Repossessed Conditions";
+}
+
+<div data-module="merchandising/repossessedConditions/init" ng-controller="RepossessedConditionsCtrl" ng-init="repossessedConditions=@Html.RawJson(Model);" ng-cloak>
+
+    <div>
+        <table class="data table table-striped table-bordered table-hover buffer top">
+            <colgroup>
+                <col style="width:20%"/>
+                <col style="width:40%"/>
+                <col style="width:40%"/>
+            </colgroup>
+
+            <thead>
+                <tr>
+                    <th ng-show="canEdit"></th>
+                    <th>Name</th>
+                    <th>SKU Suffix</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="condition in repossessedConditions" ng-form="conditionForm">
+                    <td ng-show="canEdit">
+                        <span class="glyphicons glyph-btn bin" ng-click="removeCondition(condition)" ng-class="{'invisible':editing}" ng-hide="isEditing(condition)"></span>
+                        <span class="glyphicons glyph-btn pencil" ng-click="editCondition(condition)" ng-class="{'invisible':editing}"  ng-hide="isEditing(condition)"></span>
+                        <span class="glyphicons glyph-btn floppy_disk" ng-click="conditionForm.$invalid || acceptEdit(condition, conditionForm)" ng-class="{'invisible':!isEditing(condition),'disabled' : conditionForm.$invalid}" ng-class="{'disabled':conditionForm.$invalid}"></span>
+                        <span class="glyphicons glyph-btn undo" ng-click="cancelEdit(condition)" ng-class="{'invisible':!isEditing(condition)}"></span>
+                    </td>
+                    <td ng-hide="isEditing(condition)">{{condition.name}}</td>
+                    <td ng-hide="!isEditing(condition)" ng-class="{'has-error': conditionForm.name.$invalid}">
+                        <input class="form-control" ng-model="condition.name" type="text" ng-required="true" name="name" ng-change="validateName(condition.name, conditionForm)" ng-maxlength="84" maxlength="84" pb-keypress="{ enter: 'acceptEdit(condition, conditionForm)'}" />
+                    </td>
+                    <td ng-hide="isEditing(condition)" style="text-transform: uppercase">{{condition.skuSuffix}}</td>
+                    <td ng-hide="!isEditing(condition)" ng-class="{'has-error': conditionForm.skuSuffix.$invalid}">
+                        <input type="text" style="text-transform: uppercase" class="form-control" name="skuSuffix" ng-model="condition.skuSuffix" ng-change="validateSkuSuffix(condition.skuSuffix, conditionForm)" ng-required="true" ng-maxlength="10" maxlength="10" pb-keypress="{ enter: 'acceptEdit(condition,conditionForm)'}" />
+                    </td>
+                </tr>
+                <tr ng-show="canEdit">
+                    <td colspan="3"><span class="glyphicons glyph-btn plus pull-left" ng-click="addCondition()" ng-class="{'invisible':editing}"></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

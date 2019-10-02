@@ -1,0 +1,142 @@
+﻿@model Blue.Cosacs.Web.Areas.Warehouse.Models.PickListViewPrint
+@using Blue.Cosacs.Warehouse.Utils
+@using Blue.Cosacs
+
+<style type="text/css">
+    .del-col div.watermark {
+        -webkit-transform: none;
+        -moz-transform: none;
+        color: rgba(230, 230, 230, 0.5);
+        font-size: 10em;
+        z-index: -100;
+        position: absolute;
+        top: -135px;
+        left: 250px;
+        visibility: visible;
+    }
+</style>
+
+<div class="row">
+    <table class="main">
+        <thead>
+            <tr>
+                @if (!(bool)ViewBag.IsCopy)
+                { <th width="5%">
+                    Picked
+                </th> }
+                <th width="17%">
+                    Item
+                </th>
+                <th width="5%">
+                    Zone
+                </th>
+                <th width="5%">
+                    Truck
+                </th>
+                <th width="12%">
+                    Category
+                </th>
+                <th width="10%">
+                    Delivery Date
+                </th><th width="2%">
+                    Quantity
+                </th>
+                <th width="26%">
+                    Picking Comments
+                </th>
+
+                <th width="8%">
+                    Picking Rejection
+                </th>
+                <th width="10%">
+                    Line Code
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pickingitem in Model.PickListView)
+            {
+                <tr class="item">
+                    @if (!(bool)ViewBag.IsCopy)
+                    {
+                        <td>
+                            <div class="box">
+                            </div>
+                        </td>
+                    }
+                    <td>
+                        <div>@pickingitem.ItemNo - @pickingitem.ProductDescription</div>
+                        @Html.GetNonStockServicesHtml(pickingitem)
+                        <div>@Html.Barcode(pickingitem.ItemUPC, BarcodeLib.TYPE.CODE128, 150, 30, true)</div>
+                        <div><strong>@Html.Raw(pickingitem.Damaged ? "[Damaged]" : "&nbsp")</strong></div>
+                        <div><strong>@Html.Raw(pickingitem.AssemblyReq ? "[Assembly Required]" : "&nbsp")</strong></div>
+                        <div class="del-col">
+                            @if (pickingitem.CurrentQuantity == 0)
+                            {
+                                <div class="watermark cancelled">CANCELLED</div>
+                            }
+                        </div>
+                    </td>
+                    <td>
+                        @pickingitem.GetWarehouseZone()
+                    </td>
+                    <td>
+                        @pickingitem.TruckName
+                    </td>
+                    <td>
+                        <ul>
+                            <li>@pickingitem.ProductDescription</li>
+                            @if (pickingitem.ProductBrand != "")
+                            {
+                                <li>Brand: @pickingitem.ProductBrand</li>
+                            }
+                            @if (pickingitem.ProductModel != "")
+                            {
+                                <li>Model: <b>@pickingitem.ProductModel</b></li>
+                            }
+                        </ul>
+                    </td>
+                    <td style="text-align:center">
+                        <div>@pickingitem.DeliveryOrCollectionDate.ToShortDateString()</div>
+                    </td>
+                    <td>
+                        <div class="qty">
+                            @pickingitem.CurrentQuantity
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            @pickingitem.ItemComment
+                        </div>
+                        <div>
+                            @pickingitem.PickingComment
+                        </div>
+                    </td>
+                    <td class="rejection">
+                        @foreach (var rejection in Model.RejectionCodes)
+                        {
+                            <div class="reject">
+                                <span class="box">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <span>@rejection.v</span>
+                            </div>
+                        }
+                    </td>
+                    <td class="barcode">
+                        <div>
+                            @Html.Barcode(pickingitem.BookingId.ToString(), BarcodeLib.TYPE.CODE128, 100, 30)
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="clear"></div>
+@if (!(bool)ViewBag.IsCopy)
+{
+    <div class="sign">
+        <div>Picked By</div>
+        <div>Checked by</div>
+        <div>Date</div>
+    </div>
+}

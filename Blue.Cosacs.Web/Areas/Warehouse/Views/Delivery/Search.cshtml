@@ -1,0 +1,12 @@
+﻿@model string
+@{ ViewBag.Title = "Search Delivery Schedules"; }
+@Html.Partial("Legend")
+<div id="facetSearchContainer" data-module='warehouse/deliveriesSearch' ng-controller="SearchController" class="facetsearch-container">
+    <facetsearch
+        data-results="@Model"
+        data-results-template="/Static/js/warehouse/Templates/deliverySearchResult.html" 
+        data-search-url="/Warehouse/Delivery/SearchInstant"
+        data-history-url="/Warehouse/Delivery/Search"
+        data-field-labels='{"DeliveryBranchName": "Delivery Branch", "DeliveryEmployees":"Employees","DeliveryStatus":"Status"}'>
+    </facetsearch>
+</div>

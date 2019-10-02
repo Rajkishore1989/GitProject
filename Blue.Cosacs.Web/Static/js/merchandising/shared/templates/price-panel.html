@@ -1,0 +1,98 @@
+<div class="panel panel-default buffer all buffer-sm">
+    <div class="panel-heading bordered">
+        <h4 class="panel-title">{{panelTitle}}</h4>
+    </div>
+    <table class="table table-bordered table-striped pb-table">
+        <thead>
+            <tr>
+                <th class="text-center">SKU</th>
+                <th class="quantity">QTY</th>
+                <th class="quantity" ng-show="isCombo">QTY Avail.</th>
+                <th class="currency">AWC</th>
+                <th class="currency">{{panelTitle}}</th>
+                <th class="tax">Tax Rate</th>
+                <th class="percentage" ng-show="showMargin">Margin</th>
+                <th class="currency">{{type}} {{panelTitle}}</th>
+                <th class="percentage" ng-show="showMargin">{{type}} Margin</th>
+                <th class="currency">Line Price</th>
+                <th class="currency">{{type}} Line Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="price in components" ng-form="priceForm" ng-controller="PriceCtrl" ng-class="{'has-error': invalidPrice()}">
+            <td class="text-center"><a title="{{price.longDescription}}" class="reflink" href="{{generateUrl('Merchandising/Products/ref?sku=' + price.sku)}}">{{price.sku.toUpperCase() }}</a></td>
+            <td class="quantity">{{price.quantity}}</td>
+            <td class="quantity" ng-show="isCombo">{{price.stockAvailable}}</td>
+            <td class="currency">{{price.averageWeightedCost | pbCurrency}}</td>
+            <td class="currency">
+                <div>{{withTax(price[standardPrice], price.taxRate) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{price[standardPrice] | pbCurrency}}</div>
+            </td>
+            <td class="tax">
+                <div>{{price.taxRate | pbPercentage}} Inclusive</div>
+                <div class="buffer-sm top">{{price.taxRate | pbPercentage}} Exclusive</div>
+            </td>
+            <td class="percentage" ng-show="showMargin">{{margin(price[standardPrice]) | pbPercentage}}</td>
+            <td class="currency" ng-show="!isCombo">
+                <div>{{withTax(setItemPrice(priceModel, price, components, standardPrice), price.taxRate) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{setItemPrice(priceModel, price, components, standardPrice) | pbCurrency}}</div>
+            </td>
+            <td class="currency" ng-show="!isEditing() && isCombo">
+                <div>{{withTax(priceModel[price.productId], price.taxRate) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{priceModel[price.productId] | pbCurrency}}</div>
+            </td>
+            <td class="currency" ng-show="isEditing() && isCombo">
+                <div ng-class="{'has-error': priceForm.comboPrice.$invalid}">
+                    <pb-tax-input name="comboPrice" tax-excluding="priceModel[price.productId]" tax-rate="price.taxRate"/>
+                </div>
+             </td>
+
+            <td class="percentage" ng-show="!isCombo && showMargin">{{margin(setItemPrice(priceModel, price, components, standardPrice)) | pbPercentage}}</td>
+            <td class="percentage" ng-show="isCombo && showMargin">{{margin(priceModel[price.productId]) | pbPercentage}}</td>
+
+            <td class="currency">
+                <div>{{withTax(linePrice(price[standardPrice]), price.taxRate) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{linePrice(price[standardPrice]) | pbCurrency}}</div>
+            </td>
+
+            <td class="currency" ng-show="!isCombo">
+                <div>{{withTax(linePrice(setItemPrice(priceModel, price, components, standardPrice)), price.taxRate) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{linePrice(setItemPrice(priceModel, price, components, standardPrice))| pbCurrency}}</div>
+            </td>
+            <td class="currency" ng-show="isCombo">
+                <div>{{withTax(linePrice(priceModel[price.productId]), price.taxRate) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{linePrice(priceModel[price.productId])| pbCurrency}}</div>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+                <td colspan="8" ng-show="showMargin && isCombo" class="currency">TOTAL </td>
+                <td colspan="5" ng-hide="showMargin || isCombo" class="currency">TOTAL </td>
+                <td colspan="7" ng-show="showMargin && !isCombo" class="currency">TOTAL </td>
+                <td colspan="6" ng-hide="showMargin || !isCombo" class="currency">TOTAL </td>
+            <td>
+                <div>Inclusive</div>
+                <div class="buffer-sm top">Exclusive</div>
+            </td>
+            <td class="currency">
+                <div>{{ totalIncTax(standardPrice) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{total(standardPrice) | pbCurrency}}</div>
+            </td>
+            <td class="currency" ng-show="isCombo">
+                <div>{{withTax(adjustedTotal(standardPrice), avgTax(standardPrice)) | pbCurrency }}</div>
+                <div class="buffer-sm top">{{ adjustedTotal(standardPrice) | pbCurrency}}</div>
+            </td>
+            <td class="currency" ng-show="!isEditing() && !isCombo">
+                <div>{{withTax(priceModel, avgTax(standardPrice)) | pbCurrency}}</div>
+                <div class="buffer-sm top">{{ priceModel | pbCurrency }}</div>
+            </td>
+            <td class="currency" ng-show="isEditing() && !isCombo">
+                <div ng-class="{'has-error': priceForm.setPrice.$invalid}">
+                    <pb-tax-input name="setPrice" tax-excluding="priceModel" tax-rate="avgTax(standardPrice)"/>
+                </div>
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+</div>

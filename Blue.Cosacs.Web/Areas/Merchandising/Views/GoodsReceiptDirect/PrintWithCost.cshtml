@@ -1,0 +1,143 @@
+﻿@model GoodsReceiptDirectPrintModel
+
+@{
+    ViewBag.Title = "Direct Receipt " + Model.Id;
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var pagesize = 5;
+}
+
+@section Head
+{
+    <style type="text/css">
+        .reject {
+            white-space: nowrap;
+        }
+
+            .reject span {
+                margin-left: 5px;
+            }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+
+<div>
+    <header>
+        <div style="width:100%;display:inline-block;margin:0 0 20px 0;">
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    <tr><th>Receiving Location:</th><td>@Model.Location</td></tr>
+                    <tr><th>Date Received:</th><td>@Model.DateReceived.Date.ToString("D")</td></tr>
+                    <tr><th>Received By:</th><td>@Model.ReceivedBy</td></tr>
+                    <tr><th>Created By:</th><td>@Model.CreatedBy</td></tr>
+                    <tr><th>Date Approved:</th><td>@(Model.DateApproved.HasValue ? Model.DateApproved.Value.ToLocalTime().ToString("f") : "")</td></tr>
+                    <tr><th>Approved By:</th><td>@Model.ApprovedBy</td></tr>
+                </table>
+            </div>
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    <tr><th>Vendor:</th><td>@(Model.Vendor)</td></tr>
+                    <tr><th>Vendor Delivery Number:</th><td>@Model.VendorDeliveryNumber</td></tr>
+                    <tr><th>Vendor Invoice Number:</th><td>@Model.VendorInvoiceNumber</td></tr>
+                    
+                </table>
+            </div>
+            <div style="display:inline-block;vertical-align:top;float:right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Direct Receipt #@Model.Id</div>
+                        <div class="barcode">@Html.Barcode("GR$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@Model.CreatedDate.ToLocalTime().ToString("f")</div>
+                        <div class="createdBy">@Model.CreatedBy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    @for (var x = 0; x < Model.Products.Count; x += pagesize)
+    {
+        <div style="position: relative">
+            @if (!Model.OriginalPrint.HasValue)
+            {
+                @*<!-- HACK FIX: layout fix for the 'Delivery Print Schedules' original copy -->*@
+                @*<!-- This layout is broken when printing the original copy (only works when the copy-watermark  -->*@
+                @*<!-- style is present). So this is why an opacity:0 (invisible) watermark element was placed here. -->*@
+                <div class="copy-watermark" style="opacity:0;">ORIG.</div> @*<!-- HACK -->*@
+                @*<!-- HACK!!! -->*@
+            }
+            @if (Model.OriginalPrint.HasValue)
+            {
+                <div class="copy-watermark">COPY</div>
+            }
+        </div>
+       @*  need full reference here as its shared with the batch printing for goods receipts*@
+        @Html.Partial("~/Areas/Merchandising/Views/GoodsReceiptDirect/PrintProductWithCost.cshtml", Model.Products.Skip(x).Take(pagesize).ToList());
+        <table style="width:100%; text-align:right">
+            <tr>
+                <td class="number larger" style="width:90%">Total Cost:</td>
+                <td class="number larger">@(Model.Products.Any() ? Model.Products.Sum(p => p.UnitLandedCost * p.QuantityReceived).ToCurrencyWithSymbol() : "")</td>
+            </tr>
+        </table>
+        <div class="leftFooter">
+            @ViewBag.Title &nbsp;
+        </div>
+        <div class="rightFooter">
+            Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+        </div>
+
+        if (x + pagesize < Model.Products.Count)
+        {
+            <div class="pageBreak"></div>
+        }
+    }
+</div>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Blue.Cosacs.Web.Areas.Service.Models.Resolution>
+
+@{ ViewBag.Title = "Resolutions"; }
+
+<div data-module="form-inline" data-controller="Resolutions" data-label="Resolution">
+    <div class="row">
+        <div class="col-lg-8">
+            <form class="search form-horizontal" method=get action='@Url.Action("Index", "Resolutions")'>
+                <div class="row">
+                    <div class="col-lg-4">
+                        @Html.TextBox("s.Description", null, new
+                        {
+                            @class = "form-control",
+                            placeholder = "Description"
+                        })
+                    </div>
+                    <div class="col-lg-8">
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <table class="data table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        @if (Html.HasPermission(Blue.Service.ServicePermissionEnum.EditResolution))
+                        {
+                            <th class="col-2"></th>
+                        }
+                        <th>Description</th>
+                        <th>Resolution Fail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        @Html.Partial("RecordView", item)
+                    }
+                </tbody>
+                @if (Html.HasPermission(Blue.Service.ServicePermissionEnum.EditResolution))
+                {
+                <tfoot>
+                    <tr>
+                        <td class="actions"></td>
+                        <td colspan="2">&nbsp;</td>
+                    </tr>
+                </tfoot>
+                }
+            </table>
+        </div>
+        <div class="col-lg-4">
+        </div>
+    </div>
+    <script id="templateNew" type="text/template">
+        @Html.Partial("RecordEdit", ViewData["DefaultNew"])
+    </script>
+</div>

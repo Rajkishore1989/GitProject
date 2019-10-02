@@ -1,0 +1,45 @@
+<section class="buffer top">
+    <table class="table table-bordered table-striped aligned">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="text-center">Name</th>
+                <th>Rate</th>
+                <th>Effective Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="taxRate in taxRates">
+                <td class="col-btn">
+                    <span ng-show="isInPast(taxRate.effectiveDate)">Active</span>
+                    <span class="glyphicons glyph-btn bin" title="Remove" ng-click="remove(taxRate)" ng-hide="isInPast(taxRate.effectiveDate)">&nbsp;</span>
+                </td>
+                <td>{{taxRate.name}}</td>
+                <td class="col-md">{{taxRate.rate | pbPercentage}}</td>
+                <td class="col-md">{{taxRate.effectiveDate | pbDate }}</td>
+            </tr>
+             <tr ng-hide="editing">
+             <td class="col-btn" ng-hide="readonly">
+                    <span class="glyphicons glyph-btn plus" title="Add new tax rate" ng-click="edit()">&nbsp;</span>
+                </td>
+                <td colspan ="3">
+                </td>
+             </tr>
+            <tr ng-show="editing" ng-form="taxRateForm">
+                <td class="col-btn" ng-hide="readonly">
+                    <span class="glyphicons glyph-btn floppy_disk" title="Save new tax rate" ng-click="add(newRate, taxRateForm)">&nbsp;</span>
+                    <span class="glyphicons glyph-btn undo" title="Cancel new tax rate" ng-click="cancel()">&nbsp;</span>
+                </td>
+                <td ng-class="{'has-error': taxRateForm.name.$invalid}">
+                    <input type="text" class="form-control text-center" name="name" ng-model="newRate.name" required pb-keypress="{ enter: 'add(newRate, taxRateForm)'}"/>
+                </td>
+                <td class="col-md" ng-class="{'has-error': taxRateForm.rate.$invalid}">
+                    <input pb-percentage class="form-control text-center" name="rate" min="0" ng-model="newRate.rate" required pb-keypress="{ enter: 'add(newRate, taxRateForm)'}"/>
+                </td>
+                <td class="col-md" ng-class="{'has-error': taxRateForm.effectiveDate.$invalid}">
+                    <input class="form-control text-center effectiveDate" type="date" min="{{tomorrow()}}" name="effectiveDate" ng-model="newRate.effectiveDate" required pb-keypress="{ enter: 'add(newRate, taxRateForm)'}"/>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

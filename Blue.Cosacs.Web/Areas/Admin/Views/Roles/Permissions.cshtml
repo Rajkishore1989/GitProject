@@ -1,0 +1,71 @@
+﻿@model Blue.Cosacs.Web.Areas.Admin.Models.RolePermissions
+@{
+    ViewBag.Title = Model.Name + " - Permissions";
+}
+<div data-module="admin/rolePermission">
+    <div class="search row">
+        <div class="col-lg-3">
+            <input id="searchBox" type="search" class="form-control" placeholder="Type to filter permissions">
+        </div>
+        <div class="col-lg-9"></div>
+    </div>
+    <div class="rolePermissions" data-roleId="@Model.Id" >
+        @foreach (var category in Model.Permissions.Select(c => new { c.CategoryName, c.CategoryId }).Distinct())
+        { 
+            <h4 class="clickable">@category.CategoryName</h4>
+            <table class="table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th class="col-lg-3">Permission</th>
+                        <th class="col-lg-7">Description</th>
+                    @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditRoles)) {
+                        <th class="col-lg-1">
+                            <span class="col-lg-7">Allow</span>
+                            <span class="col-lg-3">
+                                @Html.CheckBox("MultipleAllow", false,
+                                    new { @class = "MultipleAllow", @data = @category.CategoryId })
+                            </span>
+                            <span class="col-lg-1"></span>
+                        </th>
+                        <th class="col-lg-1">
+                            <span class="col-lg-7">Deny</span>
+                            <span class="col-lg-3">
+                                @Html.CheckBox("MultipleDeny", false,
+                                    new { @class = "MultipleDeny", @data = @category.CategoryId })
+                            </span>
+                            <span class="col-lg-1"></span>
+                        </th>
+                    }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var permission in Model.Permissions.Where(c => c.CategoryId == category.CategoryId).OrderBy(c => c.Name))
+                    { 
+                        <tr data-id="@permission.PermissionId">
+                            <td>@permission.Name</td>
+                            <td>@permission.Description</td>
+                        @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditRoles)) {
+                            <td><span class="col-lg-7"></span>
+                                <span class="col-lg-3">
+                                    @Html.CheckBox("Allow", permission.Active, new {
+                                        @class = "allow"
+                                    })
+                                </span>
+                                <span class="col-lg-1"></span>
+                            </td>
+                            <td><span class="col-lg-7"></span>
+                                <span class="col-lg-3">
+                                    @Html.CheckBox("Deny", permission.Deny, new {
+                                        @class = "deny"
+                                    })
+                                </span>
+                                <span class="col-lg-1"></span>
+                            </td>
+                        }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

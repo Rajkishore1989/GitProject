@@ -1,0 +1,34 @@
+﻿@model GoodsReceiptBulkPrintModel
+
+@{
+    ViewBag.Title = "Batch Goods Receipt";
+    Layout = "";
+}
+
+
+
+@for (int index = 0; index < Model.GoodsReceiptPrintModels.Count; index++)
+{
+    var item = Model.GoodsReceiptPrintModels[index];
+
+    @(Model.IncludeCosts ? Html.Partial("PrintWithCost", item) : Html.Partial("Print", item))
+
+    if (index < Model.GoodsReceiptPrintModels.Count)
+    {
+        <div style="page-break-after: always"></div>
+    }
+}
+
+@for (int index = 0; index < Model.GoodsReceiptDirectPrintModels.Count; index++)
+{
+    var item = Model.GoodsReceiptDirectPrintModels[index];
+
+    @(Model.IncludeCosts ? Html.Partial("~/Areas/Merchandising/Views/GoodsReceiptDirect/PrintWithCost.cshtml", item) : Html.Partial("~/Areas/Merchandising/Views/GoodsReceiptDirect/Print.cshtml", item))
+
+    if (index < Model.GoodsReceiptDirectPrintModels.Count)
+    {
+        <div style="page-break-after: always"></div>
+    }
+}
+
+

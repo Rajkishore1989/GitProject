@@ -1,0 +1,91 @@
+﻿@model BuyerSalesHistoryPrintModel
+
+@{
+    ViewBag.Title = "Buyer Sales History Report";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+<div data-module="merchandising/reports/buyerSalesHistoryReport/init" ng-controller="buyerSalesHistoryPrintCtrl" ng-init="result=@Html.RawJson(Model)" class="ng-scope" ng-cloak>
+    <div class="row bottom header-info pb-report" ng-show="vm.query">
+
+        <h2>@ViewBag.Title</h2>
+        <table>
+            <tr>
+                <td>
+                    <label for="kpi">KPI: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="kpi">{{vm.query.kpi}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="location">Location: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="location">{{vm.query.location}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fascia">Fascia: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="fascia">{{vm.query.fascia}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="stockType">Stock Type: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="stockType">{{vm.query.productType}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="prodHier">Hierarchy: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="prodHier">{{vm.query.hierarchyString}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+  
+    <table class="main bordered small">
+        <tbody ng-repeat="pg in vm.pages" ng-class="{true: 'pageBreak', false: 'pageNoBreak'}[vm.pages.length > 1]">
+            <tr>
+                <th ng-repeat="col in vm.columns" ng-show="col.selected">
+                    {{col.name}}
+                </th>
+            </tr>
+            <tr ng-repeat="product in pg" class="item">
+                <td ng-show="vm.columns[0].selected">{{product.sku}}</td>
+                <td ng-show="vm.columns[1].selected">{{product.description}}</td>
+                <td ng-show="vm.columns[2].selected">{{product.brand}}</td>
+                <td ng-show="vm.columns[3].selected">{{product.vendor}}</td>
+                <td ng-show="vm.columns[4].selected" class="quantity">{{product.stockOnOrder}}</td>
+                <td ng-show="vm.columns[5].selected" class="quantity">{{product.stockOnHand}}</td>
+                <td ng-show="vm.columns[6].selected" class="currency">{{product.averageWeightedCost | pbCurrency}}</td>
+                <td ng-show="vm.columns[7].selected" class="currency">{{product.stockOnHandCost | pbCurrency}}</td>
+                <td ng-show="vm.columns[8].selected" class="currency">{{product.cashPrice | pbCurrency}}</td>
+                <td ng-show="vm.columns[9].selected">{{product.year}}</td>
+
+                <td class="nowrap" ng-show="vm.columns[10].selected">{{product.april | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[11].selected">{{product.may | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[12].selected">{{product.june | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[13].selected">{{product.july | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[14].selected">{{product.august | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[15].selected">{{product.september | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[16].selected">{{product.october | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[17].selected">{{product.november | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[18].selected">{{product.december | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[19].selected">{{product.january | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[20].selected">{{product.february | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[21].selected">{{product.march | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+                <td class="nowrap" ng-show="vm.columns[22].selected">{{product.yearToDate | pbChooseFilter:vm.utils.chooseFilter(vm.query.kpi)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

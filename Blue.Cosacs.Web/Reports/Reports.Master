@@ -1,0 +1,32 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Reports.Master.cs" Inherits="Blue.Cosacs.Web.Site1" %>
+<%@ Import Namespace="Blue.Web" %>
+<!doctype html >
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <title>Technician Productivity by Category</title>
+    <% RenderPartial("Head"); %>
+    @RenderSection("Head", false)
+</head>
+<body class='maximized pjax' data-base-url='@Url.Content("~/")'>
+
+    <div id="menu">
+      <%= new global::Menu().RenderToString().ToHtmlString() %>
+    </div>   
+    <div id="body">
+        <div class="container_12">
+            <div id="center" class="grid_12">
+                <div><h2 id="page-heading"></h2></div>
+                 <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                 </asp:ContentPlaceHolder>
+            </div>
+        </div> 
+    </div>
+    <% RenderPartial("Footer"); %>
+    <% RenderPartial("Confirm"); %>
+    <% RenderPartial("Script"); %>
+    <%--@RenderSection("Script", false)--%>
+</body>
+</html>

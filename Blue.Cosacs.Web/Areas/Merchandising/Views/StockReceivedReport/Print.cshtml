@@ -1,0 +1,128 @@
+﻿@model StockReceivedPrintModel
+@{
+    var pages = Model.Results.ToList();
+    var query = Model.Query;
+    var cols = Model.ColIndicies;
+    ViewBag.Title = "Stock Valuation";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+<h3>Stock Received Report @DateTime.Now.ToString("yyyy-MM-dd")</h3>
+<div class="header-info">
+            <table>
+                <tbody>
+                    @if(!string.IsNullOrEmpty(query.Division)) {
+                    <tr>
+                        <th class="col-sm">Division</th>
+                        <td>@query.Division</td>
+                    </tr>}
+                    @if(!string.IsNullOrEmpty(query.Department)) {
+                    <tr>
+                        <th class="col-sm">Department</th>
+                        <td>@query.Department</td>
+                    </tr>}
+                    @if(!string.IsNullOrEmpty(query.Class)) {
+                    <tr>
+                        <th class="col-sm">Class</th>
+                        <td>@query.Class</td>
+                    </tr>}
+                    @if(query.LocationId != null) {
+                    <tr>
+                        <th class="col-sm">Location</th>
+                        <td>@(pages.Any() ? pages.First().First().Location : query.LocationId.ToString())</td>
+                    </tr>}
+                    @if(!string.IsNullOrEmpty(query.Fascia)) {
+                    <tr>
+                        <th class="col-sm">Fascia</th>
+                        <td>@query.Fascia</td>
+                    </tr>}
+                    @if(query.VendorId != null) {
+                    <tr>
+                        <th class="col-sm">Vendor ID</th>
+                        <td>@query.VendorId</td>
+                    </tr>}
+                    @if(query.CreatedFrom != null) {
+                    <tr>
+                        <th class="col-sm">Received From</th>
+                        <td>@query.CreatedFrom</td>
+                    </tr>}
+                    @if(query.CreatedFrom != null) {
+                    <tr>
+                        <th class="col-sm">Received To</th>
+                        <td>@query.CreatedTo</td>
+                    </tr>}
+                    @if(query.PurchaseOrderId != null) {
+                    <tr>
+                        <th class="col-sm">Purchase Order ID</th>
+                        <td>@query.PurchaseOrderId</td>
+                    </tr>}
+                </tbody>
+            </table>
+        </div>
+<div class="buffer-sm bottom">
+    @if (pages.Any())
+    {
+        <table class="main bordered small">
+            @foreach (var page in pages)
+            {
+                <tbody class="pageBreak">
+                    <tr>
+                        <th @if (!cols.Contains(0)) { <text> style="display: none;" </text>   } class="col-sm">Division</th>
+                        <th @if (!cols.Contains(1)) { <text> style="display: none;" </text>   } class="col-sm">Department</th>
+                        <th @if (!cols.Contains(2)) { <text> style="display: none;" </text>   } class="col-sm">Class</th>
+                        <th @if (!cols.Contains(3)) { <text> style="display: none;" </text>   } class="col-sm" style="white-space: normal">Product</th>
+                        <th @if (!cols.Contains(4)) { <text> style="display: none;" </text>   } class="col-sm" style="white-space: normal">Location</th>
+                        <th @if (!cols.Contains(5)) { <text> style="display: none;" </text>   } class="col-sm" style="white-space: normal">Vendor</th>
+                        <th @if (!cols.Contains(6)) { <text> style="display: none;" </text>   } class="col-sm date">Date Received</th>
+                        <th @if (!cols.Contains(7)) { <text> style="display: none;" </text>   } class="col-sm date">Date Last Received</th>
+                        <th @if (!cols.Contains(8)) { <text> style="display: none;" </text>   } class="col-sm">Qty Received</th>
+                        <th @if (!cols.Contains(9)) { <text> style="display: none;" </text>   } class="col-sm">Landed Cost</th>
+                        <th @if (!cols.Contains(10)) { <text> style="display: none;" </text>   } class="col-sm">Extended Landed Cost</th>
+                        <th @if (!cols.Contains(11)) { <text> style="display: none;" </text>   } class="col-sm date">Reference Number</th>
+                        <th @if (!cols.Contains(12)) { <text> style="display: none;" </text>   } class="col-sm quantity">Stock On Hand</th>
+                        <th @if (!cols.Contains(13)) { <text> style="display: none;" </text>   } class="col-sm">Purchase Order</th>
+                        <th @if (!cols.Contains(14)) { <text> style="display: none;" </text>   } class="col-sm quantity">Stock On Order</th>
+                    </tr>
+                    @foreach (var row in page)
+                    {
+                        <tr>
+                            <td @if (!cols.Contains(0)) { <text> style="display: none;" </text>  }>@row.Division</td>
+                            <td @if (!cols.Contains(1)) { <text> style="display: none;" </text>  }>@row.Department</td>
+                            <td @if (!cols.Contains(2)) { <text> style="display: none;" </text>  }>@row.Class</td>
+                            <td @if (!cols.Contains(3)) { <text> style="display: none;" </text>  }>#@row.Sku - @row.Description</td>
+                            <td @if (!cols.Contains(4)) { <text> style="display: none;" </text>  }>@row.Location</td>
+                            <td @if (!cols.Contains(5)) { <text> style="display: none;" </text>  }>@row.Vendor</td>
+                            <td @if (!cols.Contains(6)) { <text> style="display: none;" </text>  } class="date">@row.Date.ToPrintDateString()</td>
+                            <td @if (!cols.Contains(7)) { <text> style="display: none;" </text>  } class="date">@row.DateLastReceived.ToPrintDateString()</td>
+                            <td @if (!cols.Contains(8)) { <text> style="display: none;" </text>  } class="quantity">@row.Quantity</td>
+                            <td @if (!cols.Contains(9)) { <text> style="display: none;" </text>  } class="currency">@row.LastLandedCost.ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(10)) { <text> style="display: none;" </text>  } class="currency">@row.ExtendedLandedCost.ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(11)) { <text> style="display: none;" </text>  }>#@row.ReferenceNumberCsl.Label@row.ReferenceNumberCsl.Id</td>
+                            <td @if (!cols.Contains(12)) { <text> style="display: none;" </text>  } class="quantity">@row.StockOnHand</td>
+                            <td @if (!cols.Contains(13)) { <text> style="display: none;" </text>  }>PO#@row.PurchaseOrderId</td>
+                            <td @if (!cols.Contains(14)) { <text> style="display: none;" </text>  } class="quantity">@row.PendingStock</td>
+                        </tr>
+                    }
+                    @if (page.Equals(pages.LastOrDefault())) {
+                        <tr>
+                            <td @if (!cols.Contains(0))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(1))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(2))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(3))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(4))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(5))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(6))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(7))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(8))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold">@pages.Sum(x => x.Sum(y => y.LastLandedCost)).ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(9))  { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold">@pages.Sum(x => x.Sum(y => y.ExtendedLandedCost)).ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(10)) { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(11)) { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(12)) { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                            <td @if (!cols.Contains(13)) { <text> style="display: none;" </text> } style="background: #eee; font-weight: bold"></td>
+                        </tr>
+                    }
+                </tbody>
+            }
+        </table>
+    }
+</div>

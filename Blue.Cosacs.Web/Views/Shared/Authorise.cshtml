@@ -1,0 +1,36 @@
+﻿<section ng-controller="AuthoriseController" id="authorise" class="modal fade">
+    <div class="modal-dialog">   
+        <div class="modal-content">   
+            <header class="modal-header">
+                <span class="close ui-icon ui-icon-closethick" data-dismiss="modal" title="Close" ng-click="cancel()"></span>
+                <h3>{{title}}</h3>
+            </header>
+            <article class="modal-body">
+                <article class="authorisation-reason">{{text}}</article>
+                <article class="authorisation-credentials row form-horizontal">
+                    <div class="col-lg-12">
+                        <p class="failure-message text-danger">{{failureMessage}}</p>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label class="control-label col-lg-4" for="username">User:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" ng-model="username" name="username" id="username" ng-required />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-4" for="password">Password:</label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="password" ng-model="password" name="password" id="password" ng-required />
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </article>
+            <footer class="modal-footer">
+                <button class="btn btn-primary" ng-click="authorise()" ng-disabled="disableAuthorise()">Authorise</button>
+                <button class="cancel btn btn-default" ng-click="cancel()">Cancel</button>
+            </footer>
+        </div>
+    </div>
+</section>

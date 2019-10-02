@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Technical Service Income and Margin Analysis Report";
+}
+
+<div data-module="report/ServiceIncomeAnalysis" ng-controller="serviceIncomeAnalysisController" class="ng-scope report">
+    <div id="Parameters" class="section">Parameters</div>
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">Period</label>
+                <div class="col col-md-5" ng-class="{'has-error': !period }">
+                    <list name="inputPeriod" ng-model="period" scope="periods" placeholder="Period"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label" for="inputYear">Financial Year: </label>
+                <div class="col col-lg-5" ng-class="{'has-error': !year }">
+                    <input id="inputYear" type="number" name="year" min="2000" max="2050" class="form-control" ng-model="year" placeholder="Financial Year">
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">Financial Month:</label>
+                <div class="col col-md-5" ng-class="{'has-error': !month }">
+                    <list name="inputMonth" ng-model="month" scope="months" placeholder="Financial Month"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ purchaseFromLabel }} </label>
+                <div class="col col-lg-5">
+                    <input required ui-date="linkDatePicker" ng-required ng-model="datePurchaseFrom" placeholder="Purchase Date From" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ purchaseToLabel }} </label>
+                <div class="col col-lg-5">
+                    <input required ui-date="linkDatePicker" ng-required ng-model="datePurchaseTo" placeholder="Purchase Date To" class="date form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

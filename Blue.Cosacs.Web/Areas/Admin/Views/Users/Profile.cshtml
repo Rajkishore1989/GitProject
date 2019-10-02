@@ -1,0 +1,139 @@
+﻿@model Blue.Cosacs.Web.Areas.Admin.Models.ProfileLoad
+@using Blue.Service
+<div class="row">
+    <div class="col-lg-6">
+        <div data-module="admin/userDetails">
+            <div class=row>
+
+                <div class="section">
+                    User Details
+                </div>
+                @Html.Partial("Details", Model.Profile)
+                @Html.Partial("DetailsEditor", Model.Profile)
+            </div>
+            <div class="row">
+                <div id="profiles">
+                </div>
+                <div id='profileSelector'>
+                    <div class="section">
+                        Add Profiles
+                    </div>
+                    <div>
+                        <input type=hidden id='profileAdd' class="picklist"
+                               data-profiles='@Html.ToJson( Model.AdditionalProfiles)' data-id='@Model.Profile.Id'
+                               data-delete="@ViewBag.DeleteProfilePermission"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        @if (ViewBag.CurrentUser ||
+        HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.ChangeUsersPassword))
+        {
+        <div id="divChangePassword" class="form-horizontal">
+            <div class="section">
+                Change Password
+            </div>
+            <fieldset>
+                @if (ViewBag.CurrentUser)
+                {
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label" for="currentPassword">
+                        Current Password</label>
+
+                    <div class=col-lg-6>
+                        <input class="form-control" type="password" id="currentPassword" name="currentPassword"/>
+                    </div>
+                </div>
+                }
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label" for="newPassword">
+                        New Password</label>
+
+                    <div class=col-lg-6>
+                        <input class="form-control" type="password" name="newPassword" id="newPassword"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-lg-4 control-label" for="confirmPassword">
+                        Confirm Password</label>
+
+                    <div class=col-lg-6>
+                        <input class="form-control" type="password" name="confirmPassword" id="confirmPassword"/>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="control-label col-lg-4">
+                        <button type="submit" class="btn btn-default single-click" id="buttonChangePassword"
+                                data-user="@Model.Profile.Id">
+                            Change Password
+                        </button>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        }
+        @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.SendPasswordReset) ||
+        ViewBag.CurrentUser)
+        {
+        <div id="divResetPassword" class="row" data-locked="@this.Model.Profile.Locked">
+            <div class="col-lg-12">
+                <div class="section">
+                    Password Reset
+                </div>
+                <div>
+                    <p>
+                        By clicking on "Send Password Reset E-mail" an e-mail will be sent to the person
+                        with a hyperlink that will allow the person to open a page to define a new password.
+                        The hyperlink will automatically expire after @this.Model.PasswordExpireDays.ToString()
+                        minutes.</p>
+
+                    <p>
+                        Note that anyone that has access to that person's e-mail will be able to change
+                        their password even if they do not know the current one.</p>
+
+                    <div class="control-label col-lg-4">
+                        <button type="submit" class="btn btn-default" id="buttonResetPassword"
+                                data-user="@Model.Profile.Login">
+                            Send Password Reset E-mail
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+        @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.CanLockUser) &&
+        !ViewBag.CurrentUser)
+        {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section">
+                    Lock / Unlock User
+                </div>
+                <div>
+                    @Html.Partial("LockUser", this.Model.LockUserParameters)
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</div>
+<p></p>
+<div class="row">
+    @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.ViewProfileAudit))
+    {
+    <div class="col-lg-4">
+        @Html.Partial("UserAudit", Model.Audit)
+    </div>
+    }
+    @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.ViewRoles))
+    {
+    <div class="col-lg-8">
+        <div class="section">
+            Permissions
+        </div>
+        @{ Html.RenderAction("Permissions", new { id = Model.Profile.Id }); }
+    </div>
+    }
+</div>

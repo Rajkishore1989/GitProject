@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Resolution Time Per Product Department Report";
+}
+<div data-module="report/ResolutionTimesProductCategory" ng-controller="resolutionTimesProductCategoryController"
+     class="ng-scope report" ng-cloak>
+    <div id="Parameters" class="section">
+        Parameters
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <div class="col col-md-4">
+                    <input type="radio" name="response" ng-model="filterType" value="ByDatesLogged" />
+                    <label class="control-label"> Dates Logged</label>
+                </div>
+                <div class="col col-md-4" ng-class="{'has-error': filterType == 'ByDatesLogged' && !filterParameters.DateLoggedFrom }">
+                    <input id="dateLoggedFrom" ng-disabled="filterType != 'ByDatesLogged'" ui-date="linkDatePicker" ng-model="filterParameters.DateLoggedFrom" placeholder="Date Logged From" class="date form-control" />
+                </div>
+                <div class="col col-md-4" ng-class="{'has-error': filterType == 'ByDatesLogged' && !filterParameters.DateLoggedTo }">
+                    <input id="dateLoggedTo" ng-disabled="filterType != 'ByDatesLogged'" ui-date="linkDatePicker"
+                           ng-model="filterParameters.DateLoggedTo" placeholder="Date Logged To" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">
+                    Technician
+                </label>
+                <div class="col col-md-5">
+                    <list name="daysType" ng-model="filterParameters.TechnicianId" scope="Technicians"
+                          placeholder="Technician"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <div class="col col-md-4">
+                    <input type="radio" name="response" ng-model="filterType" value="ByDatesAllocated" />
+                    <label class="control-label">
+                        Dates Allocated
+                    </label>
+                </div>
+                <div class="col col-md-4" ng-class="{'has-error': filterType == 'ByDatesAllocated' && !filterParameters.DateAllocatedFrom }">
+                    <input id="dateAllocatedFrom" ng-disabled="filterType != 'ByDatesAllocated'" ui-date="linkDatePicker" ng-model="filterParameters.DateAllocatedFrom" placeholder="Date Allocated From" class="date form-control" />
+                </div>
+                <div class="col col-md-4" ng-class="{'has-error': filterType == 'ByDatesAllocated' && !filterParameters.DateAllocatedTo }">
+                    <input id="dateAllocatedTo" ng-disabled="filterType != 'ByDatesAllocated'" ui-date="linkDatePicker" ng-model="filterParameters.DateAllocatedTo" placeholder="Date Allocated To" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label" for="Chargeto">
+                    Charge To
+                </label>
+                <div class="col col-md-5">
+                    <list id="Chargeto" name="chargeto" ng-model="filterParameters.ChargeTo" scope="ChargeTo" placeholder="Charge To"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">
+                    Product Department
+                </label>
+                <div class="col col-md-5">
+                    <list id="category" name="category" ng-model="filterParameters.ProductCategory" scope="productCategory" placeholder="Product Department"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

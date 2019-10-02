@@ -1,0 +1,156 @@
+﻿@model IList<Blue.Cosacs.Warehouse.BookingView> @*CR 2018-13*@
+@{
+    ViewBag.Title = "Schedule #" + ViewBag.id;
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+@using System.Linq
+@using System.Text.RegularExpressions
+@using BarcodeLib
+@using Blue.Config
+@section Head
+{
+    <style type="text/css">
+        .reject { white-space: nowrap; }
+
+        .reject span { margin-left: 5px; }
+
+        .rejection { page-break-inside: avoid; }
+
+        .block { display: block; }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number { text-align: right; }
+
+        img { vertical-align: middle; }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger { font-size: 2.0em; }
+
+    </style>
+}
+
+
+<div data-module="warehouse/schedulePrinting">
+    <header>
+        <div style="width: 100%; display: inline-block; margin: 0px 0px 20px 0px;">
+            <div style="display: inline-block; vertical-align: top;">
+                @if (@ViewBag.listFirst.StoreType == "C")
+                {
+                    @Html.FileToImage(new Settings().PrintoutLogoCourts, 267, 89)
+                }
+                else
+                {
+                    @Html.FileToImage(new Settings().PrintoutLogoNonCourts, 267, 89)
+                }
+            </div>
+            <div style="display: inline-block; vertical-align: top; margin-left: 120px;">
+                <table class="header-info">
+                    <tr><th>Scheduling Branch:</th><td class="branchNo">@ViewBag.listFirst.DeliveryBranch</td></tr>
+                    <tr><th>Number of Deliveries:</th><td>@Model.Count()</td></tr>
+                    <tr><th>Driver Name:</th><td>@ViewBag.Driver.Name</td></tr>
+                    <tr><th>Vehicle:</th><td>@ViewBag.Vehicle</td></tr>
+                </table>
+            </div>
+            <div style="display: inline-block; vertical-align: top; float: right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Delivery Schedule #@ViewBag.id</div>
+                        <div class="barcode">@Html.Barcode((string)("DL$" + ViewBag.id), TYPE.CODE128, 150, 30, false, AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@ViewBag.load.CreatedOn.ToLocalTime().ToString("f")</div>
+                        <div class="createdBy">@ViewBag.loadCreatedByLogin - @ViewBag.loadCreatedByName</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+    @{
+        const int pagesize = 7;
+
+        var groups = Model.GroupBy(m => m.ReceivingLocation).ToList();
+    }
+
+    @foreach (var group in groups)
+    {
+        <table>
+            <tr><th>Delivery Location:</th>
+            <td>
+                @Html.Raw(string.Join("<br/>", (new List<string> { group.First().CustomerName,group.first().DName,group.First().AddressLine1, group.First().AddressLine2, group.First().AddressLine3, group.First().PostCode }).Where(s => !string.IsNullOrWhiteSpace(s))))</td></tr>
+        </table>
+        for (var x = 0; x < group.Count(); x += pagesize)
+        {
+            <div style="position: relative">
+                @if (!(bool)ViewBag.IsCopy)
+                {
+                    @*<!-- HACK FIX: layout fix for the 'Delivery Print Schedules' original copy -->*@
+                    @*<!-- This layout is broken when printing the original copy (only works when the copy-watermark  -->*@
+                    @*<!-- style is present). So this is why an opacity:0 (invisible) watermark element was placed here. -->*@
+                    <div class="copy-watermark" style="opacity: 0;">ORIG.</div> @*<!-- HACK -->*@
+                    @*<!-- HACK!!! -->*@
+                }
+                @if ((bool)ViewBag.IsCopy)
+                {
+                    <div class="copy-watermark">COPY</div>
+                }
+            </div>
+            @Html.Partial("Printing/SchedulePageInternal", group.Skip(x).Take(pagesize).ToList())
+
+            <div class="leftFooter">
+                @string.Format("Delivery Schedule #{0} ", ViewBag.id) &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @Math.Ceiling(group.Count() / (decimal)pagesize)
+            </div>
+
+            if (x + pagesize < group.Count())
+            {
+                <div class="pageBreak"></div>
+            }
+        }
+
+        <table>
+            <tr>
+                <td class="sign" colspan="7">
+                    <div>
+                        Recipient Signature
+                    </div>
+                    <div>
+                        Print Name
+                    </div>
+                    <div>
+                        Recipient Id
+                    </div>
+                </td>
+            </tr>
+        </table>
+    <div class="pageBreak"></div>
+    }
+</div>

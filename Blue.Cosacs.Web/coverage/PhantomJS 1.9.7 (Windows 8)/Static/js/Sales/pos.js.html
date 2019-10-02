@@ -1,0 +1,1835 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for ./Static/js/Sales/pos.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <style>
+        body, html {
+            margin:0; padding: 0;
+        }
+        body {
+            font-family: Helvetica Neue, Helvetica,Arial;
+            font-size: 10pt;
+        }
+        div.header, div.footer {
+            background: #eee;
+            padding: 1em;
+        }
+        div.header {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            border-bottom: 1px solid #666;
+            width: 100%;
+        }
+        div.footer {
+            border-top: 1px solid #666;
+        }
+        div.body {
+            margin-top: 10em;
+        }
+        div.meta {
+            font-size: 90%;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        h1 {
+            font-size: 12pt;
+        }
+        h2 {
+            font-size: 10pt;
+        }
+        pre {
+            font-family: Consolas, Menlo, Monaco, monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 14px;
+            font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
+        }
+
+        div.path { font-size: 110%; }
+        div.path a:link, div.path a:visited { color: #000; }
+        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
+
+        table.coverage td {
+            margin: 0;
+            padding: 0;
+            color: #111;
+            vertical-align: top;
+        }
+        table.coverage td.line-count {
+            width: 50px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        table.coverage td.line-coverage {
+            color: #777 !important;
+            text-align: right;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
+        }
+
+        table.coverage td.text {
+        }
+
+        table.coverage td span.cline-any {
+            display: inline-block;
+            padding: 0 5px;
+            width: 40px;
+        }
+        table.coverage td span.cline-neutral {
+            background: #eee;
+        }
+        table.coverage td span.cline-yes {
+            background: #b5d592;
+            color: #999;
+        }
+        table.coverage td span.cline-no {
+            background: #fc8c84;
+        }
+
+        .cstat-yes { color: #111; }
+        .cstat-no { background: #fc8c84; color: #111; }
+        .fstat-no { background: #ffc520; color: #111 !important; }
+        .cbranch-no { background:  yellow !important; color: #111; }
+        .missing-if-branch {
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: black;
+            color: yellow;
+            xtext-decoration: line-through;
+        }
+        .missing-if-branch .typ {
+            color: inherit !important;
+        }
+
+        .entity, .metric { font-weight: bold; }
+        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
+        .metric small { font-size: 80%; font-weight: normal; color: #666; }
+
+        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
+        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
+        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
+        div.coverage-summary th.file { border-right: none !important; }
+        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
+        div.coverage-summary th.pct { border-right: none !important; }
+        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
+        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
+        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
+        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
+        div.coverage-summary td.pic { min-width: 120px !important;  }
+        div.coverage-summary a:link { text-decoration: none; color: #000; }
+        div.coverage-summary a:visited { text-decoration: none; color: #333; }
+        div.coverage-summary a:hover { text-decoration: underline; }
+        div.coverage-summary tfoot td { border-top: 1px solid #666; }
+
+        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
+            height: 10px;
+            width: 7px;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
+        div.coverage-summary .yui3-datatable-sort-indicator {
+            background: url("http://yui.yahooapis.com/3.6.0/build/datatable-sort/assets/skins/sam/sort-arrow-sprite.png") no-repeat scroll 0 0 transparent;
+        }
+        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
+            background-position: 0 -20px;
+        }
+        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
+            background-position: 0 -10px;
+        }
+
+        .high { background: #b5d592 !important; }
+        .medium { background: #ffe87c !important; }
+        .low { background: #fc8c84 !important; }
+
+        span.cover-fill, span.cover-empty {
+            display:inline-block;
+            border:1px solid #444;
+            background: white;
+            height: 12px;
+        }
+        span.cover-fill {
+            background: #ccc;
+            border-right: 1px solid #444;
+        }
+        span.cover-empty {
+            background: white;
+            border-left: none;
+        }
+        span.cover-full {
+            border-right: none !important;
+        }
+        pre.prettyprint {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .com { color: #999 !important; }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">./Static/js/Sales/pos.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">49.49% <small>(98 / 198)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">53.97% <small>(34 / 63)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">35.38% <small>(23 / 65)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">49.49% <small>(98 / 198)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">./Static/js/Sales\</a> &#187; pos.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322
+323
+324
+325
+326
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368
+369
+370
+371
+372
+373
+374
+375
+376
+377
+378
+379
+380
+381
+382
+383
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423
+424
+425
+426
+427
+428
+429
+430
+431
+432
+433
+434
+435
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464
+465
+466
+467
+468
+469
+470
+471
+472
+473
+474
+475
+476
+477
+478
+479
+480
+481
+482
+483
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498
+499
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">580</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">37</span>
+<span class="cline-any cline-yes">52</span>
+<span class="cline-any cline-yes">20</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">32</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">32</span>
+<span class="cline-any cline-yes">22</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">154</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">154</span>
+<span class="cline-any cline-yes">154</span>
+<span class="cline-any cline-yes">154</span>
+<span class="cline-any cline-yes">154</span>
+<span class="cline-any cline-yes">154</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">89</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-yes">76</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">89</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">89</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">15</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">11</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-yes">10</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-yes">17</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">4</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">290</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">145</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global define, console*/
+define(['angular', 'jquery', 'underscore', 'url', 'moment', 'spa', 'alert', 'angularShared/loader', 'angularShared/interceptor',
+    'Sales/basket', 'Sales/payment',
+    'facetsearch/controller', 'facetsearch/directive', 'localisation', 'jquery.pickList', 'Config/decisionTableAngular', 'authorise',
+    'angular.ui', 'angular.bootstrap', 'lib/select2', 'underscore.string'],
+&nbsp;
+function (angular, $, _, url, moment, spa, alert, loader, interceptor, basketController, paymentController, facetController, facetDirective, localisation, pickList, decisionTableAngular, authoriseController) {
+    'use strict';
+&nbsp;
+    return {
+        init: function ($el) {
+&nbsp;
+            var salesController = function ($scope, $timeout, $http, $dialog) {
+                $scope.culture = localisation.getSettings();
+                $scope.user = JSON.parse(sessionStorage.User);
+                $scope.cart = {
+                    items: [],
+                    total: 0,
+                    paymentsTotal: 0,
+                    credit: 0,
+                    changeTotal: 0,
+                    balance: 0,
+                    customer: {
+                        contacts: []
+                    },
+                    payments: [],
+                    warrantyBeingPurchased: false,
+                    saleComplete: false
+                };
+&nbsp;
+                $scope.payment = {};
+                $scope.cart.basketChangesAllowed = true;
+                $scope.cart.taxType = $('.pos-sales').data('taxType');
+&nbsp;
+                $scope.views = {
+                    productSearch: {
+                        visible: true
+                    },
+                    itemList: {
+                        visible: false
+                    },
+                    customer: {
+                        visible: false
+                    },
+                    payment: {
+                        visible: false
+                    },
+                    mockNativeDevices: {
+                        visible: false
+                    }
+                };
+&nbsp;
+                $scope.sections = {
+                    chequeNumber: {
+                        visible: false
+                    },
+                    bank: {
+                        visible: false
+                    },
+                    cardType: {
+                        visible: false
+                    },
+                    cardNumber: {
+                        visible: false
+                    },
+                    bankAccountNumber: {
+                        visible: false
+                    },
+                    tendered: {
+                        visible: false
+                    },
+                    change: {
+                        visible: false
+                    },
+                    buttonPay: {
+                        visible: true
+                    }
+                };
+&nbsp;
+                $scope.MasterData = {};
+&nbsp;
+                decisionTableAngular.load($http, ['POS.DecisionTable.Payment'], <span class="fstat-no" title="function not covered" >function (key, dt) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.tablePosPayment = dt;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.$watch(<span class="fstat-no" title="function not covered" >function (scope) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        return scope.payment.payMethod;</span>
+                    },
+&nbsp;
+<span class="fstat-no" title="function not covered" >                    function () {</span>
+<span class="cstat-no" title="statement not covered" >                        $scope.tablePosPayment.evaluate($scope);</span>
+                    });
+                });
+&nbsp;
+                var populatePickLists = function (list) {
+                    _.each(list, function (item) {
+                        pickList.populate(item.name, <span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                            if (_.isFunction(item.filter)) {</span>
+<span class="cstat-no" title="statement not covered" >                                $scope.MasterData[item.v] = item.filter(data);</span>
+                            } else {
+<span class="cstat-no" title="statement not covered" >                                $scope.MasterData[item.v] = data;</span>
+                            }
+                        });
+                    });
+                };
+                var pickLists = [{
+                    name: 'FPM',
+                    v: 'payMethods'
+                }, {
+                    name: 'Bank',
+                    v: 'bank'
+                }, {
+                    name: 'CCT',
+                    v: 'cardType'
+                }, {
+                    name: 'Blue.Config.ContactType',
+                    v: 'ContactTypes',
+                    filter: <span class="fstat-no" title="function not covered" >function (items) {</span>
+<span class="cstat-no" title="statement not covered" >                        var filtered = {};</span>
+<span class="cstat-no" title="statement not covered" >                        _.map(items, <span class="fstat-no" title="function not covered" >function (value, key) {</span></span>
+<span class="cstat-no" title="statement not covered" >                            if (key === 'Email' || key === 'HomePhone' || key === 'MobilePhone') {</span>
+<span class="cstat-no" title="statement not covered" >                                filtered[key] = value;</span>
+<span class="cstat-no" title="statement not covered" >                                $scope.cart.customer.contacts.push({</span>
+                                    type: value,
+                                    value: ''
+                                });
+                            }
+                        });
+<span class="cstat-no" title="statement not covered" >                        return filtered;</span>
+                    }
+                }];
+&nbsp;
+                populatePickLists(pickLists);
+&nbsp;
+                $scope.showTaxInclusivePrice = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    return $scope.cart.taxType === 'I';</span>
+                };
+&nbsp;
+                var getWarrantyTotalAmountForItem = function (item) {
+                    var warrantyTotal = 0;
+                    if (item.warranties) {
+                        warrantyTotal = _.reduce(item.warranties, function (warrantyMemo, warranty) {
+                            if (warranty.warrantyLink.IsFree) {
+                                return warrantyMemo;
+                            }
+&nbsp;
+                            return warrantyMemo + (warranty.price.RetailPrice || <span class="branch-1 cbranch-no" title="branch not covered" >0)</span> + (warranty.price.TaxAmount || 0);
+&nbsp;
+                        }, 0);
+                    }
+&nbsp;
+                    return warrantyTotal;
+                };
+&nbsp;
+                var getInstallationTotalAmountForItem = function (item) {
+                    var installationTotal = 0;
+                    if (item.installations) {
+                        installationTotal = _.reduce(item.installations, function (installationMemo, installation) {
+                            return installationMemo + (installation.UnitPriceCash || 0) + (installation.TaxAmount || 0);
+                        }, 0);
+                    }
+&nbsp;
+                    return installationTotal;
+                };
+&nbsp;
+                $scope.updateBalance = function () {
+                    var payments = _.reduce($scope.cart.payments, <span class="fstat-no" title="function not covered" >function (memo, payment) {</span>
+<span class="cstat-no" title="statement not covered" >                        return memo + (payment.amount || 0);</span>
+                    }, 0);
+&nbsp;
+                    $scope.cart.balance = $scope.cart.total - payments + $scope.cart.changeTotal - $scope.cart.credit;
+                    $scope.payment.amount = $scope.cart.balance = Math.round($scope.cart.balance * 100) / 100;
+                    $scope.payment.tendered = Math.round($scope.cart.balance * 100) / 100;
+                    $scope.cart.balance = Math.round($scope.cart.balance * 100) / 100;
+                    $scope.cart.credit = Math.round($scope.cart.credit * 100) / 100;
+                };
+&nbsp;
+                $scope.updateTotalAmount = function () {
+                    var total = _.reduce($scope.cart.items, function (memo, item) {
+                        var itemTotal = memo + item.quantity * (item.taxExclusivePrice + (item.taxAmount || 0));
+                        var warrantyTotal = getWarrantyTotalAmountForItem(item);
+                        var installationTotal = getInstallationTotalAmountForItem(item);
+                        return itemTotal + warrantyTotal + installationTotal;
+                    }, 0);
+&nbsp;
+                    $scope.cart.balance = $scope.cart.total = total;
+&nbsp;
+                    $scope.updateBalance();
+                };
+&nbsp;
+                $scope.isCustomerDataRequired = function () {
+                    return $scope.cart.warrantyBeingPurchased || $scope.cart.installationBeingPurchased || $scope.cart.itemBeingReturned || false;
+                };
+&nbsp;
+                $scope.isCustomerDataMissing = function () {
+                    if (!$scope.isCustomerDataRequired()) {
+                        return false;
+                    }
+&nbsp;
+                    var customer = $scope.cart.customer;
+                    return !customer.CustomerTitle || !customer.CustomerFirstName || !customer.CustomerLastName || !customer.CustomerAddressLine1 || !customer.CustomerTownOrCity || !customer.CustomerPostcode;
+                };
+&nbsp;
+                $scope.showProductSearchView = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.productSearch.visible = true;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.itemList.visible = false;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.customer.visible = false;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.payment.visible = false;</span>
+                };
+&nbsp;
+                $scope.showItemListView = function () {
+                    $scope.views.productSearch.visible = false;
+                    $scope.views.itemList.visible = true;
+                    $scope.views.customer.visible = false;
+                    $scope.views.payment.visible = false;
+                };
+&nbsp;
+                $scope.showCustomerView = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.productSearch.visible = false;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.itemList.visible = false;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.customer.visible = true;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.payment.visible = false;</span>
+                };
+&nbsp;
+                $scope.showPaymentView = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.productSearch.visible = false;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.itemList.visible = false;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.customer.visible = false;</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.views.payment.visible = true;</span>
+                };
+&nbsp;
+                var searchResultClicked = <span class="fstat-no" title="function not covered" >function (event, data) {</span>
+<span class="cstat-no" title="statement not covered" >                    if (!$scope.cart.saleComplete) {</span>
+<span class="cstat-no" title="statement not covered" >                        $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                            data.element.addClass('added').find('.cart_in').addClass('added');</span>
+                        }, 0);
+<span class="cstat-no" title="statement not covered" >                        $timeout(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                            data.element.removeClass('added').find('.cart_in').removeClass('added');</span>
+                        }, 1000);
+                    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    $scope.$broadcast('pos:item:add', data.resultItem);</span>
+                };
+&nbsp;
+                var startNewSale = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart = {</span>
+                        items: [],
+                        total: 0,
+                        paymentsTotal: 0,
+                        changeTotal: 0,
+                        balance: 0,
+                        credit: 0,
+                        customer: {
+                            contacts: []
+                        },
+                        payments: [],
+                        warrantyBeingPurchased: false,
+                        installationBeingPurchased: false,
+                        saleComplete: false
+                    };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    $scope.payment = {};</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart.basketChangesAllowed = true;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    $scope.showProductSearchView();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    _.each($scope.MasterData.ContactTypes, <span class="fstat-no" title="function not covered" >function (key, value) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        $scope.cart.customer.contacts.push({</span>
+                            type: value,
+                            value: ''
+                        });
+                    });
+                };
+&nbsp;
+                $scope.newSale = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    startNewSale();</span>
+                };
+&nbsp;
+                $scope.cancelSale = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    var cancelConfirmation = $dialog.messageBox('Confirm Sale Cancellation',</span>
+                        'You have chosen to cancel this sale and clear all products and customer data. Are you sure you want to do this?', [{
+                        label: 'Yes, Cancel The Sale',
+                        result: 'yes',
+                        cssClass: 'btn btn-primary'
+                    }, {
+                        label: 'No, Go Back',
+                        result: 'no'
+                    }]);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    cancelConfirmation.open().then(<span class="fstat-no" title="function not covered" >function (choice) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        if (choice === 'yes') {</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.newSale();</span>
+                        }
+                    });
+                };
+&nbsp;
+                $scope.finaliseSale = function () {
+                    $http({
+                        method: 'POST',
+                        url: url.resolve('/Sales/Orders/Save'),
+                        data: $scope.cart
+                    }).success(function (data) {
+                        console.log('Order saved ' + JSON.stringify(data));
+                        $scope.cart.saleComplete = true;
+                    });
+                };
+&nbsp;
+                var saleCompleted = function (event, order) {
+                    $http({
+                        method: 'POST',
+                        url: url.resolve('/Sales/Orders/Save'),
+                        data: order
+                    }).success(function (data) {
+                        console.log('Order saved ' + JSON.stringify(data));
+                        $scope.cart.saleComplete = true;
+                    });
+                };
+&nbsp;
+                var customerCardSwiped = <span class="fstat-no" title="function not covered" >function (event, customerNumber) {</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart.customer.CustomerTitle = 'Mr';</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart.customer.CustomerFirstName = 'Ziggy';</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart.customer.CustomerLastName = 'Stardust';</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart.customer.CustomerAddressLine1 = 'Spider lane';</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart.customer.CustomerTownOrCity = 'Mars';</span>
+<span class="cstat-no" title="statement not covered" >                    $scope.cart.customer.CustomerPostcode = customerNumber;</span>
+                };
+&nbsp;
+                var barcodeScanned = <span class="fstat-no" title="function not covered" >function (event, barcode) {</span>
+<span class="cstat-no" title="statement not covered" >                    $http({</span>
+                        method: 'GET',
+                        url: url.resolve('Sales/Pos/SelectSearch'),
+                        params: {
+                            q: barcode,
+                            rows: 1
+                        }
+                    }).success(<span class="fstat-no" title="function not covered" >function (data) {</span>
+<span class="cstat-no" title="statement not covered" >                        if (!data || !data.response.numFound) {</span>
+<span class="cstat-no" title="statement not covered" >                            return;</span>
+                        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        var doc = data.response.docs[0];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        $scope.cart.searchItem = {</span>
+                            id: doc.Id,
+                            text: doc.ItemNoWarrantyLink,
+                            ItemNoWarrantyLink: doc.ItemNoWarrantyLink,
+                            CashPrice: doc.CashPrice,
+                            Description1: doc.Description1,
+                            Description2: doc.Description2
+                        };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        $scope.$broadcast('pos:searchitem:add');</span>
+                    });
+                };
+&nbsp;
+                var tillOpenRequested = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    console.log('Till opening...');</span>
+                };
+&nbsp;
+                var showReceiptEntryDialog = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    var receiptEntry = $dialog.dialog({</span>
+                        templateUrl: url.resolve('/Static/js/Sales/Templates/receiptCodeEntry.html'),
+                        controller: 'ReceiptEntryController'
+                    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    receiptEntry.open().then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        if (!result) {</span>
+<span class="cstat-no" title="statement not covered" >                            return;</span>
+                        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        $scope.$broadcast('pos:receipt:load', result);</span>
+                    });
+                };
+&nbsp;
+                $scope.refundOrExchange = function () {
+&nbsp;
+                    <span class="missing-if-branch" title="else path not taken"" >E</span>if ($scope.cart.items.length &gt; 0) {
+                        var cancelConfirmation = $dialog.messageBox('Confirm Sale Cancellation',
+                            'In order to load a receipt the current sale will need to be cancelled. This will clear all products and customer data. Are you sure you want to do this?', [{
+                            label: 'Yes, Cancel The Sale',
+                            result: 'yes',
+                            cssClass: 'btn btn-primary'
+                        }, {
+                            label: 'No, Go Back',
+                            result: 'no'
+                        }]);
+&nbsp;
+                        cancelConfirmation.open().then(<span class="fstat-no" title="function not covered" >function (choice) {</span>
+<span class="cstat-no" title="statement not covered" >                            if (choice === 'yes') {</span>
+<span class="cstat-no" title="statement not covered" >                                $scope.newSale();</span>
+<span class="cstat-no" title="statement not covered" >                                showReceiptEntryDialog();</span>
+                            }
+                        });
+                    } else {
+<span class="cstat-no" title="statement not covered" >                        showReceiptEntryDialog();</span>
+                    }
+                };
+&nbsp;
+                $scope.manualReturn = function () {
+                    $scope.$broadcast('pos:return:manual');
+                };
+&nbsp;
+                $scope.enableMockMode = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    var mockShell = $dialog.dialog({</span>
+                        templateUrl: url.resolve('/Static/js/Sales/Templates/mockShell.html'),
+                        controller: 'MockShellController'
+                    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    mockShell.open().then(<span class="fstat-no" title="function not covered" >function (result) {</span></span>
+<span class="cstat-no" title="statement not covered" >                        if (result.action === 'swipe') {</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.$broadcast('shell:magstripe:swipe', result.magstripe);</span>
+                        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        if (result.action === 'scan') {</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.$broadcast('shell:barcode:scan', result.barcode);</span>
+                        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                        if (result.action === 'till') {</span>
+<span class="cstat-no" title="statement not covered" >                            $scope.$broadcast('shell:till:open');</span>
+                        }
+                    });
+                };
+&nbsp;
+                $scope.enableFinaliseSale = function () {
+                    return (!$scope.cart.saleComplete &amp;&amp; $scope.cart.authorisedBy !== undefined &amp;&amp; $scope.cart.authorisedBy !== null &amp;&amp; !$scope.isCustomerDataMissing() &amp;&amp; $scope.cart.balance &lt;= 0) || false;
+                };
+&nbsp;
+                var setScreenHeight = <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    $('.facet-data-container').height($(window).height() - 146);</span>
+<span class="cstat-no" title="statement not covered" >                    $('.item-list').height($(window).height() - 146);</span>
+                };
+&nbsp;
+                $scope.$on('facetsearch:result:click', searchResultClicked);
+                $scope.$on('shell:magstripe:swipe', customerCardSwiped);
+                $scope.$on('shell:barcode:scan', barcodeScanned);
+                $scope.$on('shell:till:open', tillOpenRequested);
+                $scope.$on('pos:sale:completed', saleCompleted);
+&nbsp;
+                $timeout(<span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                    $('body').addClass('full-screen');</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    $('.pos-navbar-toggle').on('click', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >                        $('body').toggleClass('full-screen');</span>
+                    });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    $(window).on('resize', setScreenHeight);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                    setScreenHeight();</span>
+                }, 0);
+            };
+&nbsp;
+            angular.module('myApp', ['ui', 'ui.bootstrap'])
+                .config(['$httpProvider', function ($httpProvider) {
+                $httpProvider.responseInterceptors.push(interceptor);
+            }])
+                .filter('humanize', <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                return <span class="fstat-no" title="function not covered" >function (input) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    return _.str.humanize(input);</span>
+                };
+            })
+                .filter('titleize', <span class="fstat-no" title="function not covered" >function () {</span>
+<span class="cstat-no" title="statement not covered" >                return <span class="fstat-no" title="function not covered" >function (input) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    return _.str.titleize(input);</span>
+                };
+            })
+                .factory('myHttp', ['$http', '$rootScope', loader])
+                .controller('FacetController', ['$scope', '$attrs', 'myHttp', '$compile', facetController])
+                .directive('facetsearch', facetDirective)
+                .controller('BasketController', ['$scope', '$rootScope', '$timeout', '$http', basketController])
+                .controller('PaymentController', ['$scope', '$timeout', '$http', paymentController])
+                .controller('AuthoriseController', ['$scope', '$http', '$rootScope', authoriseController])
+                .controller('SalesController', ['$scope', '$timeout', '$http', '$dialog', salesController])
+                .controller('ReceiptEntryController', ['$scope', 'dialog', <span class="fstat-no" title="function not covered" >function ($scope, dialog) {</span>
+<span class="cstat-no" title="statement not covered" >                $scope.loadReceipt = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    e.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >                    dialog.close($scope.barcode);</span>
+                };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $scope.cancel = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    e.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >                    dialog.close();</span>
+                };
+            }])
+                .controller('MockShellController', ['$scope', 'dialog', <span class="fstat-no" title="function not covered" >function ($scope, dialog) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $scope.mockSwipeCustomerCard = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    e.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >                    dialog.close({</span>
+                        action: 'swipe',
+                        magstrip: $scope.magstripe
+                    });
+                };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $scope.mockScanBarcode = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    e.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >                    dialog.close({</span>
+                        action: 'scan',
+                        barcode: $scope.barcode
+                    });
+                };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $scope.openTill = <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    e.preventDefault();</span>
+<span class="cstat-no" title="statement not covered" >                    dialog.close({</span>
+                        action: 'till'
+                    });
+                };
+            }]);
+&nbsp;
+            return angular.bootstrap($el, ['myApp']);
+        }
+    };
+});</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Mar 07 2014 15:49:30 GMT+0000 (GMT Standard Time)</div>
+</div>
+
+<script src="../prettify.js"></script>
+
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script>
+
+    YUI().use('datatable', function (Y) {
+
+        var formatters = {
+          pct: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              try {
+                  return o.value.toFixed(2) + '%';
+              } catch (ex) { return o.value + '%'; }
+          },
+          html: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.record.get(o.column.key + '_html');
+          }
+        },
+          defaultFormatter = function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.value;
+          };
+
+        function getColumns(theadNode) {
+            var colNodes = theadNode.all('tr th'),
+                cols = [],
+                col;
+            colNodes.each(function (colNode) {
+                col = {
+                    key: colNode.getAttribute('data-col'),
+                    label: colNode.get('innerHTML') || ' ',
+                    sortable: !colNode.getAttribute('data-nosort'),
+                    className: colNode.getAttribute('class'),
+                    type: colNode.getAttribute('data-type'),
+                    allowHTML: colNode.getAttribute('data-html') === 'true' || colNode.getAttribute('data-fmt') === 'html'
+                };
+                col.formatter = formatters[colNode.getAttribute('data-fmt')] || defaultFormatter;
+                cols.push(col);
+            });
+            return cols;
+        }
+
+        function getRowData(trNode, cols) {
+            var tdNodes = trNode.all('td'),
+                    i,
+                    row = { classes: {} },
+                    node,
+                    name;
+            for (i = 0; i < cols.length; i += 1) {
+                name = cols[i].key;
+                node = tdNodes.item(i);
+                row[name] = node.getAttribute('data-value') || node.get('innerHTML');
+                row[name + '_html'] = node.get('innerHTML');
+                row.classes[name] = node.getAttribute('class');
+                //Y.log('Name: ' + name + '; Value: ' + row[name]);
+                if (cols[i].type === 'number') { row[name] = row[name] * 1; }
+            }
+            //Y.log(row);
+            return row;
+        }
+
+        function getData(tbodyNode, cols) {
+            var data = [];
+            tbodyNode.all('tr').each(function (trNode) {
+                data.push(getRowData(trNode, cols));
+            });
+            return data;
+        }
+
+        function replaceTable(node) {
+            if (!node) { return; }
+            var cols = getColumns(node.one('thead')),
+                data = getData(node.one('tbody'), cols),
+                table,
+                parent = node.get('parentNode');
+
+            table = new Y.DataTable({
+                columns: cols,
+                data: data,
+                sortBy: 'file'
+            });
+            parent.set('innerHTML', '');
+            table.render(parent);
+        }
+
+        Y.on('domready', function () {
+            replaceTable(Y.one('div.coverage-summary table'));
+            if (typeof prettyPrint === 'function') {
+                prettyPrint();
+            }
+        });
+    });
+</script>
+</body>
+</html>

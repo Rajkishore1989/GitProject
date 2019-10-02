@@ -1,0 +1,31 @@
+﻿@model Blue.Cosacs.Web.Areas.Warehouse.Models.Driver
+<tr data-id="@Model.Id" class="edit">
+@if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.DriverMaintenanceEdit))
+ {
+    <td class="actions"></td>
+ }
+    <td colspan="2">
+        @using (Html.BeginForm("RecordEdit", "Drivers", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label for="Name" class="col col-lg-3 control-label">Name</label>
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.Name, new { @class="form-control form-horizontal" })
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="PhoneNumber" class="col col-lg-3 control-label">Phone</label>
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.PhoneNumber, new { @class="form-control form-horizontal" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-lg-12">
+                    <div class="text-warning">In order to add to a truck any new Driver created, you need to log out and log in again.</div>
+                </div>
+            </div>
+        </div>
+        }
+    </td>
+</tr>

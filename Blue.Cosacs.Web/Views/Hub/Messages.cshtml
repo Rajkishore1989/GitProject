@@ -1,0 +1,103 @@
+﻿@model Blue.Hub.Server.IQueueWithStatistics
+@{
+    ViewBag.Title = string.Format("Messages for Queue {0} ({1})", Model.Id, Model.Binding);
+}
+<div data-module="Hub" ng-controller="HubController">
+    <h5>({{hubMessages.Poison.TotalResults}}) Poison Messages</h5>
+    <div>
+        <table class="table table-striped table-bordered">
+            <thead>
+            <tr>
+                <th style="width: 3%;"></th>
+                <th style="width: 5%; white-space: nowrap;">Msg Id</th>
+                <th style="width: 12%;">Created On</th>
+                <th style="width: 10%">Correlation Id</th>
+                <th style="width: 35%;">Content</th>
+                <th style="width: 35%;">Exception</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="message in hubMessages.Poison.Results">
+                <td>
+                    <a href="#" ng-click="reprocessPoisonMessage()" class="action-reprocess glyphicons restart" title="Reprocess this message"></a>
+                </td>
+                <td>{{message.Id}}</td>
+                <td nowrap>{{message.CreatedOn | moment: "DD/MM/YYYY HH:mm:ss"}}</td>
+                <td>{{message.CorrelationId}}</td>
+                <td ng-click="showMessageViewer()">
+                    <pre class="message xml" ng-bind="message.Body | prettyPrint"></pre>
+                </td>
+                <td ng-click="showExceptionViewer()" class="message">
+                    <pre class="message" ng-bind-html-unsafe="message.Exception | prettyPrint"></pre>
+                </td>
+            </tr>
+            </tbody>
+            <tfoot ng-show="hubMessages.Poison.TotalResults > 0">
+                <tr>
+                    <td colspan="6">
+                        <pagination num-pages="hubMessages.Poison.NumberOfPages"
+                                    current-page="paging.poison.currentPage"></pagination>
+                    </td>
+                </tr>
+            </tfoot>
+            <tfoot ng-show="hubMessages.Poison.TotalResults == 0">
+                <tr>
+                    <td colspan="6">There are no poison messages in this queue.</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+    <div class=section>({{hubMessages.Initial.TotalResults}}) Pending Messages</div>
+    <table class="table table-striped table-bordered">
+        <thead>
+        <tr>
+            <th style="width:  5%; white-space: nowrap;">Msg ID</th>
+            <th style="width: 15%">Created On</th>
+            <th style="width: 10%">Correlation ID</th>
+            <th style="width: 70%">Content</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="message in hubMessages.Initial.Results">
+            <td>{{message.Id}}</td>
+            <td nowrap>{{message.CreatedOn | moment: 'DD/MM/YYYY HH:mm:ss'}}</td>
+            <td>{{message.CorrelationId}}</td>
+            <td ng-click="showMessageViewer()">
+                <pre class="message xml" ng-bind="message.Body | prettyPrint"></pre>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot ng-show="hubMessages.Initial.TotalResults == 0">
+        <tr>
+            <td colspan="4">There are no pending messages in this queue.</td>
+        </tr>
+        </tfoot>
+    </table>
+    <div class="modal fade" id="contentModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title">Hub message</h4></div>
+                <div class="modal-body">
+                    <textarea id="messageBody" ng-model="showMessage"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-default" ng-click="closeMessageViewer()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="exceptionModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><h4 class="modal-title">Exception</h4></div>
+                <div class="modal-body">
+                    <textarea id="messageExceptionBody" ng-model="showException"></textarea>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-default" ng-click="closeExceptionViewer()">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>  
+</div>

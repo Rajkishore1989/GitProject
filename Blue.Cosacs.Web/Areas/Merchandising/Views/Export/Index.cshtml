@@ -1,0 +1,26 @@
+﻿@model IEnumerable<PurchaseOrderExportModel>
+@{
+     ViewBag.Title = "Export Test";
+}
+
+<div data-module="merchandising/export/init" ng-controller="exportCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+
+    <div class="row buffer bottom">
+         <button class="btn btn-primary" ng-click="DownloadProducts()">Download Product Export</button>
+    </div>
+    <div class="row buffer bottom">
+         <button class="btn btn-primary" ng-click="DownloadStockLevels()">Download Stock Level Export</button>
+    </div>
+    <div class="row buffer bottom">
+        <button class="btn btn-primary" ng-click="DownloadSets()">Download Set Export</button>
+    </div>
+    <div class="row buffer top bottom">
+        <button class="btn btn-primary" ng-click="DownloadOrders()">Download Purchase Order Export</button>
+    </div>
+    <div class="row buffer top bottom">
+        <button class="btn btn-primary" ng-click="DownloadPromotions()">Download Promotion Export</button>
+    </div>
+    <div class="row buffer top bottom">
+        <button class="btn btn-primary" ng-click="DownloadAssociatedProducts()">Download Associated Products</button>
+    </div>
+</div>

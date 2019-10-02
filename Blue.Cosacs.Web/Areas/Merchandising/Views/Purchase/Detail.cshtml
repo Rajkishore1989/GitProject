@@ -1,0 +1,86 @@
+﻿@model object
+
+<div data-module="merchandising/purchase/init" ng-controller="PurchaseCtrl" ng-init="purchase=@Html.RawJson(Model)" ng-cloak class="buffer-sm bottom">
+    <div ng-form="purchaseForm">
+
+        <div ng-show="isCreateMode()">
+            <create-purchase-order></create-purchase-order>
+            <create-items></create-items>
+        </div>
+        
+        <div ng-show="isEditMode()">
+            <edit-purchase-order></edit-purchase-order>
+            <div ng-show="editingLabels">
+                <view-labels></view-labels>
+            </div>
+            <div ng-hide="editingLabels">
+                <edit-items></edit-items>
+            </div>
+        </div>
+
+        <div ng-show="isViewMode()">
+            <view-purchase-order></view-purchase-order>
+            <view-items></view-items>
+        </div>
+
+        <div class="row" style="font-weight: bold" ng-show="purchase.vendorId && purchase.receivingLocationId && !editingLabels">
+            <div class="col-lg-9"></div>
+            <div id="totalTableContainer" class="col-lg-3">
+                <table class="table table-bordered table-striped pb-table">
+                    <tbody>
+                        <tr>
+                            <td class="currency">Total</td>
+                            <td class="currency" ng-show="isCreateMode()">{{totalCost(purchase.products) | pbCurrency:purchase.vendor.currency}}</td>
+                            <td class="currency" ng-show="!isCreateMode()">{{totalCost(purchase.products) | pbCurrency:purchase.currency}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" ng-hide="editingLabels">
+            <div id="referenceNumbersContainer" class="col-lg-6">
+                <div class="section">Reference Numbers</div>
+                <table class="table table-bordered table-striped pb-table" ng-form="refForm">
+                    <tbody>
+                        <tr class="form-group" ng-repeat="referenceNumber in purchase.referenceNumbers">
+                            <td ng-hide="!canEditReferences()" class="component-controls x-small">
+                                <span ng-click="removeReferenceNumber(referenceNumber)" title="Remove" ng-class="{hide: purchase.referenceNumbers.length <= 1}" class="halflings trash btn-icon"></span>
+                            </td>
+                            <td ng-hide="readonly">
+                                <list id="{{$index}}" ng-model="referenceNumber.key" scope="options.referenceNumberType" placeholder="Select Type" ng-disabled="!canEditReferences()"></list>
+                            </td>
+                            <td ng-show="readonly">
+                                <label>{{referenceNumber.key}}</label>
+                            </td>
+                            <td ng-hide="readonly">
+                                <input id="{{$index}}" class="form-control" type="text" ng-model="referenceNumber.value" maxlength="100" ng-disabled="!canEditReferences()">
+                            </td>
+                            <td ng-show="readonly">
+                                {{referenceNumber.value}}
+                            </td>
+                        </tr>
+                        <tr ng-hide="!canEditReferences()">
+                            <td class="aligned component-controls x-small">
+                                <span ng-click="addReferenceNumber()" title="Add" class="glyphicons btn-icon plus" ng-class="{'disabled' : !canAddReference()}">
+                                </span>
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-6">
+                <div class="section">General Purchase Order Comments</div>
+                <div class="form-group" ng-class="{'has-error': purchaseForm.comments.$invalid}">
+                    <div ng-hide="editing">
+                        <p class="pb-text" ng-model="purchase.comments" pb-ref-link></p>
+                    </div>
+                    <textarea class="form-control" rows="6" name="comments" ng-model="purchase.comments" ng-show="editing"></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>

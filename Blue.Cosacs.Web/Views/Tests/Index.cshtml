@@ -1,0 +1,27 @@
+﻿@{ Layout = null; }
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <title>QUnit Tests</title>
+    @Html.Css("qunit")
+    <script data-main='@Url.Content("~/static/js/test/main")' src='@Url.Content("~/static/js/lib/require-jquery.js")'></script>
+</head>
+<body data-base-url='@Url.Content("~/")'>
+
+    <h1 id="qunit-header">QUnit Tests</h1>
+    <h2 id="qunit-banner"></h2>
+    <div id="qunit-testrunner-toolbar"></div>
+    <h2 id="qunit-userAgent"></h2>
+    <ol id="qunit-tests"></ol>
+    <div id="qunit-fixture">
+
+        <!-- jquery.pickList -->
+        <input id="badPickList" type="text" /> 
+        <select id="pickListWithNoDataAttr"></select>
+        <select id="pickList1"></select>
+    </div>
+</body>
+</html>

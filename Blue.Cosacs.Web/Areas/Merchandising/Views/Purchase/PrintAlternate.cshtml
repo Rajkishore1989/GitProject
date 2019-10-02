@@ -1,0 +1,118 @@
+﻿@model PurchaseOrderPrintModel
+
+@{
+    ViewBag.Title = "Purchase Order Addendum " + Model.Id;
+    ViewBag.Currency = Model.Currency;
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var pagesize = 3;
+}
+
+@section Head
+{
+    <style type="text/css">
+        .reject {
+            white-space: nowrap;
+        }
+
+        .reject span {
+            margin-left: 5px;
+        }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+
+<div>
+    <header>
+        <div style="width:100%;display:inline-block;margin:0 0 20px 0;">
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    <tr><th>Receiving Location:</th><td>@Model.ReceivingLocation</td></tr>
+                    <tr><th>Vendor:</th><td>@Model.Vendor</td></tr>
+                    <tr><th>Requested Delivery Date:</th><td>@Model.RequestedDeliveryDate</td></tr>
+                </table>
+            </div>
+            <div style="display:inline-block;vertical-align:top;float:right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Purchase Order Addendum @Model.Id</div>
+                        <div class="barcode">@Html.Barcode("PO$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@Model.CreatedDate</div>
+                        <div class="createdBy">@Model.CreatedById - @Model.CreatedBy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    @for (var x = 0; x < Model.Products.Count; x += pagesize)
+    {
+        @Html.Partial("PrintProductWithCostAlternate", Model.Products.Skip(x).Take(pagesize).ToList());
+         <div class="clear"></div>     
+       
+        if (x + pagesize < Model.Products.Count)
+        {
+             <div class="leftFooter">
+                 @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+
+            <div class="pageBreak"></div>
+        }
+        else
+        {
+            <div class="larger" style="float:right;">Total Cost: @Model.Currency @Model.PendingCost</div>
+        
+        <br/>
+        <br/>
+        <br/>
+
+             <div class="leftFooter">
+                 @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+        }
+    }
+</div>

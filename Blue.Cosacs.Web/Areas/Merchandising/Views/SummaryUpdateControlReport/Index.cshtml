@@ -1,0 +1,304 @@
+﻿<div data-module="merchandising/reports/summaryUpdateControl/init" ng-controller="SummaryUpdateControlReportCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="btn btn-default" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="btn btn-default" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="btn btn-default" ng-click="reset()">Clear</button>
+                    <button id="buttonSearch" class="btn btn-primary" ng-click="get()" ng-disabled="loading()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="division">Run Number</label>
+                    <input class="form-control" name="runNumber" ng-model="query.runNumber" />
+                </div>
+            </div>
+             <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <list name="location" ng-model="query.locationId" scope="locations" placeholder="Select a Location" ng-disabled="query.fasciaId"></list>
+                </div>
+            </div>
+           <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="fromDate">Created From</label>
+                    <input class="form-control" name="fromDate" ng-model="query.fromDate" type="date" placeholder="Select Date" />
+                </div>
+           </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="toDate">Created To</label>
+                    <input class="form-control" name="toDate" ng-model="query.toDate" type="date" placeholder="Select Date" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <table class="table table-bordered table-responsive pb-table" ng-hide="!results">
+        <thead>
+            <tr>
+                <th>Inventory Summary Control</th>
+                <th colspan="2">Transaction</th>
+                <th colspan="2">Regular Inventory</th>
+                <th colspan="2">Repossessed Inventory</th>
+                <th colspan="2">Spare Parts</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th class="col-sm"></th>
+                <th class="col-sm">ID</th>
+                <th class="col-sm">Date</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+            </tr>
+            <tr>
+                <td><strong>Opening Inventory</strong></td>
+                <td></td>
+                <td></td>
+                <td>{{results.openingInventory.regularValue | pbCurrency}}</td>
+                <td>{{results.openingInventory.regularUnits || 0}}</td>
+                <td>{{results.openingInventory.repossessedValue | pbCurrency}}</td>
+                <td>{{results.openingInventory.repossessedUnits || 0}}</td>
+                <td>{{results.openingInventory.sparePartsValue | pbCurrency}}</td>
+                <td>{{results.openingInventory.sparePartsUnits || 0}}</td>
+            </tr>
+            <tr ng-click="toggleType('Goods Receipt')" class="expand-icon-group darken">
+                <td>
+                    <span ng-show="results.summaries['Goods Receipt'].rows.length">
+                        <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="showType('Goods Receipt')"></span>
+                        <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="showType('Goods Receipt')"></span>
+                    </span>
+                    {{rowName['Goods Receipt']}}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Goods Receipt'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Goods Receipt'].regUnits || 0}}</td>
+                <td>{{results.summaries['Goods Receipt'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Goods Receipt'].repUnits || 0}}</td>
+                <td>{{results.summaries['Goods Receipt'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Goods Receipt'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in results.summaries['Goods Receipt'].rows | limitTo:rowLimit" ng-hide="!showType('Goods Receipt')">
+                <td></td>
+                <td><span pb-ref-link ng-model="x.transactionUrl"></span></td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+            <tr ng-hide="!showRowsMsg('Goods Receipt')">
+                <td colspan="9">Group contains more than {{rowLimit}} results. Please export to see the full {{results.summaries['Goods Receipt'].rows.length}} rows.</td>
+            </tr>
+            <tr ng-click="toggleType('Stock Transfer')" class="expand-icon-group darken">
+                <td>
+                    <span ng-show="results.summaries['Stock Transfer'].rows.length">
+                        <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="showType('Stock Transfer')"></span>
+                        <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="showType('Stock Transfer')"></span>
+                    </span>
+                    {{rowName['Stock Transfer']}}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Stock Transfer'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Stock Transfer'].regUnits || 0}}</td>
+                <td>{{results.summaries['Stock Transfer'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Stock Transfer'].repUnits || 0}}</td>
+                <td>{{results.summaries['Stock Transfer'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Stock Transfer'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in results.summaries['Stock Transfer'].rows | limitTo:rowLimit" ng-hide="!showType('Stock Transfer')">
+                <td></td>
+                <td><span pb-ref-link ng-model="x.transactionUrl"></span></td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+            <tr ng-hide="!showRowsMsg('Stock Transfer')">
+                <td colspan="9">Group contains more than {{rowLimit}} results. Please export to see the full {{results.summaries['Stock Transfer'].rows.length}} rows.</td>
+            </tr>
+            <tr ng-click="toggleType('Deliveries')" class="expand-icon-group darken">
+                <td>
+                    <span ng-show="results.summaries['Deliveries'].rows.length">
+                        <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="showType('Deliveries')"></span>
+                        <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="showType('Deliveries')"></span>
+                    </span>
+                    {{rowName['Deliveries']}}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Deliveries'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Deliveries'].regUnits || 0}}</td>
+                <td>{{results.summaries['Deliveries'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Deliveries'].repUnits || 0}}</td>
+                <td>{{results.summaries['Deliveries'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Deliveries'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in results.summaries['Deliveries'].rows | limitTo:rowLimit" ng-hide="!showType('Deliveries')">
+                <td></td>
+                <td><span pb-ref-link ng-model="x.transactionUrl"></span></td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+            <tr ng-hide="!showRowsMsg('Deliveries')">
+                <td colspan="9">Group contains more than {{rowLimit}} results. Please export to see the full {{results.summaries['Deliveries'].rows.length}} rows.</td>
+            </tr>
+            <tr ng-click="toggleType('Collects')" class="expand-icon-group darken">
+                <td>
+                    <span ng-show="results.summaries['Collects'].rows.length">
+                        <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="showType('Collects')"></span>
+                        <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="showType('Collects')"></span>
+                    </span>
+                    {{rowName['Collects']}}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Collects'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Collects'].regUnits || 0}}</td>
+                <td>{{results.summaries['Collects'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Collects'].repUnits || 0}}</td>
+                <td>{{results.summaries['Collects'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Collects'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in results.summaries['Collects'].rows | limitTo:rowLimit" ng-hide="!showType('Collects')">
+                <td></td>
+                <td><span pb-ref-link ng-model="x.transactionUrl"></span></td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+            <tr ng-hide="!showRowsMsg('Collects')">
+                <td colspan="9">Group contains more than {{rowLimit}} results. Please export to see the full {{results.summaries['Collects'].rows.length}} rows.</td>
+            </tr>
+            <tr ng-click="toggleType('Inventory Count Adjustments')" class="expand-icon-group darken">
+                <td>
+                    <span ng-show="results.summaries['Inventory Count Adjustments'].rows.length">
+                        <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="showType('Inventory Count Adjustments')"></span>
+                        <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="showType('Inventory Count Adjustments')"></span>
+                    </span>
+                    {{rowName['Inventory Count Adjustments']}}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Inventory Count Adjustments'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].regUnits || 0}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].repUnits || 0}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in results.summaries['Inventory Count Adjustments'].rows | limitTo:rowLimit" ng-hide="!showType('Inventory Count Adjustments')">
+                <td></td>
+                <td><span pb-ref-link ng-model="x.transactionUrl"></span></td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+            <tr ng-hide="!showRowsMsg('Inventory Count Adjustments')">
+                <td colspan="9">Group contains more than {{rowLimit}} results. Please export to see the full {{results.summaries['Inventory Count Adjustments'].rows.length}} rows.</td>
+            </tr>
+            <tr ng-click="toggleType('Adjustment Gains')" class="expand-icon-group darken">
+                <td>
+                    <span ng-show="results.summaries['Adjustment Gains'].rows.length">
+                        <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="showType('Adjustment Gains')"></span>
+                        <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="showType('Adjustment Gains')"></span>
+                    </span>
+                    {{rowName['Adjustment Gains']}}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Adjustment Gains'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Gains'].regUnits || 0}}</td>
+                <td>{{results.summaries['Adjustment Gains'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Gains'].repUnits || 0}}</td>
+                <td>{{results.summaries['Adjustment Gains'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Gains'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in results.summaries['Adjustment Gains'].rows | limitTo:rowLimit" ng-hide="!showType('Adjustment Gains')">
+                <td></td>
+                <td><span pb-ref-link ng-model="x.transactionUrl"></span></td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+            <tr ng-hide="!showRowsMsg('Adjustment Gains')">
+                <td colspan="9">Group contains more than {{rowLimit}} results. Please export to see the full {{results.summaries['Adjustment Gains'].rows.length}} rows.</td>
+            </tr>
+            <tr ng-click="toggleType('Adjustment Losses')" class="expand-icon-group darken">
+                <td>
+                    <span ng-show="results.summaries['Adjustment Losses'].rows.length">
+                        <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="showType('Adjustment Losses')"></span>
+                        <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="showType('Adjustment Losses')"></span>
+                    </span>
+                    {{rowName['Adjustment Losses']}}
+                </td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Adjustment Losses'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Losses'].regUnits || 0}}</td>
+                <td>{{results.summaries['Adjustment Losses'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Losses'].repUnits || 0}}</td>
+                <td>{{results.summaries['Adjustment Losses'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Losses'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in results.summaries['Adjustment Losses'].rows | limitTo:rowLimit" ng-hide="!showType('Adjustment Losses')">
+                <td></td>
+                <td><span pb-ref-link ng-model="x.transactionUrl"></span></td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+            <tr ng-hide="!showRowsMsg('Adjustment Losses')">
+                <td colspan="9">Group contains more than {{rowLimit}} results. Please export to see the full {{results.summaries['Adjustment Losses'].rows.length}} rows.</td>
+            </tr>
+            <tr>
+                <td><strong>Closing Inventory</strong></td>
+                <td></td>
+                <td></td>
+                <td>{{results.closingInventory.regularValue | pbCurrency}}</td>
+                <td>{{results.closingInventory.regularUnits || 0}}</td>
+                <td>{{results.closingInventory.repossessedValue | pbCurrency}}</td>
+                <td>{{results.closingInventory.repossessedUnits || 0}}</td>
+                <td>{{results.closingInventory.sparePartsValue | pbCurrency}}</td>
+                <td>{{results.closingInventory.sparePartsUnits || 0}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

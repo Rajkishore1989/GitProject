@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Warranty Claims Report";
+}
+
+<div data-module="report/WarrantyClaims" ng-controller="WarrantyClaimsController" class="ng-scope report" ng-cloak>
+    <div class="section">Parameters</div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-2 control-label"> {{ yearLabel }} </label>
+                <div class="col col-lg-2" ng-class="{'has-error': !filterParameters.year }">
+                    <input class="form-control ng-pristine ng-invalid ng-invalid-required ng-valid-number ng-valid-min" type="number" min="1900" ng-model="filterParameters.year" name="Year" id="Year" required="" placeholder="yyyy">
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-2 control-label"> {{ categoryLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.category }">
+                    <list id="category" name="category" ng-model="filterParameters.category" scope="productCategories" placeholder="Category"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+    <p class="searchrow" />
+
+</div>
+

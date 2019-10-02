@@ -1,0 +1,181 @@
+{
+         "Id": "238724",
+         "Account": "905406155220",
+         "CreatedOn": {},
+         "CreatedById": "3002",
+         "CreatedBy": "Icil Jones",
+         "Branch": "910",
+         "BranchName": "SEVICE DEPARTMENT 910",
+         "Type": "SI",
+         "State": "Closed",
+         "InvoiceNumber": "905406155220",
+         "CustomerId": "KHARRIS",
+         "CustomerTitle": "MR",
+         "CustomerFirstName": "KEITH",
+         "CustomerLastName": "HARRIS",
+         "CustomerAddressLine1": "53 FRERE PILGRIM",
+         "CustomerAddressLine2": "",
+         "CustomerAddressLine3": "",
+         "CustomerPostcode": "CH CH",
+         "CustomerNotes": "",
+         "ItemId": "5784",
+         "ItemNumber": "522140",
+         "ItemAmount": "587.23",
+         "ItemSoldBy": "Ama Holder",
+         "ItemDeliveredOn": {},
+         "ItemStockLocation": "903",
+         "Item": "BROTHER CS6000T/I SEWING MACHINE",
+         "ItemSupplier": "RFH0",
+         "ProductLevel_1": "PCE",
+         "ProductLevel_2": "5",
+         "ProductLevel_3": "52",
+         "Manufacturer": "null",
+         "ItemSerialNumber": "461530-J1G185138",
+         "WarrantyGroupId": "null",
+         "WarrantyNumber": "null",
+         "WarrantyLength": "null",
+         "WarrantyContractNo": "null",
+         "WarrantyContractId": "null",
+         "ManufacturerWarrantyLength": "12",
+         "ManufacturerWarrantyNumber": "null",
+         "ManufacturerWarrantyContractNo": "null",
+         "TransitNotes": "",
+         "Evaluation": "Warranty Covered",
+         "EvaluationClaimFoodLoss": "false",
+         "EvaluationLocation": "",
+         "EvaluationAction": "",
+         "AllocationItemReceivedOn": "null",
+         "AllocationPartExpectOn": "null",
+         "AllocationTechnician": "145",
+         "AllocationTechnicianName": "REGINAL MOORE",
+         "AllocationTechnicianIsInternal": "false",
+         "AllocationInstructions": "null",
+         "AllocationServiceScheduledOn": {},
+         "AllocationOn": "null",
+         "AllocationSlots": "1",
+         "AllocationSlotExtend": "0",
+         "Resolution": "Mechanical Defect",
+         "ResolutionDate": {},
+         "RepairType": "",
+         "ResolutionSupplierToCharge": "",
+         "ResolutionPrimaryCharge": "Internal",
+         "ResolutionCategory": "",
+         "ResolutionReport": "disassembled machine - removed & cleaned corroded main shaft & rotary hook shaft - reassembled -retimed & repogrammed cpu box - balanced thread tens",
+         "ResolutionDelivererToCharge": "",
+         "ResolutionLabourCost": "80.85",
+         "ResolutionAdditionalCost": "0",
+         "ResolutionTransportCost": "0",
+         "FinalisedFailure": "Mechanical Defect",
+         "FinaliseReturnDate": {},
+         "Comment": "null",
+         "ItemModelNumber": "",
+         "IsClosed": "true",
+         "IsPaymentRequired": "null",
+         "PaymentBalance": "null",
+         "RepairTotal": "null",
+         "ReplacementIssued": "null",
+         "ReasonForExchange": "",
+         "Retailer": "",
+         "DepositAuthorised": "false",
+         "DepositRequired": "null",
+         "RepairLimitWarning": "false",
+         "TechnicianBookingDeleteReason": "null",
+         "TechnicianBookingDeleteId": "0",
+         "SlotStartTime": "08:37",
+         "SlotEndTime": "09:14",
+         "Contacts": [{
+             "Type": "HomePhone",
+             "Value": "246 2622146"
+ }],
+         "FoodLoss": [],
+         "Parts": [],
+         "ScriptAnswer": [{
+             "Question": "Have you read the instruction manual?",
+             "Value": "NA"
+ }, {
+             "Question": "Is the item under warranty?",
+             "Value": "NA"
+ }, {
+             "Question": "Is the item in use domestically?",
+             "Value": "NA"
+ }, {
+             "Question": "Was the item installed by qualified personnel?",
+             "Value": "NA"
+ }, {
+             "Question": "Has the item been moved from the delivery address?",
+             "Value": "NA"
+ }],
+         "RequestComments": [],
+         "History": [],
+         "Charges": [{
+             "CustomerId": "null",
+             "Label": "Parts Cosacs",
+             "ChargeType": "Internal",
+             "ItemNo": "null",
+             "Account": "910500000970",
+             "Cost": "0",
+             "Value": "0",
+             "Tax": "0",
+             "RequestId": "238724",
+             "IsExternal": "false"
+ }, {
+             "CustomerId": "null",
+             "Label": "Labour",
+             "ChargeType": "Internal",
+             "ItemNo": "null",
+             "Account": "910500000970",
+             "Cost": "0",
+             "Value": "68.81",
+             "Tax": "12.04",
+             "RequestId": "238724",
+             "IsExternal": "false"
+ }],
+         "HistoryCharges": [],
+         "FaultTags": [],
+         "StockItem": {
+             "CostPrice": "319.41"
+         },
+         "FaultTagsArray": [],
+         "FoodLossClaim": {
+             "optionYes": "Yes",
+             "OptionNo": "No"
+         },
+         "DisplayCharges": [{
+             "costType": "Parts Cosacs",
+             "charges": {
+                 "total": "0",
+                 "Internal": "0"
+             }
+ }, {
+             "costType": "Labour",
+             "charges": {
+                 "total": "68.81",
+                 "Internal": "68.81"
+             }
+ }, {
+             "costType": "Taxes",
+             "charges": {
+                 "total": "12.04",
+                 "Internal": "12.04"
+             }
+ }, {
+             "costType": "Total Cost",
+             "charges": {
+                 "Customer": "0",
+                 "Deliverer": "0",
+                 "EW": "0",
+                 "FYW": "0",
+                 "Internal": "80.85",
+                 "Supplier": "0",
+                 "total": "80.85"
+             }
+ }],
+         "ChargeTos": {
+             "Customer": "Customer",
+             "Deliverer": "Deliverer",
+             "EW": "EW",
+             "FYW": "FYW",
+             "Internal": "Internal",
+             "Supplier": "Supplier"
+         }
+     }

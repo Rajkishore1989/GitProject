@@ -1,0 +1,142 @@
+﻿@model Blue.Cosacs.Warehouse.BookingView
+
+@if (Model.PickUp == false)
+{
+<div style="text-align: center; font-size: 21px; font-weight: bold; margin-bottom: 15px;">Customer Collection Note</div>
+<div style="width:100%;display:inline-block;margin:0px 0px 20px 0px;">
+    <div style="display:inline-block;vertical-align:top;">
+    @if (Model.StoreType == "C")
+    {
+        @Html.FileToImage(new Blue.Config.Settings().PrintoutLogoCourts, 267, 89)
+    }
+    else
+    {
+        @Html.FileToImage(new Blue.Config.Settings().PrintoutLogoNonCourts, 267, 89)
+    }
+    </div>
+    <div style="display:inline-block;vertical-align:top;margin-left:120px;">
+        <table class="header-info">
+            <tr><th>Scheduling Branch:</th><td class="branchNo">@Model.DeliveryBranch</td></tr>
+            <tr><th>Driver Name:</th><td>@ViewBag.Driver.Name</td></tr>
+            <tr><th>Vehicle:</th><td>@ViewBag.Vehicle</td></tr>
+        </table>
+    </div>
+    <div style="display:inline-block;vertical-align:top;float:right;">
+        <div class="document-id">
+            <div>
+                <div class="ref">Delivery Schedule #@ViewBag.id</div>
+                <div class="barcode">@Html.Barcode((string)("DL$" + ViewBag.id), BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+            </div>
+            <div>
+                <div class="createdOn">@ViewBag.load.CreatedOn.ToLocalTime().ToString("f")</div>
+                <div class="createdBy">@ViewBag.loadCreatedByLogin - @ViewBag.loadCreatedByName</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clear"></div>
+}
+
+<div style="border-bottom: 1px solid black; border-top: 1px solid black">
+    <table class="collection-attributes" style="float: left" width="50%">
+        <tbody>
+            <tr>
+                <th>Reference</th>
+                <td>@Model.AcctNo</td>
+            </tr>
+            <tr>
+                <th>Recipient</th>
+                <td>@Model.CustomerName</td>
+            </tr>
+             <tr>
+                <th>Contact Information</th>                
+                <td>@Html.Raw(Html.Encode(Model.ContactInfo).Replace("\n", "<br />")) </td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>
+                    @Model.AddressLine1<br />
+                    @Model.AddressLine2<br />
+                    @Model.AddressLine3<br />
+                </td>
+            </tr>
+            <tr>
+                <th>Postcode</th>
+                <td>@Model.PostCode</td>
+            </tr>
+            <tr>
+                <th>Delivery Zone</th>
+                <td>@Model.DeliveryZone</td>
+            </tr>
+            <tr>
+                <th>Booked On</th>
+                <td>
+                    @if (Model.OrderedOn.HasValue)
+                    {
+                        @Model.OrderedOn.Value.ToLocalTime().ToString("f")
+                    }
+                </td>
+            </tr>
+            <tr>
+                <th>Quantity for @(Model.PickUp == false? " Collection": Model.DeliveryOrCollection == "D"? " Pick Up": " Return")</th>
+                <td style="font-size:large"><strong>@Model.Quantity</strong></td>
+            </tr>
+            <tr>
+                <th>Shipment No.</th>
+                <td>#@Model.Id</td>
+            </tr>
+            <tr>
+                <th>Original Shipment No.</th>
+                <td>#@Model.Id</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="collection-attributes" style="float: right" width="50%">
+        <tbody>
+            <tr>
+                <th>Item No.</th>
+                <td>@Model.ItemNo</td>
+            </tr>
+            <tr>
+                <th>Item UPC</th>
+                <td>@Model.ItemUPC</td>
+            </tr>
+            <tr>
+                <th>Product Category</th>
+                <td>@Model.ProductCategory</td>
+            </tr>
+            <tr>
+                <th>Product Description</th>
+                <td>@Html.Raw(Html.Encode(@Model.ProductDescription).Replace("\n", "<br />"))</td>
+            </tr>
+            <tr>
+                <th>Product Model</th>
+                <td>@Model.ProductModel</td>
+            </tr>
+            <tr>
+                <th>Product Brand</th>
+                <td>@Model.ProductBrand</td>
+            </tr>
+            <tr>
+                <th>Product Area</th>
+                <td>@Model.ProductArea</td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="clear"></div>
+    <table class="collection-attributes">
+        <tbody>
+            <tr>
+                <th>Comment</th>
+                <td>@Html.Raw(HttpUtility.HtmlEncode(Model.Comment).Replace("\n", "<br/>"))</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="sign" style="text-align: center">
+    <div>@(Model.PickUp == false ? "Driver Signature" : "Customers Signature")</div>
+    <div>Date and Time of @(Model.PickUp == false ? "Collection" : Model.DeliveryOrCollection == "D" ? "Pick Up" : "Return")</div>
+</div>
+<div class="leftFooter">
+@(Model.PickUp == false ? string.Format("Collection Note from Schedule #{0} ", ViewBag.id) : "")
+</div>

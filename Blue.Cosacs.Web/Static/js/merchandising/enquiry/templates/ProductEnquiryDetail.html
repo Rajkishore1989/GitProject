@@ -1,0 +1,231 @@
+<h4>Search Results</h4>
+<div class="panel panel-default buffer bottom" ng-repeat="result in displayResults">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-lg-12">
+                <h4><span class="panel-title"><a
+                        ng-href="{{'Merchandising/Products/Details/' + result.ProductId | pbResolveLink}}">#{{result.Sku}} - {{result.LongDescription}}</a></span>
+                </h4>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <ng-form name="stockForm" class="stock-form" novalidate>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label for="description" class="col-md-5 control-label">Product Type</label>
+                        <div class="col-md-7">
+                            <p>{{result.ProductType}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-md-5 control-label">Product Status</label>
+                        <div class="col-md-7">
+                            <p>{{result.ProductStatus}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label for="description" class="col-md-4 control-label">Tags</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">
+                                <span ng-show="result.Tags.length"
+                                      ng-repeat="tag in result.Tags"><span>{{tag}}</span><span ng-hide="$last">, </span></span>
+                                <span ng-hide="result.Tags.length">None</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="description" class="col-md-4 control-label">Store Types</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">
+                                <span ng-show="result.StoreTypes.length"
+                                      ng-repeat="storeType in result.StoreTypes">
+                                    <span>{{storeType}}</span><span ng-hide="$last">,</span>
+                                </span>
+                                <span ng-hide="result.StoreTypes.length">None</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label for="description" class="col-md-4 control-label">Vendor</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">
+                                <span ng-show="result.Vendors.length" ng-repeat="vendor in result.Vendors">
+                                    <span>{{vendor}}</span><span ng-hide="$last">,</span>
+                                </span>
+                                <span ng-hide="result.Vendors.length">None</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group row" ng-show="result.RepossessedCondition">
+                        <label for="description" class="col-md-4 control-label">Repossessed Condition</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">{{result.RepossessedCondition}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group row">
+                        <label for="description" class="col-md-4 control-label">Attribute</label>
+                        <div class="col-md-8">
+                            <p>
+                                {{result.PreviousProductType}}
+                                <span ng-hide="result.Vendors.length">None</span>
+                            </p>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12" ng-hide="result.ProductType == 'Set' || result.ProductType == 'Combo'">
+                    <h4>Stock</h4>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>Location</th>
+                            <th>On Hand</th>
+                            <th>Available</th>
+                            <th>On Order</th>
+                            <th>Allocated</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>All Locations - {{(result.BranchesWithStock) | number}} locations with Stock</td>
+                            <td>{{(result.StockOnHand) | number}}</td>
+                            <td>{{(result.StockAvailable) | number}}</td>
+                            <td>{{(result.StockOnOrder) | number}}</td>
+                            <td>{{(result.StockAllocated) | number}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h4>Prices</h4>
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Location</th>
+                                <th>Fascia</th>
+                                <th><span class="pull-right">Tax</span></th>
+                                <th><span class="pull-right">AWC</span></th>
+                                <th title="Cash Price"><span class="pull-right">Cash</span></th>
+                                <th><span class="pull-right">Margin</span></th>
+                                <th title="Regular Price"><span class="pull-right">Regular</span></th>
+                                <th title="DutyFree Price"><span class="pull-right">Duty Free</span></th>
+                                <th>Active</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr ng-repeat="prc in result.PriceData" ng-show="result.PriceData.length > 0"
+                                ng-init="priceObj=parseJson(prc)">
+
+                                <td>{{priceObj.LocationName || 'ANY'}}</td>
+                                <td>{{priceObj.Fascia || 'ANY'}}</td>
+                                <td><span class="pull-right">{{priceObj.TaxRate | pbPercentage }}</span></td>
+                                <td><span class="pull-right">{{priceObj.AverageWeightedCost | pbCurrency}}</span></td>
+                                <td><span class="pull-right">{{addTax(priceObj.CashPrice, priceObj.TaxRate) | pbCurrency}}</span></td>
+                                <td><span class="pull-right">{{margin(priceObj.AverageWeightedCost, priceObj.CashPrice) | pbPercentage }}</span></td>
+                                <td><span class="pull-right">{{addTax(priceObj.RegularPrice, priceObj.TaxRate) | pbCurrency}}</span></td>
+                                <td><span class="pull-right">{{addTax(priceObj.DutyFreePrice, priceObj.TaxRate) | pbCurrency}}</span></td>
+                                <td></td>
+                            </tr>
+                            <tr ng-hide="result.PriceData.length > 0">
+                                <td colspan="10">No price data found</td>
+                            </tr>
+                            <tr colspan="10" >
+                                <td style="border-top: 0px;">
+                                    <h4>Promotional Prices</h4>
+                                </td>
+                            </tr>
+                            <tbody>
+                            <tr ng-repeat="prc in result.PromoData" ng-show="result.PromoData.length > 0"
+                                ng-init="priceObj=parseJson(prc)" ng-class="!isActive(priceObj) && 'halfOpacity'">
+
+                                <td>{{priceObj.LocationName || 'ANY'}}</td>
+                                <td>{{priceObj.Fascia || 'ANY'}}</td>
+                                <td></td>
+                                <td></td>
+                                <td><span class="pull-right">{{addTax(priceObj.CashPrice, priceObj.TaxRate) | pbCurrency}}</span></td>
+                                <td></td>
+                                <td><span class="pull-right">{{addTax(priceObj.RegularPrice, priceObj.TaxRate) | pbCurrency}}</span></td>
+                                <td><span class="pull-right">{{addTax(priceObj.DutyFreePrice, priceObj.TaxRate) | pbCurrency}}</span></td>
+                                <td>{{isActiveDate(priceObj)}}</td>
+                            </tr>
+                            <tr ng-hide="result.PromoData.length > 0">
+                                <td colspan="9">No promotion data found</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12">-->
+                        <!--<h4>Promotional Prices</h4>-->
+                        <!--<table class="table table-striped">-->
+                            <!--<thead>-->
+                            <!--<tr>-->
+                                <!--<th>Location</th>-->
+                                <!--<th>Fascia</th>-->
+                                <!--<th></th>-->
+                                <!--<th></th>-->
+                                <!--<th title="Cash Price">Cash</th>-->
+                                <!--<th title="Regular Price">Regular</th>-->
+                                <!--<th title="DutyFree Price">DutyFree</th>-->
+                            <!--</tr>-->
+                            <!--</thead>-->
+                            <!--<tbody>-->
+                            <!--<tr ng-repeat="prc in result.PromoData" ng-show="result.PromoData.length > 0"-->
+                                <!--ng-init="priceObj=parseJson(prc)">-->
+                                <!--<td>{{priceObj.LocationName || 'ANY'}}</td>-->
+                                <!--<td>{{priceObj.Fascia || 'ANY'}}</td>-->
+                                <!--<td></td>-->
+                                <!--<td></td>-->
+                                <!--<td>{{priceObj.CashPrice | pbCurrency}}</td>-->
+                                <!--<td>{{priceObj.RegularPrice | pbCurrency}}</td>-->
+                                <!--<td>{{priceObj.DutyFreePrice | pbCurrency}}</td>-->
+                            <!--</tr>-->
+                            <!--<tr ng-hide="result.PromoData.length > 0">-->
+                                <!--<td colspan="9">No promotion data found</td>-->
+                            <!--</tr>-->
+                            <!--</tbody>-->
+                        <!--</table>-->
+                    <!--</div>-->
+                <!--</div>-->
+                <div class="row">
+                    <div class="col-md-12 ">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th><h4>Sales</h4></th>
+                                <th>This Period</th>
+                                <th>Last Period</th>
+                                <th>This YTD</th>
+                                <th>Last YTD</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>Volume</td>
+                                <td>{{result.SalesThisPeriod}}</td>
+                                <td>{{result.SalesLastPeriod}}</td>
+                                <td>{{result.SalesThisYTD}}</td>
+                                <td>{{result.SalesLastYTD}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

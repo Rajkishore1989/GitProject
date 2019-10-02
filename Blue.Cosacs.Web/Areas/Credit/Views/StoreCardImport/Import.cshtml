@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Third Party Store Card Import";
+}
+
+<div class="container_12">
+    @using (Html.BeginForm("Import", "StoreCardImport", FormMethod.Post, new { EncType = "multipart/form-data" }))
+    {
+        
+        
+        <div class="row">
+            <div class="input-group col-md-6 .col-md-offset-3">
+                <div tabindex="-1" class="form-control ">
+                    <span class="glyphicons file"></span>
+                    <div class="file-caption-name"></div>
+                </div>
+                <div class="input-group-btn">
+@*   <button type="button" class="btn btn-default"><span class="halflings ban-circle"></span>&nbsp;&nbsp;Remove</button>*@
+                    <button type="submit" class="btn btn-default"><span class="glyphicons upload"></span>&nbsp;&nbsp;Upload</button>
+                    <span class="btn btn-primary btn-file"><i class="halflings folder-open"></i>&nbsp;&nbsp;&nbsp;Browse …
+                    <input id="fileUpload" name="fileUpload" type="file" class="file"></span>
+                </div>
+            </div>
+        </div>
+    }
+
+
+
+    @*    <p><%= Html.Encode(ViewData["Feedback"]) %></p> *@
+
+
+
+</div>

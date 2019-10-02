@@ -1,0 +1,58 @@
+﻿@model StockRequisitionOnOrderViewModel
+
+<div data-module="merchandising/stockRequisition/init" ng-controller="StockRequisitionOnOrderCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+
+    <div class="buffer top">
+        <ng-form name="reasonForm" class="form-horizontal" novalidate>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="description">Description</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">
+                                <a href="{{resolve('Merchandising/Products/Details/' + stockOnOrder.id)}}">{{stockOnOrder.description}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-1" for="location">Location</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">
+                                <a href="{{resolve('Merchandising/Locations/Detail/' + stockOnOrder.locationId)}}">{{stockOnOrder.location}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row buffer-sm top" ng-show="stockOnOrder.stockItems">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped aligned pb-table">
+                        <thead>
+                        <tr>
+                            <th>Purchase Order Id</th>
+                            <th>Expected Delivery Date</th>
+                            <th>Quantity On Order</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="po in stockOnOrder.stockItems">
+                            <td><a href="{{resolve('Merchandising/Purchase/Detail/' + po.id)}}">{{po.id}}</a></td>
+                            <td>{{po.date | pbDate }}</td>
+                            <td>{{po.movement}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row buffer-sm top" ng-hide="stockOnOrder.stockItems">
+                <div class="col-md-12">
+                    No stock currently on order for this product and location.
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

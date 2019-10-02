@@ -1,0 +1,53 @@
+﻿<div ng-show="weeks.length > 0">
+    
+    <div id="divLegendService">
+        <div class="cosacs-legend-service rejected">Rejected</div>
+        <div class="cosacs-legend-service publicHoliday">Public Holiday</div>
+        <div class="cosacs-legend-service Service">Service Request</div>
+        <div class="cosacs-legend-service Installation">Installation</div>
+        <div class="cosacs-legend-service stockRepair">Stock Repair</div>
+        <div class="cosacs-legend-service holidayApproved">Not Available</div>
+        <div class="cosacs-legend-service holidayPending">Availability Pending</div>
+    </div>
+    
+    <div ng-repeat="week in weeks">
+        <table class="table table-condensed diaryTable table-no-margin-bottom">
+            <thead>
+                <tr ng-class="dayOnly()">
+                    <th style="width:2%;">
+                        Time
+                    </th>
+                    <th class="dayHeader text-center" ng-repeat="day in week" style="width: 14%;">
+                        {{ formatHeader(day.date) }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="text-center">
+                        <table class="table table-condensed slotTable">
+                            <tbody>
+                                <tr ng-repeat="slot in slotTimes">
+                                    <td class="fixed time">
+                                        {{ slot.time.format('HH:mm') }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td class="text-center" ng-repeat="day in week">
+                        <table class="table table-condensed slotTable">
+                            <tbody>
+                                <tr ng-repeat="slot in day.slots">
+                                    <td ng-click="slotPopup(slot,day.date)" class="fixed" ng-class="slotClass(slot)">
+                                        <a ng-href="{{slotUrl(slot)}}" ng-click="preventPopup($event)" ng-show="slot.booking">{{slotTextReqId(slot)}}</a>&nbsp;
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

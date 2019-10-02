@@ -1,0 +1,53 @@
+﻿@{
+    ViewBag.Title = "Second Effort Solicitation Candidates Report";
+}
+
+<div data-module="report/secondEffortCandidates" ng-controller="SecondEffortController" class="ng-scope report" ng-cloak="">
+    <div>
+        <div class="search row">
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label class="col col-lg-6 control-label">Customer Groups</label>
+                    <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.CustomerGroup }">
+                        <list name="listCustomerGroups" ng-model="filterParameters.CustomerGroup"
+                              scope="customersGroups" placeholder="Customers Group"></list>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label class="col col-lg-6 control-label">{{salesPersonLabel}}</label>
+                    <div class="col col-lg-6">
+                        <list name="listChain" ng-model="filterParameters.SalesPersonId" ng-required lookup="SalePersons"
+                              placeholder="Sales Person"></list>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="searchrow" />
+        <div class="search row">
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label class="col col-lg-6 control-label">{{ chainLabel }}</label>
+                    <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.Chain }">
+                        <list name="listChain" ng-model="filterParameters.Chain" scope="chains" ng-required
+                              placeholder="Chain"></list>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-6">
+                <div class="form-group">
+                    <label class="col col-lg-6 control-label"> {{ branchLabel }} </label>
+                    <div class="col col-lg-6">
+                        <list name="listBranches" scope="branches" ng-model="filterParameters.Branch" placeholder="Select branch"></list>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="searchrow" />
+        <div class="search row">
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

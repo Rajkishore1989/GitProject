@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Outdated Browser Detected";
+}
+<div class="divBody">
+    <div class="alert alert-danger">
+        We have detected that you are using an 
+        @if (Request.Browser.Browser.Equals("IE")) {
+            <b>unsupported browser (@Request.Browser.Browser)</b>
+        } else {
+            <b>outdated browser (@Request.Browser.Browser, version @Request.Browser.MajorVersion)</b>
+        }
+        .<br />
+        Using your current browser will prevent you from using the full potential of the application. Please update your browser to the latest version or use a different browser.
+    </div>
+    <div class="alert alert-success">
+        <p>The currently supported browsers are:</p>
+        <br />
+        <div>
+            <a href="https://www.google.com/chrome" title="Google Chrome"><img src="@Url.Content("~/static/images/chrome.gif")" alt="" /></a>
+            <a href="http://www.mozilla.org" title="Mozilla Firefox"><img src="@Url.Content("~/static/images/firefox.gif")" alt="" /></a>
+            <!--a href="http://www.apple.com/safari/download/" title="Apple Safari"><img src="@Url.Content("~/static/images/safari.gif")" alt="" /></a-->
+        </div>
+    </div>
+    <br />
+    <br />
+    <div class="section">Install CoSaCS Client</div>
+    <div class="alert alert-warning">
+        <div class="logo-icon"></div> 
+        <div style="display: inline-block; vertical-align: top; margin-top: 15px;">
+            <p>
+                You can still download and install:
+                <ul>
+                    <li><a href="/cosacs.client/cosacsclient.application">CoSaCS Windows Client</a></li>
+                    <li><a href="/cosacs.shell/cosacs.shell.application">CoSaCS Shell</a></li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>

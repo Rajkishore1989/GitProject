@@ -1,0 +1,36 @@
+<section class="buffer top" ng-show="product.id && canView && product.incoterms.length">
+    <div class="section">
+        Incoterm Costs
+    </div>
+                
+    <table class="table table-bordered table-striped aligned pb-table">
+        <thead>
+            <tr>
+                <th>Incoterm Name</th>
+                <th>Currency</th>
+                <th>Supplier Unit Cost</th>
+                <th>Country of Dispatch</th>
+                <th>Lead Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="incoterm in product.incoterms">
+                <td>
+                    {{incoterm.name}}
+                </td>
+                <td>
+                    {{incoterm.currencyType}}
+                </td>
+                <td class="currency">
+                    {{incoterm.supplierUnitCost | pbCurrency}}
+                </td>
+                <td>
+                    {{incoterm.countryOfDispatch}}
+                </td>
+                <td>
+                    {{incoterm.leadTime}}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>

@@ -1,0 +1,62 @@
+<div class="buffer top">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="row">
+                <div class="col-lg-4"><label>Purchase Order Number:</label></div>
+                <div class="col-lg-8"><a href="{{generateUrl('Merchandising/Purchase/Detail/' + purchaseOrder.id)}}">#{{purchaseOrder.id}}</a></div>
+            </div>
+        </div>
+        <div class="col-lg-6 text-right">
+            <span class="glyphicons glyph-btn bin" ng-click="remove(purchaseOrder)"></span>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-striped pb-table">
+                <thead>
+                    <tr>
+                        <th class="col-sm sku">Product Code</th>
+                        <th class="col-sm-2">Description</th>
+                        <th class="col-sm date">Expected Delivery Date</th>
+                        <th class="col-sm-2">Comments</th>
+                        <th class="col-sm quantity">Quantity Pending</th>
+                        <th class="col-sm quantity">Quantity Received</th>
+                        <th ng-show="receipt.enableBackOrderCancel" class="col-sm quantity">Quantity Cancelled</th>
+                        <th class="col-sm quantity">Quantity Back Ordered</th>
+                        <th ng-show="receipt.enableBackOrderCancel" class="col-sm-2">Reason For Cancellation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="product in purchaseOrder.products" ng-form="productForm" ng-controller="ReceiptPurchaseCtrl">
+                        <td><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + product.sku)}}">{{product.sku}}</a></td>
+                        <td>{{product.description}}</td>
+                        <td class="date">{{product.estimatedDeliveryDate | pbDate }}</td>
+                        <td><span pb-ref-link ng-model="product.comments"></span></td>
+                        <td class="quantity">{{product.quantityPending}}</td>
+
+                        <td class="quantity">
+                            <div ng-class="{'has-error': productForm.quantityReceived.$invalid}">
+                                <input pb-integer name="quantityReceived" ng-model="product.quantityReceived" ng-change="quantityChange(product, productForm)" class="form-control" required ng-required="true" ng-min="0" ng-max="product.quantityPending" pb-keypress="{ enter: 'accept(product, productForm)'}" />
+                            </div>
+                        </td>
+
+                        <td class="quantity" ng-show="enableBackOrderCancel()">
+                            <div ng-class="{'has-error': productForm.quantityCancelled.$invalid}">
+                                <input pb-integer name="quantityCancelled" ng-model="product.quantityCancelled" ng-change="quantityChange(product, productForm)" class="form-control" required ng-required="true" ng-min="0" ng-max="product.quantityPending" pb-keypress="{ enter: 'accept(product, productForm)'}" />
+                            </div>
+                        </td>
+
+                        <td class="quantity"><span ng-hide="product.quantityBackOrdered < 0">{{product.quantityBackOrdered}}</span></td>
+                        
+                        <td ng-show="enableBackOrderCancel()">
+                            <div ng-class="{'has-error': productForm.reasonForCancellation.$invalid}">
+                                <input class="form-control" type="text" name="reasonForCancellation" ng-required="product.quantityCancelled > 0" ng-model="product.reasonForCancellation" maxlength="100" ng-disabled="product.quantityCancelled < 1">
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

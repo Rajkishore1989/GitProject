@@ -1,0 +1,425 @@
+﻿@model GoodsOnLoanViewModel
+
+<div data-module="merchandising/goodsOnLoan/init" ng-controller="GoodsOnLoanCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak ng-cloak class="buffer-lg bottom">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <button class="btn btn-default" ng-click="printDeliveryNote()" ng-hide="!canPrintDeliveryNote()">Print Delivery Note <span class="glyphicons new_window"></span></button>
+                <button class="btn btn-default" ng-click="printCollectionNote()" ng-hide="!canPrintCollectionNote()">Print Collection Note <span class="glyphicons new_window"></span></button>
+                <button class="btn btn-primary" ng-click="save()" ng-hide="!canSave(goodsOnLoanForm)">Save</button>
+                <button class="btn btn-primary" ng-click="edit()" ng-hide="!canEdit() || editing">Edit</button>
+                <button class="btn btn-default" ng-click="collect()" ng-show="canCollect()">Collect</button>
+                <button class="btn btn-default" ng-click="cancel()" ng-show="editing && isCreated()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="buffer top">
+        <ng-form name="goodsOnLoanForm" class="form-horizontal" novalidate>
+
+            <div class="row" ng-hide="isCreated()">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <button ng-class="{'btn btn-default':vm.type != 'business', 'btn btn-primary': vm.type == 'business'}" ng-click="setType('business')">Business</button>
+                        <button ng-class="{'btn btn-default':vm.type != 'customer', 'btn btn-primary': vm.type == 'customer'}" ng-click="setType('customer')">Customer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-hide="isCreated() || vm.type =='business'">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="serviceRequests">Search Service Requests</label>
+                        <div class="col-md-8">
+                            <pb-search-dropdown id="serviceRequests"
+                                                 endpoint="serviceRequestEndpoint"
+                                                 placeholder="serviceRequestPlaceholder"
+                                                 is-disabled="isCreated()"
+                                                 model="serviceRequest.searchResult"
+                                                 mapper="mapServiceRequest"
+                                                 result-formatter="serviceRequestResultFormat"
+                                                 result-key-formatter="serviceRequestItemFormat"
+                                                 result-processor="processServiceSearchResult"
+                                                 use-default-mapper="false" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section" ng-show="vm.type =='customer'">Customer</div>
+            <div class="section" ng-show="vm.type =='business'">Business</div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row" ng-show="vm.type =='business'">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.businessName.$invalid}">
+                                <label class="control-label col-md-4" for="businessName">Business Name</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="businessName" ng-model="goodsOnLoan.businessName" maxlength="100" ng-show="editing && !isCreated()" ng-required="vm.type =='business'" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.businessName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="vm.type =='customer'">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.customerId.$invalid}">
+                                <label class="control-label col-md-4" for="customerId">Customer Id</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="customerId" ng-model="goodsOnLoan.customerId" maxlength="100" ng-show="editing && !isCreated()" ng-required="vm.type =='customer'" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.customerId}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="vm.type =='customer' && goodsOnLoan.serviceRequestId">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Service Request Id</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">
+                                        <a href="{{resolve('Service/Requests/' +goodsOnLoan.serviceRequestId)}}">{{goodsOnLoan.serviceRequestId}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-show="vm.type =='business'" ng-class="{'has-error': goodsOnLoanForm.jobTitle.$invalid}">
+                                <label class="control-label col-md-4" for="jobTitle">Job Title</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="jobTitle" ng-model="goodsOnLoan.jobTitle" maxlength="100" ng-show="editing && !isCreated()" ng-required="vm.type =='business'" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.jobTitle}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.title.$invalid}">
+                                <label class="control-label col-md-4" for="title">Title</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="title" ng-model="goodsOnLoan.title" maxlength="100" ng-show="editing && !isCreated()" ng-required="true" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.title}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.firstName.$invalid}">
+                                <label class="control-label col-md-4" for="firstName">First Name</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="firstName" ng-model="goodsOnLoan.firstName" maxlength="100" ng-show="editing && !isCreated()" ng-required="true" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.firstName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.lastName.$invalid}">
+                                <label class="control-label col-md-4" for="lastName">Last Name</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="lastName" ng-model="goodsOnLoan.lastName" maxlength="100" ng-show="editing && !isCreated()" ng-required="true" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.lastName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.addressLine1.$invalid}">
+                                <label class="control-label col-md-4" for="addressLine1">Address Line 1</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="addressLine1" ng-model="goodsOnLoan.addressLine1" maxlength="100" ng-show="editing && !isCreated()" ng-required="true" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.addressLine1}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.addressLine2.$invalid}">
+                                <label class="control-label col-md-4" for="addressLine2">Address Line 2</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="addressLine2" ng-model="goodsOnLoan.addressLine2" maxlength="100" ng-show="editing && !isCreated()" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.addressLine2}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.townCity.$invalid}">
+                                <label class="control-label col-md-4" for="townCity">Town / City</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="townCity" ng-model="goodsOnLoan.townCity" maxlength="100" ng-show="editing && !isCreated()" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.townCity}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.postCode.$invalid}">
+                                <label class="control-label col-md-4" for="postCode">Post Code</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="postCode" ng-model="goodsOnLoan.postCode" maxlength="100" ng-show="editing && !isCreated()" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.postCode}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.addressNotes.$invalid}">
+                                <label class="control-label col-md-4" for="addressNotes">Address Notes</label>
+                                <div class="col-md-8">
+                                    <textarea ng-show="editing && !isCreated()" name="addressNotes" rows="4" ng-model="goodsOnLoan.addressNotes" maxlength="1000" class="form-control"></textarea>
+                                    <div ng-hide="editing && !isCreated()" class="form-control-static"><p class="pb-text" pb-ref-link ng-model="goodsOnLoan.addressNotes"></p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="section">Contact Details</div>
+                            <div class="form-group" ng-class="{'has-error': !contact.value}" ng-repeat="contact in vm.contacts" ng-hide="!editing || isCreated()">
+                                <div class="col-md-1">
+                                    <div class="control-label">
+                                        <a href="#" ng-click="removeContact(contact)" title="Remove" ng-class="{hide: $first}" class="halflings trash"></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <list ng-model="contact.key" scope="options.contactType" placeholder="Select Type"></list>
+                                </div>
+                                <div class="col-md-7">
+                                    <input class="form-control" type="text" ng-model="contact.value" maxlength="100">
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="row">
+                                        <a href="#" ng-click="addContact()" title="Add" ng-class="{hide: !$last}" class="halflings plus"></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-repeat="contact in vm.contacts" ng-hide="editing && !isCreated()">
+                                <label class="control-label col-md-4">{{contact.key | inflector}}</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">{{contact.value}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="vm.type =='business'">
+                        <div class="col-md-12">
+                            <div class="section">Delivery Contact Details</div>
+                            <div class="form-group" ng-class="{'has-error': !contact.value}" ng-repeat="contact in vm.deliveryContactDetails" ng-hide="!editing || isCreated()">
+                                <div class="col-md-1">
+                                    <div class="control-label">
+                                        <a href="#" ng-click="removeDeliveryContact(contact)" title="Remove" ng-class="{hide: $first}" class="halflings trash"></a>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <list ng-model="contact.key" scope="options.contactType" placeholder="Select Type"></list>
+                                </div>
+                                <div class="col-md-7">
+                                    <input class="form-control" type="text" ng-model="contact.value" maxlength="100">
+                                </div>
+                                <div class="col-md-1">
+                                    <div class="row">
+                                        <a href="#" ng-click="addDeliveryContact()" title="Add" ng-class="{hide: !$last}" class="halflings plus"></a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group" ng-repeat="contact in vm.deliveryContactDetails" ng-hide="editing && !isCreated()">
+                                <label class="control-label col-md-4">{{contact.key | inflector}}</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">{{contact.value}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': !goodsOnLoan.stockLocationId}">
+                                <label class="control-label col-md-4" for="stockLocation">Stock Location</label>
+                                <div class="col-md-8">
+                                    <div ng-show="editing && !isCreated()">
+                                        <list name="stockLocation"
+                                              ng-model="goodsOnLoan.stockLocationId"
+                                              ng-disabled="goodsOnLoan.products.length > 0"
+                                              scope="locations"
+                                              placeholder="Select a Location"></list>
+                                    </div>
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">
+                                        <a href="{{resolve('Merchandising/Locations/Detail/' +goodsOnLoan.stockLocationId)}}">{{goodsOnLoan.stockLocation}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.preferredDeliveryDate.$invalid}">
+                                <label class="control-label col-md-4" for="preferredDeliveryDate">Preferred Delivery Date</label>
+                                <div class="col-md-8">
+                                    <input type="date" class="form-control" id="preferredDeliveryDate" name="preferredDeliveryDate" ng-model="goodsOnLoan.preferredDeliveryDate"  ng-show="editing && !isCreated()" />
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.preferredDeliveryDate | pbDate}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.expectedCollectionDate.$invalid}">
+                                <label class="control-label col-md-4" for="expectedCollectionDate">Expected Collection Date</label>
+                                <div class="col-md-8">
+                                    <input type="date" class="form-control" id="expectedCollectionDate" name="expectedCollectionDate" ng-change="updatePreferredDeliveryDate()" ng-model="goodsOnLoan.expectedCollectionDate" ng-show="editing" ng-required="true" />
+                                    <div class="form-control-static" ng-hide="editing">{{goodsOnLoan.expectedCollectionDate | pbDate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': goodsOnLoanForm.comments.$invalid}">
+                                <label class="control-label col-md-4" for="comments">Comments</label>
+                                <div class="col-md-8">
+                                    <textarea ng-show="editing" name="comments" rows="4" maxlength="1000" placeholder="Comment on the condition of the returned item" ng-model="goodsOnLoan.comments" class="form-control"></textarea>
+                                    <div ng-hide="editing" class="form-control-static"><p class="pb-text" pb-ref-link ng-model="goodsOnLoan.comments"></p></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="isCreated()">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Created On</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">{{goodsOnLoan.createdOn | pbDate : true}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="isCreated()">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Created By</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">{{goodsOnLoan.createdBy}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="isCreated() && goodsOnLoan.status == 'Completed'">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Collected Date</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">{{goodsOnLoan.collectedDate | pbDate : true }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="isCreated()">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Status</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static" ng-hide="editing && !isCreated()">{{goodsOnLoan.status}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row buffer top" ng-show="editing && !isCreated()" ng-disabled="saving">
+                <div class="col-md-12">
+                    <h4>Add Products</h4>
+                    <div class="well well-sm" ng-form="productForm">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div ng-class="{'has-error': !newProduct.searchResult && canEditProduct()}">
+                                    <pb-search-dropdown is-disabled="!canEditProduct()" model="newProduct" params="getSearchParams" result-processor="processSearchResult" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-class="{'has-error': productForm.referenceNumber.$invalid}">
+                                    <input name="referenceNumber" maxlength="50" ng-disabled="!canEditProduct()" class="form-control" placeholder="Enter other reference" ng-model="newProduct.referenceNumber" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div ng-class="{'has-error': productForm.quantity.$invalid || !newProduct.quantity}">
+                                    <input name="quantity" id="quantity" pb-integer ng-disabled="!canEditProduct()" ng-change="checkQuantity()" ng-min="1" min="1" ng-max="20000" max="20000" maxlength="5" class="form-control" placeholder="Enter a quantity" ng-model="newProduct.quantity" data-toggle="tooltip" data-placement="top" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div ng-class="{'has-error': productForm.comments.$invalid}">
+                                    <input name="comments" id="productComments" placeholder="Enter a comment" ng-disabled="!canEditProduct()" class="form-control" ng-model="newProduct.comments" maxlength="100" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <span class="glyphicons btn-icon plus" ng-click="addProduct(newProduct, productForm)" ng-class="{disabled:!canAddProduct(productForm)}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-show="showProducts()">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped aligned pb-table">
+                        <thead>
+                            <tr>
+                                <th class="component-controls" ng-show="editing && !isCreated()"></th>
+                                <th>SKU</th>
+                                <th>Description</th>
+                                <th>Reference</th>
+                                <th>Comments</th>
+                                <th>AWC</th>
+                                <th>Quantity</th>
+                                <th>Line Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in goodsOnLoan.products">
+                                <td class="component-controls" ng-show="$parent.editing && !$parent.isCreated()">
+                                    <span class="glyphicons glyph-btn bin" ng-click="removeProduct(product.productId)" ng-hide="editMode"></span>
+                                </td>
+                                <td><a href="{{resolve('Merchandising/Products/Details/' + product.productId)}}">{{product.sku}}</a></td>
+                                <td>{{product.description}}</td>
+                                <td>{{product.referenceNumber}}</td>
+                                <td><div class="form-control-static"><p class="pb-text" pb-ref-link class="form-control-static" ng-model="product.comments"></p></div></td>
+                                <td>{{product.averageWeightedCost | pbCurrency}}</td>
+                                <td>{{product.quantity}}</td>
+                                <td>{{$parent.lineCost(product) | pbCurrency}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td ng-show="editing && !isCreated()"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Total</td>
+                                <td>{{totalLineCost() | pbCurrency}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

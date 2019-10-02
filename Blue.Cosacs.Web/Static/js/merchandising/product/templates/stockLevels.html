@@ -1,0 +1,26 @@
+<div class="section">
+    Stock Levels
+</div>
+<div class="no-results-message" ng-hide="stockLevels.length">
+    No stock data found.
+</div>
+<table class="table table-bordered table-striped aligned" ng-show="stockLevels.length">
+    <thead>
+        <tr>
+            <th>Location</th>
+            <th>On Hand</th>
+            <th>Available</th>
+            <th>On Order</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="stock in stockLevels">
+            <td><a href="{{resolve('Merchandising/Locations/Detail/' + stock.locationId)}}">{{stock.locationName}}</a></td>
+            <td>{{stock.stockOnHand}}</td>
+            <td>{{stock.stockAvailable}}</td>
+            <td><a href="{{resolve('Merchandising/StockRequisition/GetPendingQuantity?productId=' + stock.productId + '&locationId=' + stock.locationId)}}" target="_blank">
+                                                    {{stock.stockOnOrder}}
+                                                </a></td>
+        </tr>
+    </tbody>
+</table>          

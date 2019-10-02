@@ -1,0 +1,99 @@
+﻿<div data-module="merchandising/reports/stockReceived/init" ng-controller="StockReceivedReportCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="btn btn-default" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="btn btn-default" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="btn btn-default" ng-click="reset()">Clear</button>
+                    <button id="buttonSearch" class="btn btn-primary" ng-click="get()" ng-disabled="loading()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="createdFrom">Received From</label>
+                            <input class="form-control" name="createdFrom" ng-model="query.createdFrom" type="date" placeholder="Select Date" />
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="createdTo">Received To</label>
+                            <input class="form-control" name="createdTo" ng-model="query.createdTo" type="date" placeholder="Select Date" />
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="fascia">Fascia</label>
+                            <list name="fascia" ng-model="query.fascia" scope="fascias" placeholder="Select a Fascia" ng-disabled="query.locationId"></list>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <list name="location" ng-model="query.locationId" scope="locations" placeholder="Select a Location" ng-disabled="query.fascia"></list>
+                        </div>
+                    </div>
+
+                    
+                </div>
+                <div class="row buffer-sm bottom">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="vendor">Vendor</label>
+                            <list name="vendor" ng-model="query.vendorId" scope="vendors" placeholder="Select a Vendor"></list>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="purchaseOrderId">Purchase Order Number</label>
+                            <input class="form-control" name="purchaseOrderId" ng-model="query.purchaseOrderId" />
+                        </div>
+                    </div>
+
+                    
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="division">Division</label>
+                            <list name="division" ng-model="query.division" scope="divisions" placeholder="Select a Division"></list>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="sku">Department</label>
+                            <list name="department" ng-model="query.department" scope="departments" placeholder="Select a Department"></list>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="class">Class</label>
+                            <list name="class" ng-model="query.class" scope="classes" placeholder="Select a Class"></list>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+
+            
+        
+        <pb-column-select data="results" columns="columns" template-url="gridTemplate" utils="gridUtils"></pb-column-select>
+    </div>
+</div>

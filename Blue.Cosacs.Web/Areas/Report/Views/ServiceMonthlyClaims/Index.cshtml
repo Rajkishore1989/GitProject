@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "Service Monthly Claims Summary Report";
+}
+<div data-module="report/monthlyClaimsSummary" ng-controller="MonthlyClaimsSummaryController"
+    class="ng-scope report" ng-cloak>
+    <div class="section">
+        Parameters</div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group" ng-class="{'has-error': !year }">
+            <label class="col col-lg-4 control-label" for="inputYear">
+                {{yearLabel}}:
+            </label>
+            <div class="col col-lg-5">
+                <input id="inputYear" type="number" name="year" min="2009" max="2050" ng-required
+                    class="form-control" ng-model="year" />
+            </div>
+        </div>
+        <div class="col col-md-6 form-group" ng-class="{'has-error': !year || !month}">
+            <label class="col col-md-4 control-label">
+                {{monthLabel}}:</label>
+            <div class="col col-md-5">
+                <list name="listMonth" ng-model="month" scope="months" ng-required
+                    placeholder="Month"></list>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group" ng-class="{'has-error': !supplier }">
+            <label class="col col-lg-4 control-label">
+                {{ suppliersLbl }}
+            </label>
+            <div class="col col-lg-5">
+                <list name="listMonth" ng-model="supplier" scope="ServiceSuppliers"
+                    ng-required placeholder="Supplier"></list>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="actions">
+        <button id="buttonClear" class="clear btn btn-default" ng-click="clear()">
+            Clear</button>
+        <button id="buttonSearch" class="search btn btn-primary" ng-click="search()">
+            Run</button>
+        <button class="btn btn-default" ng-click="exportResults()">Export</button>
+    </div>
+    <p class="searchrow" />
+    <div id="divResults" class="generic-report-results">
+        <table class="table table-striped table-bordered table-hover" style="visibility: visible">
+            <thead>
+                <tr>
+                    <th style="width: 60%;">
+                        &nbsp;
+                    </th>
+                    <th colspan="4" class="text-center">
+                        Amount Claimed
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                        &nbsp;
+                    </th>
+                    <th colspan="2" class="text-center" style="width: 20%;">
+                        Current Month
+                    </th>
+                    <th colspan="2" class="text-center" style="width: 20%;">
+                        Year to Date (YTD)
+                    </th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="item in queryResults">
+                <tr class="text-center ng-scope" style="visibility: visible">
+                    <td class="ng-binding text-left">
+                        {{ item.Name }}
+                    </td>
+                    <td class="ng-binding" colspan="2">
+                        {{ item.CurrentMonth | currency : culture.CurrencySymbol : culture.DecimalPlaces
+                        }}
+                    </td>
+                    <td class="ng-binding" colspan="2">
+                        {{ item.YearToDate | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                    </td>
+                </tr>
+                <tr ng-show="item.ClaimsProductCategories.length">
+                    <td colspan="5" style="padding: 0; margin: 0;">
+                        <table style="width: 100%" class="table-bordered">
+                            <thead>
+                                <tr>
+                                    <th style="width: 60%;">
+                                        &nbsp;
+                                    </th>
+                                    <th class="text-center subHeaderIt" style="width: 10%;">
+                                        Labour
+                                    </th>
+                                    <th class="text-center subHeaderIt" style="width: 10%;">
+                                        Parts
+                                    </th>
+                                    <th class="text-center subHeaderIt" style="width: 10%;">
+                                        Labour
+                                    </th>
+                                    <th class="text-center subHeaderIt" style="width: 10%;">
+                                        Parts
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="cat in item.ClaimsProductCategories" class="text-center ng-scope">
+                                    <td class="ng-binding text-left" style="padding-left: 25px;">
+                                        - {{cat.Name}}
+                                    </td>
+                                    <td class="ng-binding" style="width: 10%;">
+                                        {{cat.CurrentMonthLabour| currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                    </td>
+                                    <td class="ng-binding" style="width: 10%;">
+                                        {{cat.CurrentMonthParts| currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                    </td>
+                                    <td class="ng-binding" style="width: 10%;">
+                                        {{cat.YearToDateLabour| currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                    </td>
+                                    <td class="ng-binding" style="width: 10%;">
+                                        {{cat.YearToDateParts| currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <tr ng-show="item.ClaimsProductCategories.length" style="background-color: #f9f9f9;
+                    font-weight: bold;" class="text-center">
+                    <td  class="text-left" style="padding-left: 20px;">
+                        Total
+                    </td>
+                    <td style="width: 10%;">
+                        {{item.TotalCurrentMonthLabour | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                    </td>
+                    <td style="width: 10%;">
+                        {{item.TotalCurrentMonthParts | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                    </td>
+                    <td style="width: 10%;">
+                        {{item.TotalYearToDateLabour | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                    </td>
+                    <td style="width: 10%;">
+                        {{item.TotalYearToDateParts | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

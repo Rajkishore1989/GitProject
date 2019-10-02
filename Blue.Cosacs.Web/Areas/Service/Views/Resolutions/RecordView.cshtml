@@ -1,0 +1,14 @@
+﻿@model Blue.Cosacs.Web.Areas.Service.Models.Resolution
+<tr data-id=@Model.Id class=view>
+    @if (Html.HasPermission(Blue.Service.ServicePermissionEnum.EditResolution))
+    {
+        <td class="actions"></td>
+    }
+    <td>@Model.Description</td>
+    <td>
+        @{
+            var hasFail = Model.Fail ? "Yes" : "No";
+        }
+        @hasFail
+    </td>
+</tr>

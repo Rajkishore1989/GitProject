@@ -1,0 +1,72 @@
+ <section class="buffer top" ng-show="product.id && canView">
+<ng-form name="costsForm" class="form-horizontal cost-form" novalidate>
+    <a name="CostsPricing"></a>
+    <div class="section">
+        Cost Pricing
+    </div>
+
+     <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-md-4 control-label pull-right" style="text-align:left">
+                    Currency
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group" ng-class="{'has-error': costsForm.supplierCost.$invalid || costsForm.supplierCurrency.$invalid}">
+                <label for="supplierCost" class="col-md-4 control-label">
+                    Vendor Cost
+                </label>
+                <div class="col-md-4 currency">
+                    <input pb-currency class="form-control" required ng-disabled="!canEdit" name="supplierCost" ng-model="costPrice.supplierCost" min="0" ng-required="true" maxlength="20" ng-maxlength="20"/>
+                </div>
+                <div class="col-md-4">
+                    <select name="type" ng-model="costPrice.supplierCurrency" ng-show="canEdit" required ng-required="true" class="form-control"
+                            ng-options="curr for curr in currencies"
+                            placeholder="Select a currency"></select>
+                    <input class="form-control" ng-hide="canEdit || productType == 'RepossessedStock'" ng-disabled="!canEdit" ng-model="costPrice.supplierCurrency">
+                    <span ng-show="productType == 'RepossessedStock'">{{localCurrency}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group" ng-class="{'has-error': costsForm.landedCost.$invalid}">
+                <label for="landedCost" class="col-md-4 control-label">
+                    Last Landed Cost
+                </label>
+                <div class="col-md-4  currency">
+                    <input pb-currency class="form-control" required ng-disabled="!canEdit" ng-change="ok(costPrice.lastLandedCost)" name="landedCost" ng-model="costPrice.lastLandedCost" min="0" ng-required="true" maxlength="100" ng-maxlength="100" ng-readonly="false"/>
+                </div>
+                <div class="col-md-4">
+                    {{localCurrency}}
+                </div>
+            </div>
+        </div>
+         <div class="col-md-6">
+            <input type="button" class="btn btn-primary" value="Save" ng-disabled="!canSave(costsForm) || saving" ng-click="save()" ng-show="canEdit"/>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group" ng-class="{'has-error': productForm.sku.$invalid}">
+                <label for="averageWeightedCost" class="col-md-4 control-label">
+                    Average Weighted Cost
+                </label>
+                <div class="col-md-4">
+                    <p class="form-control-static">{{ costPrice.averageWeightedCost | pbCurrency }}</p>
+                </div>
+                <div class="col-md-4">
+                    {{localCurrency}}
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-form>
+     </section>

@@ -1,0 +1,263 @@
+﻿<div ng-controller="warrantyCtrl" data-module='warranty/warrantyController' ng-cloak class="warranty"
+     data-branches="@ViewBag.branches" data-branch-types="@ViewBag.branchTypes"
+     data-edit-price-permission="@ViewBag.editPricePermission"
+     data-view-promotion-permission="@ViewBag.viewPromotionsPermission"
+     data-default-tax-rate="@ViewBag.defaultTaxRate">
+    @{ ViewBag.Title = "Warranty";}
+    <div>
+        <form name="warrantyForm" class="form-horizontal row">
+        <div class="col-lg-3">
+            <div class="warrantyTable">
+                <div class="section">
+                    Details</div>
+                <div class="form-group" ng-class="{'has-error': warrantyForm.Number.$invalid}">
+                    <label for="Number" class="control-label col-lg-4">
+                        Item number</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" type="text" ng-model="warranty.Number" name="Number" id="Number" maxlength="20" required ng-disabled="locked" /></div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': warrantyForm.Description.$invalid}">
+                    <label for="Description" class="control-label col-lg-4">
+                        Description</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" type="text" ng-model="warranty.Description" name="Description"
+                            id="Description" maxlength="32" required ng-disabled="locked" /></div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': warrantyForm.Length.$invalid}">
+                    <label for="Length" class="control-label col-lg-4">
+                        Length in months</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" type="number" max="99" min="1" ng-model="warranty.Length"
+                            name="Length" id="Length" required ng-disabled="locked" /></div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': warrantyForm.TaxRate.$invalid}">
+                    <label for="TaxRate" class="control-label col-lg-4">
+                        Tax rate</label>
+                    <div class="col-lg-8">
+                        <input class="form-control" type="number" step=".01" max="100" min="0" ng-model="warranty.TaxRate" name="TaxRate" id="TaxRate" ng-disabled="locked" /></div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': warrantyForm.warrantyTypes.$invalid}">
+                    <label for="warrantyTypes" class="control-label col-lg-4">
+                        Warranty Type</label>
+                    <div class="col-lg-8">
+                        <div class="radio">
+                            <label for="Free">
+                                <input id="Free" name="warrantyTypes" type="radio" value="F" ng-model="warranty.TypeCode"
+                                    ng-disabled="locked">
+                                Free
+                            </label>
+                            <br>
+                            <label for="Extended">
+                                <input id="Extended" name="warrantyTypes" type="radio" value="E" ng-model="warranty.TypeCode"
+                                    ng-disabled="locked">
+                                Extended<br>
+                            </label>
+                            <label for="InstantReplacement">
+                                <input id="InstantReplacement" name="warrantyTypes" type="radio" value="I" ng-model="warranty.TypeCode"
+                                    ng-disabled="locked">
+                                Instant Replacement<br>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error': warrantyForm.IsDeleted.$invalid}">
+                    <label for="IsDeleted" class="control-label col-lg-4">
+                        Is Deleted</label>
+                    <div class="col-lg-8">
+                        <div class="checkbox">
+                            <input type="checkbox" ng-model="warranty.IsDeleted" name="IsDeleted" id="IsDeleted" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3" ng-show="warranty.levels">
+            <div class="warrantyTable">
+                <div class="section">
+                    Hierarchy</div>
+                <div class="form-group" ng-repeat="level in warranty.levels" ng-class="{'has-error': !level.selectedTag}">
+                    <label for="level_{{level.LevelId}}" class="control-label col-lg-4">
+                        {{level.LevelName}}</label>
+                    <div class="col-lg-8">
+                        <list id="level_{{$parent.level.LevelId}}" name="level_{{$parent.level.LevelId}}"
+                              scope="level.levelScope" ng-model="level.selectedTag" placeholder="Select a Tag"
+                              ng-disabled="locked" ng-change="isDepartmentSet()">
+                        </list>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" ng-hide="hideRenewal">
+            <div class="section">
+                Renewal Links</div>
+            <div class="col-lg-4">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                Renewed by
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="parent in warranty.RenewalParents">
+                            <td style="width: 250px;">
+                                <a ng-href="{{warrantyLink(parent.id)}}" class="external-link" target="_blank">{{parent.text}}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-lg-8">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-1">
+                            </th>
+                            <th class="col-lg-11">
+                                Renewal of
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="child in warranty.RenewalChildren">
+                            <td>
+                                <div title="Delete" class="glyphicons bin click btn-group-vertical" ng-click="RemoveRenewal(child)">
+                                </div>
+                            </td>
+                            <td>
+                                <a class="external-link" ng-show="renewalPicked(child)" ng-href="{{warrantyLink(child.id)}}"
+                                    target="_blank">{{child.text}}</a>
+                                <div ng-hide="renewalPicked(child)">
+                                    <input type="hidden" class="picklist picklistdirective" ng-model="newRenewal" ng-required
+                                        ui-select2="warrantySearchSetup()" />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>
+                                <div class="glyphicons plus btn-group-vertical" title="Add" ng-click="AddRenewal()"
+                                    ng-class="{true: 'disabled',false : 'click'} [newRenewal == null]" />
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+        </form>
+        <button class="btn btn-primary" ng-click="saveWarranty(false)" ng-disabled="(warrantyForm.$invalid || !departmentSet)">
+            Save</button>
+        <button class="btn btn-primary" ng-click="saveWarranty(true)" ng-disabled="(warrantyForm.$invalid || !departmentSet)"
+            ng-show="!warranty.Id">
+            Save and continue</button>
+        <button class="btn btn-default" ng-click="clear()">
+            Clear</button>
+    </div>
+    <p>
+        &nbsp;</p>
+    <section class="warranty-price-container col-lg-6" ng-show="warranty.Id">
+        <header class="section">Prices</header>
+        <article ng-show="hasEditPricePermission">
+            <a ng-show="showEditPrice" href="{{getWarrantyPriceLink()}}">Edit prices</a>
+            <p>
+                &nbsp;</p>
+        </article>
+        <article class="warranty-prices">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="col-lg-3 text-center">
+                            Store Type
+                        </th>
+                        <th class="col-lg-3 text-center">
+                            Branch
+                        </th>
+                        <th class="col-lg-2 text-center">
+                            Cost
+                        </th>
+                        <th class="col-lg-2 text-center">
+                            Retail
+                        </th>
+                        <th class="col-lg-2 text-center">
+                            Tax Inclusive
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="locationPrice in prices">
+                        <td class="location-type col-lg-3">
+                            {{locationPrice.BranchType || 'All'}}
+                        </td>
+                        <td class="location col-lg-3">
+                            {{locationPrice.BranchName || 'All'}}
+                        </td>
+                        <td class="price col-lg-2 text-right">
+                            {{locationPrice.CostPrice | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                        </td>
+                        <td class="price col-lg-2 text-right">
+                            {{locationPrice.RetailPrice | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                        </td>
+                        <td class="price col-lg-2 text-right">
+                            {{locationPrice.TaxInclusivePrice | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </section>
+    <section class="warranty-promotions col-lg-6" ng-show="hasViewPromotionPermission && warranty.Id">
+        <header class="section">Promotions</header>
+        <article class="existing">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th class="title filters">
+                            Filters
+                        </th>
+                        <th class="title date">
+                            Start Date
+                        </th>
+                        <th class="title date">
+                            End Date
+                        </th>
+                        <th class="title price">
+                            Promotion Price
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="promotion" data-id="{{promo.Id}}" ng-repeat="promo in promotions">
+                        <td class="filters">
+                            <div class="filter" ng-repeat="filter in promo.LevelFilters">
+                                <span class="level-name">{{filter.LevelName}}:</span> <span class="tag-name">{{filter.TagName}}</span>
+                            </div>
+                            <div class="filter" ng-repeat="filter in promo.Filters">
+                                <span class="level-name">{{filter.name}}:</span> <span ng-show="filter.name != 'Warranty'"
+                                    class="tag-name">{{filter.value}}</span> <a ng-show="filter.name == 'Warranty'" class="tag-name"
+                                        ng-href="{{filter.wurl}}">{{filter.value}}</a>
+                            </div>
+                            <div ng-show="!promo.LevelFilters.length && !promo.Filters.length">
+                                All Stores</div>
+                        </td>
+                        <td class="date">
+                            {{promo.startDate | date:"dd MMM yyyy"}}
+                        </td>
+                        <td class="date">
+                            {{promo.endDate | date:"dd MMM yyyy"}}
+                        </td>
+                        <td class="price text-right" ng-show="promo.IsPercentage">
+                            {{promo.PromotionAmount}} % OFF
+                        </td>
+                        <td class="price text-right" ng-hide="promo.IsPercentage">
+                            {{promo.PromotionAmount | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+    </section>
+</div>

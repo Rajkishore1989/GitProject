@@ -1,0 +1,37 @@
+﻿@model Blue.Cosacs.Web.Areas.Warehouse.Models.DriverCommission
+@using Blue.Cosacs
+@{ ViewBag.Title = Model.Title; }
+<button class="exp" type="submit">New Export</button>
+<div class="section">Previous Exports</div>
+<table class="data" data-module="warehouse/driverCommission" style="margin:0px;">
+    <thead>
+        <tr>
+            <th>Export No</th>
+            <th>Exported On</th>
+            <th>Exported By</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody class="tableRows">
+        @if (Model.Values.Count > 0)
+  {
+      foreach (var item in Model.Values)
+      {
+            <tr data-id="@item.Id" class="view">
+                <td>@item.Id</td>
+                <td>@item.CreatedOn.ToString("g")</td>
+                <td>@item.CreatedBy</td>
+                <td>@Html.ActionLink("Download", "Export", new { id = item.Id })</td>
+            </tr>
+      }
+  }
+  else
+  {
+            <tr class="empty">
+                <td colspan="9">
+                    There are no Previous Exports.
+                </td>
+            </tr>
+  }
+    </tbody>
+</table>

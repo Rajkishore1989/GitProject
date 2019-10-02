@@ -1,0 +1,141 @@
+﻿    @model string
+@{ ViewBag.Title = "Warranty Return Percentages"; }
+<div id="WarrantyReturnContainer" data-module="warranty/warrantyReturn" class="warranty-return-percentage-module" data-returnpercentage-data="@Model" ng-controller="WarrantyReturnController" data-view-warranty-permission="@ViewBag.viewWarrantyPermission" data-edit-percentage-permission="@ViewBag.editPercentagePermission" ng-cloak ng-init="linkFilter='@Model'">
+    <article class="warranty-returns">
+        <div class="row">
+            <div class="col-lg-10">
+                <section class="filters">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input class="form-control" type="text" maxlength="50" ng-model="filter.SearchCriteria" ui-keypress="{enter:'search()'}" placeholder="Warranty"/>
+                        </div>
+                        <div class="col-8">
+                            <button class="btn btn-primary" ng-click="search()">Search</button>
+                        </div>
+                    </div>
+                </section>
+                <br />
+                <section class="existing">
+                    <table class="data table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th class="action"></th>
+                                <th class="title filters">Filters</th>
+                                <th class="title months">Warranty Length<br />Months</th>
+                                <th class="title months">Free Warranty<br />Length</th>
+                                <th class="title months">Warranty Elapsed<br />Months</th>
+                                <th class="title return percentage">Warranty Return<br />Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="return" data-id="{{returnPercentage.Id}}" ng-repeat="returnPercentage in returnPercentages">
+                                <td class="action"><span ng-show="hasEditPercentagePermission" class="glyphicons glyph-btn action-delete bin" title="Delete" ng-click="deleteReturnPercentage()"></span></td>
+                                <td class="filters">
+                                    <table class="filterstable">
+                                        <tr class="filter" ng-repeat="filter in returnPercentage.WarrantyReturnFilters">
+                                            <td class="level-name">{{filter.LevelName}}:</td>
+                                            <td class="tag-name">{{filter.TagName}}</td>
+                                        </tr>
+                                        <tr class="filter" ng-repeat="filter in returnPercentage.Filters">
+                                            <td class="level-name">{{filter.name}}:</td>
+                                            <td ng-show="filter.name != 'Warranty'" class="tag-name">{{filter.value}}</td>
+                                            <td ng-show="filter.name == 'Warranty'">
+                                                <a ng-show="filter.wurl != '#'" class="tag-name" ng-href="{{filter.wurl}}">{{filter.value}}</a>
+                                                <span ng-show="filter.wurl == '#'" class="tag-name" ng-href="{{filter.wurl}}">{{filter.value}}</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="months">{{returnPercentage.WarrantyLength}}</td>
+                                <td class="months">{{returnPercentage.FreeWarrantyLength}}</td>
+                                <td class="months">{{returnPercentage.ElapsedMonths}}</td>
+                                <td class="percentage">{{returnPercentage.PercentageReturn}} %</td>
+                            </tr>
+                        </tbody>
+                        <tfoot ng-show="hasEditPercentagePermission">
+                            <tr class="return-new new" ng-hide="creatingNewReturn">
+                                <td class="action">
+                                    <a class="glyphicons glyph-btn action-new plus" href="#" title="New" ng-click="showNewRow($event)"></a>
+                                </td>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr class="return-new create RowTemplate" ng-show="creatingNewReturn">
+                                <td class="action">
+                                    <a class="glyphicons glyph-btn action save floppy_disk" title="Save" ng-click="createNewReturnPercentage()"></a>
+                                    <a class="glyphicons glyph-btn action cancel undo" title="Cancel" ng-click="cancelNewReturnPercentage()"></a>
+                                </td>
+                                <td class="filters">
+                                    <div class="btn-group">
+                                        <input id="lvl" type="radio" name="filtersToggle" ng-model="filtersToggle" value="level" />
+                                        <label for="lvl" class="click">Levels Filters&nbsp;&nbsp;</label>
+                                        <input id="war" type="radio" name="filtersToggle" ng-model="filtersToggle" value="warranty" />
+                                        <label for="war" class="click">Warranty</label>
+                                    </div>
+                                    <section class="filters level" ng-show="filtersToggle == 'level'">
+                                        <div class="field" ng-repeat="level in MasterData.Levels">
+                                            <div>{{level.Name}}</div>
+                                            <select ui-select2="select2Options" ng-model="newReturn.Levels[level.Id]" data-placeholder="{{level.Name}}" style="width: 80%;">
+                                                <option></option>
+                                                <option value="{{tag.Id}}" ng-repeat="(value, tag) in level.Tags">{{tag.Name}}</option>
+                                            </select>
+                                        </div>
+                                    </section>
+                                    <section class="filters warranty" ng-show="filtersToggle == 'warranty'">
+                                        <div class="field">
+                                            <div>Warranty</div>
+                                            <input ui-select2="warrantySearchSetup()" ng-model="newReturn.Warranty" data-placeholder="Warranty" style="width: 80%;" />
+                                        </div>
+                                    </section>
+                                    <section class="filters static">
+                                        <div class="field">
+                                            <div>Store Type</div>
+                                            <select ui-select2="select2Options" ng-model="newReturn.BranchType" data-placeholder="Store Type" style="width: 80%;">
+                                                <option></option>
+                                                <option value="{{value}}" ng-repeat="(value, branchType) in MasterData.BranchTypes">{{branchType}}</option>
+                                            </select>
+                                        </div>
+                                        <div class="field">
+                                            <div>Store Location</div>
+                                            <select ui-select2="select2Options" ng-model="newReturn.BranchNumber" data-placeholder="Store Location" style="width: 80%;">
+                                                <option></option>
+                                                <option value="{{value}}" ng-repeat="(value, branch) in MasterData.Branches">{{branch}}</option>
+                                            </select>
+                                        </div>
+                                    </section>
+                                </td>
+                                <td class="months">
+                                    <div class="field months retail" ng-class="{'has-error': !newReturn.WarrantyLength}">
+                                        <!--<div>Warranty Length Months</div>-->
+                                        <input ng-required="true" ng-model="newReturn.WarrantyLength" placeholder="Length Months" type="number" min="0" class="form-control" ng-disabled="newReturn.Warranty && newReturn.WarrantyLength" />
+                                    </div>
+                                </td>
+                                <td class="months">
+                                    <div class="field months retail" ng-class="{'has-error': !newReturn.FreeWarrantyLength}">
+                                        <input ng-required="true" ng-model="newReturn.FreeWarrantyLength" placeholder="Free Warrany Length" type="number" min="0" class="form-control" />
+                                    </div>
+                                </td>
+                                <td class="months">
+                                    <div class="field months retail" ng-class="{'has-error': !newReturn.ElapsedMonths}">
+                                        <!--<div>Warranty Elapsed Months</div>-->
+                                        <input ng-required="true" ng-model="newReturn.ElapsedMonths" placeholder="Elapsed Months" type="number" min="0" max="{{newReturn.WarrantyLength}}" ng-class="{true:'Elapsed-higher'}[newReturn.ElapsedMonths > newReturn.WarrantyLength]" class="form-control" />
+                                    </div>
+                                </td>
+                                <td class="percentage">
+                                    <div class="field percentage retail" ng-class="{'has-error': !(newReturn.ReturnPercentage || newReturn.ReturnPercentage == 0) }">
+                                        <!--<div>Warranty Return Percentage</div>-->
+                                        <input ng-required="true" ng-model="newReturn.ReturnPercentage" placeholder="Percentage %" type="number" min="0.00" max="100.00" step="0.01" ng-change="newReturnPercentageChanged()" ui-keypress="{enter:'createNewReturnPercentage()'}" ui-keyup="{esc:'cancelNewReturnPercentage()'}" class="form-control" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </section>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-lg-12" data-ng-show="returnPercentages">
+                <pagination num-pages="filter.PageCount" max-size="10" current-page="filter.PageIndex" on-select-page="selectPage(page)" ></pagination>
+            </div>
+        </div>
+    </article>
+</div>

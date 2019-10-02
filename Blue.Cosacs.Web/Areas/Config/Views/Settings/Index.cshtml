@@ -1,0 +1,148 @@
+﻿@model IEnumerable<Blue.Config.ISettings>
+    @{ ViewBag.Title = "System Settings"; }
+<div class="settingsEditor" ng-controller="SettingsEditorCtrl" data-module='config/settingsEditor'
+     data-settings-upload-url="Files" ng-cloak>
+    <div class="col-lg-2">
+        &nbsp;
+        <div id="navBar" ng-hide="MenuItems==null" >
+            <ul class="nav nav-stacked" >
+                <li ng-repeat="item in MenuItems" ng-class="{active: activeItem==item.module.Label}">
+                    <a href="#" class="menu_element" ng-click="menuItemsClick(item)">{{item.module.Label}}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-10">
+        <ng-form name="editorForm">
+        <table class="table table-striped table-bordered" ng-hide="SelectedModuleData==null">
+            <thead><tr>
+                @if (Html.HasPermission(Blue.Config.ConfigPermissionEnum.EditSystemSettingsConfig)) {
+                <th class="edit_controls_column"></th>
+                }
+                <th>Name</th>
+                <th>Description</th>
+                <th>Value</th>
+            </tr></thead>
+            <tr ng-repeat="settingItem in SelectedModuleData" ng-class="{'has-error': !settingItem.editValue}">
+                @if (Html.HasPermission(Blue.Config.ConfigPermissionEnum.EditSystemSettingsConfig)) {
+                <td colspan="4"
+                    ng-hide="settingItem.settingsHeaderDesc==undefined">
+                    <h4 class="text-center">{{settingItem.settingsHeaderDesc}}</h4> &nbsp;</td>
+
+                <td  ng-hide="settingItem.editMode"
+                    ng-show="settingItem.settingsHeaderDesc==undefined">
+                    <a class="glyphicons pencil btn" href="#" title="Edit"
+                       ng-click="settingItemEdit(settingItem,$event)"></a>
+                </td>
+                <td ng-show="settingItem.editMode"
+                    ng-show="settingItem.settingsHeaderDesc==undefined">
+                    <a class="glyphicons floppy_disk btn" ng-disabled="!editorForm.$valid"
+                       href="#" title="Save" ng-click="settingsEditSaveClick(settingItem,$event)"></a>
+                    <a class="glyphicons undo btn" href="#" title="Cancel"
+                       ng-click="settingItemEditCancelled(settingItem,$event)"></a>
+                </td>
+                } else {
+                <td colspan="3" ng-hide="settingItem.settingsHeaderDesc==undefined">
+                    {{settingItem.settingsHeaderDesc}} &nbsp;</td>
+                }
+                <td ng-show="settingItem.settingsHeaderDesc==undefined">{{settingItem.Name}}</td>
+                <td ng-show="settingItem.settingsHeaderDesc==undefined">{{settingItem.Description}}</td>
+                <td ng-hide="settingItem.editMode || settingItem.settingsHeaderDesc != undefined">
+                    <div ng-hide="settingItem.Type == 3 || settingItem.Type == 4 || settingItem.Type == 9 || settingItem.Type == 10"
+                         style="min-height: 22px;"> <!--bit      0 -->
+                        {{settingItem.value}}
+                    </div>
+                    <div ng-show="settingItem.Type == 3" style="min-height: 22px;"> <!--date     3 -->
+                        {{settingItem.value | moment:'YYYY-MM-DD'}}
+                    </div>
+                    <div ng-show="settingItem.Type == 4" style="min-height: 22px;"> <!--datetime 4 -->
+                        {{settingItem.value | moment:'YYYY-MM-DD HH:mm'}}
+                    </div>
+                    <div ng-show="settingItem.Type == 9" style="min-height: 22px;"> <!--list     9 -->
+                        <ul>
+                            <li ng-repeat="itemOption in settingItem.List">{{itemOption}}</li>
+                        </ul>
+                    </div>
+                    <div ng-show="settingItem.Type == 10" style="min-height: 22px;"> <!--image   10 -->
+                        <img alt="Logo setting image" ng-src='{{settingItem.imageUrl}}' width="300px" height="100px" ng-show="settingItem.value != '00000000-0000-0000-0000-000000000000'">
+                        <span ng-show="settingItem.value == '00000000-0000-0000-0000-000000000000'">No image selected</span>
+                    </div>
+                </td>
+                <td ng-show="settingItem.editMode && settingItem.settingsHeaderDesc==undefined">
+                    <div ng-switch on="settingItem.Type" style="min-height: 22px;">
+                        <div ng-switch-when="0"> <!--bit      0 -->
+                            <input class="form-control" type="checkbox" ng-model="settingItem.editValue"/>
+                        </div>
+                        <div ng-switch-when="1"> <!--int      1 -->
+                            <input class="form-control" type="text" ng-model="settingItem.editValue" ng-required
+                                   ng-pattern="regexpInteger"/>
+                        </div>
+                        <div ng-switch-when="2"> <!--decimal  2 -->
+                            <input class="form-control" type="text" ng-model="settingItem.editValue"
+                                   title="{{settingItem.decimal_title}}" ng-pattern="settingItem.decimal_regexp" />
+                        </div>
+                        <div ng-switch-when="3"> <!--date     3 -->
+                            <input class="form-control" type="text" ng-model="settingItem.editValue"
+                                   ng-value="settingItem.editValue" ng-required
+                                   ui-date="{ dateFormat: 'yy-mm-dd' }" onkeypress="return false;">
+                        </div>
+                        <div ng-switch-when="4"> <!--datetime 4 -->
+                            <input class="form-control" type="text" ng-model="settingItem.editValue"
+                                   ng-value="settingItem.editValue" ng-required
+                                   ui-date="{ dateFormat: 'yy-mm-dd' }" onkeypress="return false;">
+                            <input class="form-control" type="text" ng-model="settingItem.editValueHours"
+                                   ng-value="settingItem.editValueHours" ng-required
+                                   ng-pattern="regexpHours"/> <strong>:</strong>
+                            <input class="form-control" type="text" ng-model="settingItem.editValueMinutes"
+                                   ng-value="settingItem.editValueMinutes" ng-required
+                                   ng-pattern="regexpMinutes"/>
+                        </div>
+                        <div ng-switch-when="5"> <!--string   5 -->
+                            <input class="form-control" type="text" ng-model="settingItem.editValue" ui-reset
+                                   ng-minlength="0" ng-maxlength="256"/>
+                        </div>
+                        <div ng-switch-when="6"> <!--text     6 -->
+                            <textarea class="form-control" rows="{{settingItem.textAreaRows}}"
+                                      ng-model="settingItem.editValue"></textarea>
+                        </div>
+                        <div ng-switch-when="7"> <!--codelist 7 -->
+                            <select ui-select2 placeholder="Select {{settingItem.CodeList}}" ng-required="true"
+                                    ng-model="settingItem.editValue" style="width: 200px" >
+                                <option value="{{key}}" ng-repeat="(key , value) in settingItem.options">{{value}}</option>
+                            </select>
+                        </div>
+                        <div ng-switch-when="8"> <!--enum     8 -->
+                            <select class="form-control" ng-model="settingItem.editValue">
+                                <option id="{{itemOption}}" ng-hide="settingItem.value==itemOption"
+                                        ng-repeat="itemOption in settingItem.Enum">{{itemOption}}</option>
+                                <option id="{{itemOption}}" ng-show="settingItem.value==itemOption" selected="selected"
+                                        ng-repeat="itemOption in settingItem.Enum">{{itemOption}}</option>
+                            </select>
+                        </div>
+                        <div ng-switch-when="9"> <!--list     9 -->
+                            <textarea class="form-control" rows="{{settingItem.textAreaRows}}"
+                                      ng-model="settingItem.editValue"></textarea>
+                        </div>
+                        <div ng-switch-when="10"> <!--image   10 -->
+                            <div ng-show="uploadInProgress" class="loader-element"></div>
+                            <div ng-show="progressVisible">
+                                <div class="percent">{{progress}}%</div>
+                                <div class="progress-bar">
+                                    <div class="uploaded" ng-style="{'width': progress+'%'}"></div>
+                                </div>
+                            </div>
+                            <form class="row form-inline">
+                                <input type="hidden" ng-model="settingItem.fileModel" style="width:70%;" />
+                                <div class="col-lg-9">
+                                    <input type="file" onchange="angular.element(this).scope().onFileSelect({{settingItem}}, this)"/>
+                                </div>
+                            </form>
+                            <img alt="Logo setting image" width="300px" height="100px" id="{{settingItem.Id}}" ng-src='{{settingItem.imageUrl}}' ng-show="settingItem.value != '00000000-0000-0000-0000-000000000000' || fileSelected">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        </ng-form>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+@{
+ViewBag.Title = "Weekly Trading Report";
+}
+<div data-module="merchandising/reports/weeklyTradingReport/init"
+     ng-controller="WeeklyTradingReportCtrl">
+    <div class="section">Export Data</div>
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="form-group">
+                <input class="form-control" name="exportDate" ng-model="exportDate"
+                       type="date" placeholder="Select Export Date"/>
+            </div>
+        </div>
+        <div class="col-lg-1">
+            <button id="buttonExport" class="btn btn-default" ng-click="exportReportData(exportDate)">Export</button>
+        </div>
+    </div>
+</div>

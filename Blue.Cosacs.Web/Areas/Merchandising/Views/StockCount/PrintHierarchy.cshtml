@@ -1,0 +1,93 @@
+﻿@model List<StockCountHierarchyPrintModel>
+
+@{
+    var pageSize = 10;
+}
+
+@section Head
+{
+    <style type="text/css">
+        .reject {
+            white-space: nowrap;
+        }
+
+            .reject span {
+                margin-left: 5px;
+            }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+<div>
+
+@foreach (var hierarchy in Model) {
+    <div class="larger" style="text-align:center;">
+        <div>@hierarchy.Hierarchy</div>
+    </div>    
+
+
+    for (var x = 0; x < hierarchy.Products.Count; x += pageSize)
+    {
+
+        @Html.Partial("PrintProduct", hierarchy.Products.Skip(x).Take(pageSize).ToList());
+
+        <div class="leftFooter">
+                @ViewBag.Title - @hierarchy.Hierarchy
+            </div>
+            <div class="rightFooter">
+                Page @((x / pageSize) + 1) of @(Math.Ceiling((decimal)hierarchy.Products.Count / pageSize))
+            </div>
+            <div class="clear"></div>
+        if (x + pageSize < hierarchy.Products.Count)
+        {
+            <div class="pageBreak"></div>
+        }
+    }
+}
+</div>

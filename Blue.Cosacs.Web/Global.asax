@@ -1,0 +1,1 @@
+<%@ Codebehind="Global.asax.cs" Inherits="Blue.Cosacs.Web.Global" Language="C#" %>

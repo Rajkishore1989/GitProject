@@ -1,0 +1,1997 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <StyleCopTreatErrorsAsWarnings>false</StyleCopTreatErrorsAsWarnings>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0C72F8E3-7A0A-4BF6-89C8-0C073FF7A8FB}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Blue.Cosacs.Web</RootNamespace>
+    <AssemblyName>Blue.Cosacs.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <JSLintSkip>\Static\|\app.build.js|\requirejs-config.js|\testacular.conf.js</JSLintSkip>
+    <UseIISExpress>false</UseIISExpress>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+    <MvcProjectUpgradeChecked>true</MvcProjectUpgradeChecked>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <TargetFrameworkProfile />
+    <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Artemis, Version=0.1.382.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Artemis.0.1.382\lib\net40\Artemis.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper.Net4, Version=3.3.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK, Version=1.5.39.0, Culture=neutral, PublicKeyToken=9f476d3089b52be3, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\AWSSDK.1.5.39.0\lib\AWSSDK.dll</HintPath>
+    </Reference>
+    <Reference Include="BarcodeLib, Version=1.0.0.12, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\lib\Barcode\BarcodeLib.dll</HintPath>
+    </Reference>
+    <Reference Include="BCrypt.Net, Version=0.1.4141.31969, Culture=neutral, PublicKeyToken=f3bc8f8c31beeb49, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\BCrypt.Net.0.1.0\lib\net35\BCrypt.Net.dll</HintPath>
+    </Reference>
+    <Reference Include="Blue, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.0.1.982\lib\net40\Blue.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Admin, Version=0.1.1041.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Admin.0.1.1041\lib\net40\Blue.Admin.dll</HintPath>
+    </Reference>
+    <Reference Include="Blue.Caching, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Caching.0.1.982\lib\net40\Blue.Caching.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Config, Version=0.1.995.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Config.0.1.995\lib\net40\Blue.Config.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Elmah, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Elmah.0.1.982\lib\net40\Blue.Elmah.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Events, Version=0.1.980.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Events.0.1.980\lib\net40\Blue.Events.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Glaucous.Client, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Glaucous.Client.1.0.646\lib\net45\Blue.Glaucous.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Glaucous.Client.Mvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Glaucous.Client.Mvc.1.0.646\lib\net45\Blue.Glaucous.Client.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Hub.Client, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Hub.Client.0.1.982\lib\net45\Blue.Hub.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Hub.Server, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Hub.Server.0.1.982\lib\net45\Blue.Hub.Server.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Licensing.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Blue\Licensing\Blue.Licensing.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Blue.log4net, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.log4net.0.1.982\lib\net40\Blue.log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Networking, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Networking.0.1.982\lib\net45\Blue.Networking.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Transactions, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Transactions.0.1.982\lib\net40\Blue.Transactions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Transactions.Mvc, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Transactions.Mvc.0.1.982\lib\net40\Blue.Transactions.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Blue.Web, Version=0.1.982.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Blue.Web.0.1.982\lib\net40\Blue.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DataAnnotationsExtensions">
+      <HintPath>..\packages\DataAnnotationsExtensions.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DataAnnotationsExtensions.ClientValidation">
+      <HintPath>..\packages\DataAnnotationsExtensions.MVC3.1.1.0.0\lib\NETFramework40\DataAnnotationsExtensions.ClientValidation.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah.Mvc">
+      <HintPath>..\packages\Elmah.MVC.2.1.1\lib\net40\Elmah.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FileHelpers, Version=3.1.5.0, Culture=neutral, PublicKeyToken=3e0c08d59cc3d657, processorArchitecture=MSIL">
+      <HintPath>..\packages\FileHelpers.3.1.5\lib\net45\FileHelpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.9\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\Microsoft\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\CommonServiceLocator.1.0\lib\NET35\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Interception.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Interception.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception.Configuration, Version=2.1.505.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Interception.2.1.505.2\lib\NET35\Microsoft.Practices.Unity.Interception.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="MvcContrib, Version=2.0.36.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Artemis.0.1.382\lib\net40\MvcContrib.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PercolatorAnalysis">
+      <HintPath>..\packages\PercolatorAnalysisServices.0.3.2\lib\PercolatorAnalysis.dll</HintPath>
+    </Reference>
+    <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Artemis.0.1.382\lib\net40\PowerCollections.dll</HintPath>
+    </Reference>
+    <Reference Include="StackExchange.Redis, Version=1.1.608.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.1.1.608\lib\net45\StackExchange.Redis.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StackExchange.Redis.Extensions.Core, Version=1.1.12.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Core.1.1.12.0\lib\net45\StackExchange.Redis.Extensions.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StackExchange.Redis.Extensions.Newtonsoft, Version=1.1.10.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\StackExchange.Redis.Extensions.Newtonsoft.1.1.10.0\lib\net45\StackExchange.Redis.Extensions.Newtonsoft.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.4.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <HintPath>..\packages\structuremap.2.6.4.1\lib\net40\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="Blue.Events.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\lib\EventStore\Blue.Events.Shared.dll</HintPath>
+    </Reference>
+    <Reference Include="Blue.EventStore.Web, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\lib\EventStore\Blue.EventStore.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebActivator">
+      <HintPath>..\packages\WebActivator.1.5.1\lib\net40\WebActivator.dll</HintPath>
+    </Reference>
+    <Reference Include="xVal, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f8fbed92c68c4006, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Artemis.0.1.382\lib\net40\xVal.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Courts.NET.WS\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Controllers\BranchOpeningHoursController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Controllers\LockedClientsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Controllers\RolesController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Controllers\ProfileController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Controllers\SessionsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\BranchOpeningHours.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\Profile.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\ProfileNew.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\LockUser.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\RolePermissionsByCategory.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\RoleSearch.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\RolePermissionsDisplay.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\EffectivePermissions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\ProfileLoad.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\UserProfile.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\UserProfilePermissions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\RolePermissionRequest.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\Role.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\RolePermissions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Admin\Models\UserRoles.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Config\ConfigAreaRegistration.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Credit\Controllers\StoreCardImportController.cs" />
+    <Compile Include="Areas\Credit\CreditAreaRegistration.cs" />
+    <Compile Include="Areas\Credit\Models\ImportResult.cs" />
+    <Compile Include="Areas\Financial\Controllers\CintOrderDeliveredController.cs" />
+    <Compile Include="Areas\Financial\Controllers\CintOrderReturnedController.cs" />
+    <Compile Include="Areas\Financial\Controllers\FinancialQueryReportController.cs" />
+    <Compile Include="Areas\Financial\Controllers\GoodsReceiptCreatedController.cs" />
+    <Compile Include="Areas\Financial\Controllers\TransferController.cs" />
+    <Compile Include="Areas\Financial\Controllers\StockAdjustmentCreatedController.cs" />
+    <Compile Include="Areas\Financial\Controllers\VendorReturnCreatedController.cs" />
+    <Compile Include="Areas\Financial\FinancialAreaRegistration.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\BuyerSalesHistoryReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\NonWarrantableItemsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\WarehouseOversupplyReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\RP3ExportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\SummaryUpdateControlReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockReceivedReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\NegativeStockReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\WeeklyTradingReportController.cs" />
+    <Compile Include="Areas\Merchandising\Models\AllocatedStockPrintModel.cs" />
+    <Compile Include="Areas\Merchandising\Models\AllocatedStockQuery.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\AllocatedStockReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\AssociatedProductsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\BookingCancelStockController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\BookingReceiveStockController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\BrandController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\PromotionReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\SalesComparisonReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockMovementReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockValueReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\TopSkuReportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\TradingReportController.cs" />
+    <Compile Include="Areas\Merchandising\Models\AllocatedStockReportGroup.cs" />
+    <Compile Include="Areas\Merchandising\Models\AllocatedStockReportDetail.cs" />
+    <Compile Include="Areas\Stock\Controllers\CatalogueController.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\Merchandising\Controllers\CINTsSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\CINTSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ComboController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\CostPriceController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\DemoController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\CintErrorController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ExportController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\GoodsReceiptController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\GoodsReceiptReviewSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ProductsSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ProductSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\PurchaseOrderSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\GoodsOnLoanController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockAllocationController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockRequisitionController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockTransferController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\TransactionTypeController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\VendorMailSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\VendorReturnDirectController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\GoodsReceiptDirectController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\HierarchyController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\LevelsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\LocationsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\MasterProductsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\PeriodDataController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ProductEnquiryController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ProductsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ProductStatusController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\ProductWithoutStockController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\PromotionController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\PurchaseController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\RegularStockController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\RepossessedConditionsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\RepossessedStockController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\RetailPriceController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\SearchController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\SetController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\SetSkuController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\SkuExistsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\SparePartController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockAdjustmentController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockAdjustmentReasonController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockAdjustmentSecondaryReasonController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockCountController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockCountPreviousController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockCountScheduleController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockCountStartController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\StockMovementController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\TagsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\TagValuesController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\TaxController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\TicketingController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\UserController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\VendorReturnController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\VendorsController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\VendorsSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\Controllers\VendorSubscriberController.cs" />
+    <Compile Include="Areas\Merchandising\MerchandisingAreaRegistration.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\Merchandising\Models\AssociatedProduct.cs" />
+    <Compile Include="Areas\Merchandising\Models\Component.cs" />
+    <Compile Include="Areas\Merchandising\Models\HierarchyValue.cs" />
+    <Compile Include="Areas\Merchandising\Models\Level.cs" />
+    <Compile Include="Areas\Merchandising\Models\PeriodData.cs" />
+    <Compile Include="Areas\Merchandising\Models\Product.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Areas\Merchandising\Models\ProductHierarchy.cs" />
+    <Compile Include="Areas\Merchandising\Models\Tag.cs" />
+    <Compile Include="Areas\Report\Controllers\OutstandingSRsPerProductCategoryController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\ServiceClaimsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\DynamicReportController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\ReplacementDataController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\ServiceIncomeAnalysisController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\ServiceMonthlyClaimsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\ServiceRequestResolution.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\WarrantyClaimsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\SecondEffortSolicitationController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\WarrantySalesController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Controllers\WeeklySummaryController.cs">
+      <SubType>Code</SubType>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Models\CustomerFeedback.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\Models\WeeklySummary.cs">
+      <SubType>Code</SubType>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Report\ReportAreaRegistration.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\ChargesController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\InstallationSubscriberController.cs" />
+    <Compile Include="Areas\Service\Controllers\PartsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\ReportsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\ResolutionsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\ServiceSuppliersController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Config\Controllers\SettingsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Config\Controllers\DecisionTableController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Config\Controllers\PublicHolidaysController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Config\Models\BankHolidays.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\TechnicianPaymentsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Models\Resolution.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Models\ServiceSupplier.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\PaymentsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\RequestsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\SupplierCostsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Controllers\TechnicianDiariesController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Models\CustomerSearch.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Models\Setting.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Models\TechnicianPaymentsPrint.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Models\UserProfile.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\Routing.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Service\ServiceAreaRegistration.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Stock\StockAreaRegistration.cs" />
+    <Compile Include="Areas\Warehouse\Controllers\BookingCancelController.cs" />
+    <Compile Include="Areas\Warehouse\Controllers\BookingSubmitController.cs" />
+    <Compile Include="Areas\Warehouse\Controllers\BookingsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Controllers\DriverPaymentsController.cs" />
+    <Compile Include="Areas\Warehouse\Controllers\CustomerPickUpsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Controllers\SalesManagementController.cs" />
+    <Compile Include="Areas\Warehouse\Models\DriverPayment.cs" />
+    <Compile Include="Areas\Warehouse\Models\PickingConfirmation.cs" />
+    <Compile Include="Areas\Warehouse\Models\PickUpConfirmation.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Common\Search.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\LevelsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\LinkController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\TagsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\HierarchyController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\WarrantiesController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\WarrantyReturnController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\WarrantyAPIController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\WarrantyPricesController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\WarrantyPromotionsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Controllers\WarrantySubscriberController.cs" />
+    <Compile Include="Areas\Warranty\Models\BulkEditRequest.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Models\Level.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\Models\Tag.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warranty\WarrantyAreaRegistration.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\DynamicFileExporter.cs" />
+    <Compile Include="Common\BaseImportFile.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\CacheProvider.cs" />
+    <Compile Include="Common\DictionaryModelBinder.cs" />
+    <Compile Include="Common\ICacheProvider.cs" />
+    <Compile Include="Common\JSendResult.cs" />
+    <Compile Include="Common\JsonNetResult.cs" />
+    <Compile Include="Common\LargeJsonResult.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\Merchandising\MerchandisingConfiguration.cs" />
+    <Compile Include="Common\PasswordResult.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\DecimalModelBinder.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\External\Context.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\External\Model.cs">
+      <DependentUpon>Model.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\EventStore.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\HiLo.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\PickList.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\TooManyResultsException.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\AuthorisationController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\BrowserNotSupportedController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\HttpHubSubscriberController.cs" />
+    <Compile Include="Controllers\LocalisationController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\NotFoundController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\PickListsController.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\SalesManagementController.cs" />
+    <Compile Include="Controllers\SitemapController.cs" />
+    <Compile Include="Extensions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="HackClass.cs" />
+    <Compile Include="Helpers\EnumHelper.cs" />
+    <Compile Include="Helpers\Menu.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Models\HubMessagesPending.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Models\MenuItem.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\ChangePasswordHandler.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\Generic\PermissionsEnum.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\FormInlineBaseController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Controllers\TrucksController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Controllers\DeliveryController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Controllers\DriversController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Controllers\PickingController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Controllers\PickingItemsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\CancelBooking.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\Truck.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\Driver.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\DeliveryConfirmation.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\PickListConfirmation.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\PickListViewPrint.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\ResolveBooking.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\Models\ScheduleConfirmation.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Areas\Warehouse\WarehouseAreaRegistration.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\BookingException.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\Bootstrapper.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\CosacsValidationException.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\GlobalRegistry.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\JsonOnly.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\Routing.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\Validators\BookingValidator.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\Validators\IBookingValidator.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Common\Validators\IValidator.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\AuditController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\ExceptionsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\IndexingController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\HiLoController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\HomeController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\HubController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Controllers\TestsController.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Helpers\ControllerExtensions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Helpers\HtmlExtensions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Helpers\RejectTemplate.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Helpers\ViewExtensions.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Models\RecoverPassword.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+    </Compile>
+    <Compile Include="Reports\Reports.Master.cs">
+      <DependentUpon>Reports.Master</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Report1.aspx.cs">
+      <DependentUpon>Report1.aspx</DependentUpon>
+      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Content Include="App_Readme\Elmah.txt" />
+    <Content Include="Areas\Merchandising\Views\Catalogue\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Web.config" />
+    <Content Include="Static\css\main.css">
+      <DependentUpon>main.less</DependentUpon>
+    </Content>
+    <Content Include="Static\css\main.min.css">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+    <Content Include="Static\css\merchandising.css">
+      <DependentUpon>merchandising.less</DependentUpon>
+    </Content>
+    <Content Include="Static\css\merchandising.min.css">
+      <DependentUpon>merchandising.css</DependentUpon>
+    </Content>
+    <Content Include="Static\js\merchandising\nonWarrantableItems\controllers\nonWarrantableItems.js" />
+    <Content Include="Static\js\merchandising\nonWarrantableItems\init.js" />
+    <Content Include="Static\js\merchandising\nonWarrantableItems\services\NonWarrantableItemsResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\allocatedStockReport\controllers\allocatedStockReport.js" />
+    <Content Include="Static\js\merchandising\reports\allocatedStockReport\controllers\allocatedStockReportPrint.js" />
+    <Content Include="Static\js\merchandising\reports\allocatedStockReport\init.js" />
+    <Content Include="Static\js\merchandising\goodsOnLoan\services\serviceRequestResourceProvider.js" />
+    <Content Include="Static\js\merchandising\product\directives\promotionalPricing.js" />
+    <Content Include="Static\js\merchandising\product\directives\sales.js" />
+    <Content Include="Static\js\merchandising\product\directives\incoterm.js" />
+    <Content Include="Static\js\merchandising\product\templates\promotionalPricing.html" />
+    <Content Include="Static\js\merchandising\product\templates\sales.html" />
+    <Content Include="Static\js\merchandising\product\templates\incoterm.html" />
+    <Content Include="Static\js\merchandising\purchase\directives\viewLabels.js" />
+    <Content Include="Static\js\merchandising\purchase\templates\printLabelItems.html" />
+    <Content Include="Static\js\merchandising\reports\allocatedStockReport\services\allocatedStockReportProvider.js" />
+    <Content Include="Static\js\merchandising\reports\allocatedStockReport\templates\allocatedStockReportGrid.html" />
+    <Content Include="Static\js\merchandising\reports\buyerSalesHistoryReport\controllers\buyerSalesHistory.js" />
+    <Content Include="Static\js\merchandising\reports\buyerSalesHistoryReport\controllers\buyerSalesHistoryPrint.js" />
+    <Content Include="Static\js\merchandising\shared\filters\chooseFilter.js" />
+    <Content Include="Static\js\merchandising\reports\buyerSalesHistoryReport\init.js" />
+    <Content Include="Static\js\merchandising\reports\buyerSalesHistoryReport\services\buyerSalesHistoryResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\buyerSalesHistoryReport\templates\buyerSalesHistoryGrid.html" />
+    <Content Include="Static\js\merchandising\reports\summaryUpdateControl\controllers\summaryUpdateControlReportPrint.js" />
+    <Content Include="Static\js\merchandising\reports\warehouseOversupplyReport\controllers\warehouseOversupplyPrint.js" />
+    <Content Include="Static\js\merchandising\reports\warehouseOversupplyReport\controllers\warehouseOversupply.js" />
+    <Content Include="Static\js\merchandising\reports\warehouseOversupplyReport\init.js" />
+    <Content Include="Static\js\merchandising\reports\warehouseOversupplyReport\services\warehouseOversupplyResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\warehouseOversupplyReport\templates\warehouseOversupplyGrid.html" />
+    <Content Include="Static\js\merchandising\reports\promotionReport\controllers\promotionReport.js" />
+    <Content Include="Static\js\merchandising\reports\promotionReport\controllers\promotionPrint.js" />
+    <Content Include="Static\js\merchandising\reports\promotionReport\init.js" />
+    <Content Include="Static\js\merchandising\reports\promotionReport\services\promotionResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\financialQueryReport\controllers\financialQueryReport.js" />
+    <Content Include="Static\js\merchandising\reports\financialQueryReport\init.js" />
+    <Content Include="Static\js\merchandising\reports\financialQueryReport\services\financialQueryResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\promotionReport\templates\promoReportGrid.html" />
+    <Content Include="Static\js\merchandising\reports\summaryUpdateControl\controllers\summaryUpdateControlReport.js" />
+    <Content Include="Static\js\merchandising\reports\summaryUpdateControl\init.js" />
+    <Content Include="Static\js\merchandising\reports\summaryUpdateControl\services\summaryUpdateControlResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\stockReceived\controllers\stockReceivedReport.js" />
+    <Content Include="Static\js\merchandising\reports\stockReceived\init.js" />
+    <Content Include="Static\js\merchandising\reports\stockReceived\services\stockReceivedResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\stockReceived\templates\stockReceivedReportGrid.html" />
+    <Content Include="Static\js\merchandising\reports\stockMovement\controllers\stockMovementReport.js" />
+    <Content Include="Static\js\merchandising\reports\stockMovement\init.js" />
+    <Content Include="Static\js\merchandising\reports\stockMovement\services\stockMovementResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\negativeStock\controllers\negativeStock.js" />
+    <Content Include="Static\js\merchandising\reports\negativeStock\init.js" />
+    <Content Include="Static\js\merchandising\reports\negativeStock\services\negativeStockResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\negativeStock\templates\negativeStockGrid.html" />
+    <Content Include="Static\js\merchandising\reports\stockValue\templates\stockValuePrint.html" />
+    <Content Include="Static\js\merchandising\shared\services\periodProvider.js" />
+    <Content Include="Static\js\merchandising\reports\stockValue\controllers\stockValue.js" />
+    <Content Include="Static\js\merchandising\reports\stockValue\controllers\stockValuePrint.js" />
+    <Content Include="Static\js\merchandising\reports\stockValue\init.js" />
+    <Content Include="Static\js\merchandising\reports\stockValue\services\stockValueResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\stockValue\templates\stockValueGrid.html" />
+    <Content Include="Static\js\merchandising\reports\salesComparison\controllers\salesComparison.js" />
+    <Content Include="Static\js\merchandising\reports\salesComparison\init.js" />
+    <Content Include="Static\js\merchandising\reports\salesComparison\services\brandProvider.js" />
+    <Content Include="Static\js\merchandising\reports\salesComparison\services\salesComparisonProvider.js" />
+    <Content Include="Static\js\merchandising\reports\salesComparison\templates\salesComparisonGrid.html" />
+    <Content Include="Static\js\merchandising\reports\topSku\controllers\topSkuPrint.js" />
+    <Content Include="Static\js\merchandising\reports\topSku\templates\topSkuGrid.html" />
+    <Content Include="Static\js\merchandising\search\initSearch.js" />
+    <Content Include="Areas\Report\Views\WeeklySummary\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Report\Views\_ViewStart.cshtml" />
+    <Content Include="reports.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Static\js\admin\branchOpeningHours.js" />
+    <Content Include="Static\js\admin\lockedclients.js" />
+    <Content Include="Static\js\angularShared\app.js" />
+    <Content Include="Static\js\angularShared\directives.js" />
+    <Content Include="Static\js\angularShared\enums.js" />
+    <Content Include="Static\js\angularShared\filters.js" />
+    <Content Include="Static\js\angularShared\loader.js" />
+    <Content Include="Areas\Service\Views\Requests\Printing\FoodLossReport.cshtml" />
+    <Content Include="Areas\Config\Views\Web.config" />
+    <Content Include="Areas\Config\Views\PublicHolidays\Index.cshtml" />
+    <Content Include="Areas\Config\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Service\Views\Requests\Printing\Request.cshtml" />
+    <Content Include="Areas\Service\Views\SupplierCosts\Index.cshtml" />
+    <Content Include="Areas\Service\Views\TechnicianDiaries\Diary.cshtml" />
+    <Content Include="Areas\Service\Views\Requests\Printing\SummaryPrint.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\showDiary.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\payment.cshtml" />
+    <Content Include="Areas\Service\Views\Requests\StockItem.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\stock.cshtml" />
+    <Content Include="Reports\Report1.aspx" />
+    <Content Include="Areas\Admin\Views\LockedClients\Index.cshtml" />
+    <Content Include="Access-Rules.config" />
+    <Content Include="Areas\Admin\Views\BranchOpeningHours\Index.cshtml" />
+    <None Include="Areas\Config\Views\DecisionTable\Index.cshtml" />
+    <Content Include="Areas\Config\Views\Settings\Index.cshtml" />
+    <Content Include="Areas\Service\Views\ServiceSuppliers\Index.cshtml" />
+    <Content Include="Areas\Service\Views\ServiceSuppliers\RecordEdit.cshtml" />
+    <Content Include="Areas\Service\Views\ServiceSuppliers\RecordView.cshtml" />
+    <Content Include="Areas\Service\Views\Requests\Search.cshtml" />
+    <Content Include="Areas\Service\Views\Charges\Index.cshtml" />
+    <Content Include="Areas\Report\Views\Web.config" />
+    <Content Include="Areas\Report\Views\DynamicReport\Index.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\List.cshtml" />
+    <Content Include="Areas\Report\Views\Shared\GenericReportResult.cshtml" />
+    <Content Include="Areas\Service\Views\Resolutions\Index.cshtml" />
+    <Content Include="Areas\Service\Views\Resolutions\RecordEdit.cshtml" />
+    <Content Include="Areas\Service\Views\Resolutions\RecordView.cshtml" />
+    <Content Include="Areas\Service\Views\Parts\Index.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\SecondEffortSolicitation.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\ResolutionTimesProductCategory.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\ReplacementData.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\CustomerFeedbackHappyCall.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\OutstandingServiceRequests.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\ServiceRequestResolution.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\SpareParts.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\TechnicianRejections.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\WarrantiesDueRenewal.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\WarrantyClaims.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\WarrantyHitRate.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\WarrantyReturns.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\WarrantySales.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\InstallationHitRate.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\ServiceFailures.cshtml" />
+    <Content Include="Areas\Report\Views\ServiceMonthlyClaims\Index.cshtml" />
+    <Content Include="Areas\Report\Views\OutstandingSRsPerProductCategory\Index.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\ServiceClaims.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\ServiceRequestFinancial.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\ServiceIncomeAnalysis.cshtml" />
+    <Content Include="Areas\Report\Views\DynamicReport\DeliveryPerformanceSummary.cshtml" />
+    <Content Include="Areas\Service\Views\Payments\Printing\PaymentReceipt.cshtml" />
+    <Content Include="Areas\Merchandising\Views\AssociatedProducts\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Combo\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Demo\Reflink.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Export\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceiptDirect\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceiptDirect\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceiptDirect\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceiptDirect\PrintProductWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceiptDirect\PrintWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\BatchPrint.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\PrintProductWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\PrintWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsReceipt\VerifyCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Hierarchy\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Hierarchy\RecordView.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Locations\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Locations\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\PeriodData\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\ProductEnquiry\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\ProductStatus\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Products\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\ProductWithoutStock\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Promotion\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Promotion\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\PrintProductWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\PrintWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\RegularStock\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\RepossessedConditions\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\RepossessedStock\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Set\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\SparePart\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockAdjustmentReason\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockAdjustment\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockAdjustment\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockAdjustment\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockAdjustment\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCountPrevious\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCountSchedule\New.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCountStart\Start.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\CintError\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\PrintHierarchy.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\PrintVariance.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\PrintVarianceHierarchy.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockCount\PrintVarianceProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\AllocatedStockReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockValueReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockValueReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockMovement\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\TagValues\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Tax\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Ticketing\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturn\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturnDirect\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturnDirect\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturnDirect\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturnDirect\PrintProductWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturnDirect\PrintWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturn\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturn\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturn\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturn\PrintProductWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorReturn\PrintWithCost.cshtml" />
+    <Content Include="Areas\Merchandising\Views\VendorStatus\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Vendors\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Vendors\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Merchandising\Views\TransactionType\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockTransfer\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockTransfer\PrintTransferNote.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockTransfer\PrintTransferNoteProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockTransfer\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockTransfer\PrintStockSheetProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockTransfer\PrintStockSheet.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockRequisition\New.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockRequisition\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockRequisition\OnOrder.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockAllocation\New.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockAllocation\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsOnLoan\Detail.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsOnLoan\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsOnLoan\PrintDeliveryNote.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsOnLoan\PrintProduct.cshtml" />
+    <Content Include="Areas\Merchandising\Views\GoodsOnLoan\PrintCollectionNote.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Unauthorized\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\TopSkuReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\TopSkuReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\TradingReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\TradingReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Shared\_Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockMovementReport\Index.cshtml" />
+    <Content Include="Areas\Financial\Views\FinancialQueryReport\Index.cshtml" />
+    <Content Include="Areas\Financial\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Merchandising\Views\SalesComparisonReport\Index.cshtml" />
+    <Content Include="Areas\Financial\Views\FinancialQueryReport\Print.cshtml" />
+    <Content Include="Areas\Financial\Views\Shared\_Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockMovementReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\PromotionReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\PromotionReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\SalesComparisonReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\AllocatedStockReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockReceivedReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockReceivedReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\NegativeStockReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\NegativeStockReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\WarehouseOversupplyReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\WarehouseOversupplyReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\SummaryUpdateControlReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\SummaryUpdateControlReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\PrintAlternate.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\PrintProductWithCostAlternate.cshtml" />
+    <Content Include="Areas\Merchandising\Views\BuyerSalesHistoryReport\Index.cshtml" />
+    <Content Include="Areas\Merchandising\Views\BuyerSalesHistoryReport\Print.cshtml" />
+    <Content Include="Areas\Merchandising\Views\StockTransfer\Header.cshtml" />
+    <Content Include="Areas\Merchandising\Views\WeeklyTradingReport\Index.cshtml" />
+    <Content Include="Areas\Credit\Views\StoreCardImport\Import.cshtml" />
+    <Content Include="Areas\Credit\Views\StoreCardImport\Index.cshtml" />
+    <Content Include="Areas\Credit\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Merchandising\Views\NonWarrantableItems\Index.cshtml" />
+    <None Include="Areas\Service\Views\Shared\Dialogue.cshtml" />
+    <Content Include="Areas\Service\Views\TechnicianPayments\MyPayments.cshtml" />
+    <Content Include="Areas\Service\Views\TechnicianPayments\Index.cshtml" />
+    <Content Include="Reports\Reports.Master" />
+    <Content Include="Areas\Warranty\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Warranty\Views\Levels\Index.cshtml" />
+    <Content Include="Areas\Warranty\Views\Levels\RecordView.cshtml" />
+    <Content Include="Areas\Warranty\Views\Levels\RecordEdit.cshtml" />
+    <Content Include="Areas\Warranty\Views\Tags\Index.cshtml" />
+    <Content Include="Areas\Warranty\Views\Tags\RecordView.cshtml" />
+    <Content Include="Areas\Warranty\Views\Hierarchy\Index.cshtml" />
+    <Content Include="Areas\Warranty\Views\Hierarchy\RecordView.cshtml" />
+    <Content Include="Areas\Warranty\Views\Warranties\Warranty.cshtml" />
+    <Content Include="Areas\Warranty\Views\Web.config" />
+    <Content Include="Areas\Warranty\Views\Warranties\Index.cshtml" />
+    <Content Include="Areas\Warranty\Views\WarrantyReturn\Index.cshtml" />
+    <Content Include="Areas\Warranty\Views\WarrantyPromotions\Index.cshtml" />
+    <Content Include="Areas\Warranty\Views\Link\Simulator.cshtml" />
+    <Content Include="Areas\Warranty\Views\Link\Index.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\TechnicianPaymentsDisplay.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Warehouse\Views\Shared\BookingTemplateRejectBootstrap.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\TechnicianPaymentsPrint.cshtml" />
+    <Content Include="Areas\Warranty\Views\Shared\PromotionResult.cshtml" />
+    <Content Include="Areas\Warranty\Views\WarrantyPromotions\PromotionsForWarrantyPrice.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\servicePaymentReceipt.cshtml" />
+    <Content Include="routes.json" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Printing\ScheduleInternal.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Printing\SchedulePageInternal.cshtml" />
+    <Content Include="Areas\Warehouse\Views\DriverPayments\Index.cshtml" />
+    <Content Include="Areas\Warehouse\Views\DriverPayments\RecordEdit.cshtml" />
+    <Content Include="Areas\Warehouse\Views\DriverPayments\RecordView.cshtml" />
+    <Content Include="Areas\Merchandising\Views\Purchase\StockLabelPrint.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\JobOverridePopup.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\OverrideAuthorisationPopup.cshtml" />
+    <Content Include="Areas\Service\Views\Shared\TechnicianAllocatedJobs.cshtml" />
+    <None Include="Static\css\base\Printing\cosacsPrinting.less" />
+    <Content Include="Static\css\main.less" />
+    <Content Include="Static\css\print.css.map">
+      <DependentUpon>print.css</DependentUpon>
+    </Content>
+    <Content Include="Static\css\warranty.less" />
+    <Content Include="Static\css\warehouse.less" />
+    <Content Include="Static\css\variables.less" />
+    <Content Include="Static\css\typeahead.less" />
+    <Content Include="Static\css\service.less" />
+    <Content Include="Static\css\service-printing.less" />
+    <Content Include="Static\css\select2.less" />
+    <Content Include="Static\css\report-printing.less" />
+    <Content Include="Static\css\pos.less" />
+    <Content Include="Static\css\merchandising.less" />
+    <Content Include="Static\css\main.css.map">
+      <DependentUpon>main.css</DependentUpon>
+    </Content>
+    <Content Include="Static\css\merchandising.css.map">
+      <DependentUpon>merchandising.css</DependentUpon>
+    </Content>
+    <None Include="Static\js\admin\additionalProfile.js" />
+    <Content Include="Static\css\images\ui-icons_888888_256x240.png" />
+    <Content Include="Static\js\admin\Templates\profileTemplate.htm" />
+    <Content Include="Static\js\alert.js" />
+    <Content Include="Static\js\angularShared\services.js" />
+    <Content Include="Static\js\angularShared\services\lookup.js" />
+    <Content Include="Static\js\angularShared\services\user.js" />
+    <Content Include="Static\js\angularShared\templates\facetsearch.html" />
+    <Content Include="Static\js\audit.js" />
+    <Content Include="Static\js\authorise.js" />
+    <Content Include="Static\js\config\decisionTableAngular.js" />
+    <Content Include="Static\js\config\publicHolidays.js" />
+    <Content Include="Static\js\config\settingsEditor.js" />
+    <Content Include="Static\js\confirm.js" />
+    <Content Include="Static\js\decisionTables\POS.DecisionTable.Payment.json" />
+    <Content Include="Static\js\decisionTables\SR.DecisionTable.Charge.json" />
+    <Content Include="Static\js\decisionTables\SR.DecisionTable.ChargeToAuthorisation.json" />
+    <Content Include="Static\js\decisionTables\SR.DecisionTable.Payment.json" />
+    <Content Include="Static\js\decisionTables\SR.DecisionTable.ServiceStatus.json" />
+    <Content Include="Static\js\decisionTables\SR.DecisionTable.Workflow.json" />
+    <None Include="Static\js\select2ListUpdate.coffee_ignore" />
+    <Content Include="Static\js\ConvertToISO8601Date.js" />
+    <Content Include="Static\js\d3charts\d3LineChart.js" />
+    <Content Include="Static\js\d3charts\ResolutionReportBarChart.js" />
+    <Content Include="Static\js\datepicker.js" />
+    <Content Include="Static\js\directives\list.js" />
+    <Content Include="Static\js\directives\timepicker.js" />
+    <Content Include="Static\js\exception-logger.js" />
+    <Content Include="Static\js\facetsearch\controller.js" />
+    <Content Include="Static\js\facetsearch\directive.js" />
+    <Content Include="Static\js\facetsearch\facetsearch.js" />
+    <Content Include="Static\js\facetsearch\service.js" />
+    <Content Include="Static\js\hilo.js" />
+    <Content Include="Static\js\jquery.pickList.js" />
+    <Content Include="Static\js\lib\growl.js" />
+    <Content Include="Static\js\lib\underscore.string.js" />
+    <Content Include="Static\js\localisation.js" />
+    <Content Include="Static\js\Login.js" />
+    <Content Include="Static\js\lookup.js" />
+    <Content Include="Static\js\main.js" />
+    <Content Include="Static\js\menu-hud.js" />
+    <Content Include="Static\js\menu.js" />
+    <Content Include="Static\js\merchandising\app.js" />
+    <Content Include="Static\js\merchandising\associatedproduct\controllers\associatedproduct.js" />
+    <Content Include="Static\js\merchandising\associatedproduct\init.js" />
+    <Content Include="Static\js\merchandising\combo\controllers\combo.js" />
+    <Content Include="Static\js\merchandising\combo\controllers\component.js" />
+    <Content Include="Static\js\merchandising\combo\controllers\location.js" />
+    <Content Include="Static\js\merchandising\combo\controllers\price.js" />
+    <Content Include="Static\js\merchandising\combo\init.js" />
+    <Content Include="Static\js\merchandising\combo\services\comboResourceProvider.js" />
+    <Content Include="Static\js\merchandising\config.js" />
+    <Content Include="Static\js\merchandising\demo\controllers\reflink.js" />
+    <Content Include="Static\js\merchandising\demo\init.js" />
+    <Content Include="Static\js\merchandising\enquiry\templates\ProductEnquiryDetail.html" />
+    <Content Include="Static\js\merchandising\export\controllers\export.js" />
+    <Content Include="Static\js\merchandising\export\init.js" />
+    <Content Include="Static\js\merchandising\goodscosting\controllers\goodsCosting.js" />
+    <Content Include="Static\js\merchandising\goodscosting\init.js" />
+    <Content Include="Static\js\merchandising\goodscosting\services\goodsCostingResourceProvider.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\controllers\directReceipt.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\controllers\receiptProducts.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\directives\createDirectItems.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\directives\editDirectReceipt.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\directives\viewDirectItems.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\init.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\services\goodsReceiptDirectResourceProvider.js" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\templates\createDirectItems.html" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\templates\editDirectReceipt.html" />
+    <Content Include="Static\js\merchandising\goodsreceiptdirect\templates\viewDirectItems.html" />
+    <Content Include="Static\js\merchandising\goodsreceipt\controllers\goodsReceipt.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\controllers\receiptPurchases.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\controllers\search.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\directives\createItems.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\directives\editGoodsReceipt.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\directives\viewItems.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\init.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\services\goodsReceiptResourceProvider.js" />
+    <Content Include="Static\js\merchandising\goodsreceipt\templates\createItems.html" />
+    <Content Include="Static\js\merchandising\goodsreceipt\templates\editGoodsReceipt.html" />
+    <Content Include="Static\js\merchandising\goodsreceipt\templates\searchResult.html" />
+    <Content Include="Static\js\merchandising\goodsreceipt\templates\viewItems.html" />
+    <Content Include="Static\js\merchandising\hierarchy\controllers\productHierarchy.js" />
+    <Content Include="Static\js\merchandising\hierarchy\controllers\tagsController.js" />
+    <Content Include="Static\js\merchandising\hierarchy\directives\hierarchy.js" />
+    <Content Include="Static\js\merchandising\hierarchy\init.js" />
+    <Content Include="Static\js\merchandising\hierarchy\services\productHierarchyService.js" />
+    <Content Include="Static\js\merchandising\hierarchy\templates\ProductCategory.html" />
+    <Content Include="Static\js\merchandising\hierarchy\templates\ProductCategoryMultiple.html" />
+    <Content Include="Static\js\merchandising\hierarchy\templates\ProductClass.html" />
+    <Content Include="Static\js\merchandising\hierarchy\templates\ProductDepartment.html" />
+    <Content Include="Static\js\merchandising\hierarchy\templates\productHierarchy.html" />
+    <Content Include="Static\js\merchandising\location\controllers\location.js" />
+    <Content Include="Static\js\merchandising\location\init.js" />
+    <Content Include="Static\js\merchandising\location\templates\searchResult.html" />
+    <Content Include="Static\js\merchandising\perioddata\controllers\periodDataController.js" />
+    <Content Include="Static\js\merchandising\perioddata\init.js" />
+    <Content Include="Static\js\merchandising\productStatus\controllers\productStatus.js" />
+    <Content Include="Static\js\merchandising\productStatus\init.js" />
+    <Content Include="Static\js\merchandising\product\controllers\product.js" />
+    <Content Include="Static\js\merchandising\product\directives\costControls.js" />
+    <Content Include="Static\js\merchandising\product\directives\retailPricing.js" />
+    <Content Include="Static\js\merchandising\product\directives\stockLevels.js" />
+    <Content Include="Static\js\merchandising\product\init.js" />
+    <Content Include="Static\js\merchandising\product\services\costsResourceProvider.js" />
+    <Content Include="Static\js\merchandising\product\services\repossessedStockProvider.js" />
+    <Content Include="Static\js\merchandising\product\services\retailpriceProvider.js" />
+    <Content Include="Static\js\merchandising\product\templates\costControls.html" />
+    <Content Include="Static\js\merchandising\product\templates\retailPricing.html" />
+    <Content Include="Static\js\merchandising\product\templates\searchResult.html" />
+    <Content Include="Static\js\merchandising\product\templates\stockLevels.html" />
+    <Content Include="Static\js\merchandising\promotion\controllers\promotion.js" />
+    <Content Include="Static\js\merchandising\promotion\init.js" />
+    <Content Include="Static\js\merchandising\promotion\services\promotionResourceProvider.js" />
+    <Content Include="Static\js\merchandising\promotion\templates\searchResult.html" />
+    <Content Include="Static\js\merchandising\purchase\controllers\product.js" />
+    <Content Include="Static\js\merchandising\purchase\controllers\purchase.js" />
+    <Content Include="Static\js\merchandising\purchase\directives\createItems.js" />
+    <Content Include="Static\js\merchandising\purchase\directives\createPurchaseOrder.js" />
+    <Content Include="Static\js\merchandising\purchase\directives\editItems.js" />
+    <Content Include="Static\js\merchandising\purchase\directives\editPurchaseOrder.js" />
+    <Content Include="Static\js\merchandising\purchase\directives\viewItems.js" />
+    <Content Include="Static\js\merchandising\purchase\directives\viewPurchaseOrder.js" />
+    <Content Include="Static\js\merchandising\purchase\init.js" />
+    <Content Include="Static\js\merchandising\purchase\templates\createItems.html" />
+    <Content Include="Static\js\merchandising\purchase\templates\createPurchaseOrder.html" />
+    <Content Include="Static\js\merchandising\purchase\templates\editItems.html" />
+    <Content Include="Static\js\merchandising\purchase\templates\editPurchaseOrder.html" />
+    <Content Include="Static\js\merchandising\purchase\templates\searchResult.html" />
+    <Content Include="Static\js\merchandising\purchase\templates\viewItems.html" />
+    <Content Include="Static\js\merchandising\purchase\templates\viewPurchaseOrder.html" />
+    <Content Include="Static\js\merchandising\repossessedConditions\controllers\repossessedConditions.js" />
+    <Content Include="Static\js\merchandising\repossessedConditions\init.js" />
+    <Content Include="Static\js\merchandising\repossessedConditions\services\repossessedConditionResourceProvider.js" />
+    <Content Include="Static\js\merchandising\set\controllers\component.js" />
+    <Content Include="Static\js\merchandising\set\controllers\location.js" />
+    <Content Include="Static\js\merchandising\set\controllers\price.js" />
+    <Content Include="Static\js\merchandising\set\controllers\set.js" />
+    <Content Include="Static\js\merchandising\set\init.js" />
+    <Content Include="Static\js\merchandising\set\services\setResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\directives.js" />
+    <Content Include="Static\js\merchandising\shared\directives\createGoodsReceipt.js" />
+    <Content Include="Static\js\merchandising\shared\directives\currency.js" />
+    <Content Include="Static\js\merchandising\shared\directives\datetime.js" />
+    <Content Include="Static\js\merchandising\shared\directives\disabledOptions.js" />
+    <Content Include="Static\js\merchandising\shared\directives\hierarchy.js" />
+    <Content Include="Static\js\merchandising\shared\directives\integer.js" />
+    <Content Include="Static\js\merchandising\shared\directives\keypress.js" />
+    <Content Include="Static\js\merchandising\shared\directives\pagination.js" />
+    <Content Include="Static\js\merchandising\shared\directives\percentage.js" />
+    <Content Include="Static\js\merchandising\shared\directives\pricePanel.js" />
+    <Content Include="Static\js\merchandising\shared\directives\columnSelect.js" />
+    <Content Include="Static\js\merchandising\shared\directives\proHierarchy.js" />
+    <Content Include="Static\js\merchandising\shared\directives\refLink.js" />
+    <Content Include="Static\js\merchandising\shared\directives\tagging.js" />
+    <Content Include="Static\js\merchandising\shared\directives\searchDropdown.js" />
+    <Content Include="Static\js\merchandising\shared\directives\taxInput.js" />
+    <Content Include="Static\js\merchandising\shared\directives\taxRateGrid.js" />
+    <Content Include="Static\js\merchandising\shared\filters.js" />
+    <Content Include="Static\js\merchandising\shared\filters\currency.js" />
+    <Content Include="Static\js\merchandising\shared\filters\dateTime.js" />
+    <Content Include="Static\js\merchandising\shared\filters\date.js" />
+    <Content Include="Static\js\merchandising\shared\filters\joinBy.js" />
+    <Content Include="Static\js\merchandising\shared\filters\keyFilter.js" />
+    <Content Include="Static\js\merchandising\shared\filters\linkRefs.js" />
+    <Content Include="Static\js\merchandising\shared\filters\percentage.js" />
+    <Content Include="Static\js\merchandising\shared\filters\resolveLink.js" />
+    <Content Include="Static\js\merchandising\shared\filters\titlecase.js" />
+    <Content Include="Static\js\merchandising\shared\services.js" />
+    <Content Include="Static\js\merchandising\shared\services\apiResourceHelper.js" />
+    <Content Include="Static\js\merchandising\shared\services\dateHelper.js" />
+    <Content Include="Static\js\merchandising\shared\services\helpers.js" />
+    <Content Include="Static\js\merchandising\shared\services\hierarchyResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\services\locationResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\services\pageHelper.js" />
+    <Content Include="Static\js\merchandising\shared\services\productResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\services\purchaseResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\services\taggingResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\services\reportHelper.js" />
+    <Content Include="Static\js\merchandising\shared\services\taxHelper.js" />
+    <Content Include="Static\js\merchandising\shared\services\taxRateResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\services\userResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\services\vendorResourceProvider.js" />
+    <Content Include="Static\js\merchandising\shared\templates\createGoodsReceipt.html" />
+    <Content Include="Static\js\merchandising\shared\templates\hierarchyControls.html" />
+    <Content Include="Static\js\merchandising\shared\templates\pagination.html" />
+    <Content Include="Static\js\merchandising\shared\templates\price-panel.html" />
+    <Content Include="Static\js\merchandising\shared\templates\column-select.html" />
+    <Content Include="Static\js\merchandising\shared\templates\pro-hierarchy.html" />
+    <Content Include="Static\js\merchandising\shared\templates\search-dropdown.html" />
+    <Content Include="Static\js\merchandising\shared\templates\TagList.html" />
+    <Content Include="Static\js\merchandising\shared\templates\taxInput.html" />
+    <Content Include="Static\js\merchandising\search\controllers\defaultSearch.js" />
+    <Content Include="Static\js\merchandising\shared\templates\taxRateGrid.html" />
+    <Content Include="Static\js\merchandising\goodsOnLoan\controllers\goodsOnLoan.js" />
+    <Content Include="Static\js\merchandising\goodsOnLoan\controllers\goodsOnLoanSearch.js" />
+    <Content Include="Static\js\merchandising\goodsOnLoan\init.js" />
+    <Content Include="Static\js\merchandising\goodsOnLoan\services\goodsOnLoanResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\stockMovement\templates\stockMovementReportGrid.html" />
+    <Content Include="Static\js\merchandising\stockAllocation\controllers\allocationProduct.js" />
+    <Content Include="Static\js\merchandising\stockAllocation\controllers\stockAllocation.js" />
+    <Content Include="Static\js\merchandising\stockAllocation\controllers\stockAllocationSearch.js" />
+    <Content Include="Static\js\merchandising\stockAllocation\init.js" />
+    <Content Include="Static\js\merchandising\stockAllocation\services\stockAllocationResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockRequisition\controllers\stockOnOrder.js" />
+    <Content Include="Static\js\merchandising\stockRequisition\controllers\stockRequisition.js" />
+    <Content Include="Static\js\merchandising\stockRequisition\controllers\stockRequisitionSearch.js" />
+    <Content Include="Static\js\merchandising\stockRequisition\init.js" />
+    <Content Include="Static\js\merchandising\stockRequisition\services\stockRequisitionResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\tradingReport\controllers\tradingReport.js" />
+    <Content Include="Static\js\merchandising\reports\tradingReport\init.js" />
+    <Content Include="Static\js\merchandising\reports\tradingReport\services\tradingReportResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockTransfer\controllers\stockTransferSearch.js" />
+    <Content Include="Static\js\merchandising\stockTransfer\controllers\stockTransfer.js" />
+    <Content Include="Static\js\merchandising\stockTransfer\init.js" />
+    <Content Include="Static\js\merchandising\stockTransfer\services\stockTransferResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockAdjustmentReason\controllers\primaryReason.js" />
+    <Content Include="Static\js\merchandising\stockAdjustmentReason\controllers\secondaryReason.js" />
+    <Content Include="Static\js\merchandising\stockAdjustmentReason\controllers\stockAdjustmentReason.js" />
+    <Content Include="Static\js\merchandising\stockAdjustmentReason\init.js" />
+    <Content Include="Static\js\merchandising\stockAdjustmentReason\services\primaryReasonResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockAdjustmentReason\services\secondaryReasonResourceProvider.js" />
+    <Content Include="Static\js\merchandising\cintError\controllers\cintError.js" />
+    <Content Include="Static\js\merchandising\cintError\init.js" />
+    <Content Include="Static\js\merchandising\cintError\services\cintErrorResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockAdjustment\controllers\stockAdjustment.js" />
+    <Content Include="Static\js\merchandising\stockAdjustment\controllers\stockAdjustmentSearch.js" />
+    <Content Include="Static\js\merchandising\stockAdjustment\init.js" />
+    <Content Include="Static\js\merchandising\stockAdjustment\services\stockAdjustmentResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockCountPrevious\controllers\previousCount.js" />
+    <Content Include="Static\js\merchandising\stockCountPrevious\init.js" />
+    <Content Include="Static\js\merchandising\stockCountPrevious\services\stockCountPreviousResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockCountSchedule\controllers\stockCountSchedule.js" />
+    <Content Include="Static\js\merchandising\stockCountSchedule\init.js" />
+    <Content Include="Static\js\merchandising\stockCountSchedule\services\stockCountScheduleResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockCountStart\controllers\stockCountStart.js" />
+    <Content Include="Static\js\merchandising\stockCountStart\init.js" />
+    <Content Include="Static\js\merchandising\stockCountStart\services\stockCountStartResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockCount\controllers\product.js" />
+    <Content Include="Static\js\merchandising\stockCount\controllers\stockCount.js" />
+    <Content Include="Static\js\merchandising\stockCount\controllers\stockCountSearch.js" />
+    <Content Include="Static\js\merchandising\stockCount\init.js" />
+    <Content Include="Static\js\merchandising\stockCount\services\stockCountResourceProvider.js" />
+    <Content Include="Static\js\merchandising\stockMovement\controllers\stockMovement.js" />
+    <Content Include="Static\js\merchandising\stockMovement\init.js" />
+    <Content Include="Static\js\merchandising\supplier\controllers\supplier.js" />
+    <Content Include="Static\js\merchandising\supplier\init.js" />
+    <Content Include="Static\js\merchandising\supplier\templates\searchResult.html" />
+    <Content Include="Static\js\merchandising\tagValues\controllers\tag.js" />
+    <Content Include="Static\js\merchandising\tagValues\controllers\tagValues.js" />
+    <Content Include="Static\js\merchandising\tagValues\init.js" />
+    <Content Include="Static\js\merchandising\taxRate\controllers\taxRate.js" />
+    <Content Include="Static\js\merchandising\taxRate\init.js" />
+    <Content Include="Static\js\merchandising\transactionType\controllers\transactionType.js" />
+    <Content Include="Static\js\merchandising\transactionType\init.js" />
+    <Content Include="Static\js\merchandising\transactionType\services\transactionTypeResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\topSku\controllers\topSku.js" />
+    <Content Include="Static\js\merchandising\reports\topSku\init.js" />
+    <Content Include="Static\js\merchandising\reports\topSku\services\topSkuResourceProvider.js" />
+    <Content Include="Static\js\merchandising\reports\weeklyTradingReport\controllers\weeklyTradingReport.js" />
+    <Content Include="Static\js\merchandising\reports\weeklyTradingReport\init.js" />
+    <Content Include="Static\js\stock\Templates\ProductCategory.html" />
+    <Content Include="Static\js\stock\Templates\ProductCategoryMultiple.html" />
+    <Content Include="Static\js\stock\Templates\ProductClass.html" />
+    <Content Include="Static\js\stock\Templates\ProductDepartment.html" />
+    <Content Include="Static\js\merchandising\ticketing\controllers\ticketing.js" />
+    <Content Include="Static\js\merchandising\ticketing\init.js" />
+    <Content Include="Static\js\merchandising\vendorReturnDirect\controllers\vendorReturnDirect.js" />
+    <Content Include="Static\js\merchandising\vendorReturnDirect\init.js" />
+    <Content Include="Static\js\merchandising\vendorReturnDirect\services\vendorReturnDirectResourceProvider.js" />
+    <Content Include="Static\js\merchandising\vendorReturn\controllers\vendorReturn.js" />
+    <Content Include="Static\js\merchandising\vendorReturn\controllers\vendorReturnSearch.js" />
+    <Content Include="Static\js\merchandising\vendorReturn\init.js" />
+    <Content Include="Static\js\merchandising\vendorReturn\services\vendorReturnResourceProvider.js" />
+    <Content Include="Static\js\notification.js" />
+    <Content Include="Static\js\permissions.js" />
+    <Content Include="Static\js\pjax.js" />
+    <Content Include="Static\js\report\DeliveryPerformanceSummary.js" />
+    <Content Include="Static\js\report\OutstandingSRsPerProductCategory.js" />
+    <Content Include="Static\js\report\ServiceClaims.js" />
+    <Content Include="Static\js\report\monthlyClaimsSummary.js" />
+    <Content Include="Static\js\report\ReplacementData.js" />
+    <Content Include="Static\js\report\InstallationHitRate.js" />
+    <Content Include="Static\js\report\ResolutionTimesProductCategory.js" />
+    <Content Include="Static\js\report\ServiceFailure.js" />
+    <Content Include="Static\js\report\ServiceIncomeAnalysis.js" />
+    <Content Include="Static\js\report\ServiceRequestFinancial.js" />
+    <Content Include="Static\js\report\serviceRequestResolution.js" />
+    <Content Include="Static\js\report\customerFeedbackHappyCall.js" />
+    <Content Include="Static\js\report\secondEffortCandidates.js" />
+    <Content Include="Static\js\report\spareParts.js" />
+    <Content Include="Static\js\report\WarrantyClaims.js" />
+    <Content Include="Static\js\report\WarrantyHitRate.js" />
+    <Content Include="Static\js\report\WarrantyReturns.js" />
+    <Content Include="Static\js\report\WarrantiesDueRenewal.js" />
+    <Content Include="Static\js\report\WarrantySales.js" />
+    <Content Include="Static\js\report\GenericReportResult.js" />
+    <Content Include="Static\js\report\GenericService.js" />
+    <Content Include="Static\js\report\OutstandingServiceRequests.js" />
+    <Content Include="Static\js\report\TechnicianRejections.js" />
+    <Content Include="Static\js\report\WeeklySummary.js" />
+    <Content Include="Static\js\returnCodeActions.js" />
+    <Content Include="Static\js\select2ListUpdate.js">
+      <DependentUpon>select2ListUpdate.coffee_ignore</DependentUpon>
+    </Content>
+    <Content Include="Static\js\lib\bootstrap\typeahead.js" />
+    <Content Include="Static\js\jsonDateToMomentUtcFix.js" />
+    <Content Include="Static\js\services\lookup.js" />
+    <Content Include="Static\js\service\calendarBase.js" />
+    <Content Include="Static\js\service\chargesMatrix.js" />
+    <Content Include="Static\js\service\partsMatrix.js" />
+    <Content Include="Static\js\service\search.js" />
+    <Content Include="Static\js\service\myPayments.js" />
+    <Content Include="Static\js\service\technicianPayments.js" />
+    <Content Include="Static\js\service\technicianPaymentsDisplayController.js" />
+    <Content Include="Static\js\service\techPrintSearch.js" />
+    <Content Include="Static\js\service\paymentsController.js" />
+    <Content Include="Static\js\service\stockController.js" />
+    <Content Include="Static\js\service\serviceRequestDecisionTable.js" />
+    <Content Include="Static\js\service\technicianDiary.js" />
+    <Content Include="Static\js\config\decisionTable.html" />
+    <Content Include="Static\js\config\decisionTable.js" />
+    <Content Include="Static\js\config\decisionTableExplorer.js" />
+    <Content Include="Static\js\service\supplierCosts.js" />
+    <Content Include="Static\js\lib\angular\angular-resource.js" />
+    <Content Include="Static\js\lib\angular.ui\angular.ui.js" />
+    <Content Include="Static\js\lib\bootstrap\scrollspy.js" />
+    <Content Include="Static\js\service\serviceRequest.js" />
+    <Content Include="Areas\Warehouse\Views\CustomerPickUps\Print.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Shared\Printing\CollectionNote.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Warehouse\Views\CustomerPickUps\Printing\PickUpNote.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Warehouse\Views\CustomerPickUps\Printing\PickUpNoteNoItems.cshtml" />
+    <Content Include="Areas\Warehouse\Views\DriverCommission\DriverCommissionLine.cshtml" />
+    <Content Include="Areas\Service\Views\TechnicianDiaries\Search.cshtml" />
+    <None Include="Common\External\Model.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Model.cs</LastGenOutput>
+      <LastOutputs>.\Model.cs</LastOutputs>
+    </None>
+    <Content Include="Areas\Service\Views\Web.config" />
+    <Content Include="Areas\Service\Views\Requests\Detail.cshtml" />
+    <Content Include="Areas\Service\Views\SupplierCosts\_ViewStart.cshtml" />
+    <Content Include="Common\External\Model.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Static\images\CosacsIcon.png" />
+    <Content Include="Static\images\CosacsIconSmall.png" />
+    <Content Include="Static\js\admin\lockUser.js">
+      <DependentUpon>lockUser.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\admin\Templates\Login.htm" />
+    <Content Include="Static\js\service\Templates\searchResult.html" />
+    <Content Include="Static\js\single-click.js" />
+    <Content Include="Static\js\stock\productHierarchy.js" />
+    <Content Include="Static\js\stock\productHierarchyService.js" />
+    <Content Include="Static\js\styleBootstrapInputLabels.js" />
+    <Content Include="Static\js\url.js" />
+    <Content Include="Static\js\warehouse\driverPayments.js" />
+    <Content Include="Static\js\warehouse\loadPrinting.js" />
+    <Content Include="Static\js\warehouse\picklistPrinting.js" />
+    <Content Include="Static\js\warehouse\PickUpNotePrinting.js" />
+    <Content Include="Static\js\warehouse\schedulePrinting.js" />
+    <Content Include="Static\js\warehouse\CustomerPickUps.js" />
+    <Content Include="Static\js\lib\angular\angular-module.js" />
+    <Content Include="Static\js\lib\angular\angular.js" />
+    <Content Include="Static\js\lib\console.js" />
+    <Content Include="Static\js\lib\Twitter\bootstrap.js" />
+    <Content Include="Static\js\partial.js" />
+    <Content Include="Static\js\service\filters.js" />
+    <Content Include="Static\js\service\Templates\technicianProfile.htm" />
+    <Content Include="Static\js\service\widgets.js" />
+    <Content Include="Static\js\spa.js" />
+    <Content Include="Static\js\string.js" />
+    <Content Include="Static\js\test\adapter-after.js" />
+    <Content Include="Static\js\test\adapter-before.js" />
+    <Content Include="Static\js\test\adapter-first.js" />
+    <Content Include="Static\js\test\unit\decision-table.js" />
+    <Content Include="Static\js\warehouse\bookings.js" />
+    <Content Include="Static\js\warehouse\Templates\bookingSearchResult.html" />
+    <Content Include="Static\js\warehouse\Templates\deliverySearchResult.html" />
+    <Content Include="Static\js\warehouse\Templates\pickingSearchResult.html" />
+    <Content Include="Static\js\warehouse\trucks.js">
+      <DependentUpon>trucks.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\warranty\linkController.js" />
+    <Content Include="Static\js\warranty\listTest.js" />
+    <Content Include="Static\js\warranty\searchModalController.js" />
+    <Content Include="Static\js\warranty\simulatorController.js" />
+    <Content Include="Static\js\warranty\tagsController.js" />
+    <Content Include="Static\js\warranty\templates\bulkEditConfirmation.html" />
+    <Content Include="Static\js\warranty\templates\warranties.html" />
+    <Content Include="Static\js\warranty\templates\warrantyLinkProductEdit.html" />
+    <Content Include="Static\js\warranty\templates\warrantyLinkProductShow.html" />
+    <Content Include="Static\js\warranty\templates\warrantyPrices.html" />
+    <Content Include="Static\js\warranty\templates\warrantySalesSearchResult.html" />
+    <Content Include="Static\js\warranty\templates\warrantyStructure.html" />
+    <Content Include="Static\js\warranty\warrantyController.js" />
+    <Content Include="Static\js\warranty\warrantyDirective.js" />
+    <Content Include="Static\js\warranty\warrantyPricePromotions.js" />
+    <Content Include="Static\js\warranty\warrantyPrices.js" />
+    <Content Include="Static\js\warranty\warrantyPromotions.js" />
+    <Content Include="Static\js\warranty\warrantyReturn.js" />
+    <Content Include="Static\js\warranty\warrantySales.js" />
+    <Content Include="Static\js\warranty\warrantyTags.js" />
+    <Content Include="testacular.conf.js" />
+    <Content Include="Views\Shared\NotFound.cshtml" />
+    <Content Include="Views\Shared\BrowserNotSupported.cshtml" />
+    <Content Include="Views\Shared\Authorise.cshtml" />
+    <Content Include="Views\Home\Styles.cshtml" />
+    <Content Include="Views\Indexing\IndexingDone.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="app.build.js" />
+    <Content Include="Areas\Warehouse\Views\Bookings\Detail.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Bookings\Index.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Confirmation.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Printing\Load.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Printing\LoadPage.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Printing\NoSchedule.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Printing\Schedule.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Printing\SchedulePage.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Schedule.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Delivery\Search.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Picking\Confirmation.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Picking\Index.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Picking\Printing\PickList.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Picking\Printing\PickListPage.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Picking\PrintMany.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Picking\Reference.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Picking\Search.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Shared\BookingTemplate.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Shared\BookingTemplateReject.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Web.config" />
+    <Content Include="Areas\Warehouse\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Roles\Permissions.cshtml" />
+    <Content Include="Areas\Admin\Views\Roles\Users.cshtml" />
+    <Content Include="Areas\Admin\Views\Web.config" />
+    <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Roles\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Roles\RecordView.cshtml" />
+    <Content Include="Areas\Admin\Views\Roles\RecordEdit.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Index.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Areas\Admin\Views\Sessions\Index.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Shared\Legend.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\UserAudit.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Details.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\DetailsEditor.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\UserPermissions.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Profile.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Create.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\UserProfile.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\LockUser.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\LockUser.cshtml" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Areas\Warehouse\Views\Trucks\Index.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Trucks\RecordEdit.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Trucks\RecordView.cshtml" />
+    <Content Include="Areas\Warehouse\Views\DriverCommission\Index.cshtml" />
+    <Content Include="Static\css\images\ajax-loader-arrows-contrast.gif" />
+    <Content Include="Static\images\avatar.png" />
+    <Content Include="Static\images\chrome.gif" />
+    <Content Include="Static\images\firefox.gif" />
+    <Content Include="Static\images\OutdatedBrowser.jpg" />
+    <Content Include="Static\images\safari.gif" />
+    <Content Include="Static\js\admin\sessions.js">
+      <DependentUpon>sessions.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\admin\Templates\UserSearch.htm" />
+    <Content Include="Static\js\admin\rolePermission.js">
+      <DependentUpon>rolePermission.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\admin\userCreate.js" />
+    <Content Include="Static\js\admin\userDetails.js" />
+    <Content Include="Static\js\admin\userProfile.js" />
+    <Content Include="Static\js\admin\userRole.js">
+      <DependentUpon>userRole.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\admin\users.js">
+      <DependentUpon>users.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\admin\userSearchRenderAction.js">
+      <DependentUpon>userSearchRenderAction.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\warehouse\bookingDetails.js" />
+    <Content Include="Static\js\Booking\Templates\BookingHistory.htm" />
+    <Content Include="Static\js\Booking\Templates\BookingSearch.htm" />
+    <Content Include="Static\js\lib\bootstrap\collapse.js" />
+    <Content Include="Static\js\lib\bootstrap\transition.js" />
+    <Content Include="Static\js\lib\events.js">
+      <DependentUpon>events.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\lib\jquery.containsCaseInsensitive.js">
+      <DependentUpon>jquery.containsCaseInsensitive.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\lib\jquery.pjax.js" />
+    <Content Include="Static\js\recoverPassword.js" />
+    <Content Include="Static\js\warehouse\deliveriesSearch.js" />
+    <Content Include="Static\Web-cache.config" />
+    <Content Include="Static\css\images\select2.png" />
+    <Content Include="Static\css\images\spinner.gif" />
+    <Content Include="Static\css\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="Static\css\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Static\css\print.css">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>print.less</DependentUpon>
+    </Content>
+    <Content Include="Static\css\images\ajax-loader-squares-contrast.gif" />
+    <Content Include="Static\css\images\ajax-loader-squares-white.gif" />
+    <Content Include="Static\css\images\ajax_loader-squares-blue.gif" />
+    <Content Include="Static\images\Cosacs.png" />
+    <Content Include="Static\js\Hub.js" />
+    <Content Include="Static\js\lib\almond.js" />
+    <Content Include="Static\js\lib\backbone.js" />
+    <Content Include="Static\js\lib\jquery.js" />
+    <Content Include="Static\js\unused\BarCodeScanner.js">
+      <DependentUpon>BarCodeScanner.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\warehouse\bookingItemReject.js" />
+    <Content Include="Static\js\warehouse\bookingDisplay.js" />
+    <Content Include="Static\js\lib\bootstrap\modal.js" />
+    <Content Include="Static\js\lib\bootstrap\tooltip.js" />
+    <Content Include="Static\dev\coffee-script.js" />
+    <Content Include="Static\dev\cs.js" />
+    <Content Include="Static\js\warehouse\deliveryConfirm.js" />
+    <Content Include="Static\js\form-inline.js" />
+    <Content Include="Static\js\forms.js">
+      <DependentUpon>forms.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\lib\jquery.message.js" />
+    <Content Include="Static\js\lib\jquery.ui.core.js" />
+    <Content Include="Static\js\lib\jquery.ui.mouse.js" />
+    <Content Include="Static\js\lib\jquery.ui.sortable.js" />
+    <Content Include="Static\js\lib\jquery.ui.widget.js" />
+    <Content Include="Static\js\lib\jquery.validate.js" />
+    <Content Include="Static\js\lib\jquery.validate.unobtrusive.js" />
+    <Content Include="Static\js\lib\json2.js" />
+    <Content Include="Static\js\lib\select2.js" />
+    <Content Include="Static\js\warehouse\Load.js" />
+    <Content Include="Static\js\Models.js">
+      <DependentUpon>Models.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\module-activator.js" />
+    <Content Include="Static\js\lib\moment.js" />
+    <Content Include="Static\js\warehouse\Picking.js" />
+    <Content Include="Static\js\warehouse\PickingConfirmation.js" />
+    <Content Include="Static\js\lib\require-jquery.js" />
+    <Content Include="Static\js\unused\ScanRedirect.js">
+      <DependentUpon>ScanRedirect.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\unused\StateMachine.js">
+      <DependentUpon>StateMachine.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\test\hilo.js">
+      <DependentUpon>hilo.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\test\jquery.pickList.js">
+      <DependentUpon>jquery.pickList.coffee</DependentUpon>
+    </Content>
+    <Content Include="Static\js\test\main.js" />
+    <Content Include="Static\js\test\qunit.js" />
+    <None Include="Static\js\admin\sessions.coffee" />
+    <None Include="Static\js\admin\lockUser.coffee" />
+    <None Include="Static\js\admin\rolePermission.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Static\js\admin\userRole.coffee" />
+    <None Include="Static\js\admin\users.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Static\js\admin\userSearchRenderAction.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <Content Include="Views\Shared\Forbidden.cshtml">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="Views\Shared\Script.cshtml" />
+    <Content Include="Static\js\requirejs-config.js" />
+    <Content Include="Views\Login\RecoverPassword.cshtml" />
+    <None Include="Static\js\lib\events.coffee" />
+    <Content Include="Static\js\service\technicianProfile.js" />
+    <None Include="Static\js\angularShared\interceptor.js" />
+    <Content Include="Static\js\warehouse\pickingSearch.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Areas\Warehouse\Views\Drivers\Index.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Drivers\RecordEdit.cshtml" />
+    <Content Include="Areas\Warehouse\Views\Drivers\RecordView.cshtml" />
+    <None Include="Static\css\base\960-fluid.less" />
+    <None Include="Static\css\base\fonts-min.less" />
+    <None Include="Static\css\base\reset.less" />
+    <None Include="Static\css\base\text.less" />
+    <None Include="Static\css\base\mixins.less" />
+    <None Include="Static\css\chosen.less" />
+    <None Include="Static\css\print.less">
+      <Generator>DotLessCustomTool</Generator>
+      <LastGenOutput>print.css</LastGenOutput>
+    </None>
+    <None Include="Static\js\lib\jquery.containsCaseInsensitive.coffee">
+      <Compile>True</Compile>
+      <Minify>True</Minify>
+      <Bare>False</Bare>
+      <Iced>False</Iced>
+    </None>
+    <None Include="Static\js\unused\BarCodeScanner.coffee" />
+    <None Include="Static\js\warehouse\trucks.coffee" />
+    <None Include="Static\js\forms.coffee" />
+    <None Include="Static\js\Models.coffee" />
+    <None Include="Static\js\unused\ScanRedirect.coffee" />
+    <None Include="Static\js\unused\StateMachine.coffee" />
+    <None Include="Static\js\test\hilo.coffee" />
+    <None Include="Static\js\test\jquery.pickList.coffee" />
+    <None Include="Static\js\test\main.coffee" />
+    <Content Include="Static\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Audit\Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Test.cshtml" />
+    <Content Include="Views\Hub\Index.cshtml" />
+    <Content Include="Views\Hub\Messages.cshtml" />
+    <Content Include="Views\PickLists\Details.cshtml" />
+    <Content Include="Views\PickLists\Index.cshtml" />
+    <Content Include="Views\Shared\Confirm.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\Footer.cshtml" />
+    <Content Include="Views\Shared\Head.cshtml" />
+    <Content Include="Views\Shared\Unauthorized.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Shared\_Partial.cshtml" />
+    <Content Include="Views\Shared\_Print.cshtml" />
+    <Content Include="Views\Tests\Index.cshtml" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Web.sitemap">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Indexing\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Blue.Cosacs.Credit\Blue.Cosacs.Credit.csproj">
+      <Project>{e1368196-ac96-4996-a23b-0c317ad25b60}</Project>
+      <Name>Blue.Cosacs.Credit</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Financial\Blue.Cosacs.Financial.csproj">
+      <Project>{5c79c0a7-fb94-4787-9c0a-d38f236e0644}</Project>
+      <Name>Blue.Cosacs.Financial</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Merchandising\Blue.Cosacs.Merchandising.csproj">
+      <Project>{6c8eda2d-9efd-48a5-a12e-10a29887a3a2}</Project>
+      <Name>Blue.Cosacs.Merchandising</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Messages\Blue.Cosacs.Messages.csproj">
+      <Project>{B56E7B9B-D3D5-4388-904B-1C5FA2923CEE}</Project>
+      <Name>Blue.Cosacs.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Product\Blue.Cosacs.Stock.csproj">
+      <Project>{3b706eaa-fe67-45b4-b8c1-856be99fc2c6}</Project>
+      <Name>Blue.Cosacs.Stock</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Report\Blue.Cosacs.Report.csproj">
+      <Project>{1ACEC7EA-8CCA-43B3-900C-D5A9C41FFC7B}</Project>
+      <Name>Blue.Cosacs.Report</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Service\Blue.Cosacs.Service.csproj">
+      <Project>{BF7D6245-F911-4A4E-91D6-947D11ED9A89}</Project>
+      <Name>Blue.Cosacs.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Warehouse\Blue.Cosacs.Warehouse.csproj">
+      <Project>{E7C6DE9A-4EDE-4F3B-9651-D690A55B2E64}</Project>
+      <Name>Blue.Cosacs.Warehouse</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Blue.Cosacs.Warranty\Blue.Cosacs.Warranty.csproj">
+      <Project>{CBC9AC60-DB79-44FE-9716-1836B2E7199A}</Project>
+      <Name>Blue.Cosacs.Warranty</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Merchandising\Views\Brand\" />
+    <Folder Include="Areas\Merchandising\Views\Levels\" />
+    <Folder Include="Areas\Merchandising\Views\MasterProducts\" />
+    <Folder Include="Areas\Merchandising\Views\RP3Export\" />
+    <Folder Include="Areas\Merchandising\Views\Tags\" />
+    <Folder Include="Areas\Stock\Models\" />
+    <Folder Include="Areas\Stock\Views\" />
+    <Folder Include="Areas\Warehouse\Views\StockLabelling\" />
+    <Folder Include="Static\css\Service\Printing\" />
+    <Folder Include="Static\js\merchandising\reports\buyerSalesHistoryReport\filters\" />
+    <Folder Include="Static\js\merchandising\set\directives\" />
+    <Folder Include="Static\js\merchandising\set\templates\" />
+    <Folder Include="Static\js\merchandising\Templates\" />
+    <Folder Include="Static\partials\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Import Project="..\StyleCop.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>60726</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost/cosacs</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />
+</Project>

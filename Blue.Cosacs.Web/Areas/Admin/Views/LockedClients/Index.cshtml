@@ -1,0 +1,52 @@
+﻿@model IList<Blue.Admin.Password.ClientAttemptsWindow>
+@using Blue.Admin
+@{ ViewBag.Title = "Blocked Clients"; }
+<div data-module="admin/lockedclients" class="row">
+    <div class="col-lg-9">
+        <div class="row">
+            @if(Model.Count <= 0) {
+            <p class="text-left col-lg-12">There are no blocked clients.</p>
+            } else if(Model.Count == 1) {
+            <p class="text-left col-lg-12">There is 1 blocked client.</p>
+            } else if(Model.Count > 1) {
+            <p class="text-left col-lg-12">There are @Model.Count blocked clients.</p>
+            }
+        </div>
+        <table class="table table-striped table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th class="col-3">Last Username</th>
+                    <th class="col-2">Last User Agent</th>
+                    <th class="col-2">Locked On</th>
+                    <th class="col-2">Locked Until</th>
+                    <th class="col-3">Machine IP Address</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var client in Model)
+            {
+                User userNameObj = null;
+                try {
+                    userNameObj = UserRepository.GetUserByLogin(client.Attempts.Last().UsernameEntered);
+                } catch (Exception) { }
+
+                <tr data-ClientID="@client.ClientID">
+                    @if (userNameObj != null && userNameObj.Id > 0) {
+                    <td>@Html.ProfileLink(client.Attempts.Last().UsernameEntered, userNameObj.Id)</td>
+                    } else {
+                    <td>@client.Attempts.Last().UsernameEntered</td>
+                    }
+                    <td>@client.Attempts.Last().UserAgent</td>
+                    <td>@client.LockedTimestamp.ToLocalTime()</td>
+                    <td>@client.LockedUntilTimestamp.ToLocalTime()</td>
+                    <td>@client.ClientID</td>
+                    <td><a class="ui-widget glyph-btn glyphicons action-unlock-client bin" href="#" title="Unlock Client"></a></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-lg-3">
+    </div>
+</div>

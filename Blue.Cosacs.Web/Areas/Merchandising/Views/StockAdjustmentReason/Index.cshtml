@@ -1,0 +1,119 @@
+﻿@model List<StockAdjustmentReasonViewModel>
+
+@{
+    ViewBag.Title = "Stock Adjustment Reasons";
+}
+
+<div data-module="merchandising/stockAdjustmentReason/init" ng-controller="StockAdjustmentReasonCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+    
+    <div class="buffer-sm top">
+        <ng-form name="reasonForm" class="form-horizontal" novalidate>
+            <div class="row" ng-show="hasEditPermission">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="primaryReason">Primary Reason</label>
+                        <div class="col-md-4">
+                            <input class="form-control" type="text" name="primaryReason" ng-model="primaryReason" ng-disabled="!canEdit()" maxlength="100" required pb-keypress="{ enter: 'addPrimaryReason(primaryReason)'}" />
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-primary" ng-click="addPrimaryReason(primaryReason)" ng-show="hasEditPermission" ng-disabled="!canAddPrimaryReason(reasonForm)">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="defaultForCountAdjustment">Default for Count Adjustment</label>
+                        <div class="col-md-4">
+                            <select name="defaultForCountAdjustment"
+                                    class="form-control"
+                                    ng-disabled="!canEdit() || secondaryReasonOptions.length < 1"
+                                    ng-model="defaultForCountAdjustment"
+                                    ng-options="r.id as r.name group by r.primary for r in secondaryReasonOptions"
+                                    ng-change="saveDefaultForCountAdjustment()"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div ng-repeat="reason in vm" ng-controller="PrimaryReasonCtrl">
+                <div class="row">
+                    <h4 class="col-md-10">{{reason.primaryReason}}</h4>
+                    <div class="col-md-2">
+                        <span class="glyphicons glyph-btn bin pull-right" ng-click="canRemove(reason) && removePrimaryReason(reason.id)" ng-show="hasEditPermission" ng-class="{disabled:!canRemove(reason)}"></span>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-striped aligned pb-table">
+                            <thead>
+                                <tr>
+                                    <th class="component-controls"></th>
+                                    <th>Secondary Reason</th>
+                                    <th>Transaction Code</th>
+                                    <th>Control Account</th>
+                                    <th class="narrow">Split by department</th>
+                                    <th>Contra Account</th>
+                                    <th class="narrow">Split by department</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="secondaryReason in reason.secondaryReasons" ng-controller="SecondaryReasonCtrl" ng-form="secondaryReasonForm">
+                                    <td class="component-controls">
+                                        <span class="glyphicons glyph-btn bin" ng-click="removeSecondaryReason(secondaryReason.id)" ng-hide="editMode" ng-class="{disabled: !canRemove(reason)}"></span>
+                                        <span class="glyphicons glyph-btn undo" ng-click="cancel()" ng-show="editMode" ng-class="{disabled: !canCancel()}"></span>
+                                        <span class="glyphicons glyph-btn floppy_disk" ng-click="accept(secondaryReasonForm)" ng-show="editMode" ng-class="{'disabled': secondaryReasonForm.$invalid }"></span>
+                                    </td>
+                                    <td ng-hide="editMode">{{secondaryReason.secondaryReason}}</td>
+
+                                    <td ng-show="editMode">
+                                        <div ng-class="{'has-error': secondaryReasonForm.secondaryReason.$invalid}">
+                                            <input class="form-control" type="text" name="secondaryReason" maxlength="100" required ng-model="secondaryReason.secondaryReason" pb-keypress="{ enter: 'addSecondaryReason(reason)'}" />
+                                        </div>
+                                    </td>
+
+                                    <td ng-hide="editMode">{{secondaryReason.transactionCode}}</td>
+                                    <td ng-show="editMode">
+                                        <div ng-class="{'has-error': secondaryReasonForm.transactionCode.$invalid}">
+                                            <input class="form-control" type="text" name="transactionCode" maxlength="3" ng-minlength="3" ng-maxlength="3" required ng-model="secondaryReason.transactionCode" pb-keypress="{ enter: 'addSecondaryReason(reason)'}" />
+                                        </div>
+                                    </td>
+
+                                    <td ng-hide="editMode">{{secondaryReason.debitAccount}}</td>
+                                    <td ng-show="editMode">
+                                        <div ng-class="{'has-error': secondaryReasonForm.debitAccount.$invalid}">
+                                            <input class="form-control" type="text" name="debitAccount" maxlength="30" required ng-model="secondaryReason.debitAccount" ng-pattern="/^[0-9]+$/" pb-keypress="{ enter: 'addSecondaryReason(reason)'}" />
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <input type="checkbox" ng-model="secondaryReason.splitDebitByDepartment" name="splitDebitByDepartment" ng-disabled="!editMode" />
+                                    </td>
+
+                                    <td ng-hide="editMode">{{secondaryReason.creditAccount}}</td>
+                                    <td ng-show="editMode">
+                                        <div ng-class="{'has-error': secondaryReasonForm.creditAccount.$invalid}">
+                                            <input class="form-control" type="text" name="creditAccount" maxlength="30" required ng-model="secondaryReason.creditAccount" ng-pattern="/^[0-9]+$/" pb-keypress="{ enter: 'addSecondaryReason(reason)'}" />
+                                        </div>
+                                    </td>
+
+                                    <td><input type="checkbox" ng-model="secondaryReason.splitCreditByDepartment" name="splitCreditByDepartment" ng-disabled="!editMode" /></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr class="addNew" ng-show="hasEditPermission">
+                                    <td class="component-controls" colspan="1">
+                                        <span class="glyphicons glyph-btn plus" ng-click="addSecondaryReason(reason)" ng-class="{disabled:!canAddSecondaryReason()}"></span>
+                                    </td>
+                                    <td colspan="8"></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

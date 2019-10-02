@@ -1,0 +1,36 @@
+<div>
+    <div class="searchWarranty result search-result panel panel-default" data-id="{{result.WarrantyId}}"
+         ng-repeat="result in displayResults" ng-init="result.addPricing = false;">
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-lg-2">
+                    <a class="warranty-id refLink" data-id="{{result.Id}}" ng-href="{{ getPathToWarranty(result.WarrantyId) }}">{{result.WarrantyNumber}}</a>
+                </div>
+                <div class="col-lg-2">
+                    <span class="itemQuantity" title="Quantity">{{result.Length}}</span> months
+                </div>
+                <div class="col-lg-6">
+                    <span>{{warrantyHierarchyCrumbs()}}</span>
+                </div>
+                <div class="col-lg-2 text-right">
+                    <span ng-show="result.WarrantyHasPrices == 'No' && result.Free == 'false'" class="label label-warning">No prices</span>
+                </div>
+            </div>
+        </div>
+        <div class="panel-body centre-section expandable">
+            <div class="row">
+                <div class="col-lg-2">
+                    <div>{{result.TaxRate}}% Tax Rate</div>
+                    <div>{{result.WarrantyType}}</div>
+                    <div ng-show="result.Deleted">Deleted</div>
+                    <div ng-hide="result.Deleted">Active</div>
+                </div>
+                <div class="col-lg-10">
+                    <p class="description">{{result.ItemDescription}}</p>
+                </div>
+            </div>
+            <div class="text-center expandable-toggle"><span class="glyphicons more"></span></div>
+            <div id="warrantyPrices-{{result.WarrantyId}}"></div>
+        </div>
+    </div>
+</div>

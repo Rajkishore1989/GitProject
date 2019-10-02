@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    ViewBag.Title = "Product Search";
+}
+<div id="facetSearchContainer" data-module="merchandising/search/initSearch" ng-controller="SearchController" class="facetsearch-container">
+    <facetsearch data-buttons="@ViewBag.buttons" data-results="@Model"
+                 data-results-template="/Static/js/merchandising/product/templates/searchResult.html"
+                 data-search-url="/Merchandising/Products/SearchInstant"
+                 data-history-url="/Merchandising/Products"
+                 data-date-fields='{"CreatedOn": "Date Created"}'
+                 data-convert-dates='true'
+                 data-field-labels='{"LocationName": "Location Name","Fascia": "Fascia","StoreTypes": "Store Type","Warehouse": "Warehouse","ProductType": "Product Type","ProductStatus": "Status", "Tags": "Product Tags", "Vendors": "Vendors"}'>
+    </facetsearch>
+</div>

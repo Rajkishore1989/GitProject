@@ -1,0 +1,44 @@
+/*SERVICE PRINTING FOOD LOSS*/
+.foodLossReport{
+    .name {font-weight: bold;}
+    .address {margin-bottom: 20px;}
+    .lossTable {
+            
+        thead { 
+            td {padding-left:10px; border-bottom: 2px solid black; border-top: 2px solid black;  padding: 2px; font-weight: bold;}
+        }
+        tbody { 
+            td {border-bottom: 1px solid black; padding-right: 20px; padding-left:10px;}
+            td:not(:first-child) { text-align: right; }
+            .total { border-bottom: 2px solid black; border-top: 2px solid black; }
+       }
+    }
+}
+
+
+/*SERVICE PRINTING REQUEST*/
+.requestPrint{
+    .section {border-bottom: 1px solid black; font-weight: bold; font-size:12px; margin-top:10px;}
+    .customer {border-bottom: 10px;}
+    table {
+        width: 100%;
+        td:first-child { /*for the labels*/
+            width: 30%;
+        }
+        border-bottom: 0px;
+        margin-bottom: 0px;
+    }
+
+    .sign div {
+        margin-top: 60px !important;
+        margin-bottom: 0px !important;
+    }
+}
+
+
+/*SERVICE PRINTING SUMMARY*/
+.summaryTable {   
+    thead { 
+        tr {font-weight: bold; font-size: larger;} 
+    }
+}

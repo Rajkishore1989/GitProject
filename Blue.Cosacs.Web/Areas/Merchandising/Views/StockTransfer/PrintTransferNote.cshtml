@@ -1,0 +1,162 @@
+﻿@model StockTransferPrintModel
+
+@{
+    ViewBag.Title = string.IsNullOrWhiteSpace(ViewBag.Title) ? "Stock Transfer " + Model.Id : ViewBag.Title;
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var pagesize = 5;
+}
+
+@section Head
+{
+    <style type="text/css">
+        
+        .signature div {display: inline-block; border-top: 1px dashed black; margin: 75px 15px 15px 15px; width: 200px; }
+
+         .reject {
+             white-space: nowrap;
+         }
+
+        .reject span {
+            margin-left: 5px;
+        }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+
+<div>
+    <header>
+        @Html.Partial("Header")
+        <div class="clear"></div>
+    </header>
+
+    @for (var x = 0; x < Model.Products.Count; x += pagesize)
+    {
+        <div style="position: relative">
+            @if (!Model.OriginalPrint.HasValue)
+            {
+                @*<!-- HACK FIX: layout fix for the 'Delivery Print Schedules' original copy -->*@
+                @*<!-- This layout is broken when printing the original copy (only works when the copy-watermark  -->*@
+                @*<!-- style is present). So this is why an opacity:0 (invisible) watermark element was placed here. -->*@
+                <div class="copy-watermark" style="opacity:0;">ORIG.</div> @*<!-- HACK -->*@
+                @*<!-- HACK!!! -->*@
+            }
+            @if (Model.OriginalPrint.HasValue)
+            {
+                <div class="copy-watermark">COPY</div>
+            }
+        </div>
+        @Html.Partial("PrintTransferNoteProduct", Model.Products.Skip(x).Take(pagesize).ToList())
+       
+
+        if (x + pagesize < Model.Products.Count)
+        {
+             <div class="leftFooter">
+                @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+            <div class="pageBreak"></div>
+        }
+        else
+        {
+             <div class="larger" style="float:right;">Total Cost: @(Model.Products.Any() ? ((Model.Products.Sum(p => p.AverageWeightedCost * p.Quantity).ToCurrencyWithSymbol())) : "")</div>
+            <div class="clear"></div>
+            <div class="larger" style="text-align:center;">
+                <div>@Model.Comments</div>
+            </div>
+             <div class="leftFooter">
+                @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+            <div class="pageBreak"></div>
+        }
+    }
+    
+    <div class="pageBreak"></div>
+    
+    @Html.Partial("Header")
+    <p class="larger">For Unicomer Use</p>
+    <div class="signature">
+        <div>Loading Personnel Name</div>
+        <div>Loading Personnel Signature</div>
+        <div>Date</div>
+    </div>
+    <div class="signature">
+        <div>Driver Name</div>
+        <div>Driver Signature</div>
+    </div>
+    <div class="signature">
+        <div>Exit Pass Number</div>
+        <div>Truck Licence Number</div>
+    </div>
+    <div class="signature">
+        <div>Authorised By</div>
+        <div>Signature</div>
+        <div>Date</div>
+    </div>
+    <div class="signature">
+        <div>Driver Payment Authorised By</div>
+        <div>Cartage Fee ($)</div>
+    </div>
+    <div class="signature">
+        <div>Dispatch Time</div>
+        <div>Arrival Time</div>
+    </div>
+    <p class="larger">For Receiving Location Use</p>
+    <div class="signature">
+        <div>Goods Receiceived By </div>
+        <div>Signature</div>
+        <div>Date</div>
+    </div>
+</div>
+            

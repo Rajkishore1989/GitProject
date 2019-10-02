@@ -1,0 +1,88 @@
+<div class="panel panel-default serviceSearch result search-result" data-request-id="{{result.RequestId}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-lg-2">
+                <span class="resultType">Request</span>
+                <a class="refLink" href="{{relativeurl}}Requests/{{result.RequestId}}">#{{result.RequestId}}</a>
+            </div>
+            <div class="col-lg-3">
+                <span>{{result.SRType}}</span>
+            </div>
+            <div class="col-lg-3">
+                <span ng-show="result.CustomerId">{{result.Customer}} ({{result.CustomerId}})</span>
+            </div>
+            <div class="col-lg-2">
+                <span>{{result.Reference}}</span>
+            </div>
+            <div class="col-lg-2 text-right">
+                <div class="status label label-default" >{{result.ServiceStatus}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body centre-section">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-12" title="Customer Address">
+                        <div class="CustomerAddressLine" ng-bind-html-unsafe="result.Address | linebreak"></div>
+                    </div>
+                </div>
+                <div class="row contact-details">
+                    <div class="col-lg-5">
+                        <div class="contact-type" ng-repeat="type in result.ContactType">
+                            <b>{{type | humanize | titleize }}</b>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 contact-values">
+                        <div class="contact-value" ng-repeat="value in result.ContactValue">
+                            {{value}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div><b>Item No</b></div>
+                        <div><b>Serial No</b></div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div>{{result.ItemNo}}</div>
+                        <div>{{result.SerialNo}}</div>
+                    </div>
+                    <div class="col-lg-12">{{result.ItemDescription}}</div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <span><b>Schedule/Repair dates</b></span>
+                </div>
+                <div>
+                    <div class="date">{{result.TechAllocated | date:'EEEE dd-MMMM-yyyy HH:mm'}}</div>
+                    <div>to {{result.TechName}}({{result.TechId}})</div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div>
+                    <div>
+                        <span><b>Created</b></span>
+                    </div>
+                    <div>
+                        <div class="date" title="{{result.CreatedOn | fromNowDays}}">{{result.CreatedOn | date:'EEEE dd-MMMM-yyyy HH:mm'}}</div>
+                        <div>at {{result.HomeBranchName}}</div>
+                        <div>by {{result.CreatedBy}}</div>
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <span><b>Last updated</b></span>
+                    </div>
+                    <div>
+                        <div class="date" title="{{result.LastUpdatedOn | fromNowDays}}">{{result.LastUpdatedOn | date:'EEEE dd-MMMM-yyyy HH:mm'}}</div>
+                        <div>by {{result.LastUpdatedByName}} ({{result.LastUpdatedBy}})</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

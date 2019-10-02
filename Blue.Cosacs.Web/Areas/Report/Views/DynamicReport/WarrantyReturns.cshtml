@@ -1,0 +1,80 @@
+﻿
+@{
+    ViewBag.Title = "Warranty Returns Report";
+}
+
+<div data-module="report/WarrantyReturns" ng-controller="WarrantyReturnsController" class="ng-scope report" >
+    <div class="section">Parameters</div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ dateFromLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.dateFrom }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateFrom" placeholder="" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ dateToLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.dateTo }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateTo" placeholder="" class="date form-control" />
+                </div>
+            </div>
+        </div>
+         <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ returnTypeLabel }} </label>
+                <div class="col col-lg-6">                   
+                    <select class="picklist" ui-select2 ng-model="filterParameters.returnType" name="returnType" id="returnType" ui-reset placeholder="Select Return Type">
+                        <option></option>
+                        <option value="A">All</option>
+                        <option value="C">Cancellation</option>
+                        <option value="R">Repossession</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="search row">&nbsp;</div>
+     <div class="search row">
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ fasciaLabel }} </label>
+                <div class="col col-lg-6">
+                    <select class="picklist" id="fascia" ui-select2 ng-model="filterParameters.fascia" placeholder="Select Fascia">
+                        <option></option>
+                        <option value="A">All</option>
+                        <option value="C">Courts</option>
+                        <option value="N">@ViewBag.NonCourts</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ branchLabel }} </label>
+                <div class="col col-lg-6">
+                    <list name="listBranches" ng-model="filterParameters.branch" scope="branches" placeholder="Select branch"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ warrantyTypeLabel }} </label>
+                <div class="col col-lg-6">                   
+                    <select class="picklist" ui-select2 ng-model="filterParameters.warrantyType" name="warrantyType" id="warrantyType" placeholder="Select Type">
+                        <option></option>
+                        <option value="B">Both</option>
+                        <option value="EW">Extended Warranty</option>
+                        <option value="IR">Instant Replacement</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>
+

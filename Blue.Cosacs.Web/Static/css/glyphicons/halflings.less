@@ -1,0 +1,233 @@
+/*!
+ *
+ *  Project:  GLYPHICONS HALFLINGS
+ *  Author:   Jan Kovarik - www.glyphicons.com
+ *  Twitter:  @jankovarik
+ *
+ */
+
+// IMPORT FONTS
+@font-face {
+  font-family: 'Glyphicons Halflings Regular';
+  src: url('@{glyphicons-halflings-font-path}glyphicons-halflings-regular.eot');
+  src: url('@{glyphicons-halflings-font-path}glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'),
+       url('@{glyphicons-halflings-font-path}glyphicons-halflings-regular.woff') format('woff'),
+       url('@{glyphicons-halflings-font-path}glyphicons-halflings-regular.ttf') format('truetype'),
+       url('@{glyphicons-halflings-font-path}glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// FONT ICONS
+.halflings{
+  text-decoration: none !important;
+  &:before {
+    font-family: 'Glyphicons Halflings Regular';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  &.glass{ &:before{ content:"\E001";} }
+  &.music{ &:before{ content:"\E002";} }
+  &.search{ &:before{ content:"\E003";} }
+  &.envelope{ &:before{ content:"\2709";} }
+  &.heart{ &:before{ content:"\E005";} }
+  &.star{ &:before{ content:"\E006";} }
+  &.star-empty{ &:before{ content:"\E007";} }
+  &.user{ &:before{ content:"\E008";} }
+  &.film{ &:before{ content:"\E009";} }
+  &.th-large{ &:before{ content:"\E010";} }
+  &.th{ &:before{ content:"\E011";} }
+  &.th-list{ &:before{ content:"\E012";} }
+  &.ok{ &:before{ content:"\E013";} }
+  &.remove{ &:before{ content:"\E014";} }
+  &.zoom-in{ &:before{ content:"\E015";} }
+  &.zoom-out{ &:before{ content:"\E016";} }
+  &.off{ &:before{ content:"\E017";} }
+  &.signal{ &:before{ content:"\E018";} }
+  &.cog{ &:before{ content:"\E019";} }
+  &.trash{ &:before{ content:"\E020";} }
+  &.home{ &:before{ content:"\E021";} }
+  &.file{ &:before{ content:"\E022";} }
+  &.time{ &:before{ content:"\E023";} }
+  &.road{ &:before{ content:"\E024";} }
+  &.download-alt{ &:before{ content:"\E025";} }
+  &.download{ &:before{ content:"\E026";} }
+  &.upload{ &:before{ content:"\E027";} }
+  &.inbox{ &:before{ content:"\E028";} }
+  &.play-circle{ &:before{ content:"\E029";} }
+  &.repeat{ &:before{ content:"\E030";} }
+  &.refresh{ &:before{ content:"\E031";} }
+  &.list-alt{ &:before{ content:"\E032";} }
+  &.lock{ &:before{ content:"\1F512";} }
+  &.flag{ &:before{ content:"\E034";} }
+  &.headphones{ &:before{ content:"\E035";} }
+  &.volume-off{ &:before{ content:"\E036";} }
+  &.volume-down{ &:before{ content:"\E037";} }
+  &.volume-up{ &:before{ content:"\E038";} }
+  &.qrcode{ &:before{ content:"\E039";} }
+  &.barcode{ &:before{ content:"\E040";} }
+  &.tag{ &:before{ content:"\E041";} }
+  &.tags{ &:before{ content:"\E042";} }
+  &.book{ &:before{ content:"\E043";} }
+  &.bookmark{ &:before{ content:"\1F516";} }
+  &.print{ &:before{ content:"\E045";} }
+  &.camera{ &:before{ content:"\1F4F7";} }
+  &.font{ &:before{ content:"\E047";} }
+  &.bold{ &:before{ content:"\E048";} }
+  &.italic{ &:before{ content:"\E049";} }
+  &.text-height{ &:before{ content:"\E050";} }
+  &.text-width{ &:before{ content:"\E051";} }
+  &.align-left{ &:before{ content:"\E052";} }
+  &.align-center{ &:before{ content:"\E053";} }
+  &.align-right{ &:before{ content:"\E054";} }
+  &.align-justify{ &:before{ content:"\E055";} }
+  &.list{ &:before{ content:"\E056";} }
+  &.indent-left{ &:before{ content:"\E057";} }
+  &.indent-right{ &:before{ content:"\E058";} }
+  &.facetime-video{ &:before{ content:"\E059";} }
+  &.picture{ &:before{ content:"\E060";} }
+  &.pencil{ &:before{ content:"\270F";} }
+  &.map-marker{ &:before{ content:"\E062";} }
+  &.adjust{ &:before{ content:"\E063";} }
+  &.tint{ &:before{ content:"\E064";} }
+  &.edit{ &:before{ content:"\E065";} }
+  &.share{ &:before{ content:"\E066";} }
+  &.check{ &:before{ content:"\E067";} }
+  &.move{ &:before{ content:"\E068";} }
+  &.step-backward{ &:before{ content:"\E069";} }
+  &.fast-backward{ &:before{ content:"\E070";} }
+  &.backward{ &:before{ content:"\E071";} }
+  &.play{ &:before{ content:"\E072";} }
+  &.pause{ &:before{ content:"\E073";} }
+  &.stop{ &:before{ content:"\E074";} }
+  &.forward{ &:before{ content:"\E075";} }
+  &.fast-forward{ &:before{ content:"\E076";} }
+  &.step-forward{ &:before{ content:"\E077";} }
+  &.eject{ &:before{ content:"\E078";} }
+  &.chevron-left{ &:before{ content:"\E079";} }
+  &.chevron-right{ &:before{ content:"\E080";} }
+  &.plus-sign{ &:before{ content:"\E081";} }
+  &.minus-sign{ &:before{ content:"\E082";} }
+  &.remove-sign{ &:before{ content:"\E083";} }
+  &.ok-sign{ &:before{ content:"\E084";} }
+  &.question-sign{ &:before{ content:"\E085";} }
+  &.info-sign{ &:before{ content:"\E086";} }
+  &.screenshot{ &:before{ content:"\E087";} }
+  &.remove-circle{ &:before{ content:"\E088";} }
+  &.ok-circle{ &:before{ content:"\E089";} }
+  &.ban-circle{ &:before{ content:"\E090";} }
+  &.arrow-left{ &:before{ content:"\E091";} }
+  &.arrow-right{ &:before{ content:"\E092";} }
+  &.arrow-up{ &:before{ content:"\E093";} }
+  &.arrow-down{ &:before{ content:"\E094";} }
+  &.share-alt{ &:before{ content:"\E095";} }
+  &.resize-full{ &:before{ content:"\E096";} }
+  &.resize-small{ &:before{ content:"\E097";} }
+  &.plus{ &:before{ content:"\002B";} }
+  &.minus{ &:before{ content:"\2212";} }
+  &.asterisk{ &:before{ content:"\002A";} }
+  &.exclamation-sign{ &:before{ content:"\E101";} }
+  &.gift{ &:before{ content:"\E102";} }
+  &.leaf{ &:before{ content:"\E103";} }
+  &.fire{ &:before{ content:"\1F525";} }
+  &.eye-open{ &:before{ content:"\E105";} }
+  &.eye-close{ &:before{ content:"\E106";} }
+  &.warning-sign{ &:before{ content:"\E107";} }
+  &.plane{ &:before{ content:"\E108";} }
+  &.calendar{ &:before{ content:"\1F4C5";} }
+  &.random{ &:before{ content:"\E110";} }
+  &.comments{ &:before{ content:"\E111";} }
+  &.magnet{ &:before{ content:"\E112";} }
+  &.chevron-up{ &:before{ content:"\E113";} }
+  &.chevron-down{ &:before{ content:"\E114";} }
+  &.retweet{ &:before{ content:"\E115";} }
+  &.shopping-cart{ &:before{ content:"\E116";} }
+  &.folder-close{ &:before{ content:"\E117";} }
+  &.folder-open{ &:before{ content:"\E118";} }
+  &.resize-vertical{ &:before{ content:"\E119";} }
+  &.resize-horizontal{ &:before{ content:"\E120";} }
+  &.hdd{ &:before{ content:"\E121";} }
+  &.bullhorn{ &:before{ content:"\E122";} }
+  &.bell{ &:before{ content:"\1F514";} }
+  &.certificate{ &:before{ content:"\E124";} }
+  &.thumbs-up{ &:before{ content:"\E125";} }
+  &.thumbs-down{ &:before{ content:"\E126";} }
+  &.hand-right{ &:before{ content:"\E127";} }
+  &.hand-left{ &:before{ content:"\E128";} }
+  &.hand-top{ &:before{ content:"\E129";} }
+  &.hand-down{ &:before{ content:"\E130";} }
+  &.circle-arrow-right{ &:before{ content:"\E131";} }
+  &.circle-arrow-left{ &:before{ content:"\E132";} }
+  &.circle-arrow-top{ &:before{ content:"\E133";} }
+  &.circle-arrow-down{ &:before{ content:"\E134";} }
+  &.globe{ &:before{ content:"\E135";} }
+  &.wrench{ &:before{ content:"\1F527";} }
+  &.tasks{ &:before{ content:"\E137";} }
+  &.filter{ &:before{ content:"\E138";} }
+  &.briefcase{ &:before{ content:"\1F4BC";} }
+  &.fullscreen{ &:before{ content:"\E140";} }
+  &.dashboard{ &:before{ content:"\E141";} }
+  &.paperclip{ &:before{ content:"\1F4CE";} }
+  &.heart-empty{ &:before{ content:"\E143";} }
+  &.link{ &:before{ content:"\E144";} }
+  &.phone{ &:before{ content:"\E145";} }
+  &.pushpin{ &:before{ content:"\1F4CC";} }
+  &.euro{ &:before{ content:"\20AC";} }
+  &.usd{ &:before{ content:"\E148";} }
+  &.gbp{ &:before{ content:"\E149";} }
+  &.sort{ &:before{ content:"\E150";} }
+  &.sort-by-alphabet{ &:before{ content:"\E151";} }
+  &.sort-by-alphabet-alt{ &:before{ content:"\E152";} }
+  &.sort-by-order{ &:before{ content:"\E153";} }
+  &.sort-by-order-alt{ &:before{ content:"\E154";} }
+  &.sort-by-attributes{ &:before{ content:"\E155";} }
+  &.sort-by-attributes-alt{ &:before{ content:"\E156";} }
+  &.unchecked{ &:before{ content:"\E157";} }
+  &.expand{ &:before{ content:"\E158";} }
+  &.collapse{ &:before{ content:"\E159";} }
+  &.collapse-top{ &:before{ content:"\E160";} }
+  &.log_in{ &:before{ content:"\E161";} }
+  &.flash{ &:before{ content:"\E162";} }
+  &.log_out{ &:before{ content:"\E163";} }
+  &.new_window{ &:before{ content:"\E164";} }
+  &.record{ &:before{ content:"\E165";} }
+  &.save{ &:before{ content:"\E166";} }
+  &.open{ &:before{ content:"\E167";} }
+  &.saved{ &:before{ content:"\E168";} }
+  &.import{ &:before{ content:"\E169";} }
+  &.export{ &:before{ content:"\E170";} }
+  &.send{ &:before{ content:"\E171";} }
+  &.floppy_disk{ &:before{ content:"\E172";} }
+  &.floppy_saved{ &:before{ content:"\E173";} }
+  &.floppy_remove{ &:before{ content:"\E174";} }
+  &.floppy_save{ &:before{ content:"\E175";} }
+  &.floppy_open{ &:before{ content:"\E176";} }
+  &.credit_card{ &:before{ content:"\E177";} }
+  &.transfer{ &:before{ content:"\E178";} }
+  &.cutlery{ &:before{ content:"\E179";} }
+  &.header{ &:before{ content:"\E180";} }
+  &.compressed{ &:before{ content:"\E181";} }
+  &.earphone{ &:before{ content:"\E182";} }
+  &.phone_alt{ &:before{ content:"\E183";} }
+  &.tower{ &:before{ content:"\E184";} }
+  &.stats{ &:before{ content:"\E185";} }
+  &.sd_video{ &:before{ content:"\E186";} }
+  &.hd_video{ &:before{ content:"\E187";} }
+  &.subtitles{ &:before{ content:"\E188";} }
+  &.sound_stereo{ &:before{ content:"\E189";} }
+  &.sound_dolby{ &:before{ content:"\E190";} }
+  &.sound_5_1{ &:before{ content:"\E191";} }
+  &.sound_6_1{ &:before{ content:"\E192";} }
+  &.sound_7_1{ &:before{ content:"\E193";} }
+  &.copyright_mark{ &:before{ content:"\E194";} }
+  &.registration_mark{ &:before{ content:"\E195";} }
+  &.cloud{ &:before{ content:"\2601";} }
+  &.cloud_download{ &:before{ content:"\E197";} }
+  &.cloud_upload{ &:before{ content:"\E198";} }
+  &.tree_conifer{ &:before{ content:"\E199";} }
+  &.tree_deciduous{ &:before{ content:"\E200";} }
+
+}

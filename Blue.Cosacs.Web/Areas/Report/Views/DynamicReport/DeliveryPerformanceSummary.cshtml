@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Delivery Performance Summary - Days Late";
+}
+
+<div data-module="report/DeliveryPerformanceSummary" ng-controller="DeliveryPerformanceSummaryController" class="ng-scope" >
+    <div class="section">Parameters</div>
+    <div>This report shows the delivery count and item value for all items that are delivered early, on time, 1 day late, 2-7 days late or 8+ days late. Both values and percentages are shown.</div>
+    <div class="search row">&nbsp;</div>
+       <div class="search row">
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ pivotLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.pivot}">
+                    <select class="picklist" id="pivot" ui-select2 ng-model="filterParameters.pivot" placeholder="Select Pivot">
+                        <option></option>
+                        <option value="DB">Delivery Branch</option>
+                        <option value="SB">Sales Branch</option>
+                        <option value="F">Fascia</option>
+                    </select>
+                </div>
+            </div>
+        </div>   
+      <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ deliveryTypeLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.deliveryType}">
+                    <select class="picklist" id="deliveryType" ui-select2 ng-model="filterParameters.deliveryType" placeholder="Select Delivery Type">
+                        <option></option>
+                        <option value="A">All</option>
+                        <option value="D">Delivery</option>
+                        <option value="C">Collection</option>
+                        <option value="R">Re-Delivery</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ dateTypeLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.dateType}">                   
+                    <select class="picklist" ui-select2 ng-model="filterParameters.dateType" name="dateType" id="dateType" placeholder="Select Date Type">
+                        <option></option>
+                        <option value="O">Ordered</option>
+                        <option value="D">Delivery</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="search row">&nbsp;</div>
+     <div class="search row">
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ dateFromLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.dateFrom }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateFrom" placeholder="" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label"> {{ dateToLabel }} </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.dateTo }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateTo" placeholder="" class="date form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>
+

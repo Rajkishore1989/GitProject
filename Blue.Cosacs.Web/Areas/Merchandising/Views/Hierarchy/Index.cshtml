@@ -1,0 +1,5 @@
+﻿@model string
+@{ ViewBag.Title = "Product Hierarchy"; }
+<div class="product-hierarchy" data-module="merchandising/hierarchy/init" ng-controller="TagsController" ng-cloak>
+    <hierarchy data-merchandising-data="@Model" />
+</div>

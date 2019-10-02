@@ -1,0 +1,101 @@
+﻿@{ ViewBag.Title = "Supplier Contractual Costs"; }
+
+<div class="alert alert-warning" role="alert">
+    Warning! All listed prices will be interpreted as US Dollars and will be converted upon loading into the local
+    currency, on the service request screen.
+</div>
+
+<div id="supplierCosts" ng-controller='supplierCostsCtrl' data-module="service/supplierCosts" ng-cloak>
+    <div class="supplierMain">
+        <div class="form-horizontal">
+            <div class="form-group">
+                <label class="col-lg-1 control-label">Supplier</label>
+                <div class="col-lg-3">
+                    <select ui-select2 type="text" class="select2Box picklist" ng-model="supplier" ng-change="loadData()" required 
+                           placeholder="Please select supplier">
+                        <option></option>
+                        <option value="{{value}}" ng-repeat="value in MasterData.ServiceSuppliers | orderBy:'toString()'">
+                            {{value}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="text-danger col-12" ng-show="noProductsMessage">This supplier has no costs. Please add below.</div>
+            </div>
+        </div>
+
+        <form name="costMatrix">
+            <div ng-show="costs.length > 0">
+            <table class="supplierCostsTable table">
+                <thead>
+                    <tr>
+                        <th style="width: 16px"></th>
+                        <th>Product</th>
+                        <th>Month</th>
+                        <th>Part Type</th>
+                        <th>Part %</th>
+                        <th>Part Value</th>
+                        <th>Labour %</th>
+                        <th>Labour Value</th>
+                        <th>Additional %</th>
+                        <th>Additional Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="cost in costs">
+                        <td>
+                            <a href="#" ng-click="removeSupplierCost($index)" title="Remove" class="action-delete-date halflings trash"></a>
+                        </td>
+                        <td ng-class="{'has-error': !cost.product}">
+                            <input class="form-control" name="product_{{$index}}" type="text" typeahead="product for product in products() | filter:$viewValue | unique:'toString()'" ng-model="cost.product" required/>
+                        </td>
+                        <td ng-class="{'has-error': !cost.month}">
+                            <div class="select2Box" ng-required ng-model="cost.month">
+                                <select ui-select2 ng-required ng-model="cost.month" name="PartType_{{$index}}">
+                                    <option value="{{value}}" ng-repeat="value in MasterData.ServicePartMonths">{{value}}
+                                    </option>
+                                </select>
+                            </div>
+                        </td>
+                        <td ng-class="{'has-error': !cost.partType}">
+                            <input class="form-control" name="partType_{{$index}}" type="text" typeahead="part for part in parts() | filter:$viewValue | unique:'toString()'" ng-model="cost.partType" required/>
+                        </td>
+                        <td class="col-1">
+                            <input class="form-control" name="partPcent" type="number" ui-validate="{invalid:checkPcent}" ng-model="cost.partPcent" maxlength="3" min="0" max="100"/>
+                        </td>
+                        <td class="col-1">
+                            <input class="form-control" name="partVal" type="number" ui-validate="{invalid:checkVal}" ng-model="cost.partVal"/>
+                        </td>
+                        <td class="col-1">
+                            <input class="form-control" name="labourPcent" type="number" ui-validate="{invalid:checkPcent}" ng-model="cost.labourPcent" maxlength="3" min="0" max="100"/>
+                        </td>
+                        <td class="col-1">
+                            <input class="form-control" name="labourVal" type="number" ui-validate="{invalid:checkVal}" ng-model="cost.labourVal"/>
+                        </td>
+                        <td class="col-1">
+                            <input class="form-control" name="additionalPcent" type="number" ui-validate="{invalid:checkPcent}" ng-model="cost.additionalPcent" maxlength="3" min="0" max="100"/>
+                        </td>
+                        <td class="col-1">
+                            <input class="form-control" name="additionalVal" type="number" ui-validate="{invalid:checkVal}" ng-model="cost.additionalVal"/>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <div class="form-inline">
+                <div class="col-lg-1">
+                    <input class="form-control" type="number" value={{numRows}} maxlength="3" ng-model="numRows"/>
+                </div>
+                <div class="col-lg-1">
+                    <button class="btn btn-default" ng-click="addRows()" ng-disabled="!loaded">Add Rows</button>
+                </div>
+                <div class="col-lg-1">
+                    <button class="btn btn-primary" ng-click="save()" ng-disabled="!saveEnabled()">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+

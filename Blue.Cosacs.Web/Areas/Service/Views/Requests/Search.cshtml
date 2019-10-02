@@ -1,0 +1,12 @@
+﻿@model string
+<div id="facetSearchContainer" data-module="service/search" ng-controller="SearchController" class="facetsearch-container">
+	<facetsearch data-buttons="@ViewBag.buttons" data-results="@Model" 
+		data-results-template="/Static/js/service/Templates/searchResult.html" 
+		data-date-fields='{"CreatedOn": "Date Created", "LastUpdatedOn": "Date Updated"}'
+		data-search-url="/Service/Requests/SearchInstant"
+		data-history-url="/Service/Requests"
+		data-field-labels='{"HomeBranchName": "Branch","SRType": "Type","CreatedOn": "Date Created","FaultTags": "Fault Tags","RepairLimitWarning": "Repair Limit Warning", "ServiceStatus" : "Status", "TechName": "Technician"}'
+		data-half-fields='["FaultTags", "Printed","RepairLimitWarning"]'
+		data-custom-query='{"RepairOverdue": "Repair Overdue"}'>
+	</facetsearch>
+</div>

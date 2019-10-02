@@ -1,0 +1,52 @@
+﻿@{
+    ViewBag.Title = "Warehouse Oversupply Report";
+}
+<div data-module="merchandising/reports/warehouseOversupplyReport/init" ng-controller="warehouseOversupplyCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="btn btn-default" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="btn btn-default" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="btn btn-default" ng-click="reset()">Clear</button>
+                    <button id="buttonSearch" class="btn btn-primary" ng-click="search()" ng-disabled="vm.searching">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="location">Warehouse</label>
+                            <list name="location" ng-model="vm.query.warehouseId" scope="vm.locations" placeholder="Select a Warehouse"></list>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="fascia">Location Fascia</label>
+                            <list name="fascia" ng-model="vm.query.fascia" scope="vm.options.fascia" placeholder="Select a fascia"></list>
+                        </div>
+                    </div>
+                </div>       
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="prodTags">Product Tags</label>
+                            <pb-tag-list tags="vm.options.productTags"
+                                         selected-tags="vm.query.tags"
+                                         clear-flag="clearTags"
+                                         placeholder="Type to add product tags" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <pb-pro-hierarchy ng-model="vm.query.hierarchy" readonly="false" placeholder="Any" horizontal="false" />
+            </div>
+        </div>
+        <pb-column-select data="vm.results" columns="vm.columns" count="vm.resultCount" template-url="vm.gridTemplate" utils="vm.gridUtils" has-data="hasData"></pb-column-select>
+    </div>
+</div>

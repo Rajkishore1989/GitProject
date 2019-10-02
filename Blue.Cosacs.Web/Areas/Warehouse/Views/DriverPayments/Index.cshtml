@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Blue.Cosacs.Warehouse.DriverPaymentView>
+@{ ViewBag.Title = "Internal Driver Payments Setup"; }
+<div data-module="warehouse/driverPayments" data-controller="DriverPayments" data-label="DriverPayment" id="payments">
+    <div class="row">
+        <div class="col-lg-8">        
+            <table class="data table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                    @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.InternalDriverPaymentsEdit))
+                    {
+                        <th class="col-2"></th>
+                    }
+                        <th>Sending Branch</th>
+                        <th>Receiving Branch</th>
+                        <th>Truck Size</th>
+                        <th>Payment Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        @Html.Partial("RecordView", item)
+                    }
+                </tbody>
+                @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.InternalDriverPaymentsEdit))
+                {
+                <tfoot>
+                    <tr>
+                        <td class="actions"></td>
+                        <td colspan="4">&nbsp;</td>
+                    </tr>
+                </tfoot>
+                }
+            </table>
+        </div>
+        <div class="col-lg-4">
+        </div>
+    </div>
+    <script id="templateNew" type="text/template">
+        @Html.Partial("RecordEdit", ViewData["DefaultNew"])
+    </script>
+</div>

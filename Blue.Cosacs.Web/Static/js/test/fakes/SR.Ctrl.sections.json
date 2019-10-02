@@ -1,0 +1,74 @@
+{
+         "screen": {
+             "visible": "true"
+         },
+         "pageHeading": {
+             "visible": "true"
+         },
+         "searchSelectorInput": {
+             "visible": "true"
+         },
+         "customer": {
+             "visible": "true",
+             "enabled": "true"
+         },
+         "evaluation": {
+             "visible": "true",
+             "enabled": "true"
+         },
+         "deposit": {
+             "visible": "true",
+             "authorisationVisible": "false"
+         },
+         "product": {
+             "visible": "true",
+             "enabled": "false",
+             "stockLocationVisible": "true",
+             "serviceRetailerVisible": "false",
+             "stockLocationRequired": "true",
+             "level_1_required": "false",
+             "level_2_required": "false",
+             "level_3_required": "false",
+             "allEnabled": "true"
+         },
+         "warranty": {
+             "visible": "true",
+             "internalCustomerMode": "true",
+             "enabled": "true",
+             "contractType": []
+         },
+         "showPrintInvoice": {
+             "visible": "true"
+         },
+         "foodLoss": {
+             "visible": "null"
+         },
+         "customerDetail": {
+             "visible": "true"
+         },
+         "outOfWarrantyCoverMessage": {
+             "visible": "true"
+         },
+         "formReferenceField": {
+             "visible": "true"
+         },
+         "resolutionSection": {
+             "supplierVisible": "false",
+             "delivererVisible": "false",
+             "productVisible": "false"
+         },
+         "resolutionEntireSection": {
+             "visible": "true"
+         },
+         "payment": {
+             "visible": "false",
+             "makePaymentEnabled": "false"
+         },
+         "finalise": {
+             "visible": "true",
+             "itemReplacedVisible": "false"
+         },
+         "allocationEntireSection": {
+             "visible": "true"
+         }
+     }

@@ -1,0 +1,136 @@
+﻿<div data-module="merchandising/reports/tradingReport/init" ng-controller="TradingReportCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="row">
+        <div class="col-sm-12 pull-right">
+            <button class="btn btn-default" ng-click="csv()">Export CSV</button>
+            <button class="btn btn-default" ng-click="print()">Print</button>
+        </div>
+    </div>
+    <div class="row" ng-hide="!reports.salesReports">
+        <div class="col-lg-12">
+            <table class="pb-table pb-report">
+                <thead>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="8">This Year</th><th colspan="8">Last Year</th><th colspan="8">Variance</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="2">Day</th><th colspan="2">Week</th><th colspan="2">Period</th><th colspan="2">Year To Date</th>
+                    <th colspan="2">Day</th><th colspan="2">Week</th><th colspan="2">Period</th><th colspan="2">Year To Date</th>
+                    <th colspan="2">Day</th><th colspan="2">Week</th><th colspan="2">Period</th><th colspan="2">Year To Date</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="report in reports.salesReports">
+                    <tr ng-repeat="row in report.rows" ng-hide="!row.isHeaderRow" class="header">
+                        <td>{{row.name}}</td>
+                        <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                    </tr>
+                    <tr ng-repeat="row in report.rows" ng-hide="row.isHeaderRow">
+                        <td>&nbsp;&nbsp;&nbsp;&nbsp;{{row.name}}</td>
+                        <td class="currency">{{row.statistics.todaySales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.todayGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisWeekSales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisWeekGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisPeriodSales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisPeriodGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisYearSales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisYearGrossProfit | pbCurrency}}</td>
+
+                        <td class="currency">{{row.statistics.todayLastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.todayLastYearGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisWeekLastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisWeekLastYearGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisPeriodLastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.thisPeriodLastYearGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.lastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{row.statistics.lastYearGrossProfit | pbCurrency}}</td>
+
+                        <td class="percentage">{{row.statistics.varianceDaySales | pbPercentage}}</td>
+                        <td class="percentage">{{row.statistics.varianceDayGrossProfit | pbPercentage}}</td>
+                        <td class="percentage">{{row.statistics.varianceWeekSales | pbPercentage}}</td>
+                        <td class="percentage">{{row.statistics.varianceWeekGrossProfit | pbPercentage}}</td>
+                        <td class="percentage">{{row.statistics.variancePeriodSales | pbPercentage}}</td>
+                        <td class="percentage">{{row.statistics.variancePeriodGrossProfit | pbPercentage}}</td>
+                        <td class="percentage">{{row.statistics.varianceYearSales | pbPercentage}}</td>
+                        <td class="percentage">{{row.statistics.varianceYearGrossProfit | pbPercentage}}</td>
+                    </tr>
+                    <tr class="footer" ng-class="{ grand: report.totals.isGrandTotal }" ng-hide="!report.totals.statistics">
+                        <td>Total {{report.totals.name}}</td>
+                        <td class="currency">{{report.totals.statistics.todaySales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.todayGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisWeekSales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisWeekGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisPeriodSales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisPeriodGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisYearSales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisYearGrossProfit | pbCurrency}}</td>
+
+                        <td class="currency">{{report.totals.statistics.todayLastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.todayLastYearGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisWeekLastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisWeekLastYearGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisPeriodLastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.thisPeriodLastYearGrossProfit | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.lastYearSales | pbCurrency}}</td>
+                        <td class="currency">{{report.totals.statistics.lastYearGrossProfit | pbCurrency}}</td>
+
+
+                        <td class="percentage">{{report.totals.statistics.varianceDaySales | pbPercentage}}</td>
+                        <td class="percentage">{{report.totals.statistics.varianceDayGrossProfit | pbPercentage}}</td>
+                        <td class="percentage">{{report.totals.statistics.varianceWeekSales | pbPercentage}}</td>
+                        <td class="percentage">{{report.totals.statistics.varianceWeekGrossProfit | pbPercentage}}</td>
+                        <td class="percentage">{{report.totals.statistics.variancePeriodSales | pbPercentage}}</td>
+                        <td class="percentage">{{report.totals.statistics.variancePeriodGrossProfit | pbPercentage}}</td>
+                        <td class="percentage">{{report.totals.statistics.varianceYearSales | pbPercentage}}</td>
+                        <td class="percentage">{{report.totals.statistics.varianceYearGrossProfit | pbPercentage}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row buffer-sm top" ng-hide="!reports.inventoryReports">
+        <div class="col-lg-12">
+            <table class="pb-table pb-report">
+                <thead>
+                <tr>
+                    <th>Stock</th>
+                    <th>Value</th>
+                    <th>% of Total</th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="report in reports.inventoryReports">
+                    <tr ng-repeat="row in report.rows" ng-hide="!row.isHeaderRow" class="header">
+                        <td>{{row.name}}</td>
+                        <td></td><td></td>
+                    </tr>
+                    <tr ng-repeat="row in report.rows" ng-hide="row.isHeaderRow">
+                        <td>{{row.name}}</td>
+                        <td class="currency">{{row.statistics.stockValue | pbCurrency}}</td>
+                        <td class="percentage">{{row.statistics.stockFraction | pbPercentage}}</td>
+                    </tr>
+                    <tr class="footer" ng-class="{ grand: report.totals.isGrandTotal }" ng-hide="!report.totals.statistics">
+                        <td>Total {{report.totals.name}}</td>
+                        <td class="currency">{{report.totals.statistics.stockValue | pbCurrency}}</td>
+                        <td class="percentage">{{report.totals.statistics.stockFraction | pbPercentage}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

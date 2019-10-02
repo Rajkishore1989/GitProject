@@ -1,0 +1,104 @@
+.cosacs-legend-warehouse
+{
+    width: 70px;
+    height: 30px;
+    display: inline-block;
+    margin-left:5px;
+    float: right;
+    text-align: center;
+
+    > div {
+        padding: 5px;
+    }
+
+    .express {
+        background-color: @colour-bigBird;
+    }
+    .cancelled {
+        background-color: @colour-deadRose;
+    }
+    .locked {
+        background-color: @colour-dirtySea;
+    }
+    .rejected {
+        background-color: @colour-darkMud;
+    }
+}
+
+.booking, .pickingItem {
+    .action-pick, .action-unpick {
+      cursor: pointer;
+      &:hover {
+        background-color: darken(@table-bg-accent, 10%) !important;
+      }
+    }
+
+    &.express {
+        background-color: @colour-bigBird;
+        .action-pick:hover, .action-unpick:hover {background-color: darken(@colour-bigBird, 10%) !important;}
+    }
+    &.cancelled {
+        background-color: @colour-deadRose;
+        .action-pick:hover, .action-unpick:hover {background-color: darken(@colour-deadRose, 10%) !important;}
+    }
+    &.locked {
+        background-color: @colour-dirtySea;
+        .action-pick:hover, .action-unpick:hover {background-color: darken(@colour-dirtySea, 10%) !important;}
+    }
+    &.rejected {
+        background-color: @colour-darkMud !important;
+        .action-pick:hover, .action-unpick:hover {background-color: darken(@colour-darkMud, 10%) !important;}
+
+        > td {
+          background-color: @colour-darkMud !important;
+          .action-pick:hover, .action-unpick:hover {background-color: darken(@colour-darkMud, 10%) !important;}
+        }
+    }
+
+    .order {
+        text-align: center;
+        display: none;
+        width: 30px;
+    }
+    
+    td.order {
+        font-size: 34px;
+    }
+}
+
+.warehouseModule {
+  .panel-heading {
+    font-size: 14px;
+
+    .resultType {
+      font-size: 16px;
+      font-weight: 600;
+    }
+    .refLink, .itemQuantity {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    .refLink {
+      color: @bb-contrast;
+    }
+  }
+  .expandable {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .expandable-toggle {
+    font-size: 18px;
+  }
+  
+  .title {
+    font-weight: bold;
+    color: #999999;
+  }
+  .status {
+    font-size: 14px;
+    font-weight: 600;
+  }
+}
+
+.bookingsHistory { border-top: 1px solid #E5E5E5; margin-top: 15px; }

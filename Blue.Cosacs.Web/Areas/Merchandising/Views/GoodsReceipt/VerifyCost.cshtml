@@ -1,0 +1,154 @@
+﻿@model object
+
+<div data-module="merchandising/goodscosting/init" ng-controller="GoodsCostCtrl" ng-init="goodsCost=@Html.RawJson(Model)" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top">
+        <div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <button class="btn btn-primary" ng-click="confimCost()" ng-show="canConfirm()">Confirm Costs</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Goods Receipt</label>
+                        <p><a href="{{generateUrl('Merchandising/GoodsReceipt/Detail/' + goodsCost.id)}}">#{{goodsCost.id}}</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vendor</label>
+                        <p ng-repeat="vendors in vendorsList">
+                            <a href="{{generateUrl('Merchandising/Vendors/Detail/' + vendors.vendorId)}}">{{vendors.vendor}}</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Receiving Location</label>
+                        <p><a href="{{generateUrl('Merchandising/Locations/Detail/' + goodsCost.locationId)}}">{{goodsCost.location}}</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Verified By</label>
+                        <p>{{goodsCost.costConfirmedBy}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vendor Invoice Number</label>
+                        <p>{{goodsCost.vendorInvoiceNumber || 'Not Entered'}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Vendor Delivery Number</label>
+                        <p>{{goodsCost.vendorDeliveryNumber || 'Not Entered'}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Date Created</label>
+                        <p>{{goodsCost.createdDate | pbDate : true}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Created By</label>
+                        <p>{{goodsCost.createdBy}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Date Received</label>
+                        <p>{{goodsCost.dateReceived | pbDate }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label>Received By</label>
+                        <p>{{goodsCost.receivedBy}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="isApproved">
+                    <div class="form-group">
+                        <label>Date Approved</label>
+                        <p>{{goodsCost.dateApproved | pbDate : true}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="isApproved">
+                    <div class="form-group">
+                        <label>Approved By</label>
+                        <p>{{goodsCost.approvedBy}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="section">Comments</div>
+            <div class="form-group" ng-class="{'has-error': goodsCost.comments.$invalid}">
+                <div ng-hide="editing">
+                    <p class="pb-text" pb-ref-link ng-model="goodsCost.comments"></p>
+                    <p ng-hide="goodsCost.comments.length > 0">
+                        No comments
+                    </p>
+                </div>
+                <div ng-show="editing">
+                    <textarea class="form-control" rows="3" name="comments" ng-model="goodsCost.comments" maxlength="500"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="buffer top" ng-repeat="purchaseOrder in goodsCost.purchaseOrders">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        <div class="col-lg-4"><label>Purchase Order Number:</label></div>
+                        <div class="col-lg-8"><a href="{{generateUrl('Merchandising/Purchase/Detail/' + purchaseOrder.id)}}">#{{purchaseOrder.id}}</a></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <table class="table table-bordered table-striped pb-table">
+                        <thead>
+                            <tr>
+                                <th class="col-sm sku">Product Code</th>
+                                <th class="col-sm-2">Description</th>
+                                <th class="col-sm quantity">Quantity Received</th>
+                                <th class="col-sm currency">Unit Landed Cost</th>
+                                <th class="col-sm currency">Total Landed Cost</th>
+                                <th class="col-sm">Last Received</th>
+                                <th class="col-sm">Landed Cost Last Updated</th>
+                                <th class="col-sm percentage">Margin</th>
+                                <th class="col-sm-2">Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in purchaseOrder.products | filter:costNotUpdated">
+                                <td><a href="{{generateUrl('Merchandising/Products/Details/' + product.productId)}}">{{product.productCode}}</a></td>
+                                <td>{{product.description}}</td>
+                                <td class="quantity">{{product.quantityReceived }}</td>
+                                <td class="currency">{{product.unitLandedCost | pbCurrency}}</td>
+                                <td class="currency">{{product.totalLandedCost | pbCurrency}}</td>
+                                <td>{{product.lastReceivedDate | pbDate }}</td>
+                                <td>{{product.landedCostLastUpdated | pbDate : true}}</td>
+                                <td class="percentage">{{ product.margin | pbPercentage:'0%':'0%'}}</td>
+                                <td><span pb-ref-link ng-model="product.comments"></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

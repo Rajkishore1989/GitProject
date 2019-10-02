@@ -1,0 +1,93 @@
+﻿@model Blue.Cosacs.Web.Areas.Admin.Models.UserProfilePermissions
+<div id=permissions data-module="admin/userProfile" data-userId="@Model.Id" class="form-horizontal">
+    <div class="form-group">
+        <div class="col-lg-4">
+            <input class="form-control" id="searchBox" type="search" placeholder="Search Permissions">
+        </div>
+        @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditRoles)) {
+        <div class="col-lg-4"></div>
+        <div class="col-lg-4">
+            <select class="form-control text-left" id="addRole" name="pickedBy"
+                    data-placeholder="Add New Role">
+                <option value=""></option>
+                @foreach (var role in Model.Roles)
+                {
+                <option value="@role.Id">@role.Name</option>
+                }
+            </select>
+        </div>
+        }
+    </div>
+
+    <div class="rolePermissions" data-roleId="@Model.Id">
+    </div>
+    @{ var header = true; }
+    @foreach (var category in Model.Permissions.OrderBy(c => c.CategoryName).Select(c => c.CategoryName).Distinct())
+    {
+    <div class="section">
+        <div class="click">@category</div>
+    </div>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>
+                Permission
+            </th>
+            <th>
+                Effective Permission
+            </th>
+            @foreach (var role in Model.RolePermission.Select(c => new { c.RoleName, c.RoleId }).Distinct())
+            {
+            <th>
+                @if (header && HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditRoles))
+                {
+                <span data-RoleId="@role.RoleId" class='glyphicons bin click' title='Remove Role'></span>
+                }
+                <a class="roleLink" href='@Url.Action("Permissions", "Roles")/@role.RoleId'>@role.RoleName</a>
+
+            </th>
+            }
+            @{header = false;}
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var permission in Model.Permissions.Where(c => c.CategoryName == category).OrderBy(c => c.Name))
+        {
+        <tr data-id="@permission.PermissionId">
+            <td title="@permission.Description">
+                @permission.Name
+            </td>
+            <td>
+                @if (permission.Deny.Value)
+                {
+                <span class='glyphicons ban ' title='Denied'></span>
+                }
+                else
+                {
+                <span class='glyphicons ok_2' title='Granted'></span>
+                }
+            </td>
+            @foreach (var rId in Model.RolePermission.Select(c => c.RoleId).Distinct())
+            {
+            <td>
+                @foreach (var r in Model.RolePermission.Where(c => c.PermissionId == permission.PermissionId && rId ==
+                c.RoleId))
+                {
+                if (r.Deny)
+                {
+                <span class='glyphicons ban ' title='Denied'></span>
+                }
+                else
+                {
+                <span class='glyphicons ok_2' title='Granted'></span>
+                }
+                }
+            </td>
+            }
+        </tr>
+        }
+        </tbody>
+    </table>
+    }
+</div>
+

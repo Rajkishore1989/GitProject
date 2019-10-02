@@ -1,0 +1,134 @@
+<div class="pick-list search-result">
+    <div class="Booking-Columnn">
+        <div class="row">
+            <div class="title cell" style="padding:5px">
+                Shipment No
+            </div>
+        </div>
+        <div class="Status">
+            <div class="rotate">
+                <%= DelCol %>
+            </div>
+            <% if (typeof OriginalId  !== "undefined" && OriginalId !== null) { %>
+            <div title="Linked to Shipment <%= OriginalId %>" class="ui-icon ui-icon-link"></div>
+        <% } %>
+        </div>
+        <a class="Booking-Id" href="detail/<%= BookingNo  %>">#<%= BookingNo  %></a>
+    </div>
+    <div class="centre-section">
+        <div class="details-table">
+            <div class="row">
+                <div class="ordered title cell">
+                    Booked On
+                </div>
+                <div class="title cell">
+                    Required Del/Col Date
+                </div>
+                <div class="title cell">
+                    Customer
+                </div>
+                <div class="title cell">
+                    Address
+                </div>
+                <div class="title cell ">
+                    Item Details
+                </div>
+                <div class="title cell ">
+                    Description
+                </div>
+                <div class="title cell ">
+                    Quantity
+                </div>
+                <div class="title cell ">
+                    Status
+                </div>
+            </div>
+            <div class="row">
+                <div class="ordered cell">
+                    <span class="date" />
+                </div>
+                <div class="date" style="text-align:center"> 
+                    <% var d = DueOn.replace("Z","") %>
+                    <div class=weekday><%- moment(d).format("ddd").toUpperCase() %></div>
+                    <span class=day><%- moment(d).format("DD") %></span>
+                    <span class=month><%- moment(d).format("MMM").toUpperCase() %></span>
+                    <div <span class=time><strong><%- moment(d).format("A") %></strong></span> </div>
+                    <!--<div><%- moment(d).fromNow() %></div>-->
+                </div>
+				<div class="cell" style="width: 200px">
+					<div style="text-align: left; margin: 0 auto">
+						<div style="display: inline-block;">
+							<div>
+								<strong>Cust</strong></div>
+							<div>
+								<strong>Acct</strong></div>
+						</div>
+						<div style="display: inline-block;">
+							<div>
+								<%= Customer %></div>
+							<div>
+								<%= Account %></div>
+						</div>
+					</div>
+				</div>
+				<div class="cell" style="text-align:left; width: 200px">
+					<%= Address.replace(/\r/g,"<br>") %>
+				</div>
+				<div class="cell" style="width: 120px">
+					<div style="text-align: left; margin: 0 auto">
+						<div style="display: inline-block;">
+							<!--<div>
+								<strong>Item Id</strong>
+							</div>-->
+							<div>
+								<strong>Item No</strong>
+							</div>
+							<div>
+								<strong>Item UPC</strong>
+							</div>
+							<div>
+								<strong>Product Cat</strong>
+							</div>
+                            <div>                <!-- Required for extra row -->
+                                &nbsp
+                            </div>
+                            <!--<div>
+                                <strong>Product Cat</strong>
+                            </div>-->
+                        </div>
+                        <div style="display: inline-block;">
+                            <!--<div>
+                                <%= ItemId %>
+                            </div>-->
+                            <div>
+                                <%= ItemNo %>
+                            </div>
+                            <div>
+                                <%= ItemUPC %>
+                            </div>
+                            <div>
+                                <%= ProductCat %>
+                            </div>
+                            <div>
+                                &nbsp
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="cell">
+                    <%= ItemDescription %>
+                    <div title="Damaged" class=" <%- Damaged === true ? "ui-icon ui-icon-alert" : "" %>">
+                    </div>
+                </div>
+                <div class="cell qty">
+                    <%= ItemsCount %>
+                </div>
+                <div class="cell link">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+
+</div>

@@ -1,0 +1,138 @@
+﻿@model  Blue.Cosacs.Web.Areas.Service.Models.TechnicianPaymentsPrint
+@using Blue.Cosacs.Web
+@{
+    ViewBag.Title = "Technician Payments";
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var settings = StructureMap.ObjectFactory.Container.GetInstance<Blue.Config.Settings>();
+    var curSimbol = settings.CurrencySymbol;
+    var decimalPlaces = settings.DecimalPlaces;
+    var format = "0." + "".PadRight(decimalPlaces, '0');
+}
+@section Head
+{
+    <style type="text/css">
+        .number-column
+        {
+            text-align: right;
+        }
+        .text-column
+        {
+            text-align: center;
+        }
+        #data
+        {
+            border-collapse: collapse;
+            border-spacing: 15px;
+            width: 100%;
+        }
+        #data tr td:last-child
+        {
+            padding-left: 5px;
+        }
+        #data tr th:last-child
+        {
+            padding-left: 5px;
+        }
+        #data tr
+        {
+            padding-bottom: 3px;
+        }
+        #data tr td
+        {
+            border-bottom: 1pt solid #CCCCCC;
+            padding-top: 2px;
+        }
+        .title, th
+        {
+            text-align: center;
+        }
+        .col-lg-3
+        {
+            width: 20%;
+            float: left;
+        }
+        .header-info th.title {
+            text-align: center;
+        }
+    </style>
+}
+<h2 class="title">
+    Technician Payments</h2>
+<div>
+    <div class="col-lg-3">
+        <b>Technician Name: </b>
+    </div>
+    <div class="col-lg-3">
+        @Model.SearchCriteria.Technician
+    </div>
+</div>
+<div style="clear:both"></div>
+<div>
+    <div class="col-lg-3">
+        @{
+            var from = string.Empty;
+            var to = string.Empty;
+
+            if (@Model.SearchCriteria.DateFrom.HasValue)
+            {
+                from = Model.SearchCriteria.DateFrom.Value.ToString("dd-MMM-yyyy");
+            }
+            if (@Model.SearchCriteria.DateTo.HasValue)
+            {
+                to = Model.SearchCriteria.DateTo.Value.ToString("dd-MMM-yyyy");
+            }
+        }
+        <b>Payments From:</b>
+    </div>
+    <div class="col-lg-3">
+    @from
+    </div>
+</div>
+<div style="clear:both"></div>
+<div>
+    <div class="col-lg-3">
+        <b>Payments To:</b>
+    </div>
+    <div class="col-lg-3">
+    @to
+    </div>
+</div>
+<div style="clear:both"></div>
+<div class="row">
+    &nbsp;</div>
+<table id="data">
+    <tr class="setColumnWidth header-info">
+        <th class="title" style="width: 15%">Request No</th>
+        <th class="title" style="width: 15%">Allocated On</th>
+        <th class="title" style="width: 15%">Parts Other</th>
+        <th class="title" style="width: 15%">Labour</th>
+        <th class="title" style="width: 15%">Total Cost</th>
+        <th class="title" style="width: 20%">Status</th>
+    </tr>
+    <tbody>
+        @foreach (var payment in Model.Payments)
+        {
+            <tr>
+                <td class="text-column">
+                    @payment.RequestId
+                </td>
+                <td class="text-column">
+                    @DateTime.Parse(payment.AllocatedOn).DateToUIShortString("dd MMM yyyy")
+                </td>
+                <td class="number-column">
+                    @string.Format("{0}{1}", curSimbol, payment.PartsOther.ToString(format))
+                </td>
+                <td class="number-column">
+                    @string.Format("{0}{1}", curSimbol, payment.Labour.ToString(format))
+                </td>
+                <td class="number-column">
+                    @string.Format("{0}{1}", curSimbol, payment.Total.ToString(format))
+                </td>
+                <td class="text-column">
+                    @payment.State
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

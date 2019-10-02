@@ -1,0 +1,11 @@
+﻿@model Blue.Cosacs.Web.Areas.Admin.Models.Role
+<tr data-id="@Model.Id" class="view">
+	@if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditRoles)) {
+    <td class="actions"></td>
+	}
+    <td>@Model.Name</td>
+    <td>
+        <a class="glyph-btn glyphicons lock" href='@Url.Action("Permissions", new { id = Model.Id })' title="Permissions for this Role"></a>
+        <a class="glyph-btn glyphicons user" href='@Url.Action("Users", new { id = Model.Id })' title="Users with this Role"></a>
+    </td>
+</tr>

@@ -1,0 +1,9 @@
+﻿@model Blue.Cosacs.Web.Areas.Warehouse.Models.Driver
+<tr data-id=@Model.Id class=view>
+@if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.DriverMaintenanceEdit))
+{
+    <td class="actions"></td>
+}
+    <td>@Model.Name</td>
+    <td>@Model.PhoneNumber</td>
+</tr>

@@ -1,0 +1,131 @@
+﻿@model StockTransferPrintModel
+
+@{
+    ViewBag.Title = string.IsNullOrWhiteSpace(ViewBag.Title) ? "Stock Identifying Sheet " + Model.Id : ViewBag.Title;
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var pagesize = 1;
+    ViewBag.TransferMessage = string.Format("Transfer to {0}{1}{2}", Model.ReceivingLocation, string.IsNullOrEmpty(Model.ViaLocation) ? "" : " via ", Model.ViaLocation);
+}
+
+@section Head
+{
+    <style type="text/css">
+        .reject {
+            white-space: nowrap;
+        }
+
+            .reject span {
+                margin-left: 5px;
+            }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+
+<div>
+    @for (var x = 0; x < Model.Products.Count; x += pagesize)
+    {
+    <header>
+        <div style="width: 100%; display: inline-block; margin: 0 0 20px 0;">
+            <div style="display: inline-block; vertical-align: top;">
+                <table class="header-info">
+                    <tr><th>Reference Number:</th><td>@Model.ReferenceNumber</td></tr>
+                    <tr><th>Sending Location:</th><td>@Model.SendingLocation</td></tr>
+                    <tr><th>Receiving Location:</th><td>@Model.ReceivingLocation</td></tr>
+                    <tr><th>Via Location:</th><td>@Model.ViaLocation</td></tr>
+                </table>
+            </div>
+            <div style="display: inline-block; vertical-align: top;">
+                <table class="header-info">
+                    <tr><th>Date Created:</th><td>@Model.CreatedDate</td></tr>
+                    <tr><th>Created By:</th><td>@Model.CreatedBy</td></tr>
+                </table>
+            </div>
+            <div style="display: inline-block; vertical-align: top; float: right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Stock Transfer #@Model.Id</div>
+                        <div class="barcode">@Html.Barcode("ST$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@Model.CreatedDate</div>
+                        <div class="createdBy">@Model.CreatedBy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    <div style="position: relative">
+        @if (!Model.OriginalPrint.HasValue)
+        {
+                @*<!-- HACK FIX: layout fix for the 'Delivery Print Schedules' original copy -->*@
+                @*<!-- This layout is broken when printing the original copy (only works when the copy-watermark  -->*@
+                @*<!-- style is present). So this is why an opacity:0 (invisible) watermark element was placed here. -->*@
+            <div class="copy-watermark" style="opacity: 0;">ORIG.</div> @*<!-- HACK -->*@
+                @*<!-- HACK!!! -->*@
+        }
+        @if (Model.OriginalPrint.HasValue)
+        {
+            <div class="copy-watermark">COPY</div>
+        }
+    </div>
+    @Html.Partial("PrintStockSheetProduct", Model.Products.Skip(x).Take(pagesize).ToList())
+
+    <div class="leftFooter">
+        @ViewBag.Title &nbsp;
+    </div>
+    <div class="rightFooter">
+        Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+    </div>
+    <div class="pageBreak"></div>
+    }
+</div>
+            

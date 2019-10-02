@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Service Request Resolutions Report";
+}
+<div data-module="report/serviceRequestResolution" ng-controller="resolutionController"
+    class="ng-scope report" ng-cloak>
+    <div id="Parameters" class="section">
+        Parameters</div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="form-group  col-md-6">
+            <label for="financialYear" class="col col-md-3 control-label">
+                {{ financialYearLabel }}
+            </label>
+            <div class="col col-md-2" ng-class="{'has-error': !filterParameters.financialYear }">
+                <input class="form-control" type="number" min="1900" ng-model="filterParameters.financialYear"
+                    name="financialYear" id="financialYear" required placeholder="yyyy" />
+            </div>
+        </div>
+        <div class="form-group  col-md-6">
+            <label class="col col-md-4 control-label">
+                {{ resolutionLabel }}
+            </label>
+            <div class="col col-md-6">
+                <list name="listResolution" ng-model="filterParameters.resolution" ng-required lookup="RESOLUTION"
+                    placeholder="Resolution"></list>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="form-group col-md-6">
+            <label for="WeekNoFrom" class="col col-md-3 control-label">
+                {{ weekNoFromLabel }}
+            </label>
+            <div class="col col-md-2" ng-class="{'has-error': !filterParameters.weekNoFrom }">
+                <input class="form-control" type="number" min="1" max="52" ng-model="filterParameters.weekNoFrom"
+                    name="WeekNoFrom" id="WeekNoFrom" required ng-disabled="!filterParameters.financialYear" />
+            </div>
+            <label for="WeekNoTo" class="col col-md-3 control-label">
+                {{ weekNoToLabel }}
+            </label>
+            <div class="col col-md-2" ng-class="{'has-error': !filterParameters.weekNoTo }">
+                <input class="form-control" type="number" min="1" max="52" ng-model="filterParameters.weekNoTo"
+                    name="WeekNoTo" id="WeekNoTo" required ng-disabled="!filterParameters.financialYear" />
+            </div>
+        </div>
+        <div class="form-group col-md-6">
+            <label for="listCategory" class="col-md-4 control-label">
+                {{CategoryLabel}}</label>
+            <div class="col-md-6">
+                <list name="listCategory" ng-model="filterParameters.category" ng-required scope="categories"
+                    placeholder="Department"></list>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div ng-hide="filterParameters.resolution">
+        <p class="text-warning">
+            <b> Please select a resolution value and run the report to show the
+                'Resolution % vs Category' graph, on the bottom of this page.</b>
+        </p>
+    </div>
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+    <div class="alert alert-warning"
+         ng-show="filterParameters.resolution && numberOfEmptyElementsFoundInChart > 0">
+        <p> There were also {{numberOfEmptyElementsFoundInChart}} '{{filterParameters.resolution}}'
+            Service Requests with no Product Category.
+        </p>
+    </div>
+    <div id="SrResolutionChart"></div>
+</div>

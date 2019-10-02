@@ -1,0 +1,21 @@
+<tr ng-repeat="warrantyProduct in warrantyLevel.products">
+    <td>
+        <div ng-click="productRemove($index, warrantyLevel)" title="Remove"
+             ng-class="{hide: warrantyLevel.products.length == 1}"
+             class="ui-icon ui-icon-trash click"></div>
+    </td>
+    <td ng-repeat="(key,value) in product.fields">
+        <input ui-select2="setupProducts(key)"
+               ui-reset placeholder="Select" style="width: 150px;"
+               ng-model="warrantyProduct[key]" ng-change="matchProducts(warrantyLevel)"/>
+    </td>
+    <td><input ui-select2="product.branches" ng-model="warrantyProduct.StockBranchNameWarrantyLink"
+                                            ng-change="matchProducts(warrantyLevel)" style="width: 190px;" ui-reset placeholder="Select branch" /></td>
+    <td><input ng-model="warrantyProduct.RefCodeWarrantyLink" ng-change="matchProducts(warrantyLevel)"/></td>
+    <td><input ng-model="warrantyProduct.ItemNoWarrantyLink"
+                                            ng-change="matchProducts(warrantyLevel)"/></td>
+    <td><span style="float: right" class="ui-icon ui-icon-plus click"
+                                           title="Add New"
+                                           ng-class="{hide: !$last}"
+                                           ng-click="productAdd(warrantyLevel.products)"></span></td>
+</tr>

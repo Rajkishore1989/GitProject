@@ -1,0 +1,133 @@
+<section class="facetSearch" ng-class="{'medium': touchFriendly}">
+    <div class="row facetrow buttonsRow">
+        <div class="col-lg-4 col-md-4 generatedButtons">
+            <button type="button" class="btn action btn-default external-link" data-action="{{button.name}}" ng-disabled="!button.enabled" ng-repeat="button in leaveOutExportButton(searchButtons)">{{button.label}}</button>
+            <button type="button" class="btn action btn-default download-link" data-action="{{button.name}}" ng-disabled="!button.enabled" ng-repeat="button in getOnlyExportButton(searchButtons)">{{button.label}}</button>
+        </div>
+        <div class="col-lg-4 col-md-4">
+           <input autocomplete="off" id="searchString" ng-model="searchString" ng-change="searchByText()" class="text-search form-control" placeholder="Type your search here" type='search' x-webkit-speech="" />
+        </div>
+        <div class="text-right col-lg-4 col-md-4" ng-show="!touchFriendly">
+            <button type="button" class="btn clear btn-default">Clear</button>
+        </div>
+        <div class="text-right col-lg-2 col-md-2" ng-show="touchFriendly">
+            <button type="button" class="btn clear btn-default btn-block">Reset</button>
+        </div>
+    </div>
+    <div class="facet-data-container">
+        <div class="facet-data">
+            <div class="row facetrow fieldsRow">
+                <article class="col-lg-2 col-md-2 dateFromTo" data-field="{{dateField.name}}" ng-repeat="dateField in dateFields">
+                    <div class="section">
+                        <label>{{dateField.label}}</label>
+                    </div>
+                    <p>
+                        From Date 
+                        <input ui-date="datePickerSettings" id="{{dateField.name}}DateSearchFrom" ng-model="dateField.fromValue" type="text" size="25" class="dateSearch dateInputFrom form-control">
+                    </p>
+                    <p>
+                        To Date
+                        <input ui-date="datePickerSettings" id="{{dateField.name}}DateSearchTo" ng-model="dateField.toValue" type="text" size="25" class="dateSearch dateInputTo form-control">
+                    </p>
+
+                    <!--Days before today
+                    <div class="select2Box" ng-model="dateField.numberOfDays">
+                        <select ui-select2="select2Options" ng-model="dateField.numberOfDays" data-placeholder="Number of days" ng-change="numberOfDaysChanged()" style="width:100%;">
+                            <option></option>
+                            <option value="{{item.value}}" ng-repeat="item in numberOfDays | orderBy: value">{{item.label}}</option>
+                        </select>
+                    </div>-->
+
+                </article>
+                <div class="searchFields" ng-show="!touchFriendly">
+                    <div class="col-lg-2 col-md-2 facet" ng-repeat="search in fields">
+                        <div class="section">
+                            <label>{{search.label}}</label>
+                        </div>
+                        <ul class="facet-field list-unstyled" data-field="{{search.name}}">
+                            <li class="field-value" data-value="{{fieldValue.value}}" data-count="{{fieldValue.count}}" ng-repeat="fieldValue in search.values">
+                                {{fieldValue.value}} ({{fieldValue.count}})
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 facet" ng-repeat="search in halfHeightFields">
+                        <div class="section">
+                            <label>{{search.label}}</label>
+                        </div>
+                        <ul class="facet-field halfHeight list-unstyled" data-field="{{search.name}}">
+                            <li class="field-value" data-value="{{fieldValue.value}}" data-count="{{fieldValue.count}}" ng-repeat="fieldValue in search.values">
+                                {{fieldValue.value}} ({{fieldValue.count}})
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-2 col-md-2 facet" ng-show="customQuery">
+                        <div class="section">
+                            <label>Report Queries</label>
+                        </div>
+                        <div class="facet-query checkbox" ng-repeat="search in customQuery">
+                            <label>
+                                <input type="checkbox" id="custom-query-{{search.name}}" value="{{search.name}}" class="field-value"/>
+                                {{search.label}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="searchFields touch-friendly" ng-show="touchFriendly">
+                    <div class="row facetrow">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="col-lg-12 col-md-12 search-grid">
+                                <div class="touch-selected-fields">
+                                    <div class="col-lg-2 col-md-2 grid-item touch-selected-field {{selected.field}}" data-count="{{selected.count}}" data-field="{{selected.field}}" data-value="{{selected.value}}" ng-repeat="selected in selectedFields" ng-click="applyFilter($event, selected.field, selected.value)">
+                                        <span class="search-remove glyphicons remove_2"></span>
+                                        <div class="grid-content">
+                                            <div>{{selected.value}}</div>
+                                            <div>{{selected.count}} items</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="touch-scroll-fields">
+                                    <div class="touch-search-field" data-field="{{search.name}}" ng-repeat="search in displayFields">
+                                        <div class="col-lg-2 col-md-2 grid-item touch-field-value {{search.name}}" data-value="{{fieldValue.value}}" data-count="{{fieldValue.count}}" ng-repeat="fieldValue in search.values" ng-click="applyFilter($event, search.name, fieldValue.value)">
+                                            <div class="grid-content">
+                                                <div>{{fieldValue.value}}</div>
+                                                <div>{{fieldValue.count}} items</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="results resultsRow" ng-show="touchFriendly">
+                                        <div id="resultsContainerTouch"></div>
+                                        <div ng-show="noMoreResults" class="noCases">
+                                            <div class="col-lg-2 col-md-2 grid-item text-muted"><b>No more results</b></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="facetrow results resultsRow" ng-show="!touchFriendly">
+                <div id="resultsContainer"></div>
+                <div ng-show="noMoreResults" class="noCases">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 text-center text-muted"><b>No more results</b></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row paging-row" ng-show="touchFriendly">
+        <div class="col-lg-2 col-md-2">
+            <button class="btn btn-default btn-lg btn-block paging" ng-click="pagePrevious()" ng-disabled="scrollPage == 0">
+                 <i class="glyphicons chevron-left"></i> Previous
+            </button>
+        </div>
+        <div class="col-lg-2 col-md-2 col-lg-offset-8 col-md-offset-8">
+            <button class="btn btn-default btn-lg btn-block paging" ng-click="pageNext()">
+                Next <i class="glyphicons chevron-right"></i>
+            </button>
+        </div>
+    </div>
+</section>

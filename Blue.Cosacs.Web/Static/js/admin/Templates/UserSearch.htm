@@ -1,0 +1,23 @@
+<div class="result searchUsers search-result panel panel-default" ng-repeat="result in displayResults">
+    <div class="panel-heading">
+        <div class="row">
+            <div class="col-lg-3 login">{{result.Login}}</div>
+            <div class="col-lg-3 name">{{result.FirstName}} {{result.LastName}}</div>
+            <div class="col-lg-2 col-lg-offset-2 text-right">
+                <div ng-show="result.Locked == 'True'" class="status label label-danger">Locked</div>
+                <div ng-show="result.Locked == 'False'" class="status label label-default">Active</div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-lg-2 details">
+                <div class="branch">{{result.HomeBranchName}}</div>
+                <div class="email">{{result.Email}}</div>
+            </div>
+            <div class="roles col-lg-10">
+                Roles: {{result.Roles | stringList}}
+            </div>
+        </div>
+    </div>
+</div>

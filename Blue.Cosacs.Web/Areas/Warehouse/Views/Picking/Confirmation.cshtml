@@ -1,0 +1,100 @@
+﻿@model Blue.Cosacs.Web.Areas.Warehouse.Models.PickingConfirmation
+@{
+	ViewBag.Title = string.Format("Pick List #{0} Confirmation", ViewBag.PickingId);
+	var modelJson = Model.ToJson();
+	ViewBag.IsSummary = true;
+}
+
+@Html.Partial("Legend")
+<div id="finalizePicking" data-module="warehouse/pickingConfirmation" data-picking-model='@modelJson' data-view-mode='@ViewBag.StartWithViewMode'>
+	<div id="pickList" class="form-horizontal">
+		<div class="row">
+			<div class="col-lg-6 form-group">
+				<label class="col-lg-3 control-label">Picked By</label>
+				<div class="col-lg-9">
+						@if (((int?)Model.Picking.PickedBy).HasValue)
+						{
+							<input class="form-control" type="text" value="@Model.Picking.PickedByName" disabled="disabled" />
+						}	  
+						@if (!((int?)Model.Picking.PickedBy).HasValue)
+						{
+							<div class="view pickedBy chosenwidth checkPick">
+								<input type="hidden" id="pickedBy" name="pickedBy" class="span8 pickList max" style="width:100%;"/>
+							</div>
+						}
+				</div>
+			</div>
+			<div class="col-lg-6 form-group">
+				<label class="col-lg-3 control-label">Checked By</label>
+				<div class="col-lg-9">
+					@if (((int?)Model.Picking.CheckedBy).HasValue)
+					{
+						<input class="form-control" type="text" value="@Model.Picking.CheckedByName" disabled="disabled" />
+					}	  
+					@if (!((int?)Model.Picking.CheckedBy).HasValue)
+					{
+	                    <div class="view checkedBy chosenwidth checkConfirm">
+							<input type="hidden" id="checkedBy" name="checkedBy" class="span8 pickList max" style="width:100%;"/>
+						</div>
+	                }
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-6 form-group">
+				<label class="col-lg-3 control-label">Picked On</label>
+				<div class="col-lg-9">
+					<input class="form-control" readonly="true" id="pickedOn" type="text" />
+				</div>
+			</div>
+			<div class="col-lg-6 form-group">
+				<label class="col-lg-3 control-label">Comment</label>
+				<div class="col-lg-9">
+					<div class="picking-comment">
+						 <textarea cols="35" rows="5" name="picking-comment" maxlength="160" style="width:100%;">@Model.Picking.Comment</textarea>
+						<div class="view"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id='createdOn' style="visibility: hidden">@Model.Picking.CreatedOn.ToLocalTime()</div>
+		<table id="pickingItems" class="table table-striped table-bordered booking">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Shipment</th>
+					<th>Delivery</th>
+					<th>Recipient &amp; Address</th>
+					<th>Product</th>
+					<th style="width:20%">Picking Rejection</th>
+					<th style="width:25%">Comments</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	    @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.ConfirmPicklist))
+	    {
+		<button id="save" class="btn btn-primary single-click">Save</button>
+	    }
+	    @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.ReprintPicklist))
+	    {
+		<button type="button" id="reprint" class="btn btn-default external-link" data-id="@Model.Picking.Id">Re-Print Pick List</button>
+	    }
+		<div class="warning text-danger">*Please select Picked by and Checked by employees before saving.</div>
+		<div class="warning-date text-danger">*Pick list confirmation date cannot be before the Picklist creation date. Please select a date between the Picklist creation date and todays date.</div>
+	</div>
+
+	<script id="pickingItemTemplateEmpty" type="text/template">
+		<tr class="empty">
+			<td colspan="7">There are no picking items.</td>
+		</tr>
+	</script>
+	<script id="pickingItemTemplate" type="text/template">
+		<tr data-id=<%- Id %> class="booking <%= CancelDate ? 'cancelled' : ''%>">
+			@Html.Partial("BookingTemplate")
+			@Html.Partial("BookingTemplateReject")
+		</tr>
+	</script>
+
+</div>

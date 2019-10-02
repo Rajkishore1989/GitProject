@@ -1,0 +1,6 @@
+<select name="Level_2"  ng-model="productItem.Level_2" ui-select2="select2Options" style="width: 100%;" ng-disabled="!productItem.edit"
+        ng-class="{'allowClearOff': !productItem.edit}" data-placeholder="Category" ng-change="productHierarchy.categoryChange(productItem)">
+    <option></option>
+    <option ng-repeat="catObj in productHierarchy.getL2(productItem)"
+            value="{{catObj.key}}">{{catObj.key}} - {{catObj.name}}</option>
+</select>

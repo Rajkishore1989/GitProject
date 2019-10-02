@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<Model xmlns="http://schemas.bluebridgeltd.com/cosacs/model/2010/12/" schema="dbo" namespace="Blue.Cosacs.Web.Common.External">
+    <Connection server="jaguar" database="guy10" />
+    <Queries>
+       <NonQuery name="HiLoAllocate"/>
+    </Queries>
+    <Tables>
+        <Table name="Code"/>
+        <Table name="CodeCat"/>
+        <Table name="Branch"/>
+        <Table name="Bank" />
+        <Table name="FinancialWeeks" />
+    </Tables>
+    <Views>
+        <View name="ViewSets"/>
+        <View name="ServiceSupplierView"/>
+    </Views>
+</Model>

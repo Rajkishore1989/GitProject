@@ -1,0 +1,134 @@
+﻿@{
+    ViewBag.Title = "Branch Opening Hours";
+}
+
+<div data-module="admin/branchOpeningHours" ng-controller="branchOpeningHoursController" class="ng-scope" ng-cloak>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <form id="save" class="form-horizontal" action="#">
+                <div class="actions">
+                    <button class="btn btn-primary" ng-click="save()">Save</button>
+                </div>
+            </form>
+            <p class="searchRow" />
+            <table class="table table-bordered table-striped">
+                <tr>
+                    <th></th>
+                    <th class="text-center">Monday</th>
+                    <th class="text-center">Tuesday</th>
+                    <th class="text-center">Wednesday</th>
+                    <th class="text-center">Thursday</th>
+                    <th class="text-center">Friday</th>
+                    <th class="text-center">Saturday</th>
+                    <th class="text-center">Sunday</th>
+                </tr>
+                <tr ng-repeat="item in openingHours">
+                    <td class="vcenter">
+                        {{ item.BranchNo }} {{ item.BranchName }}
+                    </td>
+                    <td>
+                        <div class="row">
+                            <span class="col-lg-3">Open</span>
+                            <div class="col-lg-5">
+                                <input type="time" ng-model="item.MondayOpen" />
+                            </div>
+                        </div>
+                        <p class="searchRow" />
+                        <div class="row">
+                            <span class="col-lg-3">Close</span>
+                            <div class="col-lg-5"><input type="time" ng-model="item.MondayClose" /></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <span class="col-lg-3">Open</span>
+                            <div class="col-lg-5">
+                                <input type="time" ng-model="item.TuesdayOpen" />
+                            </div>
+                        </div>
+                        <p class="searchRow" />
+                        <div class="row">
+                            <span class="col-lg-3">Close</span>
+                            <div class="col-lg-5">
+                                <input type="time" ng-model="item.TuesdayClose" />
+                            </div>
+                        </div>
+
+                    </td>
+                    <td>
+                        <div class="row">
+                            <span class="col-lg-3">Open</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.WednesdayOpen" />
+                            </div>
+                        </div>
+                        <p class="searchRow" />
+                        <div class="row">
+                            <span class="col-lg-3">Close</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.WednesdayClose" />
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <span class="col-lg-3">Open</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.ThursdayOpen" />
+                            </div>
+                        </div>
+                        <p class="searchRow" />
+                        <div class="row">
+                            <span class="col-lg-3">Close</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.ThursdayClose" />
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <span class="col-lg-3">Open</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.FridayOpen" />
+                            </div>
+                        </div>
+                        <p class="searchRow" />
+                        <div class="row">
+                            <span class="col-lg-3">Close</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.FridayClose" />
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <span class="col-lg-3">Open</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.SaturdayOpen" />
+                            </div>
+                        </div>
+                        <p class="searchRow" />
+                        <div class="row">
+                            <span class="col-lg-3">Close</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.SaturdayClose" />
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="row">
+                            <span class="col-lg-3">Open</span><div class="col-lg-5">
+                                <input type="time" ng-model="item.SundayOpen" />
+                            </div>
+                        </div>
+                        <p class="searchRow" />
+                        <div class="row">
+                            <span class="col-lg-3">Close</span>
+                            <div class="col-lg-5">
+                                <input type="time" ng-model="item.SundayClose" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <form id="save" class="form-horizontal" action="#">
+                <div class="actions">
+                    <button class="btn btn-primary" ng-click="save()">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

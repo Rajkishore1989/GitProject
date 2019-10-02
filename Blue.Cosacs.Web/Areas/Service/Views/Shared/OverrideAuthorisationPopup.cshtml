@@ -1,0 +1,50 @@
+﻿<div id="dialogueJobOverrideAuthorize" class="modal fade border" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close ui-icon ui-icon-closethick" title="Close"
+                      ng-click="dialogueJobOverrideAuthorize.show = false">
+                </span>
+                <h3>
+                    User Authorization
+                </h3>
+            </div>
+            <div class="popup-body modal-body">
+                <div class="row">
+                    <div id="login" class="container">
+                        <div class="col-lg-7">
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" for="username">User</label>
+                                <div class="col-lg-5">
+                                    <input class="form-control" type="text" name="username" id="usrnme" />
+                                </div>
+                            </div>
+                            <br /> <br />
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label" for="password">Password</label>
+                                <div class="col-lg-5">
+                                    <input class="form-control" type="password" name="password" id="pwd" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br /><br />
+                <div style="color:red">
+                    <label id="errMsg" class="col-lg-6 control-label" style="display:none;">
+                        {{dialogueJobOverrideAuthorize.errorText}}
+                        @*User Id or Password cannot be blank.*@
+                    </label>
+                </div>
+            </div>
+                <div class="popup-footer modal-footer">
+                    <button class="ok btn btn-primary" ng-click="dialogueJobOverrideAuthorize.actionButtonClick()">
+                        Authorize
+                    </button>
+                    <button class="cancel btn btn-default" ng-show="!dialogueJobOverrideAuthorize.showAlternate" ng-click="dialogueJobOverrideAuthorize.CancelClicked()">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+    </div>
+</div>

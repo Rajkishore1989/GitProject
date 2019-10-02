@@ -1,0 +1,236 @@
+﻿@model string
+@{ ViewBag.Title = "Labour Cost Matrix"; }
+@using Blue.Glaucous.Client.Mvc
+<div id="ChargesMaxtrixContainer" data-module="service/chargesMatrix" ng-controller="chargesMatrixController" ng-cloak>
+    <article>
+        <form name="chargesForm">
+            <section class="filters">
+                <div class="row search">
+                    <div class="col-lg-4">
+                        <input ng-model="filter" class="form-control" type="text" maxlength="50" id="searchName" ui-reset placeholder="Filter matrix by label" />
+                    </div>
+                </div>
+                <br/>
+            </section>
+            <br/>
+            <section class="existing">
+                @{
+                var hasPermission = HttpContext.Current.GetUser().HasPermission(Blue.Service.ServicePermissionEnum.EditLabourCostMatrix);
+                }
+                <table class="data table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="action col-lg-1"></th>
+                        <th class="col-lg-6">Matching Criteria</th>
+                        <th class="col-lg-5">Charges</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="labourItem in matrixList | filter:labelFilter()">
+                        <td class="action">
+                            @if (hasPermission)
+                            {
+                            <span class="glyphicons glyph-btn action save floppy_disk" title="Save" ng-click="save(labourItem)" ng-show="labourItem.edit" ng-class="{'disabled': !valid(labourItem)}"></span>
+                            <span class="glyphicons glyph-btn action cancel undo" title="Cancel" ng-click="undo(labourItem)" ng-show="labourItem.edit"></span>
+                            <span class="glyphicons glyph-btn action pencil" title="Edit" ng-click="labourItem.edit = true" ng-show="!labourItem.edit"></span>
+                            <span class="glyphicons glyph-btn action bin" title="Remove" ng-click="deleteRecord(labourItem)" ng-show="!labourItem.edit"></span>
+                            }
+                        </td>
+                        <td class="filters">
+                            <div class="row">
+                                <div class="col-lg-12 form-inline">
+                                    <div class="form-group" ng-class="{'has-error': !labourItem.Label}">
+                                        <input type="text" class="form-control" placeholder="Enter Label" ng-model="labourItem.Label" ng-disabled="!labourItem.edit"/>
+                                    </div>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="filtersToggle{{$index}}" ng-disabled="!labourItem.edit" ng-value="true" ng-model="labourItem.IsGroupFilter"/>&nbsp;Product Group
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="filtersToggle{{$index}}" ng-disabled="!labourItem.edit" ng-value="false" ng-model="labourItem.IsGroupFilter"/>&nbsp;Specific Products
+                                    </label>
+                                </div>
+                            </div>
+                            <div ng-show="labourItem.IsGroupFilter">
+                                <div class="row">
+                                    <div class="form-group" >
+                                        <hierarchy options="hierarchyOptions" selections="labourItem.hierarchy" callback="saveHierarchySettings(tag, level, labourItem)" editable="labourItem.edit" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4">
+                                        <label class="control-label">Supplier</label>
+                                        <input class="picklist " ui-select2="masterData.serviceSupplier"
+                                               placeholder="Supplier" ng-model="labourItem.Supplier"
+                                               ng-disabled="!labourItem.edit"/>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label class="control-label">Repair Type</label>
+                                        <input class="picklist " ui-select2="masterData.repairTypes"
+                                               placeholder="Repair Type" ng-model="labourItem.RepairType"
+                                               ng-required="labourItem.edit" ng-disabled="!labourItem.edit"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-show="!labourItem.IsGroupFilter">
+                                <div class="row">
+                                    <div class="form-group col-lg-8" ng-class="{'has-error': chargesForm.Number.$invalid}">
+                                        <label class="control-label">Items</label>
+                                            <textarea rows="2" class="col-lg-12" ng-model="labourItem.ItemList"
+                                                      ng-required="labourItem.edit && !labourItem.IsGroupFilter" ng-disabled="!labourItem.edit">
+                                            </textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4">
+                                        <label class="control-label">Supplier</label>
+                                        <input class="picklist " ui-select2="masterData.serviceSupplier"
+                                               placeholder="Supplier" ng-model="labourItem.Supplier"
+                                               ng-disabled="!labourItem.edit"/>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label class="control-label">Repair Type</label>
+                                        <input class="picklist " ui-select2="masterData.repairTypes"
+                                               placeholder="Repair Type" ng-model="labourItem.RepairType"
+                                               ng-required="labourItem.edit" ng-disabled="!labourItem.edit"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="charges">
+                            <div class="row">
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(labourItem.ChargeInternalTech)}">
+                                    <label class="control-label">Internal Technician</label>
+                                    <input ng-model="labourItem.ChargeInternalTech" class="form-control" ng-disabled="!labourItem.edit" type="number"/>
+                                </div>
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(labourItem.ChargeContractedTech)}">
+                                    <label class="control-label">Contracted Technician</label>
+                                    <input ng-model="labourItem.ChargeContractedTech" class="form-control" ng-disabled="!labourItem.edit" type="number"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(labourItem.ChargeEWClaim)}">
+                                    <label class="control-label">EW Claim</label>
+                                    <input ng-model="labourItem.ChargeEWClaim" class="form-control" ng-disabled="!labourItem.edit" type="number"/>
+                                </div>
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(labourItem.ChargeCustomer)}">
+                                    <label class="control-label">Customer Charge</label>
+                                    <input ng-model="labourItem.ChargeCustomer" class="form-control" ng-disabled="!labourItem.edit" type="number"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tfoot>
+                    <tr class="new" ng-hide="creating">
+                        <td class="action">
+                            @if (hasPermission)
+                            {
+                            <span class="glyphicons glyph-btn action-new plus" href="#" title="New" ng-click="createNew()"></span>
+                            }
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="create" ng-show="creating">
+
+                        <td class="action">
+                            <a class="glyphicons glyph-btn action save floppy_disk" ng-class="{'disabled': !valid(productItem)}" title="Save" ng-click="save(productItem)"></a>
+                            <a class="glyphicons glyph-btn action cancel undo" title="Cancel" ng-click="creating = false"></a>
+                        </td>
+                        <td class="filters">
+                            <div class="row">
+                                <div class="col-lg-12 form-inline">
+                                    <div class="form-group" ng-class="{'has-error': !productItem.Label}">
+                                        <input type="text" placeholder="Label" class="form-control" ng-model="productItem.Label"/>
+                                    </div>
+                                    <label for="groupProduct" class="radio-inline">
+                                        <input id="groupProduct" type="radio" name="newFiltersToggle" ng-value="true" ng-model="productItem.IsGroupFilter"/> Product Group
+                                    </label>
+                                    <label for="product" class="radio-inline">
+                                        <input id="product" type="radio" name="newFiltersToggle" ng-value="false" ng-model="productItem.IsGroupFilter"/> Specific Products
+                                    </label>
+                                </div>
+                            </div>
+                            <div ng-show="productItem.IsGroupFilter">
+                                <div class="row">
+                                    <div class="form-group" >
+                                        <hierarchy options="hierarchyOptions" selections="productItem.hierarchy" callback="saveHierarchySettings(tag, level, productItem)" editable="true" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4">
+                                        <label class="control-label">Supplier</label>
+                                        <select ui-select2="select2Options" ng-model="productItem.Supplier" data-placeholder="Supplier" style="width: 100%;">
+                                            <option></option>
+                                            <option ng-repeat="type in masterData.serviceSupplier.data" value="{{type.id}}">{{type.text}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4" ng-class="{'has-error': !productItem.RepairType}">
+                                        <label class="control-label">Repair Type</label>
+                                        <select ui-select2="select2Options" ng-model="productItem.RepairType" data-placeholder="Repair Type" ng-required="creating" style="width: 100%;">
+                                            <option></option>
+                                            <option ng-repeat="type in masterData.repairTypes.data" value="{{type.id}}">{{type.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-show="!productItem.IsGroupFilter">
+                                <div class="row">
+                                    <div class="form-group col-lg-8" ng-class="{'has-error': !productItem.ItemList}">
+                                        <label class="control-label">Items</label>
+                                            <textarea rows="2" class="col-lg-12 form-control" ng-model="productItem.ItemList"
+                                                      ng-required="creating && !productItem.IsGroupFilter">
+                                            </textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-lg-4">
+                                        <label class="control-label">Supplier</label>
+                                        <select ui-select2="select2Options" ng-model="productItem.Supplier" data-placeholder="Supplier" style="width: 100%;">
+                                            <option></option>
+                                            <option ng-repeat="type in masterData.serviceSupplier.data" value="{{type.id}}">{{type.text}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4" ng-class="{'has-error': !productItem.RepairType}">
+                                        <label class="control-label">Repair Type</label>
+                                        <select ui-select2="select2Options" ng-model="productItem.RepairType" data-placeholder="Repair Type" ng-required="creating" style="width: 100%;">
+                                            <option></option>
+                                            <option ng-repeat="type in masterData.repairTypes.data" value="{{type.id}}">{{type.text}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="charges">
+                            <div class="row">
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(productItem.ChargeInternalTech)}">
+                                    <label class="control-label">Internal Technician</label>
+                                    <input ng-model="productItem.ChargeInternalTech" class="form-control" ng-required="creating"
+                                           name="ChargeInternalTech" type="number" min="0"/>
+                                </div>
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(productItem.ChargeContractedTech)}">
+                                    <label class="control-label">Contracted Technician</label>
+                                    <input ng-model="productItem.ChargeContractedTech" class="form-control" ng-required="creating"
+                                           name="ChargesContractedTech" type="number" min="0"/>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(productItem.ChargeEWClaim)}">
+                                    <label class="control-label">EW Claim</label>
+                                    <input ng-model="productItem.ChargeEWClaim" class="form-control" ng-required="creating"
+                                           name="ChargesEWClaim" type="number" min="0"/>
+                                </div>
+                                <div class="form-group col-lg-6" ng-class="{'has-error': !chargesValueIsValid(productItem.ChargeCustomer)}">
+                                    <label class="control-label">Customer Charge</label>
+                                    <input ng-model="productItem.ChargeCustomer" class="form-control" ng-required="creating"
+                                           name="ChargesCustomer" type="number" min="0"/>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </section>
+        </form>
+    </article>
+</div>

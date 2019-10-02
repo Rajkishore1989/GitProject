@@ -1,0 +1,68 @@
+﻿<div ng-controller="StockCtrl">
+    <div id="dialogueShowStock" class="border">
+        <div id="stock-modal" class="modal fade" style="display: none;">
+            <div class="modal-dialog stockDialog">
+                <div class="popup-body modal-content modalStock">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h3>Matching Stock</h3>
+                        <div class="search row">
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <label for="itemNo" class="control-label">Item Search</label>
+                                    <input class="form-control" id="itemNo" type="text" ng-model="searchStr" maxlength="25" name="ItemNumber" ng-change="disableSearch()" autofocus/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="control-label" for="stockLocn">Stock Location</label>
+                                    <select class="picklist" ui-select2 ng-model="searchStock" data-placeholder="Filter Branch" ng-disabled="disableBranch()" >
+                                        <option value={{key}} ng-repeat="(key, value) in branches">{{value}}</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="form-group">
+                                    <div class="control-label">&nbsp;</div>
+                                    <label class="control-label"><div class="halflings search" ng-class="disable" title="Product Search" ng-click="getStock(searchStr,searchStock)"></div></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 1%"></th>
+                                    <th style="width: 10%;" class="text-center">Item Number</th>
+                                    <th style="width: 10%;" class="text-center">Location</th>
+                                    <th style="width: 20%;" class="text-center">Description1</th>
+                                    <th style="width: 30%;" class="text-center">Description2</th>
+                                    <th style="width: 10%;" class="text-center">Stock On Hand</th>
+                                    <th style="width: 10%">Cash Price</th>
+                                    <th style="width: 10%">Cost Price</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="stock in stockResult">
+                                    <td><div class="glyphicons check click" ng-click="selectStock(stock)"></div>
+                                    </td>
+                                    <td>{{stock.ItemNumber}}</td>
+                                    <td class="text-center">{{stock.LocationName}}</td>
+                                    <td>{{stock.Description1}}</td>
+                                    <td>{{stock.Description2}}</td>
+                                    <td class="text-center">{{stock.StockOnHand}}</td>
+                                    <td class="text-right" ng-show="MasterData.Settings.TaxType=='E'" >
+                                        {{ stock.CashPrice | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+                                    <td class="text-right" ng-show="MasterData.Settings.TaxType=='I'" >
+                                        {{ (stock.CashPrice + stock.TaxAmount) | currency : culture.CurrencySymbol : culture.DecimalPlaces }}</td>
+                                    <td class="text-right">{{stock.CostPrice}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

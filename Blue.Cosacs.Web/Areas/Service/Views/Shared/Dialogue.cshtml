@@ -1,0 +1,40 @@
+<div id="dialogueCommon" class="modal fade border" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                        <span class="close ui-icon ui-icon-closethick" title="Close"
+                              ng-click="dialogueCommon.show = false">
+                        </span>
+                <h3>
+                    {{dialogueCommon.headerText}}
+                </h3>
+            </div>
+            <div class="popup-body modal-body">
+                <p>
+                    {{dialogueCommon.bodyText}}
+                </p>
+
+                <div ng-hide="dialogueCommon.hideSelect">
+                    <select ui-select2 placeholder="{{dialogueCommon.placeholder}}" ng-model="dialogueCommon.selected"
+                            style="width:250px;">
+                        <option></option>
+                        <option value="{{option}}" ng-repeat="option in dialogueCommon.options">{{option}}</option>
+                    </select>
+                </div>
+
+                <p class="text-danger">{{dialogueCommon.errorText}}</p>
+            </div>
+            <div class="popup-footer modal-footer">
+                <button class="ok btn btn-primary" ng-click="dialogueCommon.actionButtonClick()" ng-disabled="dialogueCommon.actionButtonDisable() || dialogueCommon.actionButtonDisableOverride()">
+                    {{dialogueCommon.actionButtonText}}
+                </button>
+                <button class="cancel btn btn-default" ng-show="!dialogueCommon.showAlternate" ng-click="dialogueCommon.CancelClicked()">
+                    {{dialogueCommon.cancelButtonText}}
+                </button>
+                <button class="alternate btn btn-default" ng-show="dialogueCommon.showAlternate" ng-click="dialogueCommon.alternateButtonClick()">
+                    {{dialogueCommon.alternateButtonText}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@{
+ViewBag.Title = "Installation Hit Rate Report";
+}
+<div data-module="report/installationHitRate" ng-controller="installationHitRateController" class="ng-scope report">
+    <div class="section">Parameters</div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-5 control-label">{{ datePurchaseFromLabel }}</label>
+                <div class="col col-md-6" ng-class="{'has-error': !filterParameters.dateFrom }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateFrom" placeholder="Date of Purchase From" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-5 control-label">{{ datePurchaseToLabel }}</label>
+                <div class="col col-md-6" ng-class="{'has-error': !filterParameters.dateTo }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateTo" placeholder="Date of Purchase To" class="date form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-5 control-label">Branch</label>
+                <div class="col col-md-6">
+                    <list name="listBranch" ng-model="filterParameters.branch" lookup="BRANCH" placeholder="Branch"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-5 control-label">Division</label>
+                <div class="col col-md-6">
+                    <list name="listDepartments" ng-model="filterParameters.department" scope="departmentList" placeholder="Division"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-5 control-label">Product Department</label>
+                <div class="col col-md-6">
+                    <list id="category" name="category" ng-model="filterParameters.productCategory" scope="categoryList" placeholder="Department"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-5 control-label">Sales Person</label>
+                <div class="col col-md-6">
+                    <list name="listChain" ng-model="filterParameters.CSR" lookup="SalePersons" placeholder="Sales Person"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

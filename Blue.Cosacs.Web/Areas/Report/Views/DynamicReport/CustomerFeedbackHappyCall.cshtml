@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Customer Feedback/Happy Call Report";
+}
+
+<div data-module="report/customerFeedbackHappyCall" ng-controller="customerFeedbackHappyCallController" class="ng-scope report">
+    <div id="Parameters" class="section">Parameters</div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ dateResolvedFromLabel }} </label>
+                <div class="col col-lg-5" ng-class="{'has-error': !filterParameters.dateResolvedFrom }">
+                    <input required ui-date="linkDatePicker" ng-required ng-model="filterParameters.dateResolvedFrom" placeholder="Resolved Date" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ dateResolvedToLabel }} </label>
+                <div class="col col-lg-5" ng-class="{'has-error': !filterParameters.dateResolvedTo }">
+                    <input required ui-date="linkDatePicker" ng-required ng-model="filterParameters.dateResolvedTo" placeholder="Resolved Date" class="date form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label">Store Type</label>
+                <div class="col col-lg-5">
+                    <list name="listStoreType" ng-model="filterParameters.storeType" ng-required lookup="fascia" placeholder="Store Type"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label">Store Location</label>
+                <div class="col col-lg-5">
+                    <list name="listBranch" ng-model="filterParameters.branch" ng-required lookup="BRANCH" placeholder="Branch"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label">Technician</label>
+                <div class="col col-lg-5">
+                    <select ui-select2 ng-model="filterParameters.TechnicianId" style="width: 100%;" placeholder="Select Technician">
+                        <option value=""></option>
+                        <option value="{{t.Id}}" ng-repeat="t in technicians">{{t.Name}} : {{t.Id}}</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-6">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label">Division</label>
+                <div class="col col-lg-5">
+                    <list name="listDepartments" ng-model="filterParameters.department" scope="departments" placeholder="Select a Division"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

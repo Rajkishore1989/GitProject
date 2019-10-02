@@ -1,0 +1,125 @@
+﻿@model Blue.Cosacs.Web.Areas.Admin.Models.Profile
+<div id="editor" class="form-horizontal" style="display: none">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(u => u.Id)
+        <div>
+            @if (System.Web.HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditUsers))
+            {
+
+                <div class="form-group row">
+                    <label for="FirstName" class="col-lg-4 control-label">First Name</label>
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.FirstName,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="LastName" class="col-lg-4 control-label">Last Name</label>
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.LastName,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="Login" class="col-lg-4 control-label">User Name</label>
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.Login, new 
+                        {
+                            currentUser = Model.Id, 
+                            id="userLogin", 
+                            @class = "form-control" 
+                        })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="eMail" class="col-lg-4 control-label">Email</label>
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.eMail,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="ExternalLogin" class="col-lg-4 control-label">External Directory Login</label>
+
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.ExternalLogin,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="FactEmployee" class="col-lg-4 control-label">Fact Employee Id</label>
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.FactEmployee, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(m => m.FactEmployee)
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="AddressLine1" class="col-lg-4 control-label">Address Line 1</label>
+
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.AddressLine1,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="AddressLine2" class="col-lg-4 control-label">Address Line 2</label>
+
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.AddressLine2,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="AddressLine3" class="col-lg-4 control-label">Town/City</label>
+
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.AddressLine3,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="PostCode" class="col-lg-4 control-label">PostCode</label>
+
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.PostCode,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="Phone" class="col-lg-4 control-label">Phone Number</label>
+
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.Phone,new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="PhoneAlternate" class="col-lg-4 control-label">Alternate Phone Number</label>
+
+                    <div class="col-lg-6">
+                        @Html.TextBoxFor(u => u.PhoneAlternate,new { @class = "form-control" })
+                    </div>
+                </div>
+
+            }
+            @if (System.Web.HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.ChangeBranch))
+            {
+            <div class="form-group row">
+                <label for="BranchNo" class="col-lg-4 control-label">Branch Name</label>
+
+                <div class="col-lg-6">
+                    <div class="pickListInputValidationClass input-validation-error">
+                    @Html.TextBoxFor(u => u.BranchNo, new
+                    {
+                    @class = "pickList form-control picklist",
+                    style = "width:250px",
+                    data_pick_list_id = "BRANCH",
+                    data_placeholder = "Select a Default Branch"
+                    })
+                    </div>
+                </div>
+            </div>
+            }
+        </div>
+    }
+    <div class="form-group row">
+        <div class=col-lg-2>
+            <button class="btn btn-primary form-control" id="save" title='Save User Details'>Save</button>
+        </div>
+        <div class=col-lg-2>
+            <button class="btn btn-default form-control" id="cancel" title='Cancel User Details Editing'>Cancel</button>
+        </div>
+    </div>
+</div>

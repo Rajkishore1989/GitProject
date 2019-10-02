@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Service Request Financials Report";
+}
+<div data-module="report/serviceRequestFinancial" ng-controller="serviceRequestFinancialController" class="ng-scope report">
+    <div class="section">Parameters</div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-6 control-label"> {{ dateInterfaceTransactionFromLabel }} </label>
+                <div class="col col-md-6" ng-class="{'has-error': !filterParameters.dateFrom }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateFrom" placeholder="Date From" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-6 control-label"> {{ dateInterfaceTransactionToLabel }} </label>
+                <div class="col col-md-6" ng-class="{'has-error': !filterParameters.dateTo }">
+                    <input required ui-date="linkDatePicker" ng-model="filterParameters.dateTo" placeholder="Date To" class="date form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-6 control-label">Product Department</label>
+                <div class="col col-md-6">
+                    <list id="category" name="category" ng-model="filterParameters.productCategory" scope="productCategory" placeholder="Product Department"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-6 control-label">Charge To</label>
+                <div class="col col-md-6">
+                    <list id="ChargeTo" name="ChargeTo" ng-model="filterParameters.chargeTo" scope="ChargeTo" placeholder="Charge To"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

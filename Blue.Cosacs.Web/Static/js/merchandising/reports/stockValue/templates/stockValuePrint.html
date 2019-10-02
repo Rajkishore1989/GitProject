@@ -1,0 +1,106 @@
+<div class="buffer" ng-repeat="location in data">
+    <div class="level1">
+        {{location.location}} - {{location.fascia}}
+    </div>
+    <table>
+
+        <tbody ng-repeat="item in location.items">
+            <tr class="level2">
+                <td class="clear"></td>
+                <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                    Stock On Hand
+                </td>
+                <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                    Stock On Hand Value
+                </td>
+                <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                    Stock On Hand Sales Value
+                </td>
+            </tr>
+            <tr class="level2">
+                <td>
+                    {{item.level}}
+                </td>
+                <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                    {{item.stockOnHandQuantity}}
+                </td>
+                <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                    {{item.stockOnHandValue | pbCurrency }}
+                </td>
+                <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                    {{item.stockOnHandSalesValue | pbCurrency }}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <table>
+                        <tbody ng-repeat="child in item.children">
+                            <tr class="level3">
+                                <td class="clear"></td>
+                                <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                    Stock On Hand
+                                </td>
+                                <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                    Stock On Hand Value
+                                </td>
+                                <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                    Stock On Hand Sales Value
+                                </td>
+                            </tr>
+                            <tr class="level3">
+                                <td>
+                                    {{child.level}}
+                                </td>
+                                <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                    {{child.stockOnHandQuantity}}
+                                </td>
+                                <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                    {{child.stockOnHandValue | pbCurrency }}
+                                </td>
+                                <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                    {{child.stockOnHandSalesValue | pbCurrency }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <table>
+                                        <thead>
+                                            <tr class="level4">
+                                                <td class="clear"></td>
+                                                <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                                    Stock On Hand
+                                                </td>
+                                                <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                                    Stock On Hand Value
+                                                </td>
+                                                <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                                    Stock On Hand Sales Value
+                                                </td>
+                                            </tr>
+                                        </thead>
+                                        <tbody ng-repeat="grandchild in child.children">
+                                            <tr class="level4">
+                                                <td>
+                                                    {{grandchild.level}}
+                                                </td>
+                                                <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                                    {{grandchild.stockOnHandQuantity}}
+                                                </td>
+                                                <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                                    {{grandchild.stockOnHandValue | pbCurrency }}
+                                                </td>
+                                                <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                                    {{grandchild.stockOnHandSalesValue | pbCurrency }}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

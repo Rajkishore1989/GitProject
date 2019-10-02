@@ -1,0 +1,26 @@
+    
+    <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+    <tbody>
+        <tr ng-show="data.products">
+            <th class="hidable-col" ng-repeat="col in columns" ng-style="{'display': isDisplayed($index)}">
+                {{col.name}}
+            </th>
+        </tr>
+        <tr ng-repeat="product in data.products">
+            <td class="hidable-col" ng-repeat="level in product.hierarchyTags" ng-style="{'display': isDisplayed($index)}">
+                {{level}}
+            </td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length)}">
+                <a href="{{resolve('Merchandising/Products/Details/' + product.productId)}}">{{product.sku}}</a>
+            </td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length+1)}">{{product.longDescription}}</td>
+            <td class="hidable-col quantity" ng-style="{'display': isDisplayed(product.hierarchyTags.length+2)}">{{product.stockOnHandInWarehouse}}</td>
+            <td class="hidable-col quantity" ng-style="{'display': isDisplayed(product.hierarchyTags.length+3)}">{{product.locationsAssigned}}</td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length+4)}">
+                <a href="{{resolve('Merchandising/Locations/Detail/' + product.locationId)}}">{{product.locationName}}</a>
+            </td>
+            <td class="hidable-col date" ng-style="{'display': isDisplayed(product.hierarchyTags.length+5)}">{{product.dateLastReceived | pbDate }}</td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length+6)}">{{utils.yesOrNo(product.stockRequisitionPending)}}</td>
+        </tr>
+    </tbody>
+</table>

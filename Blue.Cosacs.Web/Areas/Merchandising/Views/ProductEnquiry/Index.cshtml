@@ -1,0 +1,13 @@
+﻿@model string
+@{ ViewBag.Title = "Product Enquiry"; }
+<div data-module="merchandising/search/initSearch" ng-controller="SearchController">
+    <div id="facetSearchContainer"
+         class="facetsearch-container buffer-lg bottom">
+        <facetsearch data-results='@Model'
+                     data-results-template='/Static/js/merchandising/enquiry/templates/ProductEnquiryDetail.html'
+                     data-search-url='/Merchandising/ProductEnquiry/SearchInstant'
+                     data-history-url='/Merchandising/ProductEnquiry/'
+                     data-field-labels="@ViewBag.labels">
+        </facetsearch>
+    </div>
+</div>

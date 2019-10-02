@@ -1,0 +1,146 @@
+<div ng-show="data" ng-repeat="location in data" class="pb-fixed-report location-group">
+    <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+        <tbody>
+        <tr class="group-row header-cols">
+            <td colspan="11" class="group-title-cell"><h4>{{location.name | uppercase }}</h4></td>
+            <td class="quantity">{{location.thisYearTotals.quantity}}</td>
+            <td>{{location.thisYearTotals.grossValue | pbCurrency }}</td>
+            <td>{{location.thisYearTotals.netValue | pbCurrency }}</td>
+            <td>{{location.thisYearTotals.grossMarginValue | pbCurrency }}</td>
+            <td>{{location.thisYearTotals.netMarginValue | pbCurrency }}</td>
+            <td>{{location.thisYearTotals.grossMarginPercent | pbPercentage }}</td>
+            <td>{{location.thisYearTotals.netMarginPercent | pbPercentage}}</td>
+            <td class="quantity">{{location.lastYearTotals.quantity}}</td>
+            <td>{{location.lastYearTotals.grossValue | pbCurrency }}</td>
+            <td>{{location.lastYearTotals.netValue | pbCurrency }}</td>
+            <td>{{location.lastYearTotals.grossMarginValue | pbCurrency }}</td>
+            <td>{{location.lastYearTotals.netMarginValue | pbCurrency }}</td>
+            <td>{{location.lastYearTotals.grossMarginPercent | pbPercentage}}</td>
+            <td>{{location.lastYearTotals.netMarginPercent | pbPercentage}}</td>
+        </tr>
+        </tbody>
+    </table>
+    <div ng-repeat="division in location.children">
+        <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+            <tbody>
+            <tr class="group-row">
+                <td colspan="11" class="group-title-cell"><h5 class="indent-1">{{division.name| uppercase }}</h5></td>
+                <td class="quantity">{{division.thisYearTotals.quantity}}</td>
+                <td>{{division.thisYearTotals.grossValue | pbCurrency }}</td>
+                <td>{{division.thisYearTotals.netValue | pbCurrency }}</td>
+                <td>{{division.thisYearTotals.grossMarginValue | pbCurrency }}</td>
+                <td>{{division.thisYearTotals.netMarginValue | pbCurrency }}</td>
+                <td>{{division.thisYearTotals.grossMarginPercent | pbPercentage }}</td>
+                <td>{{division.thisYearTotals.netMarginPercent | pbPercentage}}</td>
+                <td class="quantity">{{division.lastYearTotals.quantity}}</td>
+                <td>{{division.lastYearTotals.grossValue | pbCurrency }}</td>
+                <td>{{division.lastYearTotals.netValue | pbCurrency }}</td>
+                <td>{{division.lastYearTotals.grossMarginValue | pbCurrency }}</td>
+                <td>{{division.lastYearTotals.netMarginValue | pbCurrency }}</td>
+                <td>{{division.lastYearTotals.grossMarginPercent | pbPercentage}}</td>
+                <td>{{division.lastYearTotals.netMarginPercent | pbPercentage}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-repeat="department in division.children">
+            <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+                <tbody>
+                <tr class="group-row">
+                    <td colspan="11" class="group-title-cell"><h5 class="indent-2">{{department.name | uppercase }}</h5></td>
+                    <td class="quantity">{{department.thisYearTotals.quantity}}</td>
+                    <td>{{department.thisYearTotals.grossValue | pbCurrency }}</td>
+                    <td>{{department.thisYearTotals.netValue | pbCurrency }}</td>
+                    <td>{{department.thisYearTotals.grossMarginValue | pbCurrency }}</td>
+                    <td>{{department.thisYearTotals.netMarginValue | pbCurrency }}</td>
+                    <td>{{department.thisYearTotals.grossMarginPercent | pbPercentage }}</td>
+                    <td>{{department.thisYearTotals.netMarginPercent | pbPercentage}}</td>
+                    <td class="quantity">{{department.lastYearTotals.quantity}}</td>
+                    <td>{{department.lastYearTotals.grossValue | pbCurrency }}</td>
+                    <td>{{department.lastYearTotals.netValue | pbCurrency }}</td>
+                    <td>{{department.lastYearTotals.grossMarginValue | pbCurrency }}</td>
+                    <td>{{department.lastYearTotals.netMarginValue | pbCurrency }}</td>
+                    <td>{{department.lastYearTotals.grossMarginPercent | pbPercentage}}</td>
+                    <td>{{department.lastYearTotals.netMarginPercent | pbPercentage}}</td>
+                </tr>
+                </tbody>
+            </table>
+            <table class="table table-striped table-bordered table-hover active pb-table" ng-repeat="cls in department.children">
+                <tbody>
+                <tr class="group-row">
+                    <td colspan="11" class="group-title-cell"><h5 class="indent-3">{{cls.name | uppercase }}</h5></td>
+                    <td class="quantity">{{cls.thisYearTotals.quantity}}</td>
+                    <td>{{cls.thisYearTotals.grossValue | pbCurrency }}</td>
+                    <td>{{cls.thisYearTotals.netValue | pbCurrency }}</td>
+                    <td>{{cls.thisYearTotals.grossMarginValue | pbCurrency }}</td>
+                    <td>{{cls.thisYearTotals.netMarginValue | pbCurrency }}</td>
+                    <td>{{cls.thisYearTotals.grossMarginPercent | pbPercentage }}</td>
+                    <td>{{cls.thisYearTotals.netMarginPercent | pbPercentage}}</td>
+                    <td class="quantity">{{cls.lastYearTotals.quantity}}</td>
+                    <td>{{cls.lastYearTotals.grossValue | pbCurrency }}</td>
+                    <td>{{cls.lastYearTotals.netValue | pbCurrency }}</td>
+                    <td>{{cls.lastYearTotals.grossMarginValue | pbCurrency }}</td>
+                    <td>{{cls.lastYearTotals.netMarginValue | pbCurrency }}</td>
+                    <td>{{cls.lastYearTotals.grossMarginPercent | pbPercentage}}</td>
+                    <td>{{cls.lastYearTotals.netMarginPercent | pbPercentage}}</td>
+                </tr>
+                <tr class="header-row">
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">Sku</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">Description</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">Brand</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(3)}">Product Tags</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(4)}">Stock On Hand</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(5)}">Stock On Order</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(6)}">Stock Requested</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(7)}">Cash Price</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(8)}">Regular Price</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(9)}">Promo Cash Price</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(10)}">Promo Regular Price</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(11)}" ng-hide="data.length > 1">Location</td>
+                    <td>Quantity</td>
+                    <td>Gross Value</td>
+                    <td>Net Value</td>
+                    <td>Gross Margin Value</td>
+                    <td>Net Margin Value</td>
+                    <td>Gross Margin %</td>
+                    <td>Net Margin %</td>
+                    <td>Last Years Quantity</td>
+                    <td>Last Years Gross Value</td>
+                    <td>Last Years Net Value</td>
+                    <td>Last Years Gross Margin Value</td>
+                    <td>Last Years Net Margin Value</td>
+                    <td>Last Years Gross Margin %</td>
+                    <td>Last Years Net Margin %</td>
+                </tr>
+                <tr ng-repeat="detail in cls.items">
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">{{detail.sku}}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}" style="white-space: normal;">{{detail.longDescription}}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">{{detail.brandName}}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(3)}">{{detail.tags}}</td>
+                    <td class="hidable-col quantity" ng-style="{'display': isDisplayed(4)}">{{detail.stockOnHand || 0 }}</td>
+                    <td class="hidable-col quantity" ng-style="{'display': isDisplayed(5)}">{{detail.stockOnOrder || 0 }}</td>
+                    <td class="hidable-col quantity" ng-style="{'display': isDisplayed(6)}">{{detail.stockRequested || 0 }}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(7)}">{{detail.currentCashPrice | pbCurrency }}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(8)}">{{detail.currentRegularPrice | pbCurrency }}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(9)}">{{detail.promotionalCashPrice | pbCurrency }}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(10)}">{{detail.promotionalRegularPrice | pbCurrency }}</td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(11)}" ng-hide="data.length> 1">{{detail.locationName}}</td>
+                    <td class="quantity">{{detail.thisYear.quantity}}</td>
+                    <td>{{detail.thisYear.grossValue | pbCurrency }}</td>
+                    <td>{{detail.thisYear.netValue | pbCurrency }}</td>
+                    <td>{{detail.thisYear.grossMarginValue | pbCurrency }}</td>
+                    <td>{{detail.thisYear.netMarginValue | pbCurrency }}</td>
+                    <td>{{detail.thisYear.grossMarginPercent | pbPercentage }}</td>
+                    <td>{{detail.thisYear.netMarginPercent | pbPercentage}}</td>
+                    <td class="quantity">{{detail.lastYear.quantity}}</td>
+                    <td>{{detail.lastYear.grossValue | pbCurrency }}</td>
+                    <td>{{detail.lastYear.netValue | pbCurrency }}</td>
+                    <td>{{detail.lastYear.grossMarginValue | pbCurrency }}</td>
+                    <td>{{detail.lastYear.netMarginValue | pbCurrency }}</td>
+                    <td>{{detail.lastYear.grossMarginPercent | pbPercentage}}</td>
+                    <td>{{detail.lastYear.netMarginPercent | pbPercentage}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

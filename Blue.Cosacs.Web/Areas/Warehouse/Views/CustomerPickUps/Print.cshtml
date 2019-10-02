@@ -1,0 +1,128 @@
+@{
+    ViewBag.Title = "Customer Pick Up";
+}
+
+@Html.Partial("Legend")
+<div id="load" data-module="warehouse/customerPickUps" data-default-branch='@ViewBag.DefaultBranch'>
+    <div class="section">Search</div>
+    <div class="search">
+        <form class="form-horizontal">
+            <div class="form-group criterion">
+                <label class="col col-lg-2 control-label">Delivery Branch:</label>
+                <div class="col col-lg-3">
+                    @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.WarehouseAllBranches))
+                    {
+                        <select id="deliveryBranch" name="deliveryBranch" class="pickList" data-pick-list-id="BRANCH" data-placeholder="Select a Delivery Branch" style="width: 100%"></select>
+                    }
+                    else
+                    {
+                        <select id="deliveryBranch" name="deliveryBranch" class="pickList" data-pick-list-id="BRANCH" data-placeholder="Select a Delivery Branch" style="width: 100%" disabled="disabled"></select>
+                    }
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="items-container">
+        <div id="items" class="data booking warehouseModule"></div>
+    </div>
+
+    <script id="itemTemplate" type="text/template">
+        <div class="panel panel-default booking" data-id=<%- BookingId %>>
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <span class="resultType">Shipment</span>
+                        <a class="Booking-Id refLink" href="@Url.Action("detail", "Bookings")/<%- BookingId %>">#<%- BookingId %></a>
+                    </div>
+                    <div class="col-lg-6">
+                        <span class="itemQuantity" title="Quantity"><%- CurrentQuantity %></span>
+                        <span> x </span>
+                        <span class="ItemDescription" title="Item Description"><%- ProductDescription || 'item(s)' %> </span>
+                        <span title="Damaged" class="<%- Damaged === true ? "halflings warning-sign" : "" %>"></span>
+                        <span title="Assembly Required" class="<%- AssemblyReq === true ? "glyphicons wrench" : ""%>"></span>
+                    </div>
+                    <div class="col-lg-4 text-right">
+                        <% if (typeof OriginalId  !== "undefined" && OriginalId !== null) { %>
+                            <div title="Linked to Booking <%= OriginalId %>" class="halflings link"></div>
+                        <% } %>
+                        <% if (typeof Express  !== "undefined" && Express) { %>
+                            <div title="Express Delivery" class="glyphicons step_forward"></div>
+                        <% } %>
+                        <span class="DeliveryCollection">
+                            <% var d = DeliveryOrCollectionDate %>
+                            <span class="DelColDesc title"><%= DeliveryOrCollectionDescription %></span> for 
+                            <span class="weekday"><%- moment(d).format("ddd").toUpperCase() %></span>
+                            <span class="day"><%- moment(d).format("DD").toUpperCase() %></span>
+                            <span class="month"><%- moment(d).format("MMM").toUpperCase() %></span>
+                            <span class="month"><%- moment(d).format("YYYY").toUpperCase() %></span>
+                            <span class="time"><%- moment(d).format("A") %></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    @Html.Partial("BookingTemplateBootstrap")
+                    <% if(ScheduleQuantity == null) { %>
+                        <div class="col-lg-2 pull-right">
+                            @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.PrintCustomerPickupNote))
+                            {
+                                <button class="btn btn-default btn-block printPickUp single-click" id="printPickUp#<%- BookingId %>">
+                                    <%= (DeliveryOrCollection == 'D' || DeliveryOrCollection == 'R') ? "Print Pick Up Note": "Print Return Note" %>
+                                </button>
+                            }
+                        </div>
+                    <% } %>
+
+                    <% if(DeliveryConfirmedBy == null && ScheduleQuantity != null) { %>
+                        <div class="col-lg-2 pull-right">
+                            @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.CustomerPickupNotify))
+                            {
+                                <button class="confirmPickUp btn btn-primary btn-block single-click" id="confirmPickUp#<%- BookingId %>">Confirm</button>
+                            }
+                            @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.ReprintCustomerPickupNote))
+                            {
+                                // <a href="../CustomerPickUps/PrintPickUpNote/<%- OrderId %>" class="btn btn-default btn-block external-link reprintButton" target="_blank">Re-print</a>
+                                <button class="btn single-click btn-default btn-block external-link reprintButton">Re-print</button>
+                            }
+                        </div>
+                    <% } %>
+
+                    <% if(ScheduleQuantity != null) { %>
+                        @Html.Partial("BookingTemplateRejectBootstrap")
+                    <% } else { %>
+                        <div class="col-lg-2"></div>
+                    <% } %>
+
+                    @if (((bool?)ViewBag.ShowStatus ?? false))
+                    {
+                        <div class="col-lg-1 text-right pull-right">
+                            <div class="statusfield"></div>
+                        </div>
+                    }
+                </div>
+
+                @if (!((bool?)ViewBag.IsSummary ?? false))
+                {
+                    <div class="row branch">
+                        <div class="col-lg-2"><b>Stock Branch</b></div>
+                        <% if (StockBranch !== DeliveryBranch) { %>
+                            <div class="branchNo lead col-lg-10"><span class="stockbranch"><%- StockBranch %></span></div>
+                        <% } else { %>
+                            <div class="text-muted col-lg-10"><span class="delbranch">Current</span></div>
+                        <% } %>
+                    </div>
+                }
+            </div>
+            <div class="panel-footer">
+                <%- Comment || '' %>
+            </div>
+        </div>
+    </script>
+
+    <script id="itemTemplateEmpty" type="text/template">
+        <div class="empty text-center">There are no Customer Pick Ups.</div>
+    </script>
+
+</div>

@@ -1,0 +1,166 @@
+@model LocationModel
+@{
+    if (Model == null)
+    {
+        ViewBag.Title = "Create Location";
+    }
+    else
+    {
+        ViewBag.Title = "Location - " + Model.Name;
+    }
+    var routes = new
+    {
+        save = Url.Action("Save"),
+        route = Url.RouteUrl(new {Controller="Locations", Area="Merchandising"})
+    };
+}
+
+<div data-module="merchandising/location/init" ng-controller="LocationCtrl" ng-init="location=@Html.RawJson(Model);routes=@Html.RawJson(routes)" ng-cloak>
+
+    <ng-form name="locationForm" class="form-horizontal" novalidate>
+        <div class="col-lg-10">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="row">
+                        
+                        <div class="form-group" ng-class="{'has-error': locationForm.locationId.$invalid}">
+                            <label for="locationId" class="col-lg-4 control-label">
+                                Location Id
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="locationId" ng-model="location.locationId" maxlength="100" ng-required="true" ng-disabled="readOnly" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" ng-class="{'has-error': locationForm.salesId.$invalid}">
+                            <label for="salesId" class="col-lg-4 control-label">
+                                Sales System Id
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="salesId" ng-model="location.salesId" maxlength="100" ng-required="true" ng-disabled="readOnly" />
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{'has-error': locationForm.name.$invalid}">
+                            <label for="name" class="col-lg-4 control-label">
+                                Name
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="name" ng-model="location.name" maxlength="100" ng-required="true" ng-disabled="readOnly" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" ng-class="{'has-error': !location.fascia}">
+                            <label for="fascia" class="control-label col-lg-4">Fascia</label>
+                            <div class="col-lg-8">
+                                <list name="fascia" ng-model="location.fascia" scope="options.fascia" placeholder="Select a Fascia" ng-disabled="readOnly"></list>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{'has-error': !location.storeType}">
+                            <label for="storeType" class="control-label col-lg-4">Store Type</label>
+                            <div class="col-lg-8">
+                                <list name="storeType" ng-model="location.storeType" scope="options.storeType" placeholder="Select a Store Type" ng-disabled="readOnly"></list>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="warehouse" class="col-lg-4 control-label">
+                                Warehouse
+                            </label>
+                            <div class="col-lg-8">
+                                <div class="checkbox">
+                                    <input type="checkbox" name="warehouse" ng-model="location.warehouse" ng-disabled="readOnly"/>
+                                </div>
+                            </div>
+                        </div>
+                        <!--all locations can be virtual, not just warehouse-->
+                        <div class="form-group">
+                            <label for="virtualWarehouse" class="col-lg-4 control-label">
+                                Virtual
+                            </label>
+                            <div class="col-lg-8">
+                                <div class="checkbox">
+                                    <input type="checkbox" name="virtualWarehouse" ng-model="location.virtualWarehouse" ng-disabled="readOnly"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="active" class="col-lg-4 control-label">
+                                Active
+                            </label>
+                            <div class="col-lg-8">
+                                <div class="checkbox">
+                                    <input type="checkbox" name="active" ng-model="location.active" ng-disabled="readOnly" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" ng-class="{'has-error': locationForm.addressLine1.$invalid}">
+                            <label for="addressLine1" class="col-lg-4 control-label">
+                                Address Line 1
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="addressLine1" ng-model="location.addressLine1" maxlength="100" ng-required="true" ng-disabled="readOnly" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" ng-class="{'has-error': locationForm.addressLine2.$invalid}">
+                            <label for="addressLine2" class="col-lg-4 control-label">
+                                Address Line 2
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="addressLine2" ng-model="location.addressLine2" maxlength="100" ng-disabled="readOnly" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" ng-class="{'has-error': locationForm.city.$invalid}">
+                            <label for="city" class="col-lg-4 control-label">
+                                City
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="city" ng-model="location.city" maxlength="100" ng-required="true" ng-disabled="readOnly" />
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" ng-class="{'has-error': locationForm.postCode.$invalid}">
+                            <label for="postCode" class="col-lg-4 control-label">
+                                Post Code
+                            </label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" name="postCode" ng-model="location.postCode" maxlength="10" ng-disabled="readOnly" />
+                            </div>
+                        </div>
+                        
+                        <div class="section">Contacts</div>
+                        <div class="form-group" ng-repeat="contact in location.contacts">
+                            <div class="col-lg-1">
+                                <div class="control-label">
+                                    <a href="#" ng-click="removeContact(contact)" title="Remove" ng-class="{hide: $first}" class="halflings trash" ng-hide="readOnly"></a>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <list ng-model="contact.key" scope="options.contactType" placeholder="Select Type" ng-disabled="readOnly" ng-change="updateContact(contact)"></list>
+                            </div>
+                            <div class="col-lg-6">
+                                <input class="form-control" type="text" ng-disabled="!contact.key" ng-model="contact.value" maxlength="100" ng-disabled="readOnly">
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="row">
+                                    <a href="#" ng-click="addContact()" title="Add" ng-hide="!$last" class="halflings plus" ng-hide="readOnly"></a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" ng-click="save()" class="btn btn-primary" ng-disabled="locationForm.$invalid" ng-hide="readOnly">Save</button>
+                        <p>&nbsp;</p>
+                        <p>&nbsp;</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-form>
+
+
+</div>

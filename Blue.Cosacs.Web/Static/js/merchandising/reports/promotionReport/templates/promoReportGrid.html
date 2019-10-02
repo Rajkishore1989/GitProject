@@ -1,0 +1,34 @@
+<table class="table table-striped table-bordered table-hover table-responsive active pb-table pb-search">
+    <thead>
+        <tr>
+            <th ng-style="{'display': isDisplayed(0)}" class="col-sm hidable-col">Location</th>
+            <th ng-style="{'display': isDisplayed(1)}" class="col-sm hidable-col">SKU</th>
+            <th ng-style="{'display': isDisplayed(2)}" class="col-sm hidable-col">Item Description</th>
+            <th ng-style="{'display': isDisplayed(3)}" class="col-sm quantity hidable-col">Quantity Sold</th>
+            <th ng-style="{'display': isDisplayed(4)}" class="col-sm currency hidable-col">AWC</th>
+            <th ng-style="{'display': isDisplayed(5)}" class="col-sm hidable-col">Promotion</th>
+            <th ng-style="{'display': isDisplayed(6)}" class="col-sm currency hidable-col">Promotional Cash Price</th>
+            <th ng-style="{'display': isDisplayed(7)}" class="col-sm currency hidable-col">Total Promo Cash Value</th>
+            <th ng-style="{'display': isDisplayed(8)}" class="col-sm currency hidable-col">Promotional Margin</th>
+            <th ng-style="{'display': isDisplayed(9)}" class="col-sm currency hidable-col">Total Promo Margin Value</th>
+            <th ng-style="{'display': isDisplayed(10)}" class="col-sm currency hidable-col">Cash Price</th>
+            <th ng-style="{'display': isDisplayed(11)}" class="col-sm currency hidable-col">Cash Margin</th>
+        </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="x in data">
+        <td ng-style="{'display': isDisplayed(0)}" class="hidable-col"><a href="{{resolve('Merchandising/Locations/Detail/' + x.locationId)}}">{{x.locationName}}</a></td>
+        <td ng-style="{'display': isDisplayed(1)}" class="hidable-col"><a href="{{resolve('Merchandising/Products/Details/' + x.productId)}}">{{x.sku}}</a></td>
+        <td ng-style="{'display': isDisplayed(2)}" class="hidable-col">{{x.longDescription}}</td>
+        <td ng-style="{'display': isDisplayed(3)}" class="quantity hidable-col">{{x.quantity}}</td>
+        <td ng-style="{'display': isDisplayed(4)}" class="currency hidable-col">{{x.averageWeightedCost | pbCurrency}}</td>
+        <td ng-style="{'display': isDisplayed(5)}" class="currency hidable-col"><a href="{{resolve('Merchandising/Promotion/Detail/' + x.promotionId)}}">{{x.promotionName}}</a></td>
+        <td ng-style="{'display': isDisplayed(6)}" class="currency hidable-col">{{x.price | pbCurrency}}</td>
+        <td ng-style="{'display': isDisplayed(7)}" class="currency hidable-col">{{x.netTotal | pbCurrency}}</td>
+        <td ng-style="{'display': isDisplayed(8)}" class="currency hidable-col">{{x.promotionalMargin | pbPercentage}}</td>
+        <td ng-style="{'display': isDisplayed(9)}" class="currency hidable-col">{{x.promotionalTotal | pbCurrency}}</td>
+        <td ng-style="{'display': isDisplayed(10)}" class="currency hidable-col">{{x.cashPrice | pbCurrency}}</td>
+        <td ng-style="{'display': isDisplayed(11)}" class="currency hidable-col">{{x.cashMargin | pbPercentage}}</td>
+    </tr>
+    </tbody>
+</table>

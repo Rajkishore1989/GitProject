@@ -1,0 +1,52 @@
+<div>
+    <div class="row buffer top">
+        <div class="col-lg-3">
+            <div class="form-group" ng-class="{'has-error': !receipt.locationId}">
+                <label for="location">Receiving Location</label>
+                <list name="location" ng-model="receipt.locationId" ng-required ng-change="updateLocation()" scope="locations" placeholder="Select a Location" ng-disabled="locationsLocked()"></list>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="form-group" ng-class="{'has-error': receiptForm.dateReceived.$invalid}">
+                <label for="dateReceived">Date Received</label>
+                <input class="form-control dateReceived" required ng-required="isCreateMode()" type="date" name="dateReceived" max="{{today}}" placeholder="Select Date" ng-model="receipt.dateReceived" max="{{today}}">
+            </div>
+        </div>
+        <div class="col-lg-3">
+            <div class="form-group" ng-class="{'has-error': receiptForm.vendorDeliveryNumber.$invalid}">
+                <label for="vendorDeliveryNumber">Vendor Delivery Number</label>
+                <input class="form-control" type="text" name="vendorDeliveryNumber" maxlength="100" ng-model="receipt.vendorDeliveryNumber" ng-required="!receipt.vendorInvoiceNumber">
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+    
+        <div class="col-lg-3">
+            <div class="form-group" ng-class="{'has-error': !receipt.vendorId}">
+                <label for="vendor">Vendor</label>
+                <list name="vendor" ng-model="receipt.vendorId" ng-required ng-change="updateVendor()" scope="vendors" placeholder="Select a Vendor" ng-disabled="vendorsLocked()"></list>
+            
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="form-group" ng-class="{'has-error': receiptForm.receivedById.$invalid}">
+                <label for="receivedById">Received By</label>
+                <select name="receivedById" ng-model="receipt.receivedById" required class="form-control" ng-required="true" ng-disabled="!canChangeReceivedBy()"
+                        ng-options="u.id as u.fullName for u in users">
+                    <option value="">Select a user</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="col-lg-3">
+            <div class="form-group" ng-class="{'has-error': receiptForm.vendorInvoiceNumber.$invalid}">
+                <label for="vendorInvoiceNumber">Vendor Invoice Number</label>
+                <!--This is intentional that invoice number/delivery number are dependent on one another-->
+                <input class="form-control" type="text" name="vendorInvoiceNumber" maxlength="100" ng-model="receipt.vendorInvoiceNumber" ng-required="!receipt.vendorDeliveryNumber">
+            </div>
+        </div>
+    </div>
+</div>

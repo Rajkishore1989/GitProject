@@ -1,0 +1,22 @@
+<div>
+    <div ng-repeat="level in options" class="row">
+        <div class="col-md-12">
+            <ng-form name="hierarchyItemForm">
+                <div class="form-group">
+                    <label for="hierarchyList" class="control-label col-md-4">{{level.key|inflector:humanize}}</label>
+                    <div class="col-md-8">
+                        <p for="hierarchyList" class="form-control-static" ng-hide="editable()">{{ selections[level.key] || 'none' }}</p>
+                        <div id="hierarchy-{{$index}}" ng-show="editable()">
+                            <list name="hierarchyList"
+                                  id="hierarchy-{{$id}}"
+                                  ng-model="selections[level.key]"
+                                  scope="options[$index].value"
+                                  ng-change="callback({ tag: selections[level.key], level: level.key, hier: selections, id:'hierarchy-{{$index}}'})"
+                                  placeholder="{{placeholder || 'Select a tag'}}"></list>
+                        </div>
+                    </div>
+                </div>
+            </ng-form>
+         </div>
+    </div>
+</div>

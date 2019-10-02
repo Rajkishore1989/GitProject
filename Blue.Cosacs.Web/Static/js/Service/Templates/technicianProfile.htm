@@ -1,0 +1,55 @@
+﻿<div id="techSave" class="glyphicons floppy_disk <%= edit ? 'click' : 'ban' %> pull-right glyph-button" title="Save Profile"></div>
+<div class="form-horizontal">
+    <div class="section">Technician Profile</div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label class="checkbox-inline">
+                <input type="radio" name="type" <% if (Internal) { %> checked="true" <% }%> value="true"> Internal
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" name="type" <% if (!Internal) { %> checked="true" <% }%> value="false"> External
+            </label>
+        </div>
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td>
+                        <div>Start Time</div>
+                    </td>
+                    <td>
+                        <input class="hour picklist" type="hidden" id="startHour" />
+                    </td>
+                    <td>:</td>
+                    <td>
+                        <input class="minute picklist" type="hidden" id="startMinute" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>End Time</td>
+                    <td>
+                        <input class="hour picklist" type="hidden" id="endHour" />
+                    </td>
+                    <td>:</td>
+                    <td>
+                        <input class="minute picklist" type="hidden" id="endMinute" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="form-group">
+            Number of slots <span class=""> <input id="slots" type="number" min="1" max="50" class="form-control number" /></span>
+            <!--Gurpreet - CR2018-010 - 31/10/18 - Setting of max no. of Jobs & Validation with allocated jobs for a technician.-->
+            Max Jobs <span class=""> <input id="maxjobs" type="number" min="1" max="50" class="form-control number" /></span>
+            <!--CR2018-010 Changes End-->
+        </div>
+        <div id="hourSummary" class="form-control-static">&nbsp;</div>
+    </div>
+</div>
+<div class="col-lg-6">
+    <div id="zoneSelector">
+        <input id="zoneAdd" type="hidden" class="picklist" placeholder="Select to add a category" />
+    </div>
+    <div id="zones"></div>
+</div>
+

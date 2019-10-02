@@ -1,0 +1,52 @@
+@model string
+@{
+    ViewBag.Title = "Non Warrantable Items Maintenance";
+}
+<div data-module="merchandising/nonWarrantableItems/init"
+     ng-controller="nonWarrantableItemsCtrl">
+    <div class="section">Add new non warrantable item</div>
+    <div class="row">
+        <div class="col-lg-3" ng-class="{'has-error': productForm.sku.$invalid}">
+            <input ui-select2="productSearchSetup()"  name="sku" ng-model="product.searchResult" 
+                   placeholder="Please select a sku" ng-change="processSearchResult(product.searchResult)" style="width: 100%" />
+        </div>
+        <div class="col-lg-1">
+            <button class="btn btn-default" ng-click="addProduct()">Add SKU</button>
+        </div>
+    </div>
+<div class="row">&nbsp;</div>
+ <div class="row">                   
+        <table class="table table-striped table-bordered table-hover table-responsive active" style=cursor:pointer>
+            <thead>
+            <tr>
+                    <th></th>
+                    <th>SKU</th>  
+                    <th>Description</th>                                  
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="product in nonWarrantableItems.page">
+                    <td class="text-right">
+                            <span class="glyphicons glyph-btn bin" ng-click="deleteProduct(product)"></span>
+                    </td>
+                   <td>
+                            {{product.sku}}
+                    </td>
+                    <td>
+                            {{product.longDescription}}
+                    </td>
+            </tr>
+            </tbody>
+        </table>
+        <div ng-show="!nonWarrantableItems">
+                <p> No results found </p>
+        </div>
+
+        <pagination
+                num-pages="pageCount"
+                page-size="pageSize"
+                current-page="pageIndex"
+                on-select-page="setPage(page)">
+        </pagination>
+</div>
+</div>

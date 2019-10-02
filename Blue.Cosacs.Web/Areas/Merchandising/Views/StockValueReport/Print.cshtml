@@ -1,0 +1,230 @@
+﻿@model object
+
+@{
+    ViewBag.Title = "Stock Valuation";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+@section Head
+{
+    <style type="text/css">
+        
+        table {
+            margin: 10px !important;
+        }
+
+         td {
+             border: 1px solid #333 !important;
+             padding: 2px !important;
+             text-align: right;
+         }
+
+         td.clear {
+             border: none !important;
+         }
+
+         tbody {
+             page-break-inside: avoid !important;
+         }
+        
+        tbody::before {
+            content: none !important;
+            display: none !important;
+            height: 0 !important;
+        }
+
+        .buffer { padding: 10px; }
+
+        .level1 {
+            font-size: 1.8em;
+            text-transform: uppercase;
+        }
+
+        .level2 {
+            font-size: 1.6em;
+            text-transform: uppercase;
+        }
+
+        .level3 {
+            font-size: 1.4em;
+        }
+
+         .level4 {
+            font-size: 1.0em;
+        }
+    </style>
+}
+<div data-module="merchandising/reports/stockValue/init" ng-controller="stockValuePrintCtrl" ng-init="result=@Html.RawJson(Model)" class="ng-scope" ng-cloak>
+
+    <div class="buffer header-info" ng-show="vm.query">
+        <h2>@ViewBag.Title</h2>
+        <table>
+            <tr>
+                <td>
+                    <label for="perfType">Period: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="perfType">{{vm.query.periodEndDate | pbDate }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="location">Location: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="location">{{vm.query.location}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fascia">Fascia: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="fascia">{{vm.query.fascia}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="groupByLocation">Grouping: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="groupByLocation">{{vm.query.isGrouped}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="divname">Division: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="divname">{{vm.query.divisionName}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="depname">Department: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="depname">{{vm.query.departmentName}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="classname">Class: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="classname">{{vm.query.className}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="buffer" ng-repeat="location in vm.results">
+        <div class="level1">
+            {{location.location}} - {{location.fascia}}
+        </div>
+        <table ng-repeat="item in location.items" class="noBreak separate">
+            <thead>
+                <tr class="level2">
+                    <td class="clear"></td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                        Stock On Hand
+                    </td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                        Stock On Hand Value
+                    </td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                        Stock On Hand Sales Value
+                    </td>
+                </tr>
+            </thead>
+            <tbody class="noBreak">
+                <tr class="level2">
+                    <td>
+                        {{item.level}}
+                    </td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                        {{item.stockOnHandQuantity}}
+                    </td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                        {{item.stockOnHandValue | pbCurrency }}
+                    </td>
+                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                        {{item.stockOnHandSalesValue | pbCurrency }}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <table class="separate noBreak">
+                            <thead>
+                                <tr class="level3">
+                                    <td class="clear"></td>
+                                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                        Stock On Hand
+                                    </td>
+                                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                        Stock On Hand Value
+                                    </td>
+                                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                        Stock On Hand Sales Value
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody ng-repeat="child in item.children" class="noBreak">
+                                <tr class="level3">
+                                    <td>
+                                        {{child.level}}
+                                    </td>
+                                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                        {{child.stockOnHandQuantity}}
+                                    </td>
+                                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                        {{child.stockOnHandValue | pbCurrency }}
+                                    </td>
+                                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                        {{child.stockOnHandSalesValue | pbCurrency }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <table class="separate noBreak">
+                                            <thead>
+                                                <tr class="level4">
+                                                    <td class="clear"></td>
+                                                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                                        Stock On Hand
+                                                    </td>
+                                                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                                        Stock On Hand Value
+                                                    </td>
+                                                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                                        Stock On Hand Sales Value
+                                                    </td>
+                                                </tr>
+                                            </thead>
+                                            <tbody ng-repeat="grandchild in child.children" class="noBreak">
+                                                <tr class="level4">
+                                                    <td>
+                                                        {{grandchild.level}}
+                                                    </td>
+                                                    <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                                                        {{grandchild.stockOnHandQuantity}}
+                                                    </td>
+                                                    <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">
+                                                        {{grandchild.stockOnHandValue | pbCurrency }}
+                                                    </td>
+                                                    <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">
+                                                        {{grandchild.stockOnHandSalesValue | pbCurrency }}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+</div>

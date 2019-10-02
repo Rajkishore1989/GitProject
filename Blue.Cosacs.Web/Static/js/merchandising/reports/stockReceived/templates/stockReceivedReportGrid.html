@@ -1,0 +1,51 @@
+<table ng-repeat="(vendorName, vendor) in data" class="table table-striped table-bordered table-hover table-responsive active pb-table" ng-hide="!data">
+    <thead>
+        <tr>
+            <th colspan="15"><h4>{{vendorName}}</h4></th>
+            <th class="currency">{{utils.vendorTotal(vendor) | pbCurrency}}</th>
+        </tr>
+    </thead>
+    <tbody ng-repeat="location in vendor">
+        <tr>
+            <td colspan="15"><h4>{{location[0].location}}</h4></td>
+            <td class="currency">{{utils.locationTotal(location) | pbCurrency}}</td>
+        </tr>
+        <tr>
+            <th ng-style="{'display': isDisplayed(0)}" class="col-sm hidable-col">Division</th>
+            <th ng-style="{'display': isDisplayed(1)}" class="col-sm hidable-col">Department</th>
+            <th ng-style="{'display': isDisplayed(2)}" class="col-sm hidable-col">Class</th>
+            <th ng-style="{'display': isDisplayed(3)}" class="col-sm hidable-col">Sku</th>
+            <th ng-style="{'display': isDisplayed(4)}" class="col-sm hidable-col">Description</th>
+            <th ng-style="{'display': isDisplayed(5)}" class="col-sm hidable-col">Location</th>
+            <th ng-style="{'display': isDisplayed(6)}" class="col-sm hidable-col">Vendor</th>
+            <th ng-style="{'display': isDisplayed(7)}" class="col-sm hidable-col date">Date Received</th>
+            <th ng-style="{'display': isDisplayed(8)}" class="col-sm hidable-col date">Date Last Received</th>
+            <th ng-style="{'display': isDisplayed(9)}" class="col-sm hidable-col">Qty Received</th>
+            <th ng-style="{'display': isDisplayed(10)}" class="col-sm hidable-col quantity">Landed Cost</th>
+            <th ng-style="{'display': isDisplayed(11)}" class="col-sm hidable-col quantity">Extended Landed Cost</th>
+            <th ng-style="{'display': isDisplayed(12)}" class="col-sm hidable-col">Reference Number</th>
+            <th ng-style="{'display': isDisplayed(13)}" class="col-sm hidable-col">Stock On Hand</th>
+            <th ng-style="{'display': isDisplayed(14)}" class="col-sm hidable-col">Purchase Order</th>
+            <th ng-style="{'display': isDisplayed(15)}" class="col-sm hidable-col quantity">Stock On Order</th>
+        </tr>
+        <tr ng-repeat="m in location">
+            <td ng-style="{'display': isDisplayed(0)}" class="hidable-col">{{m.division}}</td>
+            <td ng-style="{'display': isDisplayed(1)}" class="hidable-col">{{m.department}}</td>
+            <td ng-style="{'display': isDisplayed(2)}" class="hidable-col">{{m.class}}</td>
+            <td ng-style="{'display': isDisplayed(3)}" class="hidable-col"><a href="{{resolve('Merchandising/Products/Details/' + m.productId)}}">#{{m.sku}}</a></td>
+            <td ng-style="{'display': isDisplayed(4)}" class="hidable-col">{{m.description}}</td>
+            <td ng-style="{'display': isDisplayed(5)}" class="hidable-col"><a href="{{resolve('Merchandising/Locations/Detail/' + m.locationId)}}">{{m.location}}</a></td>
+            <td ng-style="{'display': isDisplayed(6)}" class="hidable-col">{{m.vendor}}</td>
+            <td ng-style="{'display': isDisplayed(7)}" class="date hidable-col">{{m.date | pbDate : true}}</td>
+            <td ng-style="{'display': isDisplayed(8)}" class="date hidable-col">{{m.dateLastReceived | pbDate : true}}</td>
+            <td ng-style="{'display': isDisplayed(9)}" class="quantity hidable-col">{{m.quantity}}</td>
+            <td ng-style="{'display': isDisplayed(10)}" class="currency hidable-col">{{m.lastLandedCost | pbCurrency}}</td>
+            <td ng-style="{'display': isDisplayed(11)}" class="currency hidable-col">{{m.extendedLandedCost | pbCurrency}}</td>
+            <td ng-style="{'display': isDisplayed(12)}" class="hidable-col"><a href="{{utils.referenceLink(m.referenceNumberCsl)}}">{{m.referenceNumberCsl.label}}#{{m.referenceNumberCsl.id}}</a></td>
+            <td ng-style="{'display': isDisplayed(13)}" class="quantity hidable-col">{{m.stockOnHand}}</td>
+            <td ng-style="{'display': isDisplayed(14)}" class="hidable-col"><a href="{{resolve('Merchandising/Purchase/Detail/' + m.purchaseOrderId)}}">PO#{{m.purchaseOrderId}}</a></td>
+            <td ng-style="{'display': isDisplayed(15)}" class="quantity hidable-col">{{m.pendingStock}}</td>
+        </tr>
+        <tr></tr>
+    </tbody>
+</table>

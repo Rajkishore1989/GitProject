@@ -1,0 +1,273 @@
+@model string
+@{ ViewBag.Title = "Warranty/Product Link"; }
+<div class="warrantyLink" data-module="warranty/linkController" data-view-link-permission="@ViewBag.viewLinkPermission"
+     data-edit-link-permission="@ViewBag.editLinkPermission" ng-controller="linkCtrl" ng-init="linkFilter='@Model'"
+     ng-cloak>
+    <div class="col col-lg-12" id="search">
+        <form class="form-horizontal">
+            <div class="section">Search</div>
+            <div class="form-group">
+                <label for="filterName" class="col col-lg-2 control-label">Name</label>
+                <div class="col col-lg-6">
+                    <input id="filterName" class="form-control" ng-model="filter.Name" ng-disabled="editing()"
+                           placeholder="Filter by Name" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="filterEffectiveDateStart" class="col col-lg-2 control-label">Effective Date</label>
+                <div class="col col-lg-3">
+                    <input id="filterEffectiveDateStart" ui-date="datePicker" ng-model="filter.EffectiveStartFrom"
+                           ng-disabled="editing()" class="date form-control" placeholder="From Effective Date" />
+                </div>
+                <div class="col col-lg-3">
+                    <input id="filterEffectiveDateEnd" ui-date="datePicker" ng-model="filter.EffectiveStartTo"
+                           ng-disabled="editing()" class="date form-control" placeholder="To Effective Date" />
+                </div>
+            </div>
+            <div class="actions">
+                <button type="reset" class="btn btn-default" id="clear" ng-click="clearFilter()" title="Clear Search">Clear</button>
+                <button type="submit" class="btn btn-primary" id="search" ng-click="search()" ng-disabled="editing()"
+                        title="Search for Warranty/Product Links">
+                    Search
+                </button>
+                <button type="button" class="btn btn-default" id="new" title="New Warranty/Product Link"
+                        ng-click="warrantyLevelAdd()" ng-show="hasEditLinkPermission">
+                    Add New
+                </button>
+            </div>
+
+        </form>
+    </div>
+    <p>&nbsp;</p>
+    <div class="col col-lg-12">
+        <div class="editorBox panel panel-default" ng-repeat="warrantyLevel in warrantyLevels"
+             ng-init="warrantyLevel.addProduct = false; warrantyLevel.addWarranty = false;">
+
+            <div class="panel-heading" ng-show="warrantyLevel.edit">
+                <h3 class="panel-title"><span ng-show="warrantyLevel.Id">Editing</span><span ng-show="!warrantyLevel.Id">Creating</span></h3>
+            </div>
+
+            <div class="panel-body">
+                <div class="form-horizontal">
+                    <div class="title form-group">
+                        <label class="col-lg-1 control-label">Name</label>
+                        <div class="col-lg-3" ng-class="{'has-error': warrantyLevel.Name.length <= 0 }">
+                            <input class="form-control" type="text" ng-model="warrantyLevel.Name" ng-show="warrantyLevel.edit" placeholder="Name" />
+                            <div ng-hide="warrantyLevel.edit" class="form-control-static">{{warrantyLevel.Name}}</div>
+                        </div>
+                        <label class="col-lg-2 control-label">Effective Date</label>
+                        <div class="col-lg-3" ng-class="{'has-error': !warrantyLevel.effectiveDate }">
+                            <input required ng-show="warrantyLevel.edit" readonly="true" ui-date="linkDatePicker" ng-model="warrantyLevel.effectiveDate"
+                                   placeholder="Effective Date" class="date form-control" />
+                            <div ng-hide="warrantyLevel.edit" class="form-control-static">{{warrantyLevel.effectiveDate | date:"dd MMM yyyy"}}</div>
+                        </div>
+                        <div class="col-lg-2 col-lg-offset-1 text-right">
+                            <span class="glyphicons glyph-btn floppy_save" title="Save Details" ng-show="warrantyLevel.edit && hasEditLinkPermission"
+                                  ng-class="{false:'disabled', true:'click'}[warrantyLevel.products.length > 0 && warrantyLevel.warranties.length > 0 && warrantyLevel.Name.length > 0 && warrantyLevel.effectiveDate]" ng-click="save(warrantyLevel)"></span>
+                            <span class="glyphicons bin glyph-btn click" title="Delete Link"
+                                  ng-show="hasEditLinkPermission && warrantyLevel.Id && !warrantyLevel.edit"
+                                  ng-click="deleteLink($index, warrantyLevel)"></span>
+                            <span class="glyphicons undo glyph-btn click" title="Stop Edit Details"
+                                  ng-show="hasEditLinkPermission && warrantyLevel.Id && warrantyLevel.edit"
+                                  ng-click="stopEdit($index, warrantyLevel)"></span>
+                            <span class="glyphicons undo glyph-btn click" title="Discard Details"
+                                  ng-show="hasEditLinkPermission && warrantyLevel.Id == null && warrantyLevel.edit"
+                                  ng-click="stopEdit($index, warrantyLevel)"></span>
+                            <span class="glyphicons glyph-btn pencil click" title="Edit Details"
+                                  ng-show="hasEditLinkPermission && !warrantyLevel.edit"
+                                  ng-click="checkEdit(warrantyLevel)"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">Products</div>
+                <table class="productTable table table-bordered table-striped">
+                    <tbody>
+                        <tr ng-repeat="productItem in warrantyLevel.products">
+                            <td class="text-center col col-lg-1" ng-show="warrantyLevel.edit">
+                                <span ng-click="productRemove($index, warrantyLevel)" title="Remove"
+                                      ng-show="hasEditLinkPermission && warrantyLevel.edit"
+                                      class="glyphicons bin click"></span>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col col-lg-6">
+                                        <hierarchy options="hierarchyOptions" selections="productItem.hierarchy" callback="saveHierarchySettings(tag, level, productItem)" editable="false" />
+                                    </div>
+                                    <div class="col col-lg-6">
+                                        <div class="row">&nbsp;</div>
+                                        <div class="col col-lg-6">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="control-label">Store Type</label>
+                                                    <span>{{productItem.StoreType && productItem.StoreType.text || "ALL"}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">&nbsp;</div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="control-label"> Ref Code</label>
+                                                    <span>{{productItem.RefCodeWarrantyLink && productItem.RefCodeWarrantyLink || "ALL"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-lg-6">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="control-label">Location</label>
+                                                    <span>{{productItem.StockBranchNameWarrantyLink && productItem.StockBranchNameWarrantyLink.text || "ALL"}}</span>
+                                                </div>
+                                            </div>
+                                            <div class="row">&nbsp;</div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="control-label">Item Number</label>
+                                                    <span>{{productItem.ItemNoWarrantyLink && productItem.ItemNoWarrantyLink || "ALL"}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot ng-show="hasEditLinkPermission">
+                        <tr ng-hide="(warrantyLevel.edit && warrantyLevel.addProduct) || !warrantyLevel.edit || !hasEditLinkPermission">
+                            <td class="action text-center">
+                                <span class="ui-widget click glyphicons action-new plus" href="#" title="New" ng-click="warrantyLevel.addProduct = !warrantyLevel.addProduct"></span>
+                            </td>
+                            <td colspan="7"></td>
+                        </tr>
+                        <tr ng-show="warrantyLevel.edit && warrantyLevel.addProduct && hasEditLinkPermission">
+                            <td ng-show="warrantyLevel.edit && hasEditLinkPermission">
+                                <div class="form-control-static text-center">
+                                    <span class="action click save glyph-btn glyphicons floppy_save text-danger" title="Save New" ng-click="productAdd(warrantyLevel)" title="Add"></span>
+                                    <span class="action click cancel glyph-btn glyphicons undo" title="Cancel" ng-click="cancelNewProduct(warrantyLevel)"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col col-lg-6">
+                                        <hierarchy options="hierarchyOptions" selections="newProduct.hierarchy" callback="saveHierarchySettings(tag, level, newProduct)" editable="true"/>
+                                    </div>
+                                    <div class="col col-lg-6">
+                                        <div class="row">&nbsp;</div>
+                                        <div class="col col-lg-6">
+                                            <div class="row" ng-show="warrantyLevel.edit && hasEditLinkPermission">
+                                                <div class="col-md-12">
+                                                    <label class="control-label">Store Type</label>
+                                                    <input class="picklist" ui-select2="product.branchTypes" ng-model="newProduct.StoreType" ng-change="matchProducts(warrantyLevel)" ui-reset placeholder="Select store type" ng-show="$last" />
+                                                </div>
+                                            </div>
+                                            <div class="row">&nbsp;</div>
+                                            <div class="row" ng-show="warrantyLevel.edit && hasEditLinkPermission" >
+                                                <div class="col-md-12">
+                                                    <label class="control-label">Ref Code</label>
+                                                    <input ng-model="newProduct.RefCodeWarrantyLink" ng-change="matchProducts(warrantyLevel)" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="col col-lg-6">
+                                            <div class="row" ng-show="warrantyLevel.edit && hasEditLinkPermission">
+                                                <div class="col-md-12">
+                                                    <label class="control-label">Location</label>
+                                                    <input class="picklist" ui-select2="product.branches" ng-model="newProduct.StockBranchNameWarrantyLink" ng-change="matchProducts(warrantyLevel)" ui-reset placeholder="Select branch" ng-show="$last" />
+                                                </div>
+                                            </div>
+                                            <div class="row">&nbsp;</div>
+                                            <div class="row" ng-show="warrantyLevel.edit && hasEditLinkPermission">
+                                                <div class="col-md-12">
+                                                    <label class="control-label">Item Number</label>
+                                                    <input ng-model="newProduct.ItemNoWarrantyLink" ng-change="matchProducts(warrantyLevel)" class="form-control" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tfoot>
+                </table>
+                <div class="section">Associated Warranties</div>
+                <div class="warrantyBox">
+                    <table class="table table-bordered table-striped" ng-init="predicate = ['Min', 'Max']; reverse = false; predictnum = 1">
+                        <thead>
+                            <tr>
+                                <th class="col-lg-1"></th>
+                                <th ng-click="predicate = ['WarrantyId.text']; reverse = !reverse; predictnum = 0" class="sortable col-lg-4">
+                                    <span>Warranty</span>
+                                    <span class="glyphicons click pull-right" ng-class="{true:'sort-by-attributes-alt', false:'sort-by-attributes'}[reverse]" title="Change sort order" ng-show="predictnum == 0"></span>
+                                </th>
+                                <th ng-click="predicate = ['Min', 'Max']; reverse = !reverse; predictnum = 1" class="sortable col-lg-3">
+                                    <span>Min</span>
+                                    <span class="glyphicons click pull-right" ng-class="{true:'sort-by-attributes-alt', false:'sort-by-attributes'}[reverse]" title="Change sort order" ng-show="predictnum == 1"></span>
+                                </th>
+                                <th ng-click="predicate = ['Max', 'Min']; reverse = !reverse; predictnum = 2" class="sortable col-lg-3">
+                                    <span>Max</span>
+                                    <span class="glyphicons click pull-right" ng-class="{true:'sort-by-attributes-alt', false:'sort-by-attributes'}[reverse]" title="Change sort order" ng-show="predictnum == 2"></span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="warranty in warrantyLevel.warranties | orderBy:predicate:reverse">
+
+                                <td class="text-center">
+                                    <span ng-click="warrantyRemove(warranty.$$hashKey, warrantyLevel)" title="Remove" ng-show="hasEditLinkPermission && warrantyLevel.edit" class="glyphicons bin click"></span>
+                                </td>
+
+                                <td>
+                                    <div class="form-group">
+                                        <div class="col-lg-10">
+                                            <a href="{{warrantyHref(warranty.WarrantyId.id)}}">{{warranty.WarrantyId.text}}</a>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <span class="label label-danger" ng-hide="!warranty.Deleted">Deleted</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-right">{{warranty.Min | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</td>
+                                <td class="text-right">{{warranty.Max | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot ng-show="hasEditLinkPermission">
+                            <tr ng-hide="(hasEditLinkPermission && warrantyLevel.edit && warrantyLevel.addWarranty) || !warrantyLevel.edit || !hasEditLinkPermission">
+                                <td class="action text-center">
+                                    <span class="ui-widget glyphicons click action-new plus" href="#" title="New" ng-click="warrantyLevel.addWarranty = !warrantyLevel.addWarranty" ng-show="hasEditLinkPermission"></span>
+                                </td>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr ng-show="warrantyLevel.edit && warrantyLevel.addWarranty && hasEditLinkPermission">
+                                <td ng-show="warrantyLevel.edit && hasEditLinkPermission">
+                                    <div class="form-control-static text-center">
+                                        <span class="action click save glyph-btn glyphicons floppy_save text-danger" title="Save New" ng-click="validateNewWarranty(warrantyLevel)" ng-class="{false:'disabled', true:'click'}[checkNewWarrantyEmpty()]" title="Add" ng-show="hasEditLinkPermission"></span>
+                                        <span class="action click cancel glyph-btn glyphicons undo" title="Cancel" ng-click="cancelNewWarranty(warrantyLevel)" ng-show="hasEditLinkPermission"></span>
+                                    </div>
+                                </td>
+                                <td ng-show="warrantyLevel.edit && hasEditLinkPermission">
+                                    <div ng-class="{'has-error': !newWarranty.WarrantyId}">
+                                        <input type='hidden' ui-select2="warrantySearchSetup()" ng-required ng-model="newWarranty.WarrantyId" class="picklist" />
+                                    </div>
+                                </td>
+                                <td ng-show="warrantyLevel.edit && hasEditLinkPermission">
+
+                                    <div ng-class="{'has-error': isWarrantyLimitInvalid(newWarranty.Min, newWarranty.Max)}">
+                                        <input class="form-control" type="number" ng-model="newWarranty.Min" min="0" required step="0.01" ng-class="{true:'', false:'ng-invalid'}[newWarranty.Min < newWarranty.Max]" />
+                                    </div>
+                                </td>
+                                <td ng-show="warrantyLevel.edit && hasEditLinkPermission">
+                                    <div ng-class="{'has-error': isWarrantyLimitInvalid(newWarranty.Max, newWarranty.Min)}">
+                                        <input class="form-control" type="number" ng-model="newWarranty.Max" min="0" required step="0.01" ng-class="{true:'', false:'ng-invalid'}[newWarranty.Min < newWarranty.Max]" />
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col col-lg-12">
+        <pagination num-pages="filter.PageCount" max-size="10" current-page="filter.PageIndex" on-select-page="selectPage(page)"></pagination>
+    </div>
+</div>

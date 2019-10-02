@@ -1,0 +1,9 @@
+﻿@model Blue.Cosacs.Warehouse.DriverCommission
+@using Blue.Cosacs.Web
+
+<tr data-id="@Model.Id" class="view">
+	<td>@Model.Id</td>
+	<td>@Model.CreatedOn.DateToUIShortString()</td>
+	<td>@Model.CreatedBy</td>
+	<td>@Html.ActionLink("Download", "Export", new { id = @Model.Id })</td>
+</tr>

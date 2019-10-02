@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Outstanding SRs Per Product Department Report";
+}
+<div data-module="report/OutstandingSRsPerProductCategory" ng-controller="OutstandingSRsPerProductCategory"
+    class="ng-scope report" ng-cloak>
+    <div class="section">
+        Parameters</div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group">
+            <label for="status" class="col col-lg-6 control-label">
+                {{ statusLabel }}
+            </label>
+            <div class="col col-lg-6" ng-class="{'has-error': !status}">
+                <list ng-model="status" scope="Status" placeholder="Select Status"></list>
+            </div>
+        </div>
+        <div class="col col-lg-6 form-group">
+            <label for="supplier" class="col col-lg-6 control-label">
+                {{ supplierLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <list ng-model="supplier" lookup="ServiceSupplier" placeholder="Please select a supplier"></list>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group" ng-class="{'has-error': !dateFrom }">
+            <label for="dateFrom" class="col col-lg-6 control-label">
+                {{ dateFromLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input ui-date="linkDatePicker" ng-model="dateFrom" placeholder="" class="date form-control" />
+            </div>
+        </div>
+        <div class="col col-lg-6 form-group" ng-class="{'has-error': !dateTo }">
+            <label for="dateTo" class="col col-lg-6 control-label">
+                {{ dateToLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input ui-date="linkDatePicker" ng-model="dateTo" placeholder="" class="date form-control" />
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group">
+            <label for="technician" class="col col-lg-6 control-label">
+                {{ technicianLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <list ng-model="technician" scope="Technicians" placeholder="Please select a Technician"></list>
+            </div>
+        </div>
+        <div class="col col-lg-6 form-group">
+            <label for="warrantyType" class="col col-lg-6 control-label">
+                {{ warrantyTypeLabel }}
+            </label>
+            <div class="col col-lg-6">
+                 <list ng-model="warrantyType" scope="WarrantyTypes" placeholder="Select Warranty Type"></list>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="actions">
+        <button id="buttonClear" class="clear btn btn-default" ng-click="clear()">
+            Clear</button>
+        <button id="buttonSearch" class="search btn btn-primary" ng-click="search()">
+            Run</button>
+        <button class="btn btn-default" ng-click="exportResults()">
+            Export</button>
+    </div>
+    <p class="searchrow" />
+    <div id="divResults" class="generic-report-results">
+        <table class="table table-striped table-bordered table-hover" ng-show="queryResults.length">
+            <thead>
+                <tr>
+                    <th class="text-center">
+                        Product Department
+                    </th>
+                    <th class="text-center">
+                        Days {{headerLbl}} 0-3
+                    </th>
+                    <th class="text-center">
+                        Days {{headerLbl}} 4-7
+                    </th>
+                    <th class="text-center">
+                        Days Days {{headerLbl}} 8-14
+                    </th>
+                    <th class="text-center">
+                        Days {{headerLbl}} 15+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in queryResults" class="text-center ng-scope">
+                    <td class="text-left">
+                        {{item.ProductCategory}}
+                    </td>
+                    <td ng-switch="item.DaysOutstandingBand01 > 0">
+                        <a class="refLink ng-binding" ng-href="../Service/Requests?q=&#123;%22query%22:%22{{item.ServiceRequestsBand01 }}%22&#125;"
+                            ng-switch-when="true">{{item.DaysOutstandingBand01}}</a> <span ng-switch-when="false">
+                                {{item.DaysOutstandingBand01}}</span>
+                    </td>
+                    <td ng-switch="item.DaysOutstandingBand02 > 0">
+                        <a class="refLink ng-binding" ng-href="../Service/Requests?q=&#123;%22query%22:%22{{item.ServiceRequestsBand02 }}%22&#125;"
+                            ng-switch-when="true">{{item.DaysOutstandingBand02}}</a> <span ng-switch-when="false">
+                                {{item.DaysOutstandingBand02}}</span>
+                    </td>
+                    <td ng-switch="item.DaysOutstandingBand03 > 0">
+                        <a class="refLink ng-binding" ng-href="../Service/Requests?q=&#123;%22query%22:%22{{item.ServiceRequestsBand03 }}%22&#125;"
+                            ng-switch-when="true">{{item.DaysOutstandingBand03}}</a> <span ng-switch-when="false">
+                                {{item.DaysOutstandingBand03}}</span>
+                    </td>
+                    <td ng-switch="item.DaysOutstandingBand04 > 0">
+                        <a class="refLink ng-binding" ng-href="../Service/Requests?q=&#123;%22query%22:%22{{item.ServiceRequestsBand04 }}%22&#125;"
+                            ng-switch-when="true">{{item.DaysOutstandingBand04}}</a> <span ng-switch-when="false">
+                                {{item.DaysOutstandingBand04}}</span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

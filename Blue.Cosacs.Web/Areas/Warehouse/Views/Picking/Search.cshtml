@@ -1,0 +1,21 @@
+﻿@model string
+@{ ViewBag.Title = "Search Pick Lists"; }
+@Html.Partial("Legend")
+@section Head 
+{
+    <style type="text/css">
+        .anchorplain
+        {
+            text-decoration: none;
+        }
+    </style>
+}
+<div id="facetSearchContainer" data-module="warehouse/pickingSearch" ng-controller="SearchController" class="facetsearch-container">
+    <facetsearch
+        data-results="@Model"
+        data-results-template="/Static/js/warehouse/Templates/pickingSearchResult.html" 
+        data-search-url="/Warehouse/Picking/SearchInstant"
+        data-history-url="/Warehouse/Picking/Search"
+        data-field-labels='{"StockBranchName": "Stock Branch", "PickingEmployees":"Employees", "PickingStatus":"Status"}'>
+    </facetsearch>
+</div>

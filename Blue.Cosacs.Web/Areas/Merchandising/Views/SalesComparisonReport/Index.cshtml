@@ -1,0 +1,72 @@
+﻿@model dynamic
+
+<div data-module="merchandising/reports/salesComparison/init" ng-controller="salesComparisonCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer bottom container-fluid" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="clear btn btn-default" ng-disabled="searching || !vm.query.PeriodEnd" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="clear btn btn-default" ng-disabled="searching || !vm.query.PeriodEnd" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="clear btn btn-default" ng-disabled="searching" ng-click="reset()">Clear</button>
+                    <button class="btn btn-primary" ng-click="search()" ng-disabled="searching || !vm.query.PeriodEnd">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row buffer-sm bottom">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row buffer-sm top">
+                        <div class="col-md-6" ng-class="{'has-error': !vm.query.PeriodEnd }">
+                            <label for="periodId">Period End</label>
+                            <list name="periodId" ng-model="vm.query.PeriodEnd" scope="vm.periods" placeholder="Select a period" ng-required="true"></list>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="brand">Brand</label>
+                            <list name="brand" ng-model="vm.query.brandId" scope="vm.brands" placeholder="Select a brand"></list>
+                        </div>
+                    </div>
+                    <div class="row buffer-sm top">
+                        <div class="col-md-6">
+                            <label for="locationId">Location</label>
+                            <list name="locationId" ng-model="vm.query.locationId" scope="vm.locations" placeholder="Select a location" ng-disabled="vm.query.fascia"></list>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="fascia">Fascia</label>
+                            <list name="fascia" ng-model="vm.query.fascia" scope="vm.options.fascia" placeholder="Select a fascia" ng-disabled="vm.query.locationId"></list>
+                        </div>
+                    </div>
+                    <div class="row buffer-sm top">
+                        <div class="col-md-12">
+                            <label for="tags">Product Tags</label>
+                            <pb-tag-list tags="vm.options.productTags"
+                                         selected-tags="vm.query.tags"
+                                         placeholder="Type to add product tags"/>
+                        </div>
+                    </div>
+                    <div class="row buffer-sm top">
+                        <div class="col-md-4">
+                            <label for="financialYear">Financial Year ?</label>
+                            <div>
+                                <input type="checkbox" name="financialYear" ng-model="vm.query.fiscalYear"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row buffer-sm top">
+                        <div class="col-md-12">
+                            <pb-pro-hierarchy ng-model="vm.query.hierarchy" readonly="false" placeholder="Any" horizontal="false"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <pb-column-select data="vm.results" columns="vm.columns" template-url="vm.gridTemplate" count="vm.resultCount" has-data="hasData"></pb-column-select>
+            </div>
+        </div>
+    </div>
+    
+</div>

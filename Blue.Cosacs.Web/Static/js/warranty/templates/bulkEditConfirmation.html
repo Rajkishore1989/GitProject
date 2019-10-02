@@ -1,0 +1,59 @@
+<section class="bulk-edit">
+    <div class="modal-dialog">   
+        <div class="modal-content">   
+			<header class="modal-header"><h4>Confirm Price Change</h4></header>
+			<article class="modal-body">
+                <div class="changes" ng-show="confirmBulkEdit.NumberOfRecords===0">
+                    <p><strong>No Prices available to Bulk Edit!</strong></p>
+                    <p>Any combination of the following reasons may apply:</p>
+                    <ul>
+                        <li>Your search has no selected warranties, and/or;</li>
+                        <li>The selected warranties don't have base prices to bulk edit, and/or;</li>
+                        <li>The selected warranties already have Bulk Edit records for
+                            {{confirmBulkEdit.effectiveDate | date:"dd MMM yyyy"}}.</li>
+                    </ul>
+                </div>
+				<div class="changes" ng-show="confirmBulkEdit.NumberOfRecords>0">
+					<p>You have chosen to Bulk Edit the following <strong{{confirmBulkEdit.NumberOfRecords}}></strong> warranty prices.</p>
+                    <p>All the changes to the prices where calculated using the <em>previous base prices</em> of the respective warranties.
+                       And all these prices will become effective on <strong>{{confirmBulkEdit.effectiveDate | date:"dd MMM yyyy"}}</strong>
+                    </p>
+                    <p>This will affect a total of <span class="count highlight strong">{{confirmBulkEdit.NumberOfRecords}}</span>
+                        warranties. Are you sure you want to do this?</p>
+                    <div class="change row" style="height:400px; margin: 0px 5px 0px 5px; overflow: auto;">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <th>WarrantyNumber</th>
+                                <th>BranchType</th>
+                                <th>BranchNumber</th>
+                                <th>CostPrice</th>
+                                <th>RetailPrice</th>
+                                <th>EffectiveDate</th>
+                                <th>TaxRate</th>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="r in confirmBulkEdit.Records">
+                                    <td>{{r.WarrantyNumber}}</td>
+                                    <td>{{r.BranchType || 'ALL'}}</td>
+                                    <td>{{r.BranchNumber || 'ALL'}}</td>
+                                    <td>{{r.CostPrice | number:2}}</td>
+                                    <td>{{r.RetailPrice | number:2}}</td>
+                                    <td>{{r.EffectiveDate | date:"dd MMM yyyy"}}</td>
+                                    <td>{{r.TaxRate | number:2}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="change confirm">
+                        <p></p>
+                        <p>Are you sure you want to do this?</p>
+                    </div>
+                </div>
+			</article>
+			<footer class="modal-footer">
+				<button class="btn btn-primary" ng-click="close($event, 'yes')">Change Prices</button>
+				<button class="btn btn-default" ng-click="close($event, 'no')">Cancel</button>
+			</footer>
+		</div>
+	</div>
+</section>

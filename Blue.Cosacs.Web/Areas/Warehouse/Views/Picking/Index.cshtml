@@ -1,0 +1,214 @@
+﻿@using Blue.Cosacs.Warehouse
+@{ 
+    ViewBag.Title = "Picking"; 
+    }
+@Html.Partial("Legend")
+@{
+    var bookingSearch = Html.ActionJson("Bookings", new BookingSearch { DeliveryBranch = ViewBag.DefaultBranch });
+}
+<div id="picking" data-module="warehouse/picking" data-default-branch='@ViewBag.DefaultBranch' data-booking-search='@bookingSearch' >
+	<div id="options" class="row">
+		<div class="col col-lg-8">
+			<form id="search" class="form-horizontal" action='#'>
+				<div class="section">Search</div>
+				<div class="form-group">
+					<label class="col col-lg-3 control-label" for="deliveryBranch">Sending Location</label>
+					<div class="col col-lg-6">
+					@if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.WarehouseAllBranches))
+					{
+						<select id="deliveryBranch" name="deliveryBranch" class="picklist" data-pick-list-id="BRANCH" data-placeholder="Select a sending location"></select>
+					}
+					else
+					{
+		                <select id="deliveryBranch" name="deliveryBranch" class="picklist" data-pick-list-id="BRANCH" data-placeholder="Select a default location" disabled="disabled"></select>
+					}
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col col-lg-3 control-label" for="deliveryZone">Delivery Zone</label>
+					<div class="col col-lg-6">
+					    <select name="deliveryZone" class="picklist" multiple="multiple" data-pick-list-id="deliveryarea" data-placeholder="Select Some Delivery Zones">
+					    </select>
+					</div>
+				</div>
+	            <div class="form-group">
+					<label class="col col-lg-3 control-label" for="fascia">Fascia</label>
+					<div class="col col-lg-6">
+						<select name="fascia" class="picklist"  data-pick-list-id="fascia" data-placeholder="Select Fascia (Sales Store Type)">
+						</select>
+					</div>
+				</div>
+			    <div class="form-group">
+			        <label class="col col-lg-3 control-label" for="productCategory">Product Category</label>
+			        <div class="col col-lg-6">
+			            <select name="productCategory" class="picklist" multiple="multiple" data-pick-list-id="PRODCATS" data-placeholder="Select Some Product Categories">
+			            </select>
+			        </div>
+			    </div>
+			    <div class="form-group">
+			        <label class="col col-lg-3 control-label" for="type">Type</label>
+			        <div class="col col-lg-6">
+			            <select id="type" data-placeholder="Select a type" class="form-control">
+			            	<option value="false">External</option>
+			                <option value="true">Internal</option>
+			            </select>
+			        </div>
+			    </div>
+                <div id="receivingLocationContainer" class="form-group">
+                    <label class="col col-lg-3 control-label" for="deliveryBranch">Receiving Location</label>
+                    <div class="col col-lg-6">
+                        <select id="receivingLocation" name="receivingLocation" class="picklist" data-pick-list-id="BRANCH" data-placeholder="Select a receiving location"></select>
+                    </div>
+                </div>
+				<div class="actions">
+					<button class="clear btn btn-default">Clear</button>
+					<button class="search btn btn-primary">Search</button>
+				</div>
+			</form>
+		</div>
+		<div id="printSelection" class="col col-lg-4">
+			<div class="section">Create and Print Pick Lists</div>
+			<div class="form-inline">
+				<div class="col col-lg-8">
+					<select id="printAllType" class="form-control" style="width: 100%" data-placeholder="Printing Group Criteria">
+						<option></option>
+						<option value="category">By Product Category</option>
+						<option value="truck">By Truck Load</option>
+						<option value="wzone">By Warehouse Zone</option>
+						<option value="all">All Pending</option>
+					</select>
+				</div>
+				<div class="col col-lg-4">
+					<button class="btn btn-primary external-link single-click" id="printAll">Print All</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<p>&nbsp;</p>
+	<div class="row">
+		<div class="col col-lg-8">
+			<div class="section" id="bookingCount">Shipments @ViewBag.TotalBookings</div>
+			<table id="bookings" class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th></th>
+						<th>Shipment</th>
+						<th>Required Date</th>
+						<th>Recipient Details </th>
+						<th>Stock Location </th>
+						<th>Product</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+		<div class="col col-lg-4">
+			<div class="section">Shipments by Truck</div>
+			<div class="form-inline">
+				<div class="col col-lg-8">
+					<select id="trucks" class="form-control" style="width: 100%" data-placeholder="Select a Truck"></select>
+				</div>
+				<div class="col col-lg-4">
+					<button class="btn btn-primary external-link" id="printByTruck">Print Truck</button>
+				</div>
+			</div>
+			<p>&nbsp;</p>
+			<table id="pickingItems" class="table table-bordered">
+				<thead>
+					<tr>
+						<th class="action"></th>
+						<th style="width: 40px">Type</th>
+						<th>Address</th>
+						<th>Product</th>
+						<th class="quantity">#</th>
+						<th>Stock Location</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
+	</div>
+    <script id="bookingTemplate" type="text/template">
+        <tr data-id="<%- Id %>" class="booking <%= typeof Express !== "undefined" && Express  ? "express" : "" %>">
+            @Html.Partial("BookingTemplate")
+            <td class="action action-pick no-select align-middle">
+                <span class="glyphicons chevron-right" title="Click to add this item"></span>
+            </td>
+        </tr>
+
+        <tr class="comment">
+            <td colspan="7"><%- Comment || '' %>&nbsp;</td>
+        </tr>
+    </script>
+    <script id="bookingTemplateEmpty" type="text/template">
+        <tr class=empty>
+            <td colspan="7">There are no pending Shipments matching your search filter.</td>
+        </tr>
+    </script>
+    <script id="pickingItemTemplate" type="text/template">
+
+        <% if(Booking.Express == true && !PickingId) { %>
+            <tr data-cid="<%- cid %>" class="pickingItem express %>">
+        <% } else { %>
+            <tr data-cid="<%- cid %>" class="pickingItem <%= PickingId ? " locked" : "" %>">
+        <% } %>
+            <td class="align-middle <%= typeof(PickingId) !== 'undefined' && PickingId ? "" : "action action-unpick" %>  no-select">
+                <span class="glyphicons <%= typeof(PickingId) !== 'undefined' && PickingId ?  "lock" : "chevron-left" %>" title="<%= typeof(PickingId) !== 'undefined' && PickingId ?  "Item is locked because it's printed on a pick list. It can't be removed" : "Click to remove the item" %>"></span>
+            </td>
+            <td class="del-col align-middle">
+                <div class="rotate-90">
+                <%- Booking.DeliveryOrCollectionDescription %>
+                </div>
+            </td>
+            <td>
+                <small>
+                <%- Booking.AddressLine1 %><br/>
+                <%- Booking.AddressLine2 %><br/>
+                <%- Booking.AddressLine3 %><br/>
+                <%- Booking.PostCode %><br/>
+                <%= Booking.ContactInfo == null ? "" : Booking.ContactInfo %><br/>
+                </small>
+            </td>
+
+            <td>
+                <div title="Damaged" class=" <%- Booking.Damaged === true ? "ui-icon ui-icon-alert" : "" %>"></div>
+                <div title="Assembly Required"class=" <%- Booking.AssemblyReq === true ? "ui-icon ui-icon-wrench" : ""%>"></div>
+                <% if (typeof Booking.NonStockServiceType !== "undefined" && Booking.NonStockServiceType === "inst") { %>
+                <div class="glyphicons wrench" title="Installation">&nbsp;
+                    <strong>Installation <%- Booking.NonStockServiceItemNo %><strong> <%- Booking.NonStockServiceDescription %>
+                </div>
+                <% } %>
+                <% if (typeof Booking.NonStockServiceType !== "undefined" && Booking.NonStockServiceType === "assembly") { %>
+                <div class="glyphicons settings" title="Assembly">&nbsp;
+                    <strong>Assembly <%- Booking.NonStockServiceItemNo %><strong> <%- Booking.NonStockServiceDescription %>
+                </div>
+                <% } %>
+                <div><label>Item No</label>&nbsp;<%- Booking.ItemNo %></div>
+                <div><label>UPC</label>&nbsp;<%- Booking.ItemUPC %></div>
+                <div><%- Booking.ProductDescription || '' %></div>
+                <div><%- Booking.ProductBrand || '' %></div>
+                <div><%- Booking.ProductModel || '' %></div>
+                <div><%- Booking.ProductArea || '' %></div>
+                <div><%- Booking.ProductCategory || '' %></div>
+                <div><%- moment(Booking.OrderedOn).format("DD-MM-YYYY") %></div>
+            </td>
+            <td><span class="qty"><%- Booking.Quantity %></span></td>
+            <td class="branch">
+                <% if (Booking.StockBranch !== Booking.DeliveryBranch) { %>
+                    <div class="branchNo lead"><%- Booking.StockBranch %></div>
+                <% } else { %>
+                        <div class="text-muted"> Current </div>
+                <% } %>
+            </td>
+        </tr>
+    </script>
+    <script id="pickingItemTemplateEmpty" type="text/template">
+        <tr class="empty">
+            <td colspan="6">There are no picking Shipments for this truck.</td>
+        </tr>
+    </script>
+
+</div>

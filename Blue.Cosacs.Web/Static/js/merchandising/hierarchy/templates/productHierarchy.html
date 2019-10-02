@@ -1,0 +1,98 @@
+<section class="product-hierarchy buffer-sm bottom">
+    <article class="filters row">
+        <div class="level col-lg-3">
+            <input class="form-control" type="text" ng-model="levelFilter" placeholder="Filter Levels" /></div>
+        <div class="tags col-lg-3">
+            <input class="form-control" type="text" ng-model="tagFilter" ng-change="filterTags()"
+                placeholder="Filter Tags" /></div>
+    </article>
+    <header class="row">
+        <h5 class="header levels-header col-lg-3">
+            Level</h5>
+        <h5 class="header tags-header col-lg-9">
+            Tags</h5>
+    </header>
+    <article class="hierarchy-container">
+        <div class="levels row" title="levels-container" data-level-id="{{level.Id}}" ng-repeat="level in hierarchyData.Levels | filter:levelFilter">
+            <div class="col-lg-12">
+                <div class="row">
+                    <article class="level col-lg-3">
+                        <div class="input-group">
+                            <span ng-show="canEdit && !level.isEditing" class="input-group-addon control-label glyphicons bin"
+                                title="Delete" data-level="{{level.Name}}" ng-click="deleteLevel()" id="level_del_btn_{{level.Id}}">&nbsp;</span>
+                            <span ng-show="canEdit && !level.isEditing" class="input-group-addon control-label glyphicons pencil"
+                                title="Edit" data-level="{{level.Name}}" ng-click="editLevel($event)" id="level_edit_btn_{{level.Id}}">&nbsp;</span>
+                            <span ng-show="canEdit && level.isEditing" class="input-group-addon control-label glyphicons undo"
+                                title="Cancel" data-level="{{level.Name}}" ng-click="cancelEditLevel()" id="level_undo_btn_{{level.Id}}">&nbsp;</span>
+                            <span ng-show="canEdit && level.isEditing" class="input-group-addon control-label glyphicons floppy_save"
+                                title="Save" data-level="{{level.Name}}" ng-click="saveEditLevel()" id="level_save_btn_{{level.Id}}">&nbsp;</span>
+                            <input ng-show="level.isEditing" class="form-control" type="text" ng-model="level.editedName"
+                                required ui-keypress="{enter:'saveEditLevel()'}" ui-keyup="{esc:'cancelEditLevel()'}"
+                                maxlength="100" id="level_edit_txt_{{level.Id}}" />
+                            <input ng-show="!level.isEditing" readonly="true" class="form-control" type="text"
+                                data-lid="{{level.Id}}" data-level-name="{{level.Name}}" ng-model="level.Name"
+                                id="level_txt_{{level.Id}}" />
+                        </div>
+                    </article>
+                    <article class="tags col-lg-9">
+                        <div class="tag col-lg-2 {{(tag.Id == 0) && 'unassigned'}}"
+                            data-tag-id="{{tag.Id}}" data-level-id="{{level.Id}}" data-tag-name="{{tag.Name}}"
+                            ng-repeat="tag in level.Tags | filter:tagFilter">
+                            <div class="name" ng-show="!tag.isEditing && tag.Name != ''"
+                                title="{{tag.Name | humanize | titleize}}" id="tag_txt_{{tag.Id}}">
+                                {{tag.Name | humanize | titleize}}</div>
+                            <div class="name" ng-show="!tag.isEditing && tag.Name == ''" id="tag_txt_{{tag.Id}}">
+                                &lt;Unassigned&gt;</div>
+                            <div class="name" ng-show="tag.isEditing">
+                                <input class="form-control" type="text" ng-model="tag.editedName" required ui-keypress="{enter:'saveEditTag()'}"
+                                    ui-keyup="{esc:'cancelEditTag()'}" maxlength="100" id="tag_edit_txt_{{tag.Id}}" />
+                            </div>
+                            <div class="actions" ng-show="canEdit">
+                                <span ng-show="tag.isEditing" class="click glyphicons undo" title="Cancel" ng-click="cancelEditTag()"
+                                    id="tag_undo_btn_{{tag.Id}}"></span><span ng-show="tag.isEditing" class="click glyphicons floppy_save"
+                                        title="Save" ng-click="saveEditTag()" id="saveEditTag_{{tag.Id}}"></span>
+                                <span ng-show="!tag.isEditing" class="{{tag.Id == 0 && 'disabled'}} click glyphicons bin"
+                                    title="Delete" ng-click="deleteTag()" id="deleteEditTag_{{tag.Id}}"></span><span
+                                        ng-show="!tag.isEditing" class="click glyphicons pencil" title="Edit" ng-click="editTag($event)"
+                                        id="editTag_{{tag.Id}}"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="tag new col-lg-2" data-level-id="{{level.Id}}" ng-show="canEdit" >
+                            <div class="name">
+                                <input class="form-control" type="text" ng-model="level.newTagName" ui-keypress="{enter:'saveNewTag()'}"
+                                    ui-keyup="{esc:'cancelNewTag()'}" placeholder="Create new tag" maxlength="100"
+                                    id="createTag_{{level.Id}}" />
+                            </div>
+                            <div class="actions">
+                                <span class="click glyphicons undo" title="Cancel" ng-click="cancelNewTag()" id="cancelNewTag_{{level.Id}}">
+                                </span><span class="click glyphicons floppy_save" title="Save" ng-click="saveNewTag()"
+                                    id="saveNewTag_{{level.Id}}"></span>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="row">
+                    <p class="section">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="levels row" ng-show="canEdit">
+            <div class="col-lg-12">
+                <div class="row">
+                    <article class="level col-lg-3 new" data-level-id="{{level.Id}}">
+                        <div class="input-group">
+                            <span id="cancelNewLevelName" class="input-group-addon glyphicons undo" title="Cancel"
+                                ng-click="cancelNewLevel()"></span><span id="saveNewLevelName" class="input-group-addon glyphicons floppy_save"
+                                    title="Save" ng-click="saveNewLevel()"></span>
+                            <input id="newLevelName" class="form-control" type="text" ng-model="newLevelName"
+                                ui-keypress="{enter:'saveNewLevel()'}" ui-keyup="{esc:'cancelNewLevel()'}" placeholder="Create new level"
+                                maxlength="100" />
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </article>
+</section>

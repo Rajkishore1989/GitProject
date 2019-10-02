@@ -1,0 +1,86 @@
+    
+<div ng-repeat="location in data" class="buffer-sm top">
+    <h4>{{location.location || 'All Locations' }} - {{location.fascia || 'All Fascias' }}</h4>
+    <div class="row" ng-repeat="div in location.items">
+        <div class="col-md-2 text-center">
+            <div class="pb-row-aligned link" style="white-space: normal;word-break: break-all" ng-click="drill(div)">
+                {{div.level}}
+                <span ng-show="div.children.length">
+                    <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="div.isExpanded"></span>
+                    <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="div.isExpanded"></span>
+                </span>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+                <thead>
+                    <tr>
+                        <th class="hidable-col" ng-style="{'display': isDisplayed(0)}">Stock On Hand</th>
+                        <th class="hidable-col" ng-style="{'display': isDisplayed(1)}">Stock Value</th>
+                        <th class="hidable-col" ng-style="{'display': isDisplayed(2)}">Sales Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="hidable-col quantity" ng-style="{'display': isDisplayed(0)}">{{div.stockOnHandQuantity}}</td>
+                    <td class="hidable-col currency" ng-style="{'display': isDisplayed(1)}">{{div.stockOnHandValue | pbCurrency }}</td>
+                    <td class="hidable-col currency" ng-style="{'display': isDisplayed(2)}">{{div.stockOnHandSalesValue | pbCurrency }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="row" ng-repeat="dept in div.children" ng-show="div.isExpanded">
+                <div class="col-md-2 text-center">
+                    <div class="pb-row-aligned link" style="white-space: normal;" ng-click="drill(dept)">
+                        {{dept.level}}
+                        <span ng-show="dept.children.length">
+                            <span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191" ng-hide="dept.isExpanded"></span>
+                            <span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192" ng-show="dept.isExpanded"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+                        <thead>
+                        <tr>
+                            <th class="hidable-col" ng-style="{'display': isDisplayed(0)}">Stock On Hand</th>
+                            <th class="hidable-col" ng-style="{'display': isDisplayed(1)}">Value</th>
+                            <th class="hidable-col" ng-style="{'display': isDisplayed(2)}">Sales Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td class="hidable-col quantity" ng-style="{'display': isDisplayed(0)}">{{dept.stockOnHandQuantity}}</td>
+                            <td class="hidable-col currency" ng-style="{'display': isDisplayed(1)}">{{dept.stockOnHandValue | pbCurrency }}</td>
+                            <td class="hidable-col currency" ng-style="{'display': isDisplayed(2)}">{{dept.stockOnHandSalesValue | pbCurrency }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="row" ng-repeat="cls in dept.children" ng-show="dept.isExpanded">
+                        <div class="col-md-2 text-center">
+                            <div class="pb-row-aligned" style="white-space: normal;">{{cls.level}}</div>
+                        </div>
+                        <div class="col-md-10">
+                            <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+                                <thead>
+                                <tr>
+                                    <th class="hidable-col" ng-style="{'display': isDisplayed(0)}">Stock On Hand</th>
+                                    <th class="hidable-col" ng-style="{'display': isDisplayed(1)}">Value</th>
+                                    <th class="hidable-col" ng-style="{'display': isDisplayed(2)}">Sales Value</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="hidable-col quantity" ng-style="{'display': isDisplayed(0)}">{{cls.stockOnHandQuantity}}</td>
+                                    <td class="hidable-col currency" ng-style="{'display': isDisplayed(1)}">{{cls.stockOnHandValue | pbCurrency }}</td>
+                                    <td class="hidable-col currency" ng-style="{'display': isDisplayed(2)}">{{cls.stockOnHandSalesValue | pbCurrency }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  

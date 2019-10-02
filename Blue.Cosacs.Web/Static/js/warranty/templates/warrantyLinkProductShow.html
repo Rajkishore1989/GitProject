@@ -1,0 +1,11 @@
+<tr ng-repeat="warrantyProduct in warrantyLevel.products">
+    <td ng-repeat="(key,value) in warrantyProduct">
+        {{showProductLevel(value)}}
+    </td>
+    <td ng-hide="warrantyLevel.edit">
+        {{showProductLevel(warrantyProduct.StockBranchNameWarrantyLink)}}
+    </td>
+    <td ng-hide="warrantyLevel.edit">
+        {{showItemNo(warrantyProduct.itemNo)}}
+    </td>
+</tr>

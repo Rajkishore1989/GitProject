@@ -1,0 +1,67 @@
+﻿@model WarehouseOversupplyPrintModel
+
+@{
+    ViewBag.Title = "Warehouse Oversupply";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+<div data-module="merchandising/reports/warehouseOversupplyReport/init" ng-controller="warehouseOversupplyPrintCtrl" ng-init="result=@Html.RawJson(Model)" class="ng-scope" ng-cloak>
+    <div class="row bottom header-info" ng-show="vm.query">
+        <h2>@ViewBag.Title</h2>
+        <table>
+            <tr>
+                <td>
+                    <label for="location">Warehouse: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="location">{{vm.query.warehouse}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fascia">Location Fascia: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="fascia">{{vm.query.fascia}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="prodTags">Product Tags: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="prodTags">{{vm.query.tagString}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="prodHier">Hierarchy: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="prodHier">{{vm.query.hierarchyString}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <table class="main bordered small">
+        <tbody ng-repeat="pg in vm.pages" ng-class="{true: 'pageBreak', false: 'pageNoBreak'}[vm.pages.length > 1]" ng-show="pg">
+            <tr>
+                <th ng-repeat="col in vm.columns" ng-show="col.selected">
+                    {{col.name}}
+                </th>
+            </tr>
+            <tr ng-repeat="product in pg" class="item">
+                <td ng-repeat="level in product.hierarchyTags" ng-show="vm.columns[$index].selected">
+                    {{level}}
+                </td>
+                <td ng-show="vm.columns[product.hierarchyTags.length].selected">{{product.sku}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+1].selected">{{product.longDescription}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+2].selected" class="text-center">{{product.stockOnHandInWarehouse}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+3].selected" class="text-center">{{product.locationsAssigned}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+4].selected">{{product.locationName}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+5].selected">{{product.dateLastReceived | pbDate : true}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+6].selected">{{yesOrNo(product.stockRequisitionPending)}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

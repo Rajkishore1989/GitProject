@@ -1,0 +1,239 @@
+﻿@model IEnumerable<Blue.Cosacs.Service.Models.RequestItem>
+@{
+    ViewBag.Title = "Service Request Print";
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var longDateFormat = "dddd dd MMMM yyyy";
+}
+@section Head
+{
+    <style type="text/css">
+        .grid_6 .label { width: 25%; }
+        .grid_6 .field { width: 75%; }
+    </style>
+}
+@foreach (var item in Model)
+{
+<div class="requestPrint">
+    <div class="grid_8">
+        <div class="document-id">
+            <div>
+                <div class="ref">
+                    Service Request #@item.Id.ToString("D8")</div>
+                <div class="barcode">@Html.Barcode("SR$" + item.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+            </div>
+            <div>
+                <div class="createdOn">@item.CreatedOn.ToString("f")</div>
+                <div class="createdBy">@item.CreatedBy (@item.CreatedById)
+                </div>
+            </div>
+        </div>
+        <h2>
+            @Blue.Cosacs.Service.Utils.ServiceType.FromString(item.Type) Report
+        </h2>
+    </div>
+    <div class="grid_4" class="customer">
+        <div>
+            <div class="bold">
+                @item.CustomerTitle
+                @item.CustomerFirstName
+                @item.CustomerLastName</div>
+        </div>
+        <div class="address">
+            <div>Delivery Details:</div>
+            <div class="bold">
+                @item.DELTitleC
+                @item.DELFirstName
+                @item.DELLastName
+            </div>
+            <div>@item.CustomerAddressLine1</div>
+            <div>@item.CustomerAddressLine2</div>
+            <div>@item.CustomerAddressLine3</div>
+            <div>@item.CustomerPostcode</div>
+        </div>
+        <div>
+            <table>
+            @foreach (var contact in item.Contacts)
+            {
+                <tr><td class="label"><strong>@contact.Type</strong></td><td class="field">&nbsp;@contact.Value</td></tr>
+            }
+            </table>
+        </div>
+    </div>
+
+    <!-- start new row -->
+    <div class="clear"></div>
+    <div class="grid_12">
+        <div>@item.CustomerNotes</div>
+    </div>
+
+    <!-- start new row -->
+    <div class="clear"></div>
+    <div class="grid_6">
+        <div class="section">Product</div>
+        <table>
+            <tbody>
+            <tr>
+                <td class="label">Item Identifier</td>
+                <td class="field">@item.ItemNumber</td>
+            </tr>
+            <tr>
+                <td class="label">Delivered on</td>
+                <td class="field">@( item.ItemDeliveredOn.HasValue ? item.ItemDeliveredOn.Value.ToString(longDateFormat) : string.Empty)</td>
+            </tr>
+            <tr>
+                <td class="label">Item Description</td>
+                <td class="field">@item.Item</td>
+            </tr>
+            <tr>
+                <td class="label">Supplier</td>
+                <td class="field">@item.ItemSupplier</td>
+            </tr>
+            <tr>
+                <td class="label">Value</td>
+                <td class="field">@item.ItemAmount</td>
+            </tr>
+            <tr>
+                <td class="label">Serial Number</td>
+                <td class="field">@item.ItemSerialNumber</td>
+            </tr>
+            <!--<tr> TODO: Add Current Warranty Coverage Type -->
+                <!--<td class="label">Coverage</td>-->
+                <!--<td class="field"> [Manufacturer Warranty | Extended Warranty] </td>-->
+            <!--</tr>-->
+            </tbody>
+        </table>
+    </div>
+    <div class="grid_6">
+        <div class="section">Request</div>
+        <table>
+            <tbody>
+            <tr>
+                <td class="label">Logged on</td>
+                <td class="field">@item.CreatedOn.ToString(longDateFormat)</td>
+            </tr>
+            <tr>
+                <td class="label">Logged by</td>
+                <td class="field">@item.CreatedBy (@item.CreatedById)</td>
+            </tr>
+            <tr>
+                <td class="label">Branch</td>
+                <td class="field">@item.BranchName</td>
+            </tr>
+            @if (@item.InvoiceNumber != null)
+            {
+            <tr>
+                <td class="label">Invoice #</td>
+                <td class="field">@item.InvoiceNumber</td>
+            </tr>
+            }
+            @if (@item.Account != null)
+            {
+            <tr>
+                <td class="label">Account #</td>
+                <td class="field">@item.Account</td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- start new row -->
+    @if (ViewBag.WarrantyAvail)
+    {
+    <div class="clear"></div>
+    <div class="grid_6"></div>
+    <div class="grid_6">
+        <div class="section">Warranty Available</div>
+        <table>
+            <tbody>
+            <tr>
+                <td class="label">Contract Number</td>
+                <td class="field">@item.WarrantyContractNo</td>
+            </tr>
+            <tr>
+                <td class="label">Warranty Length</td>
+                <td class="field">@(item.WarrantyLength.HasValue ? item.WarrantyLength.Value.ToString() : string.Empty)</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    }
+
+    <!-- start new row -->
+    <div class="clear"></div>
+    <div class="grid_6">
+        <div class="section">
+            Evaluation</div>
+        <table>
+            <tbody>
+            <tr>
+                <td class="label">Service Location</td>
+                <td class="field">@item.EvaluationLocation</td>
+            </tr>
+            <tr>
+                <td class="label">Action Required</td>
+                <td class="field">@item.EvaluationAction</td>
+            </tr>
+            <tr>
+                <td class="label">Claim for Food Loss?</td>
+                <td class="field">@(item.EvaluationClaimFoodLoss.HasValue && item.EvaluationClaimFoodLoss.Value ? "Yes" : "No")</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="grid_6">
+        <div id="allocation" class="section">
+            Allocation</div>
+        <table class="tableWithSelect2">
+            <tbody>
+            <tr>
+                <td class="label">Date Item Received On</td>
+                <td class="field">@(item.AllocationItemReceivedOn.HasValue ? item.AllocationItemReceivedOn.Value.ToString(longDateFormat) : string.Empty)</td>
+            </tr>
+            <tr>
+                <td class="label">Parts Expected On</td>
+                <td class="field">@(item.AllocationPartExpectOn.HasValue ? item.AllocationPartExpectOn.Value.ToString(longDateFormat) : string.Empty)</td>
+            </tr>
+            <tr>
+                <td class="label">Technician</td>
+                <td class="field">@(item.AllocationTechnician.HasValue ? item.AllocationTechnicianName : "") (@(item.AllocationTechnician.HasValue ? item.AllocationTechnician.Value : 0))</td>
+            </tr>
+            <tr>
+                <td class="label">Date Service Scheduled</td>
+                <td class="field">@(item.AllocationServiceScheduledOn.HasValue ? item.AllocationServiceScheduledOn.Value.ToString(longDateFormat) + " " + "Start Time: " + item.SlotStartTime + " " + "End Time: " + item.SlotEndTime : string.Empty)</td>
+            </tr>
+            </tbody>
+        </table>
+        <div>Special Instructions</div>
+    </div>
+
+    <!-- start new row -->
+    <div class="clear"></div>
+    <div class="grid_6">
+        <div id="history" class="section">Comments</div>
+        @foreach (var comment in item.RequestComments)
+        {
+        <p>
+        <div style="display: block">@comment.Date @comment.AddedBy:</div>
+        <div style="display: block">@comment.Comment</div>
+        </p>
+        }
+    </div>
+    <div class="grid_6" style="position: relative; float: right; vertical-align: top;">
+        <div class="section">&nbsp;</div>
+        <div class="sign">
+            <div>
+                Signed for by Technician as tested and operating correctly:
+            </div>
+            <div>
+                Signed for by Customer as fully repaired:
+            </div>
+        </div>
+    </div>
+
+    <!-- start new row -->
+    <div class="clear"></div>
+    <div class="grid_12"></div>
+    <br/>
+</div>
+}

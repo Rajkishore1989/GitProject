@@ -1,0 +1,46 @@
+﻿@model object
+@{
+    ViewBag.Title = "Stock Valuation Report";
+}
+
+<div data-module="merchandising/reports/stockValue/init" ng-controller="stockValueCtrl" class="ng-scope" ng-cloak>
+    <div class="buffer bottom container-fluid" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-md-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="clear btn btn-default" ng-disabled="vm.searching || searchForm.$invalid || !canSearch()" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="clear btn btn-default" ng-disabled="vm.searching || searchForm.$invalid || !canSearch()" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="clear btn btn-default" ng-disabled="vm.searching" ng-click="reset()">Clear</button>
+                    <button class="btn btn-primary" ng-click="search()" ng-disabled="vm.searching || searchForm.$invalid || !canSearch()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row buffer bottom">
+            <div class="col-md-6">
+                <div class="form-group" ng-class="{'has-error': !vm.query.periodEndDate }">
+                    <label for="period">Period</label>
+                    <list name="period" ng-model="vm.query.periodEndDate" scope="vm.periods" placeholder="Select a period" ng-disabled="!vm.periods"></list>
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <list name="location" ng-model="vm.locationId" ng-change="updateLocation()" scope="vm.locations" placeholder="Select a location" ng-disabled="vm.query.fascia"></list>
+                </div>
+                <div class="form-group">
+                    <label for="fascia">Fascia</label>
+                    <list name="fascia" ng-model="vm.query.fascia" scope="vm.options.fascia" placeholder="Select a fascia" ng-disabled="vm.query.location"></list>
+                </div>
+                <div class="form-group">
+                    <label for="groupByLocation">Grouping</label>
+                    <select class="form-control" name="groupByLocation" ng-model="vm.query.isGrouped">
+                        <option value="false">No grouping</option>
+                        <option value="true">Group by Location</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <pb-pro-hierarchy ng-model="vm.query.hierarchy" readonly="false" placeholder="Any" horizontal="false" value-property="name" />
+            </div>
+        </div>
+        <pb-column-select data="vm.results" columns="vm.columns" template-url="vm.gridTemplate"></pb-column-select>
+    </div>
+</div>

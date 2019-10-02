@@ -1,0 +1,84 @@
+﻿@model Blue.Cosacs.Web.Areas.Credit.Models.ImportResult
+@{
+    ViewBag.Title = "Third Party Store Card Import/Export";
+}
+
+<div data-module='credit/showFileName'>
+    <div class="section">Export</div>
+    <div class="row">
+        <div class="col-lg-4">Export Active Store Cards</div>
+        <div class="col-lg-8">
+            <a href='@Url.Content("~/Credit/StoreCardImport/Export")' class="btn btn-primary" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Export&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+        </div>
+    </div>
+    <div class="section">Import</div>
+
+
+    @using (Html.BeginForm("Import", "StoreCardImport", FormMethod.Post, new { EncType = "multipart/form-data" }))
+    {      
+        <div class="row">
+            <div class="col-lg-4">Import Active Store Cards Transactions</div>
+            <div class="col-lg-8">
+                <div class="container_12">
+                    <div class="input-group col-md-6 .col-md-offset-3">
+                        <button type="submit" class="btn btn-primary"><span class="glyphicons upload"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Upload&nbsp;&nbsp;</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="input-group col-md-12 .col-md-offset-3">
+                    <div tabindex="-1" class="form-control ">
+                        <span id="fileName" class="glyphicons file"></span>
+                        <div class="file-caption-name"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="input-group-btn">
+                    <span class="btn btn-default btn-file"><i class="halflings folder-open"></i>&nbsp;&nbsp;&nbsp;Browse …
+                       <input id="fileUpload" name="fileUpload" type="file" accept=".csv" class="file">
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">&nbsp</div>
+
+    @if (Model != null)
+    {
+        <div class="section">
+            Import Result
+        </div>
+        if (Model.Succeed)
+        {
+        <br />
+        <div class="row">
+            <div class="col-lg-3 text-success"><strong>Transactions Imported Successfully</strong></div>
+        </div>
+        }
+        else
+        {
+        <div class="row">
+            <div class="col-lg-4 text-danger">
+                <strong>File NOT Imported - Incorrect file records</strong>
+                <br />
+            </div>
+        </div>
+        <div>
+            <ul>
+                @foreach (var errorLine in Model.Errors)
+                {
+                    <li>@errorLine</li>
+    
+                }
+            </ul>
+        </div>
+        }
+    }
+
+</div>

@@ -1,0 +1,94 @@
+﻿<div data-module="merchandising/goodsOnLoan/init" ng-controller="GoodsOnLoanSearchCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonClear" class="clear btn btn-default" ng-click="paginator.reset()">Clear</button>
+                    <button class="btn btn-primary" ng-click="paginator.get()" ng-disabled="paginator.loading()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="id">Goods on Loan Id</label>
+                    <input class="form-control" pb-integer name="id" ng-model="query.id"/>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="stockLocation">Stock Location</label>
+                    <list name="stockLocation" ng-model="query.stockLocationId" scope="locations" placeholder="Select a Location"></list>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="createdFrom">Created From</label>
+                    <input class="form-control" name="createdFrom" ng-model="query.createdFrom" type="date" placeholder="Select Date" />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="createdTo">Created To</label>
+                    <input class="form-control" name="createdTo" ng-model="query.createdTo" type="date" placeholder="Select Date" />
+                </div>
+            </div>
+        </div>
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-3">
+                <label for="sku">Involves SKU</label>
+                <input class="form-control" name="sku" ng-model="query.sku" />
+            </div>
+            <div class="col-lg-3">
+                <label for="referenceNumber">Reference Number</label>
+                <input class="form-control" name="referenceNumber" ng-model="query.referenceNumber" />
+            </div>
+            <div class="col-lg-3">
+                <label for="expectedCollectionDate">Due for Collection Before</label>
+                <input class="form-control" name="expectedCollectionDate" ng-model="query.expectedCollectionDate" type="date" placeholder="Select Date"/>
+            </div>
+            <div class="col-lg-3">
+                <label for="status">Status</label>
+                <list name="status" ng-model="query.status" scope="statuses" placeholder="Select a Status"></list>
+            </div>
+        </div>
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-3">
+                <label for="type">Type</label>
+                <list name="type" ng-model="query.type" scope="types" placeholder="Select a Type"></list>
+            </div>
+        </div>
+
+        <pb-pagination get="search" params="query" control="paginator" no-results-message="There are no results matching the query.">
+            <table class="table table-striped table-bordered table-hover table-responsive active pb-table pb-search">
+                <thead>
+                <tr>
+                    <th class="col-sm">Goods on Loan Id</th>
+                    <th class="col-sm">Stock Location</th>
+                    <th class="col-sm">Customer Id / Business Name</th>
+                    <th class="col-sm date">Created On</th>
+                    <th class="col-sm date">Expected Collection</th>
+                    <th class="col-sm date">Collected On</th>
+                    <th class="col-sm">Status</th>
+                    <th class="col-sm">Comments</th>
+                    <th class="col-sm">Total Cost</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="result in paginator.page">
+                        <td class="text-right"><a href="{{resolve('Merchandising/GoodsOnLoan/Detail/') + result.id}}">#{{result.id}}</a></td>
+                        <td><a href="{{resolve('Merchandising/Locations/Detail/') + result.stockLocationId}}">{{result.stockLocation}}</a></td>
+                        <td>{{result.customerId}} {{result.businessName}}</td>
+                        <td class="date">{{result.createdOn | pbDate : true}}</td>
+                        <td class="date">{{result.expectedCollectionDate | pbDate }}</td>
+                        <td class="date">{{result.collectedDate | pbDate : true}}</td>
+                        <td>{{result.status}}</td>
+                        <td>{{result.comments}}</td>
+                        <td class="currency">{{result.totalCost | pbCurrency}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </pb-pagination>
+        
+    </div>
+</div>

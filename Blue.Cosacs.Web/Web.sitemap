@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<siteMap xmlns="http://schemas.microsoft.com/AspNet/SiteMap-File-1.0" >
+    <siteMapNode SecurityTrimmingEnabled="true">
+        <siteMapNode title="Logistics">
+            <siteMapNode title="Reports">
+                <siteMapNode url="~/Report/DynamicReport/DeliveryPerformanceSummary" title="Delivery Performance Summary" permission="2023" />
+            </siteMapNode>
+            <siteMapNode url="~/Warehouse/Bookings/" title="Search Shipments" permission="1401"/>
+            <siteMapNode url="~/Warehouse/Picking" title="Picking" permission="1402" />
+            <siteMapNode url="~/Warehouse/Picking/Search" title="Search Pick Lists " permission="1422"/>
+            <siteMapNode url="~/Warehouse/Delivery/Schedule" title="Scheduling" permission="1424"/>
+            <siteMapNode url="~/Warehouse/Delivery/Search" title="Search Delivery Schedules" permission="1423"/>
+            <siteMapNode url="~/Warehouse/CustomerPickUps/Print" title="Customer Pick Up" permission="1425"/>
+            <siteMapNode url="~/Warehouse/Drivers" title="Drivers" permission="1410"/>
+            <siteMapNode url="~/Warehouse/Trucks" title="Trucks" permission="1412"/>
+            <siteMapNode url="~/Warehouse/DriverPayments" title="Internal Driver Payment Setup" permission="1433"/>
+            <!--<siteMapNode url="~/Warehouse/Picking/Reference" title="Print PickList nReference" />-->
+        </siteMapNode>
+        <siteMapNode title="Service">
+            <siteMapNode title="Reports">
+                <siteMapNode url="~/Report/WeeklySummary" title="Weekly Summary" permission="2001" />
+                <siteMapNode url="~/Report/DynamicReport/TechnicianRejections" title="Technician Rejections" permission="2011" />
+                <siteMapNode url="~/Report/DynamicReport/ServiceRequestResolution" title="Service Request Resolutions" permission="2010" />
+                <siteMapNode url="~/Report/DynamicReport/CustomerFeedbackHappyCall" title="Customer Feedback/Happy Call" permission="2012" />
+                <siteMapNode url="~/Report/DynamicReport/SpareParts" title="Spare Parts" permission="2013" />
+                <siteMapNode url="~/Report/DynamicReport/InstallationHitRate" title="Installation Hit Rate" permission="2014" />
+                <siteMapNode url="~/Report/DynamicReport/ServiceRequestFinancial" title="Service Request Financial" permission="2015" />
+                <siteMapNode url="~/Report/DynamicReport/ServiceFailures" title="Service Failures" permission="2016" />
+                <siteMapNode url="~/Report/DynamicReport/ServiceIncomeAnalysis" title="Service Income Analysis" permission="2021" />
+                <siteMapNode url="~/Report/DynamicReport/ResolutionTimesProductCategory" title="Resolution Time Per Product Category" permission="2017" />
+                <siteMapNode url="~/Report/DynamicReport/ReplacementData" title="Service Replacement Data" permission="2018" />
+                <siteMapNode url="~/Report/ServiceMonthlyClaims" title="Service Monthly Claims Summary" permission ="2019"/>
+                <siteMapNode url="~/Report/OutstandingSRsPerProductCategory" title="Outstanding SRs Per Product Department" permission="2020" />
+                <siteMapNode url="~/Report/DynamicReport/ServiceClaims" title="Service Claims" permission="2022" />
+            </siteMapNode>
+            <siteMapNode url="~/Service/Requests" title="Search Service Requests" permission ="1603"/>
+            <siteMapNode url="~/Service/Requests/New" title="New Service Request" permission ="1633"/>
+            <siteMapNode url="~/Service/TechnicianDiaries/Diary" title="Technician Diary" permission ="1615"/>
+            <siteMapNode url="~/Service/TechnicianDiaries/MyDiary" title="My Diary" permission ="1616"/>
+            <siteMapNode url="~/Service/TechnicianDiaries/DiaryExceptions" title="Diary Exceptions" permission ="1617"/>
+            <siteMapNode url="~/Service/TechnicianDiaries/SearchMyJobs" title="Search My Jobs" permission ="1616"/>
+            <siteMapNode url="~/Service/TechnicianPayments" title="Technician Payments" permission="1630"/>
+            <siteMapNode url="~/Service/TechnicianPayments/MyPayments" title="My Payments" permission="1629"/>
+            <siteMapNode url="~/Service/Charges" title="Labour Cost Matrix" permission="1635"/>
+            <siteMapNode url="~/Service/Parts" title="Parts Cost Matrix" permission="1637"/>
+            <siteMapNode url="~/Service/ServiceSuppliers" title="Suppliers" permission="1625"/>
+            <siteMapNode url="~/Service/SupplierCosts" title="Supplier Contractual Costs" permission="1602"/>
+            <siteMapNode url="~/Service/Resolutions" title="Resolutions" permission="1639"/>
+        </siteMapNode>
+        <siteMapNode title="Warranty">
+            <siteMapNode title="Reports">
+                <siteMapNode url="~/Report/DynamicReport/WarrantySales" title="Warranty Sales" permission="2002" />
+                <siteMapNode url="~/Report/DynamicReport/WarrantiesDueRenewal" title="Warranties Due Renewal" permission="2003" />
+                <siteMapNode url="~/Report/DynamicReport/WarrantyReturns" title="Warranty Returns" permission="2004" />
+                <siteMapNode url="~/Report/DynamicReport/WarrantyHitRate" title="Warranty Hit Rate" permission="2006" />
+                <siteMapNode url="~/Report/DynamicReport/WarrantyClaims" title="Warranty Claims" permission="2007" />
+                <siteMapNode url="~/Report/DynamicReport/SecondEffortSolicitation" title="Second Effort Solicitation" permission="2005" />
+                <siteMapNode url="~/Report/DynamicReport/WarrantyTransactions" title="Broker Warranty Transactions" permission="2024" />
+            </siteMapNode>
+            <siteMapNode url="~/Warranty/Warranties" title="Search Warranties"  permission="1805" />
+            <siteMapNode url="~/Warranty/Hierarchy" title="Warranty Hierarchy" permission="1801" />
+            <siteMapNode url="~/Warranty/Warranties/New" title="Create Warranty" permission="1804"/>
+            <siteMapNode url="~/Warranty/Link/Simulator" title="Warranty Simulator" permission="1815" />
+            <siteMapNode url="~/Warranty/Link" title="Warranty/Product Link" permission="1814" />
+            <siteMapNode url="~/Warranty/WarrantyPromotions" title="Warranty Promotions" permission="1810" />
+            <siteMapNode url="~/Warranty/WarrantyReturn" title="Warranty Return Percentage" permission="1812" />
+        </siteMapNode>
+
+        <siteMapNode title="Financial">
+            <siteMapNode title="Reports">
+                <siteMapNode url="~/Financial/FinancialQueryReport" title="Financial Query Report" permission="2046" />
+            </siteMapNode>
+            <siteMapNode title="Credit">
+                <siteMapNode url="~/Credit/StoreCardImport/Index" title="Store Card Import/Export" permission="7000"/>
+            </siteMapNode>          
+        </siteMapNode>
+      
+
+        <siteMapNode title="Merchandising">
+            <siteMapNode title="Create">
+              <siteMapNode url="~/Merchandising/Combo/New" title="Combo" permission="2120" />
+              <siteMapNode url="~/Merchandising/GoodsOnLoan/New" title="Goods on Loan" permission="2166" />
+              <siteMapNode url="~/Merchandising/GoodsReceipt/New" title="Goods Receipt" permission="2137"/>
+              <siteMapNode url="~/Merchandising/GoodsReceiptDirect/New" title="Direct Receipt" permission="2137"/>
+              <siteMapNode url="~/Merchandising/Locations/New" title="Location" permission="2102"/>
+              <siteMapNode url="~/Merchandising/ProductWithoutStock/New" title="Product Without Stock" permission="2115" />
+              <siteMapNode url="~/Merchandising/Promotion/New" title="Promotion" permission="2129" />
+              <siteMapNode url="~/Merchandising/Purchase/New" title="Purchase Order" permission="2135" />
+              <siteMapNode url="~/Merchandising/RegularStock/New" title="Regular Stock" permission="2113" masterOnly="true" />
+              <siteMapNode url="~/Merchandising/Set/New" title="Set" permission="2118" />
+              <siteMapNode url="~/Merchandising/SparePart/New" title="Spare Part" permission="2116" />
+              <siteMapNode url="~/Merchandising/StockAdjustment/New" title="Stock Adjustment" permission="2147" />
+              <siteMapNode url="~/Merchandising/StockAllocation/New" title="Stock Allocation" permission="2164" />
+              <siteMapNode url="~/Merchandising/StockRequisition/New" title="Stock Requisition" permission="2162" />
+              <siteMapNode url="~/Merchandising/StockTransfer/New" title="Stock Transfer" permission="2160" />
+              <siteMapNode url="~/Merchandising/StockCountSchedule/New" title="Stock Count" permission="2150" />
+              <siteMapNode url="~/Merchandising/Vendors/New" title="Vendor" permission="2111" />
+            </siteMapNode>
+
+            <siteMapNode title="Search">
+              <siteMapNode url="~/Merchandising/ProductEnquiry" title="Product Enquiry" permission="2141" />
+              <siteMapNode url="~/Merchandising/GoodsOnLoan" title="Goods on Loan" permission="2165" />
+              <siteMapNode url="~/Merchandising/GoodsReceipt" title="Goods Receipts" permission="2136"/>
+              <siteMapNode url="~/Merchandising/Locations" title="Locations" permission="2170"/>
+              <siteMapNode url="~/Merchandising/Products" title="Products" permission="2112" />
+              <siteMapNode url="~/Merchandising/Promotion" title="Promotions" permission="2128" />
+              <siteMapNode url="~/Merchandising/Purchase" title="Purchase Orders" permission="2134" />
+              <siteMapNode url="~/Merchandising/StockAdjustment" title="Stock Adjustments" permission="2146" />
+              <siteMapNode url="~/Merchandising/StockAllocation" title="Stock Allocations" permission="2163" />
+              <siteMapNode url="~/Merchandising/StockRequisition" title="Stock Requisitions" permission="2161" />
+              <siteMapNode url="~/Merchandising/StockTransfer" title="Stock Transfers" permission="2159" />
+              <siteMapNode url="~/Merchandising/StockCount" title="Stock Counts" permission="2149" />
+              <siteMapNode url="~/Merchandising/Vendors" title="Vendors" permission="2171" />
+              <siteMapNode url="~/Merchandising/VendorReturn" title="Vendor Returns" permission="2136"/>
+            </siteMapNode>
+
+          <siteMapNode title="Integration">
+            <siteMapNode url="~/Merchandising/CintError" title="CINT Errors" permission="2154" />
+          </siteMapNode>
+
+          <siteMapNode title="Reports">
+            <siteMapNode url="~/Merchandising/AllocatedStockReport" title="Allocated Stock" permission="2044" />
+            <siteMapNode url="~/Merchandising/BuyerSalesHistoryReport" title="Buyer Sales History" permission="2053" />
+            <siteMapNode url="~/Merchandising/NegativeStockReport" title="Negative Stock" permission="2050" />
+            <siteMapNode url="~/Merchandising/PromotionReport" title="Promotion" permission="2047" />
+            <siteMapNode url="~/Merchandising/SalesComparisonReport" title="Sales Comparison" permission="2045" />
+            <siteMapNode url="~/Merchandising/StockMovementReport" title="Stock Movement" permission="2043" />
+            <siteMapNode url="~/Merchandising/StockValueReport" title="Stock Valuation" permission="2042" />
+            <siteMapNode url="~/Merchandising/StockReceivedReport" title="Stock Received" permission="2049" />
+            <siteMapNode url="~/Merchandising/TopSkuReport" title="Top Sku" permission="2041" />
+            <siteMapNode url="~/Merchandising/TradingReport" title="Trading" permission="2040" />
+            <siteMapNode url="~/Merchandising/SummaryUpdateControlReport" title="Summary Update Control" permission="2052" />
+            <siteMapNode url="~/Merchandising/WarehouseOversupplyReport" title="Warehouse Oversupply" permission="2051" />
+            <siteMapNode url="~/Merchandising/WeeklyTradingReport" title="Weekly Trading Report" permission="2054" />
+
+          </siteMapNode>
+          
+          <siteMapNode url="~/Merchandising/AssociatedProducts" title="Associated Products" permission="2123" />
+          <siteMapNode url="~/Merchandising/ProductStatus" title="Product Status Maintenance" permission="2112" />
+          <siteMapNode url="~/Merchandising/Hierarchy" title="Product Hierarchy" permission="2169" />
+          <siteMapNode url="~/Merchandising/StockAdjustmentReason" title="Stock Adjustment Reasons" permission="2144" />
+          <siteMapNode url="~/Merchandising/RepossessedConditions" title="Repossessed Conditions" permission="2121" />
+          <siteMapNode url="~/Merchandising/PeriodData" title="Period Data" permission="2105" />
+          <siteMapNode url="~/Merchandising/TagValues" title="Hierarchy Detail Setup" permission="2107" />
+          <siteMapNode url="~/Merchandising/Tax" title="Standard Tax Rate Maintenance" permission="2125" />
+          <siteMapNode url="~/Merchandising/Ticketing/" title="Price Ticketing" permission="2127" />
+          <siteMapNode url="~/Merchandising/TransactionType/" title="Transaction Types" permission="2157" />
+          <siteMapNode url="~/Merchandising/NonWarrantableItems" title="Non warrantable items" permission="2168" />
+  
+    </siteMapNode>
+        <siteMapNode title="Administration">
+        <siteMapNode url="~/Admin/Users" title="Search Users" permission ="391" />
+        <siteMapNode url="~/Admin/Roles" title="Roles" permission="392" />
+        <siteMapNode url="~/Admin/Sessions" title="Sessions" permission="386" />
+        <siteMapNode url="~/Admin/LockedClients" title="Blocked Clients" permission="1205" />
+        <siteMapNode url="~/Admin/Users/Create" title="Create User" permission="388" />
+        <siteMapNode url="~/Audit" title="Audit" permission="390"/>
+        <siteMapNode url="~/Admin/BranchOpeningHours" title="Branch Opening Hours" permission="1206" />
+        <!--<siteMapNode url="~/Warehouse/DriverCommission" title="Drivers Commission" permission="1414"/>-->
+        <!--siteMapNode url="/cosacs.client/cosacsclient.application" title="Install CoSaCS Client" class="pjax-off" /-->
+      </siteMapNode>
+        <siteMapNode title="Configuration">
+<!--            <siteMapNode url="~/Config/Settings" title="System Settings" permission="1202"/>-->
+            <siteMapNode url="~/Config/PublicHolidays" title="Public Holidays" permission="15001"/>
+            <siteMapNode url="~/Hub" title="Hub" permission="1429" />
+            <siteMapNode url="~/Indexing" title="Re-Indexing" permission="1430"/>
+            <siteMapNode url="~/PickLists" title="Code Lists" permission="1200"/>
+            <siteMapNode url="~/Config/DecisionTable" title="Decision Tables" permission="1502"  />
+        </siteMapNode>
+        <!--<siteMapNode title="Test">
+            <siteMapNode url="~/home/test" title="Test Page" />
+            <siteMapNode url="~/home/404" title="404" />
+            <siteMapNode url="~/home/Throw" title="Throw Exception" />
+        </siteMapNode>-->
+        <!--siteMapNode title="Reports">
+            <siteMapNode title="Tech.Productivity Category" url="~/Reports/Report1.aspx"/>
+        </siteMapNode-->
+    </siteMapNode>
+</siteMap>

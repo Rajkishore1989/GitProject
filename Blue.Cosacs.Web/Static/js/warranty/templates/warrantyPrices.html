@@ -1,0 +1,157 @@
+<article class="warranty-prices" ng-show="result.expanded">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <th class="col-1"></th>
+            <th class="location-type">Store Type</th>
+            <th class="location">Branch</th>
+            <th class="col-2 price">Cost Price</th>
+            <th class="col-2 price">Retail Price</th>
+            <th class="col-2 price">Tax Inclusive Price</th>
+            <th class="date">Effective Date</th>
+        </thead>
+        <tbody class="location-prices">
+            <tr class="price-info new" ng-hide="!hasEditPricePermission || result.addPricing">
+                <td class="action text-center">
+                    <a class="ui-widget action-new glyphicons plus" href="#" title="New" ng-click="addNewPrice($event)"></a>
+                </td>
+                <td colspan="6"></td>
+            </tr>
+            <tr class="price-info new" ng-show="hasEditPricePermission && result.addPricing">
+                <td>
+                    <span class="action glyph-btn save glyphicons floppy_save" title="Save" ng-click="createNewLocationPrice()"></span>
+                    <span class="action glyph-btn cancel glyphicons undo" title="Cancel" ng-click="cancelNewLocationPrice()"></span>
+                </td>
+                <td>
+                    <div class="select2Box" ng-model="result.newLocationPrice.BranchType">
+                        <select ui-select2="select2Options" ng-model="result.newLocationPrice.BranchType"
+                                data-placeholder="All Store Types" class="picklist">
+                            <option></option>
+                            <option value="{{value}}" ng-repeat="(value, branchType) in MasterData.BranchTypes">
+                                {{branchType}}
+                            </option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="select2Box" ng-model="result.newLocationPrice.BranchNumber">
+                        <select ui-select2="select2Options" ng-model="result.newLocationPrice.BranchNumber"
+                                data-placeholder="All Store Locations" class="picklist">
+                            <option></option>
+                            <option value="{{value}}" ng-repeat="(value, branch) in MasterData.Branches">
+                                {{branch}}
+                            </option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="price cost" ng-class="{'has-error': !isCostPriceStringValueValid(result, result.newLocationPrice) }">
+                        <input class="form-control" ng-model="result.newLocationPrice.CostPrice" type="number" required
+                               min="0" ui-keypress="{enter:'createNewLocationPrice()'}"
+                               ui-keyup="{esc:'cancelNewLocationPrice()'}" />
+                    </div>
+                </td>
+                <td>
+                    <div class="price retail" ng-class="{'has-error': !isRetailPriceStringValueValid(result, result.newLocationPrice) }">
+                        <input class="form-control" ng-model="result.newLocationPrice.RetailPrice"
+                               ng-change="newRetailPriceChanged()" type="number" ng-required="(result.WarrantyType != 'Free')"
+                               min="0" ng-hide="result.WarrantyType == 'Free'"
+                               ui-keypress="{enter:'createNewLocationPrice()'}"
+                               ui-keyup="{esc:'cancelNewLocationPrice()'}"
+                               ng-init="result.newLocationPrice.RetailPrice = (result.WarrantyType == 'Free') && '' || '0';" />
+                        <span ng-show="result.WarrantyType == 'Free'">Free</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="price tax" ng-class="{'has-error': !isTaxInclusivePriceStringValueValid(result, result.newLocationPrice) }">
+                        <input class="form-control" ng-model="result.newLocationPrice.TaxInclusivePrice"
+                               ng-change="newTaxInclusivePriceChanged()" type="number" ng-required="(result.WarrantyType != 'Free')"
+                               min="0" ng-hide="result.WarrantyType == 'Free'"
+                               ui-keypress="{enter:'createNewLocationPrice()'}"
+                               ui-keyup="{esc:'cancelNewLocationPrice()'}"
+                               ng-init="result.newLocationPrice.TaxInclusivePrice = (result.WarrantyType == 'Free') && '' || '0';" />
+                        <span ng-show="result.WarrantyType == 'Free'">Free</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="date" ng-class="{'has-error': !result.newLocationPrice.effectiveDate}">
+                        <input class="form-control" readonly="true" required ui-date="newPriceDatePicker" ng-model="result.newLocationPrice.effectiveDate" placeholder="Effective Date" class="date" />
+                    </div>
+                </td>
+            </tr>
+            <tr class="price-info existing" ng-repeat="locationPrice in result.priceData">
+                <td class="inline-bottons">
+                    <span ng-show="hasEditPricePermission && !locationPrice.EffectiveDateInThePast" class="action glyph-btn glyphicons bin" title="Delete" ng-click="deleteLocationPrice()"></span>
+                    <span ng-show="hasEditPricePermission && !locationPrice.EffectiveDateInThePast && !isBulkEdit(locationPrice)"
+                          class="action glyph-btn save glyphicons floppy_save" title="Save" ng-click="saveLocationPriceChange(result)"></span>
+                    <span ng-show="hasEditPricePermission && !locationPrice.EffectiveDateInThePast && !isBulkEdit(locationPrice)"
+                          class="action glyph-btn cancel glyphicons undo" title="Cancel" ng-click="cancelLocationPriceChange()"></span>
+                    <span ng-show="locationPrice.BulkEditId && locationPrice.BulkEditId > 0" ng-click="deleteBulkEdit(locationPrice.BulkEditId, locationPrice)"
+                          class="glyphicons glyph-btn database_ban" title="Delete Bulk Edit {{locationPrice.BulkEditId}}"></span>
+                </td>
+                <td class="location-type">
+                    <a ng-show="locationPrice.HasPromotions" ng-href="{{ getPathToWarrantyPromotion(locationPrice.WarrantyId, locationPrice.Id, result.WarrantyNumber, locationPrice.EffectiveDate) }}">
+                        <span class="glyphicons circle_info" title="{{locationPrice.PromotionTooltip}}"></span>
+                    </a>
+                    {{locationPrice.BranchType || 'All'}}
+                </td>
+                <td class="location">{{locationPrice.BranchName || 'All'}}</td>
+
+
+                <td>
+                    <span ng-show="!locationPrice.editingBulkEntry && isBulkEdit(locationPrice)"
+                          ng-click="editBulkEntry(locationPrice)">{{locationPrice.CostPriceChangeInfo}}</span>
+                    <!--<span class="bulk-edit-link" ng-show="locationPrice.editingBulkEntry" ng-click="editBulkEntry(locationPrice)">-->
+                    <!--{{locationPrice.CostPrice}} abc abc</span>-->
+
+                    <div class="price" ng-show="!isBulkEdit(locationPrice) && (!hasEditPricePermission || locationPrice.EffectiveDateInThePast)">{{locationPrice.CostPrice}}</div>
+                    <div class="price cost" ng-show="!isBulkEdit(locationPrice) && (hasEditPricePermission && !locationPrice.EffectiveDateInThePast)"
+                         ng-class="{'has-error': !isCostPriceStringValueValid(result, locationPrice) }">
+                        <input class="form-control" ng-model="locationPrice.CostPrice" type="number" required
+                               min="0" ui-keypress="{enter:'saveLocationPriceChange(result)'}"
+                               ui-keyup="{esc:'cancelLocationPriceChange()'}" />
+                    </div>
+                </td>
+                <td>
+                    <span ng-show="!locationPrice.editingBulkEntry && isBulkEdit(locationPrice)"
+                          ng-click="editBulkEntry(locationPrice)">{{locationPrice.RetailPriceChangeInfo}}</span>
+                    <!--<span class="bulk-edit-link" ng-show="locationPrice.editingBulkEntry" ng-click="editBulkEntry(locationPrice)">-->
+                    <!--{{locationPrice.RetailPrice}} abc abc</span>-->
+
+                    <div class="price" ng-show="!isBulkEdit(locationPrice) && (!hasEditPricePermission || locationPrice.EffectiveDateInThePast)">{{result.WarrantyType == 'Free' && 'Free' || locationPrice.RetailPrice}}</div>
+                    <div class="price retail" ng-show="!isBulkEdit(locationPrice) && (hasEditPricePermission && !locationPrice.EffectiveDateInThePast)" ng-class="{'has-error': !isRetailPriceStringValueValid(result, locationPrice) }">
+                        <input class="form-control" ng-model="locationPrice.RetailPrice" ng-change="retailPriceChanged()"
+                               type="number" min="0" required ng-hide="result.WarrantyType == 'Free'"
+                               ui-keypress="{enter:'saveLocationPriceChange(result)'}"
+                               ui-keyup="{esc:'cancelLocationPriceChange()'}" />
+                        <span ng-show="result.WarrantyType == 'Free'">Free</span>
+                    </div>
+                </td>
+                <td>
+                    <span ng-show="!locationPrice.editingBulkEntry && isBulkEdit(locationPrice)"
+                          ng-click="editBulkEntry(locationPrice)">{{locationPrice.TaxInclusivePriceChangeInfo}}</span>
+                    <!--<span class="bulk-edit-link" ng-show="locationPrice.editingBulkEntry" ng-click="editBulkEntry(locationPrice)">-->
+                    <!--{{locationPrice.TaxInclusivePrice}} abc abc</span>-->
+
+                    <div class="price" ng-show="!isBulkEdit(locationPrice) && (!hasEditPricePermission || locationPrice.EffectiveDateInThePast)">{{result.WarrantyType == 'Free' && 'Free' || locationPrice.TaxInclusivePrice}}</div>
+                    <div class="price tax" ng-show="!isBulkEdit(locationPrice) && (hasEditPricePermission && !locationPrice.EffectiveDateInThePast)"
+                         ng-class="{'has-error': !isTaxInclusivePriceStringValueValid(result, locationPrice) }">
+                        <input class="form-control" ng-model="locationPrice.TaxInclusivePrice" ng-change="taxInclusivePriceChanged()"
+                               type="number" required min="0" ng-hide="result.WarrantyType == 'Free'"
+                               ui-keypress="{enter:'saveLocationPriceChange(result)'}"
+                               ui-keyup="{esc:'cancelLocationPriceChange()'}" />
+                        <span ng-show="result.WarrantyType == 'Free'">Free</span>
+                    </div>
+                </td>
+
+
+
+                <td>
+                    <div class="date" ng-show="!hasEditPricePermission || (!locationPrice.editingBulkEntry && isBulkEdit(locationPrice)) || locationPrice.EffectiveDateInThePast">{{locationPrice.effectiveDate | date:"dd MMM yyyy"}}</div>
+                    <div class="field date" ng-show="!isBulkEdit(locationPrice) && (hasEditPricePermission && !locationPrice.EffectiveDateInThePast)" ng-class="{'has-error': !locationPrice.effectiveDate}">
+                        <input required ui-date="locationPrice.dateCreatedOrCurrent" readonly="true" ng-model="locationPrice.effectiveDate" placeholder="Effective Date" class="date form-control" />
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</article>

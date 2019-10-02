@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Warranty Hit Rate Report";
+}
+<div data-module="report/WarrantyHitRate" ng-controller="warrantyHitRateController" class="ng-scope report" ng-cloak>
+    <div id="Parameters" class="section">Parameters</div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">
+                    {{ dateDeliveredFromLabel }}
+                </label>
+                <div class="col col-md-5" ng-class="{'has-error': !filterParameters.dateDeliveredFrom }">
+                    <input required ui-date="linkDatePicker" ng-required ng-model="filterParameters.dateDeliveredFrom" placeholder="Delivered Date" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">
+                    {{ dateDeliveredToLabel }}
+                </label>
+                <div class="col col-md-5" ng-class="{'has-error': !filterParameters.dateDeliveredTo }">
+                    <input required ui-date="linkDatePicker" ng-required ng-model="filterParameters.dateDeliveredTo" placeholder="Delivered Date" class="date form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">
+                    {{ branchLabel }}
+                </label>
+                <div class="col col-md-5">
+                    <list name="listBranch" ng-model="filterParameters.branch" ng-required lookup="BRANCH" placeholder="Branch"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">
+                    {{chainLabel}}</label>
+                <div class="col col-md-5">
+                    <list name="listChain" ng-model="filterParameters.chain" scope="chains" ng-required placeholder="Chain"></list>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">
+                    {{salesPersonLabel}}</label>
+                <div class="col col-md-5">
+                    <list name="listChain" ng-model="filterParameters.salesPerson" ng-required lookup="SalePersons" placeholder="Sales Person"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-md-6">
+            <div class="form-group">
+                <label class="col col-md-4 control-label">Reprocessed/Cancelled</label>
+                <div class="col col-md-5">
+                    <div class="checkbox">
+                        <label class="control-label">
+                            <input type="checkbox" ng-model="filterParameters.includeReprocessedCancelled" />
+                            Include
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

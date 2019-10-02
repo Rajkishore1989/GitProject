@@ -1,0 +1,54 @@
+<div class="panel panel-default result search-result" data-request-id="{{result.ProductId}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-md-12">
+                <span class="resultType">Vendor</span>
+                <a href="{{url('Merchandising/Vendors/Detail/' + result.VendorId)}}">{{result.Name}}</a>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body centre-section">
+        <ng-form name="stockForm" class="form-horizontal stock-form" novalidate>
+            <div class="row">
+                <div class="col-md-3">
+                     <div class="form-group">
+                        <label class="col-md-4 control-label">Code</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">{{result.Code}}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Address</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">{{result.Address}}</p>
+                        </div>
+                    </div>
+              
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Status</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">{{result.Status}}</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Type</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">{{result.VendorType}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="col-md-4 control-label">Tags</label>
+                        <div class="col-md-8">
+                            <p class="form-control-static">{{result.Tags | pbJoinBy : ','}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

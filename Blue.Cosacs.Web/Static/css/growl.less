@@ -1,0 +1,46 @@
+#growlcontainer{
+    position: fixed;
+    left: 0px;
+    top: 32px;
+    z-index: 1000;
+    width: 100%;
+}
+.growlstatus{
+    position: relative;
+    background-color: @bb-contrast;
+    text-align: center;
+    padding: 15px;
+    color: #ffffff;
+    margin-bottom: 1px;
+    line-height: 1;
+
+    .box-shadow(0px 0px 10px rgba(0,0,0,0.4));
+    opacity: (0.8);
+
+    .growltitle{
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+}
+.growlstatus:hover{
+    opacity: (0.9);
+
+    .growlstatus-close {
+        opacity: 1;
+    }
+}
+
+.growlstatus:hover .growlstatus-close {
+    display: block;
+}
+
+.growlstatus-close {
+    color: white;
+    opacity: 0.7;
+}
+
+body.full-screen {
+    #growlcontainer {
+        top: 0px;
+    }
+}

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cosacsreports xmlns="http://www.bluebridltd.com/cosacs/reports/">
+    <reports>
+        <report id="TechnicianRejections" source="SQL">
+            <query>
+                Report.TechnicianRejectionReport
+            </query>
+            <columns>
+                <column type="url" parentcolumn="Request Number" format="Service/Requests/?" />
+            </columns>
+        </report>
+        <report id="OutstandingServiceRequests" source="OLAP">
+            <query>
+                SELECT
+                NON EMPTY
+                {
+                [Measures].[Technician Booking Reject Count]
+                } ON COLUMNS,
+                NON EMPTY
+                {
+                {
+                [Service Request].[Date Logged].[Date Logged].&amp;[?FirstDate]:
+                [Service Request].[Date Logged].[Date Logged].&amp;[?LastDate]
+                } *
+                [Service Request].[Request Number].[Request Number].ALLMEMBERS *
+                [Service Request].[Date Allocated].[Date Allocated].ALLMEMBERS *
+                [Service Request].[Request Type].[Request Type].ALLMEMBERS * {
+                    [Warranty].[Warranty Type].&amp;[Extended],
+                    [Warranty].[Warranty Type].&amp;[Instant Replacement]
+                } *
+                [Technician].[Name].[Name].ALLMEMBERS *
+                [Product].[Category].[Category].ALLMEMBERS *
+                [Reject Reasons].[Reason].[Reason].ALLMEMBERS
+                } ON rows
+                FROM
+                [CosacsReporting]
+            </query>
+            <columns>
+                <column type="url" parentcolumn="Service Request (Request Number)" format="Service/Requests/?" />
+            </columns>
+        </report>
+        <report id="CustomerFeedback" source="SQL">
+            <query>
+                service.CustomerFeedback
+            </query>
+            <columns>
+                <column type="url" parentcolumn="Service Request Number" format="Service/Requests/?" />
+            </columns>
+        </report>
+        <report id="WarrantySales" source="SQL"  serverpaging="true">
+            <query>
+                warranty.WarrantySalesReport
+            </query>
+        </report>
+        <report id="WarrantiesDueRenewal" source="SQL">
+            <query>
+                warranty.WarrantiesDueRenewalReport
+            </query>
+        </report>
+        <report id="WarrantyReturns" source="SQL" serverpaging="true">
+            <query>
+                warranty.WarrantyReturnsReport
+            </query>
+        </report>
+        <report id="SpareParts" source="SQL" serverpaging="true">
+            <query>
+                Report.SpareParts
+            </query>
+            <columns>
+                <column type="url" parentcolumn="Service Request Number" format="Service/Requests/?" />
+                <column type="url" parentcolumn="Warehouse Booking Id" format="Warehouse/Bookings/detail/?" />
+            </columns>
+        </report>
+        <report id="Resolution" source="SQL">
+            <query>
+                Report.Resolution
+            </query>
+          <columns>
+            <column type="url" parentcolumn="Service Request No." format="Service/Requests/?" />
+          </columns>          
+        </report>
+        <report id="WarrantyClaims" source="OLAP" serverpaging="true">
+            <query>
+                WITH MEMBER [Measures].[% Number of claims sold] AS
+                IIF([Measures].[Warranty Sale Count]=0, NULL,
+                FORMAT([Measures].[Service Request Count]/[Measures].[Warranty Sale Count], "Percent")
+                )
+                MEMBER [Measures].[% Value of claims sold] AS
+                IIF([Measures].[Warranty Sale Price]=0, NULL,
+                FORMAT([Measures].[Total Cost]/[Measures].[Warranty Sale Price], "Percent")
+                )
+                MEMBER [Measures].[Warranty Sale Count Total] AS
+                [Measures].[Warranty Sale Count] - [Measures].[Warranty Sale Cancelled]
+                SELECT
+                {
+                [Measures].[Warranty Sale Price],
+                [Measures].[Warranty Sale Count Total],
+                [Measures].[Total Cost],
+                [Measures].[Service Request Count],
+                [Measures].[% Number of claims sold],
+                [Measures].[% Value of claims sold]
+                } ON COLUMNS,
+                NON EMPTY
+                {
+                [Product].[Product Category].&amp;[?Category] *
+                [Product].[Product Code].[Product Code].ALLMEMBERS *
+                [Product].[Product Description].[Product Description].ALLMEMBERS *
+                [Warranty Sale].[Warranty Number].[Warranty Number].ALLMEMBERS *
+                { [Warranty].[Warranty Type].&amp;[Extended], [Warranty].[Warranty Type].&amp;[Instant Replacement] } *
+                ORDER (
+                [Warranty Sale].[Price].[Price],
+                [Measures].[Warranty Sale Count],
+                DESC
+                )
+                } ON ROWS
+                FROM
+                [Warranty]
+                WHERE [Time].[Fiscal Year].&amp;[?Year]
+            </query>
+            <columns>
+                <column type="replace" columnName="Warranty Sale (Price)" replaceValue="Current Warranty Sale Price - Excluding Tax" />
+                <column type="replace" columnName="Warranty Sale Price" replaceValue="Total Value of Warranty Sales" />
+            </columns>
+        </report>
+        <report id="CustomerFeedbackHappyCall" source="SQL" serverpaging="true">
+            <query>
+                Report.CustomerFeedbackHappyCall
+            </query>
+            <columns>
+                <column type="url" parentcolumn="Service Request Number" format="Service/Requests/?" />
+            </columns>
+        </report>
+        <report id="WarrantyHitRate" source="SQL">
+            <query>
+                Report.WarrantyHitRate
+            </query>
+        </report>
+        <report id="SecondEffortSolicitation" source="SQL">
+            <query>
+                Report.SecondEffortSolicitation
+            </query>
+            <columns>
+            </columns>
+        </report>
+        <report id="InstallationHitRate" source="SQL">
+            <query>
+                Report.InstallationHitRate
+            </query>
+        </report>
+        <report id="ServiceRequestFinancial" source="SQL">
+            <query>
+                Report.ServiceRequestFinancial
+            </query>
+            <columns>
+                <column type="url" parentcolumn="Service Request Number" format="Service/Requests/?" />
+            </columns>
+        </report>
+        <report id="ResolutionTimesProductCategory" source="SQL">
+            <query>
+                Report.ResolutionTimesProductCategory
+            </query>
+        </report>
+        <report id="ReplacementData" source="SQL">
+            <query>
+                Report.ReplacementData
+            </query>
+        </report>
+        <report id="ServiceFailure" source="SQL">
+            <query>
+                Report.ServiceFailure
+            </query>
+        </report>
+        <report id="ServiceIncomeAnalysis" source="SQL">
+            <query>
+                Report.ServiceIncomeAnalysis
+            </query>
+        </report>
+        <report id="MonthlyClaimsSummaryBySupplier" source="SQL">
+        <query>
+          Report.MonthlyClaimsSummaryBySupplier
+        </query>
+      </report>      
+        <report id="OutstandingSRsPerProductCategory" source="SQL">
+            <query>
+                Report.OutstandingSRsPerProductCategory
+            </query>
+            <columns>
+                <!--<column type="url" parentcolumn="Days Outstanding 0-3" format="Service/Requests?q={%22query%22:%22{{Col1SRs}}%22,%22facetFields%22:{},%22dateFields%22:{},%22customQuery%22:[]}" />
+                <column type="url" parentcolumn="Days Outstanding 4-7" format="Service/Requests?q={%22query%22:%22{{Col2SRs}}%22,%22facetFields%22:{},%22dateFields%22:{},%22customQuery%22:[]}" />
+                <column type="url" parentcolumn="Days Outstanding 8-14" format="Service/Requests?q={%22query%22:%22{{Col3SRs}}%22,%22facetFields%22:{},%22dateFields%22:{},%22customQuery%22:[]}" />
+                <column type="url" parentcolumn="Days Outstanding 15+" format="Service/Requests?q={%22query%22:%22{{Col4SRs}}%22,%22facetFields%22:{},%22dateFields%22:{},%22customQuery%22:[]}" />-->
+            </columns>
+        </report>
+        <report id="ServiceClaims" source="SQL">
+            <query>
+                Report.ServiceClaims
+            </query>
+        </report>
+        <report id="DeliveryPerformanceSummary" source="SQL">
+            <query>
+                Report.DeliveryPerformanceSummary
+            </query>
+        </report>
+        <report id="WarrantyTransactions" source="SQL">
+            <query>
+                Report.WarrantyTransactions
+            </query>
+        </report>
+    </reports>
+</cosacsreports>

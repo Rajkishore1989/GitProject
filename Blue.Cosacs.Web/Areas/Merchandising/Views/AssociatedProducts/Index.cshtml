@@ -1,0 +1,84 @@
+﻿@model AssociatedProductViewModel
+
+@{
+    ViewBag.Title = "Associated Products";
+}
+
+<div data-module="merchandising/associatedproduct/init" ng-controller="associatedProductCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+    <ng-form name="stockForm" class="form-horizontal stock-form" novalidate>
+        <div class="row section">
+            <div class="col-md-12">
+                <div class="buffer-sm top">Select Tags</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="buffer-sm top">
+                    <pb-hierarchy options="hierarchyOptions" selections="hierarchy" callback="updateHierarchy(tag, level, hier)" editable="true" placeholder="Any"/>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row section">
+            <div class="col-md-12">
+                <div class="buffer-sm top">Associate a Product</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="sku" class="col-md-2 control-label">
+                        Product {{$viewValue}}
+                    </label>
+                    <div class="col-md-4">
+                        <div ng-class="{'has-error':stockForm.$invalid}">
+                            <input ui-select2="productSearchSetup()" name="sku" ng-model="product" data-placeholder="Select a sku or description" ng-required="true"  />
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="input-group-btn">
+                            <button class="btn btn-fixed btn-primary" ng-class="{'disabled':loadingResults}" ng-disabled="stockForm.$invalid" ng-click="associateProduct()">
+                                <span ng-hide="loadingResults">Associate</span>
+                                <span ng-show="loadingResults">Loading...</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row section">
+            <div class="col-md-12">
+                <div class="buffer-sm top">Currently Associated Products</div>
+            </div>
+        </div>
+        <div class="row">
+            <div ng-hide="vm.associatedProducts.length" class="no-results-message">
+                No associations found
+            </div>
+            <table class="table table-striped table-bordered" ng-show="vm.associatedProducts.length">
+                <thead>
+                    <tr >
+                        <th></th>
+                        <th ng-repeat="(level,opt) in hierarchyOptions">{{opt.key | pbTitlecase}}</th>
+                        <th>SKU</th>
+                        <th>Short Description</th>
+                        <th>Long Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="prod in vm.associatedProducts" ng-class="{'has-error' : !prod.statusValid}">
+                        <td>
+                            <span class="glyphicons glyph-btn action-delete bin" title="Delete" ng-click="remove(prod)"></span>
+                            <span class="glyphicons circle_exclamation_mark" ng-show="!prod.statusValid" tooltip="This products status is invalid, it must not be deleted, discontinued or non active"></span>
+
+                        </td>
+                        <td ng-repeat="(level,opt) in hierarchyOptions">{{prod.hierarchy[opt.key] || 'Any'}}</td>
+                        <td><a href="{{resolve('Merchandising/Products/ref?sku=' + prod.sku)}}">{{prod.sku}}</a></td>
+                        <td>{{prod.posDescription}}</td>
+                        <td>{{prod.longDescription}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-form>
+</div>

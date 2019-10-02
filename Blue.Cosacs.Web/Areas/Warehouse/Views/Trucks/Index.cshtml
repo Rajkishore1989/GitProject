@@ -1,0 +1,68 @@
+﻿@model IEnumerable<Blue.Cosacs.Warehouse.TruckView>
+@{ ViewBag.Title = "Trucks"; }
+
+<div data-module="warehouse/trucks" data-controller="Trucks" data-label="Truck" id="trucks">
+    <div class="row">
+        <div class="col-lg-10">
+            <form class="search" method=get action='@Url.Action("Index", "Trucks")'>
+                <div class="row">
+                    <div class="col-lg-3">
+                        @Html.TextBox("s.Name", null,
+                                      new{ @class = "form-control",
+                                      placeholder = "Enter a truck name" })
+                    </div>
+                    <div class="col-lg-3">
+                        @Html.DropDownList("s.Branch", new List<SelectListItem>() { },
+                                           new { @class = "pickList form-control picklist", data_pick_list_id = "BRANCH",
+                                                 data_placeholder = "Select a Delivery Branch" })
+                    </div>
+                    <div class="col-lg-3">
+                        @Html.DropDownList("s.Size", new List<SelectListItem>() { },
+                                           new { @class = "pickList form-control picklist", data_pick_list_id = "Blue.Cosacs.Warehouse.TRUCKSIZE",
+                                                 data_placeholder = "Select a Truck Size" })
+                    </div>
+                    <div class="col-lg-3">
+                        @Html.DropDownList("s.DriverId", new List<SelectListItem>() { },
+                                           new { @class = "pickList form-control picklist", data_pick_list_id = "Driver",
+                                                 data_placeholder = "Select a Driver" })
+                    </div>
+                    <div class="col-lg-3">
+                        <button type="submit" class="btn btn-default">Search</button>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <table class="data table table-striped table-bordered table-hover">
+                <thead>
+                    <tr>
+                    @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.TruckMaintenanceEdit))
+                    {
+                        <th class="col-2"></th>
+                    }
+                        <th>Name</th>
+                        <th>Branch</th>
+                        <th>Size</th>
+                        <th>Driver</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                        @Html.Partial("RecordView", item)
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                    @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.TruckMaintenanceEdit))
+                    {
+                        <td class="actions"></td>
+                    }
+                        <td colspan="4">&nbsp;</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <script id="templateNew" type="text/template">
+        @Html.Partial("RecordEdit", ViewData["DefaultNew"])
+    </script>
+</div>

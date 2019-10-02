@@ -1,0 +1,79 @@
+﻿@model Blue.Cosacs.Service.Models.CustomerFoodLoss
+@{
+    ViewBag.Title = "FoodLossReport";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+<div class="foodLossReport">
+    <div class="document-id">
+        <div>
+            <div class="ref">
+                Service Request #@Model.Id.ToString("D8")</div>
+            <div class="barcode">@Html.Barcode("SR$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+        </div>
+        <div>
+            <div class="createdOn">@Model.CreatedOn.ToString("f")</div>
+            <div class="createdBy">@Model.CreatedBy (@Model.CreatedById)
+            </div>
+        </div>
+    </div>
+    <h2>
+        Food Loss Report</h2>
+    <div class="name">
+        @Model.CustomerTitle
+        @Model.CustomerFirstName
+        @Model.CustomerLastName
+    </div>
+    <div class="address">
+        <div>@Model.CustomerAddressLine1</div>
+        <div>@Model.CustomerAddressLine2</div>
+        <div>@Model.CustomerAddressLine3</div>
+        <div>@Model.CustomerPostcode</div>
+    </div>
+    <div>
+        <table class=lossTable>
+            <thead>
+                <tr>
+                    <td>
+                        Item
+                    </td>
+                    <td>
+                        Value
+                    </td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.FoodLoss)
+                { 
+                    <tr>
+                        <td>
+                            @item.item
+                        </td>
+                        <td>
+                            @item.value
+                        </td>
+                    </tr>
+                }
+                <tr class=total>
+                    <td>
+                        Total
+                    </td>
+                    <td>@Model.FoodLoss.Sum(f => f.value)
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+            @if (Model.AllocationTechnician == 0)
+            {
+                <div>Not Verified</div>
+          
+            }
+            else
+            {
+               <div> Verified by technician @Model.AllocationTechnician on @Model.AllocationServiceScheduledOn.ToString("D")</div>
+               
+            }
+            
+           
+        
+    </div>
+</div>

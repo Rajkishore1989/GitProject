@@ -1,0 +1,79 @@
+﻿@model List<LabelModel>
+    
+               
+@foreach (var label in Model)
+{
+    var underline = string.Join("", Enumerable.Repeat("_", label.Sku.Length));
+
+    for (int x = 1; x <= label.QuantityToPrint; x++)
+    {
+        for (int i = 1; i <= label.TotalBoxes; i++)
+        {
+            var description = label.Description;
+
+            if (description.Length + label.Sku.Length > 40)
+            {
+                description = description.Substring(0, 37 - label.Sku.Length) + "...";
+            }
+
+            var modelNumber = label.ModelNumber;
+
+            if (modelNumber.Length > 15)
+            {
+                modelNumber = modelNumber.Substring(0, 12) + "...";
+            }
+
+            var brand = label.Brand;
+
+            if (brand.Length > 15)
+            {
+                brand = brand.Substring(0, 12) + "...";
+            }
+
+            var vendor = label.VendorName;
+
+            if (vendor.Length > 34)
+            {
+                vendor = vendor.Substring(0, 31) + "...";
+            }
+            
+            
+            <text>
+                ^XA
+
+                @*Set default font for label*@
+                ^CFA,0,15
+                
+                @if (!string.IsNullOrWhiteSpace(label.VendorUpc))
+                {
+                    //Barcode
+                    @:^BY2,,100
+                    @:^FO50,50^BC^FD@(label.VendorUpc)^FS
+                }
+
+                @**Purchase Order Details*@
+                ^FO450,50^FDPurchase Order #@label.PurchaseOrderId^FS
+                ^FO450,100^FDReceived @label.DateReceived.ToString("dd/MM/yy")^FS
+
+                @*Product Details*@
+
+                ^FO50,200^FD@(label.Sku) @description^FS
+                @*This causes the text to appear bold*@
+                ^FO50,202^FD@(label.Sku)^FS
+                @*The underline must equal the length of the sku*@
+                ^FO50,202^GR^FD@(underline)^FS
+
+                @*Product Attributes*@
+                ^FO50,250^FDModel: @modelNumber^FS
+                ^FO50,300^FDBrand: @brand^FS
+                ^FO50,350^FDVendor: @vendor^FS
+
+                ^CFA,0,20
+                ^FO500,275^FDBox @i of @label.TotalBoxes^FS
+                ^FO475,250^GB300,75,1
+
+                ^XZ
+            </text>
+        }
+    }
+}

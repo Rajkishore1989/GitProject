@@ -1,0 +1,42 @@
+﻿<div data-module="merchandising/reports/promotionReport/init" ng-controller="PromotionReportCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="clear btn btn-default" ng-disabled="paginator.loading()" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="clear btn btn-default" ng-disabled="paginator.loading()" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="clear btn btn-default" ng-click="paginator.reset(); resetPromotionIds();">Clear</button>
+                    <button id="buttonSubmit" class="btn btn-primary" ng-click="paginator.get()" ng-disabled="paginator.loading()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="id">Promotions</label>
+                    <pb-tag-list tags="vm.promotions"
+                                 selected-tags="vm.selectedPromotions"
+                                 placeholder="Type to add Promotion Names"
+                                 add-callback="addPromotion(item)"
+                                 remove-callback="removePromotion(item)"
+                                 text-binding="name"
+                                 value-binding="id"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="fascia">Fascia</label>
+                    <list name="fascia" ng-model="vm.query.fascia" scope="vm.fascias" placeholder="Select a Fascia" ng-disabled="!!vm.query.locationId"></list>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <label for="location">Location</label>
+                <list name="location" ng-model="vm.query.locationId" scope="vm.locations" placeholder="Select a Location" ng-disabled="!!vm.query.fascia"></list>
+            </div>
+        </div>
+
+        <pb-pagination get="search" params="vm.query" control="paginator" preload="false" no-results-message="There are no results matching the query." callback="updateColumns">
+            <pb-column-select data="paginator.page" columns="$parent.vm.columns" template-url="$parent.vm.gridTemplate" count="vm.resultCount" has-data="vm.hasData"></pb-column-select>
+        </pb-pagination>
+    </div>
+</div>

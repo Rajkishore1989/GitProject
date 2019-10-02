@@ -1,0 +1,248 @@
+﻿@{
+    ViewBag.Title = "Service Claims Report";
+}
+<div data-module="report/ServiceClaims" ng-controller="ServiceClaimsController"
+    class="ng-scope report" ng-cloak>
+    <div class="section">
+        Parameters
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-4 form-group">
+            <label for="dateLoggedFrom" class="col col-lg-6 control-label">
+                {{ dateLoggedFromLabel }}
+            </label>
+            <div class="col col-lg-6" ng-class="{'has-error': !dateLoggedFrom }">
+                <input ui-date="linkDatePicker" ng-model="dateLoggedFrom" placeholder="" class="date form-control" />
+            </div>
+        </div>
+        <div class="col col-lg-4 form-group">
+            <label for="dateLoggedTo" class="col col-lg-6 control-label">
+                {{ dateLoggedToLabel }}
+            </label>
+            <div class="col col-lg-6" ng-class="{'has-error': !dateLoggedTo }">
+                <input ui-date="linkDatePicker" ng-model="dateLoggedTo" placeholder="" class="date form-control" />
+            </div>
+        </div>
+        <div class="col col-lg-4 form-group">
+            <label for="supplier" class="col col-lg-6 control-label">
+                {{ supplierLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <select ui-select2 class="select2Box picklist" ng-model="supplier" placeholder="Please select a supplier">
+                    <option></option>
+                    <option value="{{value}}" ng-repeat="value in MasterData.ServiceSuppliers | orderBy:'toString()'">{{value}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-4 form-group">
+            <label for="dateResolvedFrom" class="col col-lg-6 control-label">
+                {{ dateResolvedFromLabel }}
+            </label>
+            <div class="col col-lg-6" ng-class="{'has-error': !dateResolvedFrom }">
+                <input ui-date="linkDatePicker" ng-model="dateResolvedFrom" placeholder="" class="date form-control" />
+            </div>
+        </div>
+        <div class="col col-lg-4 form-group">
+            <label for="dateResolvedTo" class="col col-lg-6 control-label">
+                {{ dateResolvedToLabel }}
+            </label>
+            <div class="col col-lg-6" ng-class="{'has-error': !dateResolvedTo }">
+                <input ui-date="linkDatePicker" ng-model="dateResolvedTo" placeholder="" class="date form-control" />
+            </div>
+        </div>
+        <div class="col col-lg-4 form-group">
+            <label for="primaryCharge" class="col col-lg-6 control-label">
+                {{ primaryChargeLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <select ui-select2 type="text" class="select2Box picklist" ng-model="primaryCharge" placeholder="Please select a Primary Charge">
+                    <option></option>
+                    <option value="{{value}}" ng-repeat="value in MasterData.ChargeTos | orderBy:'toString()'">{{value}}
+                    </option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-4 form-group">
+            <label for="fywCharged" class="col col-lg-6 control-label">
+                {{ fywChargedLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input type="checkbox" ng-model="fywCharged" name="fywCharged" id="fywCharged" />
+            </div>
+        </div>
+        <div class="col col-lg-4 form-group">
+            <label for="supplierCharged" class="col col-lg-6 control-label">
+                {{ supplierChargedLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input type="checkbox" ng-model="supplierCharged" name="supplierCharged" id="supplierCharged" />
+            </div>
+        </div>
+        <div class="form-group col-lg-4">
+            <label class="col col-lg-6 control-label">
+                {{ departmentLabel }}</label>
+            <div class="col col-lg-6">
+                <list name="listDepartments" ng-model="department" scope="departments" placeholder="Select a Division"></list>
+            </div>
+        </div>
+
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-4 form-group">
+            <label for="ewCharged" class="col col-lg-6 control-label">
+                {{ ewChargedLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input type="checkbox" ng-model="ewCharged" name="ewCharged" id="ewCharged" />
+            </div>
+        </div>
+
+        <div class="col col-lg-4 form-group">
+            <label for="technicianReport" class="col col-lg-6 control-label">
+                {{ includeTechnicianReportLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input type="checkbox" ng-model="includeTechnicianReport" name="technicianReport" id="technicianReport" />
+            </div>
+        </div>
+
+    </div>
+    <p class="searchrow" />
+    <div class="actions">
+        <button id="buttonClear" class="clear btn btn-default" ng-click="clear()">
+            Clear
+        </button>
+        <button id="buttonSearch" class="search btn btn-primary" ng-click="selectPage(1)">
+            Run
+        </button>
+        <button class="btn btn-default" ng-click="exportFile()">Export</button>
+    </div>
+    <p class="searchrow" />
+    <div id="divResults"  ng-show="!emptyResults">
+        <table class="table table-striped table-bordered table-hover table-row-number" ng-hide="!resultsVisible">
+            <thead>
+                <tr>
+                    <th class="row-number"></th>
+                    <th>Country Code</th>
+                    <th>Service Request Id</th>
+                    <th>Supplier Name</th>
+                    <th>Product Category</th>
+                    <th>Primary Charge</th>
+                    <th>Date Logged</th>
+                    <th>Date Resolved</th>
+                    <th>Date Delivered</th>
+                    <th>Date Account Opened</th>
+                    <th>FYW Description</th>
+                    <th>FYW Contract Number</th>
+                    <th>EW Description</th>
+                    <th>EW Contract Number</th>
+                    <th>Model Number</th>
+                    <th>Serial Number</th>
+                    <th>Replacement Issued</th>
+                    <th>Technician Report</th>
+                    <th>Comments</th>
+                    <th>Customer Name</th>
+                    <th>Account Number</th>
+                    <th>Resolution</th>
+                    <th>Original Product Cost Price</th>
+                    <th>Parts Cost</th>
+                    <th>Product Code</th>
+                    <th>Product Description</th>
+                    <th>Part Number</th>
+                    <th>Part Description</th>
+                    <th>Part Quantity</th>
+                    <th>Part Unit Price</th>
+                    <th>Part Cost</th>
+                    <th>Supplier Parts Charge</th>
+                    <th>FYW Parts Charge</th>
+                    <th>EW Parts Charge</th>
+                    <th>Supplier Labour Charge</th>
+                    <th>FYW Labour Charge</th>
+                    <th>EW Labour Charge</th>
+                    <th>Supplier Additional Charge</th>
+                    <th>FYW Additional Charge</th>
+                    <th>EW Additional Charge</th>
+                    <th>Food Loss Value</th>
+                    <th>Total Charge</th>
+                    <th>Previous Repairs Within 90 Days</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in queryResults" ng-class="{'{{item.ServiceRequestId}}' : !item.CountryCode}" ng-click="ShowHideChild(item.ServiceRequestId)" ng-hide="!item.CountryCode">
+                    <td class="row-number">{{$index + 1}}</td>
+                    <td>{{item.CountryCode}}</td>
+                    <td>
+                        <a href="{{getSrURL(item.ServiceRequestId)}}">{{item.ServiceRequestId}}
+                        </a>
+                    </td>
+                    <td>{{item.SupplierName}}</td>
+                    <td>{{item.ProductCategory}}</td>
+                    <td>{{item.PrimaryCharge}}</td>
+                    <td>{{item.DateLogged}}</td>
+                    <td>{{item.DateResolved}}</td>
+                    <td>{{item.DateDelivered}}</td>
+                    <td>{{item.DateAccountOpened}}</td>
+                    <td>{{item.FYWDescription}}</td>
+                    <td>
+                        <a href="{{getWarrantyURL(item.FywId)}}">{{item.FYWContractNumber}}</a>
+                    </td>
+                    <td>{{item.EWDescription}}</td>
+                    <td>
+                        <a href="{{getWarrantyURL(item.EwId)}}">{{item.EWContractNumber}}</a>
+                    </td>
+                    <td>{{item.ModelNumber}}</td>
+                    <td>{{item.SerialNumber}}</td>
+                    <td>{{item.ReplacementIssued}}</td>
+                    <td>{{item.TechnicianReport}}</td>
+                    <td>{{item.Commnents}}</td>
+                    <td>{{item.CustomerName}}</td>
+                    <td>{{item.AccountNumber}}</td>
+                    <td>{{item.Resolution}}</td>
+                    <td>{{item.OriginalProductCostPrice}}</td>
+                    <td>{{item.PartsCost}}</td>
+                    <td>{{item.ProductCode}}</td>
+                    <td>{{item.ProductDescription}}</td>
+                    <td>{{item.PartNumber}}</td>
+                    <td>{{item.PartDescription}}</td>
+                    <td>{{item.PartQuantity}}</td>
+                    <td>{{item.PartUnitPrice}}</td>
+                    <td>{{item.PartCost}}</td>
+                    <td>{{item.SupplierPartsCharge}}</td>
+                    <td>{{item.FYWPartsCharge}}</td>
+                    <td>{{item.EWPartsCharge}}</td>
+                    <td>{{item.SupplierLabourCharge}}</td>
+                    <td>{{item.FYWLabourCharge}}</td>
+                    <td>{{item.EWLabourCharge}}</td>
+                    <td>{{item.SupplierAdditionalCharge}}</td>
+                    <td>{{item.FYWAdditionalCharge}}</td>
+                    <td>{{item.EWAdditionalCharge}}</td>
+                    <td>{{item.FoodLossValue}}</td>
+                    <td>{{item.TotalCharge}}</td>
+                    <td>{{item.PreviousRepairs}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div ng-show="hideTableData">
+            There are no values matching your search filter.
+        </div>
+    </div>
+    <p class="searchrow"></p>
+    <div ng-show="hasPagination && !hideTableData">
+        <pagination num-pages="PageCount" max-size="250" current-page="PageIndex" on-select-page="selectPage(page)"></pagination>
+        <div class="print-pagination">Page {{PageIndex}}<span ng-show="PageCount > 1"> of {{PageCount}}</span></div>
+    </div>
+</div>
+
+
+

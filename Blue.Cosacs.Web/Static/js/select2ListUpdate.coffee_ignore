@@ -1,0 +1,88 @@
+﻿define ['jquery','url', 'module-activator'], ($, url,moduleActivator) ->
+
+    
+
+    
+    init: (options) ->
+        this.list = options.list
+        this.listDisplayMember = options.listDisplayMember
+        this.template = options.template 
+        this.selector = options.selector # Select2 selector
+        this.selectorParent = options.selectorParent
+        this.outputParent = options.outputParent 
+        this.userId = options.userId
+        this.format = options.format || defaultFormat
+        this.placeholder = options.placeholder
+        this.onModuleActivate = options.onModuleActivate
+
+        #Not active list
+        NotActive = (list) ->
+            _.filter(list, (p) ->
+                !p.Active)
+
+        #Active List
+        Active = (list) ->
+            _.filter(list, (p) ->
+                p.Active)
+
+        #Select2 formatter
+        defaultFormat = (item) ->
+            item.ProfileName
+
+        #Render profile selector box on load and change
+        displayProfileSelector = () ->
+            if NotActive(list).length > 0
+                @selectorParent.show()
+                @selector.select2({
+                    placeholder: @placeholder,
+                    data:{ results: NotActive(list), text: @listDisplayMember },
+                    formatSelection: format,
+                    formatResult: format
+                    })
+                @selector.select2( "val","")
+            else
+                @selectorParent.hide()
+
+        #Active all active profiles on load only
+        _.each(Active(List), (row) ->
+            row.UserId = UserId
+            outputParent.append(_.template(@template,row))
+            onModuleActivate()
+            )
+
+        #Render profile selector on load
+        displayProfileSelector()
+
+        # Remove Profile
+        @outputParent.on("click",".click.profile", (e) ->
+            profileId = $(this).data('id')
+            selector = $(this).data('selector')
+            $.ajax(
+                type: 'POST'
+                url: url.resolve('/Admin/Users/RemoveProfile')
+                data: { ProfileId: profileId, UserId: UserId },
+                success: (data) ->
+                    _.find(profilesList, (p) ->
+                        p.id == profileId).Active = false
+                    $el.find('.' + selector).remove()
+                    displayProfileSelector()
+                )
+            )    
+
+        #Add Profile
+        @selectorParent.on("change",@selector, (e) ->
+            current = _.find(NotActive(List), (p) -> 
+                String(p.id) == e.val)
+            current.UserId = @userId
+           
+            $.ajax(
+                type: 'POST'
+                url: url.resolve('/Admin/Users/AddProfile')
+                data: { ProfileId: current.id, UserId: current.UserId },
+                success: (data) ->
+                    @outputParent.append(_.template(@template,current))
+                    onModuleActivate()
+                    current.Active = true
+                    displayProfileSelector()
+                )
+        )        

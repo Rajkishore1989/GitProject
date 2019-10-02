@@ -1,0 +1,204 @@
+<% var dateformat = 'dddd DD-MMMM-YYYY HH:mm' %>
+<% var dateformat2 = 'dddd DD-MMMM-YYYY' %>
+
+<div class="bookingsHistory" style="display: none">
+    <table class="table table-striped">
+        <thead>
+            <th>Action</th>
+            <th>Date</th>
+            <th>User</th>
+            <th>Comment / Notes</th>
+            <th class="text-center">Quantity</th>
+            <% if(Exception) {%><th>Rejection</th><% } %>
+        </thead>
+        <tbody>
+            <% if(CancelUser) { %>
+            <tr>
+                <td>Rejected</td>
+                <td><%= jsonDateToMomentUtcFix(CancelDate).format(dateformat) %></td>
+                <td><%= CancelUser %></td>
+                <td><%= CancelReason %></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <% } else if (Exception){ %>
+            <tr>
+                <td>Exception</td>
+                <td><%= jsonDateToMomentUtcFix(BookingOrderedOn).format(dateformat) %></td>
+                <td></td>
+                <td class="exceptionLink">
+                    <div>Linked to parent #<%= OriginalId %></div>
+                </td>
+                <td class="text-center">
+                    <%= Quantity %>
+                </td>
+                <td>
+                    <% if (ParentPickingRejected) {%> Picking <% } %> 
+                    <% if (ParentScheduleRejected && !PickUp) {%> Scheduling <% } %>
+                    <% if(PickUp) {%> Customer Pick Up <% } %>
+                    <% if (ParentDeliveryRejected) {%> Delivery <% } %>
+                </td>
+            </tr>
+            <% } else { %>
+            <tr>
+                <td>Booked</td>
+                <td><%= jsonDateToMomentUtcFix(BookingOrderedOn).format(dateformat) %></td>
+                <td><%= BookedByName %> (<%= BookedBy %>)</td>
+                <td>
+                    <div><%= DeliveryOrCollectionDescription %> Due on <%= moment(DeliveryOrCollectionDate).format(dateformat2) %></div>
+                    <% if (!Exception && OriginalId) { %>
+                    <div>Linked to parent #<%= OriginalId %> &nbsp;&nbsp;<span class="exceptionLink"></span></div>
+                    <% } %>
+                </td>
+                <td class="text-center"><%= Quantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+            <% if (PickingAssignedBy != null) { %>
+            <tr>
+                <td>Pick List Assigned</td>
+                <td><%= jsonDateToMomentUtcFix(PickingAssignedDate).format(dateformat) %></td>
+                <td><%= PickingAssignedByName %> (<%= PickingAssignedBy %>)</td>
+                <td><strong>Truck:</strong> <%=TruckName %> (<%=truckId %>)</td>
+                <td class="text-center"><%= Quantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+            <% if (PickedCreatedBy != null) { %>
+            <tr>
+                <td>PickList Created</td>
+                <td><%= jsonDateToMomentUtcFix(PickingCreatedOn).format(dateformat) %></td>
+                <td><%= PickedCreatedByName %> (<%= PickedCreatedBy %>)</td>
+                <td class="pickedLink"></td>
+                <td class="text-center"><%= Quantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+            <% if (PickedBy != null) { %>
+            <tr>
+                <td>Picked by</td>
+                <td></td>
+                <td><%= PickedByName %> (<%= PickedBy %>)</td>
+                <td></td>
+                <!-- <td><%= PickingComment %></td> -->
+                <td class="text-center"><%= PickQuantity%></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+            <% if (CheckedBy != null) { %>
+            <tr>
+                <td>Picked Item Checked</td>
+                <td></td>
+                <td><%= PickedCheckedByName %> (<%= CheckedBy %>)</td>
+                <td><%= DeliveryOrCollectionDescription %> Due on <%= jsonDateToMomentUtcFix(DeliveryOrCollectionDate).format(dateformat2) %></td>
+                <td class="text-center"><%= PickQuantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+            <% if (PickingConfirmedOn != null) { %>
+            <tr>
+                <td>PickList Confirmed</td>
+                <td><%= jsonDateToMomentUtcFix(PickingConfirmedOn).format(dateformat) %></td>
+                <td><%= PickedConfirmedByName %> (<%= ConfirmedBy %>)</td>
+                <td>
+                    <div>
+                        <% if (PickingRejected) {%> 
+                            <%= PickQuantity %> items picked. Items rejected due to <%= PickingRejectedReason %>   
+                        <% } %>
+                        <%=PickingComment %>
+                    </div>
+                    <% if (!Exception && ChildId) {%> 
+                    <div>Linked to child #<%= ChildId %> &nbsp;&nbsp;<span class="childLink"></span></div>
+                    <% } %>
+                </td>
+                <td class="text-center"><%= PickQuantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+    
+            <% if (ScheduleCreatedOn != null) { %>
+            <tr>
+                <td>Schedule Created</td>
+                <td><%= jsonDateToMomentUtcFix(ScheduleCreatedOn).format(dateformat) %></td>
+                <td><%= LoadCreatedByName %> (<%= LoadCreatedBy %>)</td>
+                <td class="scheduleLink">
+                    <div><b>Comments:</b> <%=ScheduleComment%>  </div>
+                    <div><b>Schedule Sequence:</b> <%= ScheduleSequence %></div>
+                    <div><b>Driver:</b> <%=DriverName %> (<%= DriverId %>)</div>
+                </td>
+                <td class="text-center"><%= ScheduleQuantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+             <% if (ScheduleRejectedDate != null) { %>
+            <tr>
+                <td>Schedule Rejected</td>
+                <td><%= jsonDateToMomentUtcFix(ScheduleRejectedDate).format(dateformat2) %></td>
+                <td><%= ScheduleRejectedByName %> (<%= ScheduleRejectedBy %>)</td>
+                <td>
+                    <div>
+                        <%= ScheduleQuantity %> items scheduled. Items rejected due to <%= PickingRejectedReason %>   
+                        <b>Notes:</b> <%=ScheduleComment%> 
+                    </div>
+                </td>
+                <td class="text-center"><%= ScheduleQuantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+
+            <% if (PickUpNotePrintedBy != null) {%>
+            <tr>
+                <td>Printed</td>
+                <td><%= jsonDateToMomentUtcFix(PickUpDatePrinted).format(dateformat) %></td>
+                <td><%= PickUpNotePrintedByName %> (<%= PickUpNotePrintedBy %>)</td>
+                <td></td>
+                <td class="text-center"><%= ScheduleQuantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+            <% if (DeliveryRejected != null) { %>
+            <tr>
+                <td><%= DeliveryOrCollectionDescription %> Confirmed</td>
+                <td><%= jsonDateToMomentUtcFix(DeliveryConfirmedOn).format(dateformat) %></td>
+                <td><%= DeliveryConfirmedByName %> (<%= DeliveryConfirmedBy %>)</td>
+                <td>
+                <% if (DeliveryRejected) {%>
+                    <%= DeliverQuantity %> items <% if (DeliveryOrCollectionDescription == "Delivery") {%> delivered<% } else { %> collected<% } %> on <%= jsonDateToMomentUtcFix(DeliveryConfirmedDate).format(dateformat2) %>. Items rejected due to <%= DeliveryRejectedReason %> <%= DeliveryRejectionNotes %>
+                <% } else { %>
+                    Item delivered on <%= moment(DeliveryConfirmedDate).format(dateformat2) %>
+                <% } %>
+                <% if (DeliveryRejectionNotes != null && DeliveryRejectionNotes != "") {%>
+                    <strong>Comments:</strong> <%= DeliveryRejectionNotes %>
+                <% } %>
+                <% if (PickUp) {%>
+                    <b>Comments:</b> <%=ScheduleComment%>
+                <% } %>
+                </td>
+                <td class="text-center"><%= DeliverQuantity %></td>
+                <td></td>
+            </tr>
+            <% } %>
+
+            <% if (ChildException){ %>
+            <tr>
+                <td>Exception</td>
+                <td><%= jsonDateToMomentUtcFix(ExceptionCreatedOn).format(dateformat) %></td>
+                <td></td>
+                <td class="childLink">
+                    <div>Linked to child #<%= ChildId %></div>
+                </td>
+                <td class="text-center"><%= Quantity - CurrentQuantity%></td>
+                <td></td>
+            </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>

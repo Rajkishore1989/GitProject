@@ -1,0 +1,67 @@
+﻿@{ ViewBag.Title = "Indexing Done"; }
+
+@{
+    var message = string.Empty;
+
+    if (ViewBag.doPicking)
+    {
+        message = "Picking";
+    }
+    if (ViewBag.doBooking)
+    {
+        message = "Booking";
+    }
+    if (ViewBag.doDelivery)
+    {
+        message = "Delivery";
+    }
+    if (ViewBag.doUsers)
+    {
+        message = "Users";
+    }
+    if (ViewBag.doService)
+    {
+        message = "Service";
+    }
+    if (ViewBag.doWarranty)
+    {
+        message = "Warranty";
+    }
+    if (ViewBag.doWarrantySales)
+    {
+        message = "Warranty sales";
+    }
+    if (ViewBag.doStock)
+    {
+        message = "Stock";
+    }
+    if (ViewBag.doLocation)
+    {
+        message = "Location";
+    }
+    if (ViewBag.doMerchandiseStockLevels)
+    {
+        message = "Merchandise Stock Levels";
+    }
+    if (ViewBag.doVendors)
+    {
+        message = "Vendors";
+    }
+    if (ViewBag.doPromotions)
+    {
+        message = "Promotions";
+    }
+    if (ViewBag.doPurchaseOrders)
+    {
+        message = "Purchase Orders";
+    }
+    if (ViewBag.doGoodsReceipt)
+    {
+        message = "Goods Receipt";
+    }
+}
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+    <div class="text-left text-success">@message done.</div>
+}

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Blue.Events.IEvent>
+
+    <div class=section>Security Audit (last 50 entries from past week)</div>
+    <div>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Event On</th>
+                <th>Client Address</th>
+                <th>Event</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{ var count = 0; }
+            @foreach (var e in Model)
+            {
+            <tr>
+                <td>@e.EventOnUtc.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@e.ClientAddress</td>
+                <td>@e.EventType</td>
+            </tr>
+            count++;
+            }
+            @if (count == 0)
+            {
+            <tr>
+                <td colspan=3>There are no security audit entries from the past week.</td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.ViewAudit))
+    {
+    <a href='@Url.Content("~/Audit/?EventBy=" + ViewBag.Login)'>Remaining audit records for this user</a>
+    }

@@ -1,0 +1,26 @@
+<div class="section">
+    Sales
+</div>
+<div class="no-results-message" ng-hide="sales.length">
+    No sales data found.
+</div>
+<table class="table table-bordered table-striped aligned" ng-show="sales.length">
+    <thead>
+        <tr>
+            <th></th>
+            <th>This Period</th>
+            <th>Last Period</th>
+            <th>This YTD</th>
+            <th>Last YTD</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="sale in sales">
+            <td>{{sale.type}}</td>
+            <td>{{sale.thisPeriod}}</td>
+            <td>{{sale.lastPeriod}}</td>
+            <td>{{sale.thisYTD}}</td>
+            <td>{{sale.lastYTD}}</td>
+        </tr>
+    </tbody>
+</table>          

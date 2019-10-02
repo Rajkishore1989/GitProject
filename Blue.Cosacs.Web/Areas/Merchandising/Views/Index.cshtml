@@ -1,0 +1,16 @@
+@{
+ViewBag.Title = "Weekly Trading Report";
+}
+<div ng-controller="WeeklyTradingReportController">
+    <div class="section">Export Data</div>
+    <div class="row">
+        <div class="col-lg-3">
+            <label for="exportDate">Export Date</label>
+            <input class="date" id="exportDate" name="exportDate"  type="date"
+                  ui-date="dateFormat" placeholder="Select Date"/>
+        </div>
+        <div class="col-lg-1">
+            <button id="buttonExport" class="btn btn-default" ng-click="exportReportData()">Export</button>
+        </div>
+    </div>
+</div>

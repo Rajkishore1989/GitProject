@@ -1,0 +1,81 @@
+﻿@model IList<Blue.Cosacs.Warehouse.BookingView>
+@using Blue.Cosacs.Warehouse.Utils;
+<style type="text/css">
+    .Collection {
+        border-left: 10px solid;
+    }
+
+    .del-col div.watermark {
+        -webkit-transform: none;
+        -moz-transform: none;
+        color: rgba(230, 230, 230, 0.5);
+        font-size: 10em;
+        z-index: -100;
+        position: absolute;
+        top: -25px;
+        left: 250px;
+        visibility: visible;
+    }
+</style>
+
+<span style="white-space:nowrap">
+    <table class="main">
+        <thead>
+            <tr>
+                <th colspan="2">Schedule No</th>
+                <th>Shipment No</th>
+                <th>SKU</th>
+                <th>Item</th>
+                <th class="number">Quantity</th>
+                <th>IUPC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var item in @Model)
+                {
+
+                    <tr class="item noborder @DeliveryOrCollection.FromString(item.DeliveryOrCollection).Name" style="border-top: 1px solid black;">
+                        <td rowspan="2" style="text-align: center">
+                            @if (item.DeliveryOrCollectionDate.ToString() != null)
+                            {
+                                @item.DeliveryOrCollectionSlot
+                            }
+                            <div class="del-col">
+                                <div style="right: -15px">@DeliveryOrCollection.FromString(item.DeliveryOrCollection).Name</div>
+                                @if (item.CurrentQuantity == 0)
+                                {
+                                    <div class="watermark cancelled">CANCELLED</div>
+                                }
+                            </div>
+                        </td>
+                        <td rowspan="2" style="vertical-align: middle">
+                            @Html.Barcode((string)@item.Id.ToString(), BarcodeLib.TYPE.CODE128, 130, 30, false, BarcodeLib.AlignmentPositions.CENTER, true)
+                        </td>
+                        <td rowspan="2" style="vertical-align: middle">
+                            #@item.BookingId
+                        </td>
+                        <td class="larger">
+                            <div style="white-space: normal">@item.ItemNo</div>
+                        </td>
+                        <td class="larger">
+                            <div style="white-space: normal">@item.ProductDescription</div>
+                        </td>
+                        <td class="number"><div class="qty">@item.CurrentQuantity</div></td>
+
+                        <td rowspan="2">
+                            @Html.Barcode((string)item.ItemUPC.ToString(), BarcodeLib.TYPE.CODE128, 130, 30, false, BarcodeLib.AlignmentPositions.CENTER, true)
+                            @item.ItemUPC
+                        </td>
+                    </tr>
+                    <tr class="item noborder @DeliveryOrCollection.FromString(item.DeliveryOrCollection).Name">
+                        <td colspan="7"></td>
+                    </tr>
+                    <tr>
+                        <td class="sign" colspan="7"></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</span>

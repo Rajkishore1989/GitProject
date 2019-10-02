@@ -1,0 +1,33 @@
+﻿@model IList<Blue.Cosacs.Warehouse.PickListView>
+@{
+    var pickingIds = Model.Select(p => p.Id).Distinct().ToArray();
+    ViewBag.Title = string.Format("Pick Lists: {0}", String.Join(", ", pickingIds.Select(id => id.ToString("D8"))));
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+@section Head
+{
+    <style type="text/css">
+        .reject { white-space: nowrap; margin-top: 2px; }
+        .reject span { margin-left: 5px; }
+        .rejection { page-break-inside: avoid; }
+        .watermark { color: rgba(230, 230, 230, 0.3); font-size: 400px; z-index: -100; -webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); position: absolute; top: 400px; left: 100px; visibility: hidden; }
+        .smalltext { font-size:12px;font-weight:normal; float:bottom;}
+        @if ((bool)ViewBag.IsCopy)
+        { 
+            <text>
+            .watermark { visibility: visible; }
+            </text>
+        }
+    </style>
+}
+
+@foreach (var id in pickingIds)
+{
+    @Html.Partial("Printing/PickList", Model.Where(p => p.Id == id).ToList());
+}
+@if (pickingIds.Length == 0)
+{
+    <p style="padding: 10px">
+        There are no pick lists to print probably because you haven't selected any Shipments for picking or all of them have a different stock location.
+    </p>
+}

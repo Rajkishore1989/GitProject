@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Broker Warranty Transactions Report";
+}
+<div data-module="report/WarrantyTransactions" ng-controller="WarrantyTransactionsController"
+    class="ng-scope report" ng-cloak>
+    <div class="section">
+        Parameters</div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-4 form-group">
+            <label class="col col-lg-4 control-label">
+                {{ runNoLabel }}
+            </label>
+            <div class="col col-lg-4">
+                <input type="number" ng-model="runNo" min="0" max="9999" class="form-control" />
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

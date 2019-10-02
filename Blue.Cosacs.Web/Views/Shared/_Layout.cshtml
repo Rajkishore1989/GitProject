@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js ie6 oldie" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js ie7 oldie" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    @{ Html.RenderPartial("Head"); }
+    @RenderSection("Head", false)
+</head>
+<body class='maximized @(Html.IsShell() ? "shell" : "") @(Html.IsPjaxEnabled() ? "pjax" : "")' data-base-url='@Url.Content("~/")' style="display:none">
+
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="menu">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            @(new Menu().RenderToString())
+        </div>
+    </nav>
+    <div id="menu-hud" class="modal fade" style="display: none">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <input type="text" class="form-control input-lg" id="menu-hud-search" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="body" class="body">
+        <div class="container">
+            <div id="center">
+                @if (ViewBag.TitleShow == null || ViewBag.TitleShow == true) 
+                {
+                    <div><h2 id="page-heading">@ViewBag.Title</h2></div>
+                }
+                else
+                { 
+                    <div><h2></h2></div>
+                }
+                @RenderBody()
+            </div>
+        </div> 
+    </div>
+    @Html.Partial("Footer")
+    @Html.Partial("Confirm")
+    @Html.Partial("Script")
+    @RenderSection("Script", false)
+</body>
+</html>

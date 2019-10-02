@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "Technician Rejections Report";
+}
+
+<div data-module="report/TechnicianRejections" ng-controller="technicianRejectionsController" class="ng-scope report">
+    <div class="section">Parameters</div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ dateLoggedFromLabel }} </label>
+                <div class="col col-lg-5" ng-class="{'has-error': !dateLoggedFrom }">
+                    <input required ui-date="linkDatePicker" ng-model="dateLoggedFrom" placeholder="Logged Date" class="date form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ dateLoggedToLabel }} </label>
+                <div class="col col-lg-5" ng-class="{'has-error': !dateLoggedTo }">
+                    <input required ui-date="linkDatePicker" ng-model="dateLoggedTo" placeholder="Logged Date" class="date form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    <div><span>Total Rejection Count: {{ totalRejectionCount }}</span></div>
+    <div class="search row">&nbsp;</div>
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>
+

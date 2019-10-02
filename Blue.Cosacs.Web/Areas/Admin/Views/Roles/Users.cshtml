@@ -1,0 +1,49 @@
+﻿@model Blue.Cosacs.Web.Areas.Admin.Models.UserRoles
+@{
+    ViewBag.Title = Model.Name + " - Users";
+}
+<div class="row">
+    <div class="col-lg-9" data-module="admin/userRole">
+        <div class="row">
+            <div class="col-lg-4">
+                <input id="searchBox" type="search" placeholder="Type to filter users" class="form-control">
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-lg-12">
+                <h4>Users</h4>
+            </div>
+        </div>
+        <div class="userRole row" data-roleId="@Model.Id" >
+            <div class="col-lg-12">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-3">First Name</th>
+                        <th class="col-3">Last Name</th>
+                        <th class="col-3">User Name</th>
+                        @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditRoles)) {
+                        <th class="col-3">Delete</th>
+                        }
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var user in Model.Users.OrderBy(c => c.LastName).ThenBy(n => n.FirstName))
+                    {
+                    var name = string.Format("{0} {1}", user.FirstName, user.LastName);
+                    <tr data-id="@user.Id">
+                        <td>@Html.ProfileLink(string.IsNullOrWhiteSpace(name) ? "(no name)" : name, user.Id)</td>
+                        <td>@user.LastName</td>
+                        <td>@user.UserName</td>
+                        @if (HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditRoles)) {
+                        <td><div class="ui-widget text-primary glyphicons glyph-btn bin clickable" title="Delete"></div></td>
+                        }
+                    </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

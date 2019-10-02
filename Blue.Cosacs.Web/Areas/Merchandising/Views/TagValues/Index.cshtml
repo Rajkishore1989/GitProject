@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Blue.Cosacs.Merchandising.Models.Tag>
+@{
+    ViewBag.Title = "Hierarchy Detail Setup";
+}
+
+<div data-module="merchandising/tagValues/init" ng-controller="TagValuesCtrl" ng-init="tags=@Html.RawJson(Model)" ng-cloak>
+    <article class="filters row buffer-sm bottom">
+        <div class="level col-lg-3">
+            <input class="form-control" type="text" ng-model="levelFilter" placeholder="Filter Levels" />
+        </div>
+        <div class="tags col-lg-3">
+            <input class="form-control" type="text" ng-model="tagFilter" placeholder="Filter Tags" />
+        </div>
+    </article>
+    
+    <div ng-repeat="level in hierarchies | pbKeyFilter: levelFilter | orderBy: level.id">
+        <div ng-repeat="tag in level.tags | filter:{name: tagFilter}" ng-controller="TagCtrl" ng-form="tagForm">
+            <div class="row">
+                <div class="col-lg-12" ng-show="$first">
+                    
+                    <h3>{{level.name}}</h3>
+                    
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-10"><strong>{{tag.name | uppercase}}</strong></div>
+                        <div class="col-sm-2">
+                            <div class="pull-right">
+                                <span ng-hide="isEditing || readOnly" class="glyphicons glyph-btn pencil" title="Edit" ng-click="edit()">&nbsp;</span>
+                                <span ng-show="isEditing" class="glyphicons glyph-btn undo" title="Cancel" ng-click="cancel()">&nbsp;</span>
+                                <span ng-show="isEditing" class="glyphicons glyph-btn floppy_save" title="Save" ng-click="save(tagForm)" ng-class="{'disabled': tagForm.$invalid || !checkAllConditions(tag)}">&nbsp;</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="panel-body">
+                    
+                    <div class="row">
+                        <div class="col-sm-4 section noborder">First Year Warranty</div>
+                        <div class="col-sm-4 section noborder">Aged After Period</div>
+                        <div class="col-sm-4 section noborder">Repossessed Condition</div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="row buffer-sm bottom">
+                                <div class="form-group" ng-class="{'has-error': tagForm.firstYearWarrantyProvision.$invalid && isEditing }" >
+                                    <label class="col-sm-6 control-label" for="firstYearWarrantyProvision">Provision</label>
+                                    <div class="col-sm-4">
+                                        <div class="input-group">
+                                            <input class="form-control" pb-percentage ng-model="tag.firstYearWarrantyProvision" name="firstYearWarrantyProvision" ng-min="0" ng-max="100" ng-disabled="!canEditFyw || !isEditing"/>
+                                            <span class="input-group-addon">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                      
+                        <div class="col-sm-4">
+                            <div class="row buffer-sm bottom">
+                                <div class="form-group" ng-class="{'has-error': tagForm.agedAfter.$invalid && isEditing }">
+                                    
+                                    <div class="col-sm-4">
+                                        <input class="form-control" pb-integer ng-model="tag.agedAfter" name="agedAfter" ng-disabled="!canEditFyw || !isEditing" />
+                                       
+                                    </div>
+                                    <label class="col-sm-6 control-label" for="agedAfter">Days</label>
+                                </div>
+                            </div>
+                        </div>
+
+
+                            <div class="col-sm-4">
+                                <div ng-repeat="condition in tag.repossessedConditions">
+                                    <div class="row buffer-sm bottom" ng-form="conditionForm">
+                                        <div class="form-group" ng-class="{'has-error': conditionForm.percentage.$invalid && isEditing}">
+                                            <label class="col-sm-6 control-label" for="percentage">{{condition.conditionName}}</label>
+                                            <div class="col-sm-4">
+                                                <div class="input-group">
+                                                    <input class="form-control" ng-model="condition.percentage" name="percentage" pb-percentage ng-min="0" ng-max="100" ng-disabled="!canEditConditions || !isEditing" />
+                                                    <span class="input-group-addon">%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

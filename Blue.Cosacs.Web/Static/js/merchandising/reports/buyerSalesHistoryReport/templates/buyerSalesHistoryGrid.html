@@ -1,0 +1,39 @@
+    
+    <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+        <tbody>
+        <tr>
+            <th class="hidable-col" ng-repeat="col in columns" ng-style="{'display': isDisplayed($index)}">
+                {{col.name}}
+            </th>
+        </tr>
+        <tr ng-repeat="product in data.products">
+            <td class="hidable-col" ng-style="{'display': isDisplayed(0)}">
+                <a href="{{resolve('Merchandising/Products/Details/' + product.productId)}}">{{product.sku}}</a>
+            </td>
+
+            <td class="hidable-col" ng-style="{'display': isDisplayed(1)}">{{product.description}}</td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(2)}">{{product.brand}}</td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(3)}">{{product.vendor}}</td>
+            <td class="hidable-col quantity" ng-style="{'display': isDisplayed(4)}">{{product.stockOnOrder}}</td>
+            <td class="hidable-col quantity" ng-style="{'display': isDisplayed(5)}">{{product.stockOnHand}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(6)}">{{product.averageWeightedCost | pbCurrency}}</td>         
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(7)}">{{product.stockOnHandCost | pbCurrency}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(8)}">{{product.cashPrice | pbCurrency}}</td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(9)}">{{product.year}}</td>
+
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(10)}">{{product.april | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(11)}">{{product.may | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(12)}">{{product.june | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(13)}">{{product.july | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(14)}">{{product.august | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(15)}">{{product.september | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(16)}">{{product.october | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(17)}">{{product.november | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(18)}">{{product.december | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(19)}">{{product.january | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(20)}">{{product.february | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(21)}">{{product.march | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>           
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(22)}">{{product.yearToDate | pbChooseFilter:utils.chooseFilter(data.query.kpi)}}</td>
+        </tr>
+        </tbody>
+    </table>

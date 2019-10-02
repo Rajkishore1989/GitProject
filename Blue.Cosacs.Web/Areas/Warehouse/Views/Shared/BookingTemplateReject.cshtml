@@ -1,0 +1,85 @@
+﻿@using Blue.Cosacs.Web.Helpers;
+@{
+	RejectTemplate.Set(ViewBag.ActionName);   
+ }
+
+<td>
+  <% if ( @RejectTemplate.Rejected != null && @RejectTemplate.CancelDate == null) 
+    { 
+		if ( @RejectTemplate.Quantity != @RejectTemplate.OldQuantity) 
+        {  %>
+		    <div class="reasonDisplay"> <strong><%- @RejectTemplate.RejectedReason %></strong></div>
+		    <span>Amount @ViewBag.ActionName:</span>
+		    <div class="qty right"><%- @RejectTemplate.Quantity  %></div>
+		<% }
+	    else { %>
+	        <div>
+		        All Item(s) @ViewBag.ActionName Successfully
+            </div>
+        <%} 
+	} 
+
+	else { %>
+        <% if( @RejectTemplate.CancelDate == null)
+            { %>
+            @if ((ViewBag.ActionName != "PickUp") || (ViewBag.ActionName == "PickUp" && Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.CustomerPickupNotify) && Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.CustomerPickupFailed)))
+            {
+		    <div class="rejectItem">
+            
+		        <select style="width:100%" class="rejectItemSel pickList picklist deselect" data-chosenOptions="allow_single_deselect:true" data-placeholder= "Item(s) @ViewBag.ActionName Successfully" data-pick-list-id="@ViewBag.RejectListName" name="Items.RejectionReason"></select>
+	        </div>
+            }
+            else
+            {
+                 if ((ViewBag.ActionName == "PickUp" && !Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.CustomerPickupFailed)))
+                 {
+		        <div class="rejectItem">
+            
+		        	<select style="width:100%" class="rejectItemSel pickList picklist deselect" data-chosenOptions="allow_single_deselect:true" data-placeholder= "Item(s) @ViewBag.ActionName Successfully" data-pick-list-id="@ViewBag.RejectListName" name="Items.RejectionReason" disabled="disabled" ></select>
+	            </div>
+                }
+
+            }
+           <% } else { %>
+	        <div class="rejectItem">
+		         <select style="width:100%" class="rejectItemSel pickList picklist deselect" data-chosenOptions="allow_single_deselect:false" data-placeholder= "Load Rejection" data-pick-list-id="@ViewBag.RejectListName" name="Items.RejectionReason" disabled="disabled"></select>
+            </div>
+            
+            <%}  %>
+	    <% if  (CurrentQuantity > 1 && (DeliveryOrCollection != "C" || DeliveryOrCollection != "R" )) { %>
+	        <div class="delQuantity">
+		        <select style="width:100%" class="delQtySel" data-placeholder="None @ViewBag.ActionName" name="Items.Quantity">
+		            <option></option>
+		            <% for (x = 1; x < CurrentQuantity; x++) {
+			            print ('<option value=' + x + '>' + x + ' @ViewBag.ActionName </option>')
+		            } %> 
+		        </select>
+	        </div>
+
+	    <% }
+	 } %>
+</td>
+<td>
+	<div class="comments">
+		<% if (ItemComment != null) { %>
+		<span><strong>Comments: </strong></span><span><%= ItemComment %></span>
+		<% }%>
+	</div>
+
+	<% if(!_.isNull( @RejectTemplate.Comment)) { %>
+		<div class="completed">
+			<%= @RejectTemplate.Comment %>
+		</div>
+	<%}%> 
+
+    <% if(CancelDate) { %>
+	 <div class="notCompleted">     
+		@Html.TextArea("ItemNotes", new { maxlength = "160", rows = 4, cols = 40, @class = "itemNotes", hidden = "true" })
+	 </div>
+    <%}%>
+	<% if(!CancelDate) { %>
+    <div class="notCompleted">     
+		@Html.TextArea("ItemNotes", new { maxlength="160", rows = 4, cols = 40, @class = "itemNotes"})
+     </div>
+      <%}%>
+</td>

@@ -1,0 +1,13 @@
+﻿@using Blue.Cosacs.Warehouse.Utils
+@model Blue.Cosacs.Warehouse.DriverPaymentView
+<tr data-id=@Model.Id class=view>
+@if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.InternalDriverPaymentsEdit))
+{
+    <td class="actions"></td>
+}
+    <td>@Model.SendingBranchName</td>
+    <td>@Model.ReceivingBranchName</td>
+    <td>@Model.Size</td>
+    <td>@((Model.Value.HasValue ? Model.Value.Value : 0).ToCurrencyWithSymbol())</td>
+                                    
+</tr>

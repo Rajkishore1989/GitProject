@@ -1,0 +1,128 @@
+﻿﻿@{
+ViewBag.Title = "CINT Errors";
+}
+
+<div data-module="merchandising/cintError/init" ng-controller="CintErrorCtrl" ng-cloak class="buffer-sm bottom">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="id">Run Number</label>
+                    <input class="form-control" pb-integer name="runNo" ng-model="query.runNo"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="referenceNumber">Primary Reference</label>
+                    <input class="form-control" type="text" name="referenceNumber" ng-model="query.primaryReference"
+                           ng-disabled="query.bulk"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group" style="padding-top: 29px">
+                    <input class="radio-inline" type="radio" name="bulk" ng-model="query.bulk" ng-value="true"
+                           ng-init="query.bulk = true"/>
+                    <label for="">Bulk Errors (Queue 201)</label>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="fromDate">From Date</label>
+                    <input class="form-control" type="date" name="fromDate" placeholder="Select Date"
+                           ng-model="query.fromDate">
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group">
+                    <label for="toDate">To Date</label>
+                    <input class="form-control" type="date" name="toDate" placeholder="Select Date"
+                           ng-model="query.toDate">
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="form-group" style="padding-top: 29px">
+
+                    <input class="radio-inline" type="radio" name="bulk" ng-model="query.bulk" ng-value="false"/>
+                    <label for="">Validation Errors (Queue 200)</label>
+                </div>
+            </div>
+        </div>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="btn-group">
+                <input class="checkbox" style="display: inline-block" type="checkbox"  ng-disabled="query.bulk" name="filter" ng-model="query.filter" />
+                <label for="">Filter Resolved</label>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="pull-right">
+            <button id="buttonClear" class="clear btn btn-default" ng-click="reset()">Clear</button>
+            <button id="buttonSearch" class="btn btn-primary" ng-click="search()">Search</button>
+            <button id="buttonExport" class="btn btn-primary" ng-click="export()">Export</button>
+        </div>
+    </div>
+        Display limited to 500 results (Export not limited).
+    <div class="row">
+        <span class="pull-right" ng-show="results.bulk && results.bulk.length > 0">{{results.bulk.length}} result(s) found.</span>
+        <span class="pull-right" ng-show="results.validation && results.validation.length > 0">{{results.validation.length}} result(s) found.</span>
+    </div>
+
+        <div class="row">&nbsp;</div>
+        <table class="table table-bordered table-striped" ng-show="results.bulk && results.bulk.length > 0">
+            <thead>
+            <tr>
+                <th class="col-lg-1">Message Id</th>
+                <th class="col-lg-1">Run Number</th>
+                <th class="col-lg-2">Date</th>
+                <th class="col-lg-8">Error Message</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="cintError in results.bulk">
+                <td>{{cintError.messageId}}</td>
+                <td>{{cintError.runno}}</td>
+                <td>{{dateFormat(cintError.createdOn) }}</td>
+                <td>{{cintError.exception}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-bordered table-striped" ng-show="results.validation && results.validation.length > 0">
+            <thead>
+            <tr>
+                <th class="col-lg-1">Date</th>
+                <th class="col-lg-1">Run Number</th>
+                <th class="col-lg-1">Message Id</th>
+                <th class="col-lg-1">Product Code</th>
+                <th class="col-lg-1">Primary Reference</th>
+                <th class="col-lg-1">Type</th>
+                <th class="col-lg-1">Stock Location</th>
+                <th class="col-lg-1">Sale Location</th>
+                <th class="col-lg-3">Error Message</th>
+                <th class="col-lg-1">Resolved</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="cintError in results.validation">
+                <td>{{dateFormat(cintError.date)}}</td>
+                <td>{{cintError.runNo}}</td>
+                <td>{{cintError.messageId}}</td>
+                <td>{{cintError.productCode}}</td>
+                <td>{{cintError.primaryReference}}</td>
+                <td>{{cintError.type}}</td>
+                <td>{{cintError.stockLocation}}</td>
+                <td>{{cintError.saleLocation}}</td>
+                <td>{{cintError.errorMessage}}</td>
+                <td>{{dateFormat(cintError.resolved)}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

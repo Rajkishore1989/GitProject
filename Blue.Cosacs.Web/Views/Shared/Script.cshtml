@@ -1,0 +1,18 @@
+﻿@if (!Html.IsBuilt()) 
+{
+    var config = File.ReadAllText(Server.MapPath("~/static/js/requirejs-config.js"));
+    config = config.Trim('(', ')').Replace("\"js/\"", "\"" + Url.Content("~/static/js/") + "\"");
+    
+    @Html.Js("../components/less.js/dist/less-1.4.2.min")
+    @Html.Js("lib/require-jquery")
+    <script>
+        require.config(@Html.Raw(config));
+        window.DEBUG = true;
+        require(['main'], function () { });
+    </script>
+}
+else
+{
+    <script>window.DEBUG = false;</script>
+    @Html.Js("-all-")
+}

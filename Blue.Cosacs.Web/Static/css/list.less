@@ -1,0 +1,177 @@
+
+//List variables
+@list-default-height: 32px;
+@list-border-color: #AAAAAA;
+@list-bg-color: #FFFFFF;
+@list-bg-color-disabled: #EEEEEE;
+@list-hover-color: #FFFFFF;
+@list-hover-bg-color: @bb-contrast;
+@list-clear-color: #707070;
+@list-arrow-color: #707070;
+@list-arrow-bg-color: #EEEEEE;
+
+.list-container {
+  position: relative;
+  width: 100%;
+  height: @list-default-height;
+  border: 1px solid @list-border-color;
+  background-color: @list-bg-color;
+
+  &.disabled {
+    background-color: @list-bg-color-disabled;
+  }
+  &.opened {
+    border-bottom: 1px solid transparent;
+  }
+  .list-placeholder {
+    height: 100%;
+    padding: 5px;
+    padding-right: 41px;
+    cursor: pointer;
+
+    .list-value {
+      width: 100%;
+      white-space:nowrap;
+      display: inline-block;
+      overflow-x: hidden;
+      color: @list-border-color;
+      &.selected {
+        color: @list-arrow-color;
+      }
+    }
+  }
+  .list-clear {
+    color: @list-clear-color;
+    position: absolute;
+    height: 100%;
+    width: 17px;
+    top: 0px;
+    right: 21px;
+    cursor: pointer;
+
+    div {
+      position: relative;
+      top: 7px;
+      font-size: 10px;
+    }
+  }
+  .list-arrow {
+    color: @list-arrow-color;
+    background-color: @list-arrow-bg-color;
+    position: absolute;
+    height: 100%;
+    width: 21px;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    border-left: 1px solid @list-border-color;
+
+    div {
+      transform:rotate(90deg);
+      -ms-transform:rotate(90deg); /* IE 9 */
+      -webkit-transform:rotate(90deg); /* Opera, Chrome, and Safari */
+
+      position: relative;
+      top: 12px;
+      font-size: 10px;
+    }
+    &.opened {
+      border-bottom: 1px solid @list-border-color;
+
+      div {
+        transform:rotate(270deg);
+        -ms-transform:rotate(270deg); /* IE 9 */
+        -webkit-transform:rotate(270deg); /* Opera, Chrome, and Safari */
+
+        position: relative;
+        top: 2px;
+        font-size: 10px;
+      }
+    }
+  }
+}
+.list-options-mask {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+}
+.list-options {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background-color: @list-bg-color;
+  border-left: 1px solid @list-border-color;
+  border-right: 1px solid @list-border-color;
+  border-bottom: 1px solid @list-border-color;
+  z-index: 100000;
+
+  .list-search {
+    padding: 5px;
+
+    input {
+      width: 100%;
+      padding: 5px;
+      padding-right: 20px;
+
+      &:focus {
+        border: 1px solid @bb-contrast;
+      }
+    }
+
+    .list-search-icon {
+      color: @list-clear-color;
+      position: absolute;
+      height: 20px;
+      width: 20px;
+      top: 10px;
+      right: 5px;
+      cursor: default;
+
+      div {
+        position: relative;
+        font-size: 16px;
+      }
+    }
+  }
+
+  .list-item-container {
+    min-height: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+
+    .list-item {
+      padding: 5px;
+      cursor: pointer;
+
+      &.selected {
+        color: @list-hover-color;
+        background-color: @list-hover-bg-color;
+      }
+      &.muted {
+        color: @list-border-color;
+      }
+    }
+  }
+}
+
+.has-error {
+  // Set the border and box shadow on specific inputs to match
+  .list-container {
+    border-color: @state-danger-text;
+    .box-shadow(inset 0 1px 1px rgba(0,0,0,.075)); // Redeclare so transitions work
+  }
+  .list-options {
+    border-color: @state-danger-text;
+
+    .list-search {
+      input:focus {
+        border-color: @state-danger-text;
+        .box-shadow(inset 0 1px 1px rgba(0,0,0,.075)); // Redeclare so transitions work
+      }
+    }
+  }
+}
+

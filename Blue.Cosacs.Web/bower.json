@@ -1,0 +1,13 @@
+{
+  "name": "cosacs-app",
+  "version": "0.1.0",
+  "dependencies": {
+    "bootstrap": "~3.0.0",
+    "less.js": "~1.4.2",
+    "typeahead.js": "~0.9.3",
+    "underscore": "~1.6.0",
+    "requirejs": "~2.1.14",
+    "d3": "3.4.8"
+  },
+  "devDependencies": {}
+}

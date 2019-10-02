@@ -1,0 +1,66 @@
+﻿@model List<TransactionTypeViewModel>
+@{ ViewBag.Title = "Transaction Type Configuration"; }
+
+<div data-module="merchandising/transactionType/init" ng-controller="TransactionTypeCtrl" ng-init="transactionTypes=@Html.RawJson(Model);" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top">
+        <ng-form name="form" class="form-horizontal" novalidate>
+
+            <div class="row buffer-sm bottom">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <button class="btn btn-primary" ng-click="accept(form)" ng-show="canEdit" ng-disabled="!canAccept(form)">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped aligned pb-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Transaction Code</th>
+                                <th>Debit Account</th>
+                                <th class="narrow">Split by department</th>
+                                <th>Credit account</th>
+                                <th class="narrow">Split by department</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="type in transactionTypes" ng-form="typeForm">
+                                <td>{{type.name}}</td>
+
+                                <td ng-hide="canEdit">{{type.transactionCode}}</td>
+                                <td ng-hide="!canEdit">
+                                    <div ng-class="{'has-error': typeForm.transactionCode.$invalid}">
+                                        <input class="form-control" ng-model="type.transactionCode" type="text" name="transactionCode" maxlength="3" minlength="3" required />
+                                    </div>
+                                </td>
+
+                                <td ng-hide="canEdit">{{type.debitAccount}}</td>
+                                <td ng-hide="!canEdit">
+                                    <div ng-class="{'has-error': typeForm.debitAccount.$invalid}">
+                                        <input class="form-control" ng-model="type.debitAccount" type="text" name="debitAccount" maxlength="30" ng-pattern="/^[0-9]+$/" required />
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <input type="checkbox" ng-model="type.splitDebitByDepartment" name="splitDebitByDepartment" ng-disabled="!canEdit" />
+                                </td>
+
+                                <td ng-hide="canEdit">{{type.creditAccount}}</td>
+                                <td ng-hide="!canEdit">
+                                    <div ng-class="{'has-error': typeForm.creditAccount.$invalid}">
+                                        <input class="form-control" ng-model="type.creditAccount" type="text" name="creditAccount" maxlength="30" ng-pattern="/^[0-9]+$/" required />
+                                    </div>
+                                </td>
+
+                                <td><input type="checkbox" ng-model="type.splitCreditByDepartment" name="splitCreditByDepartment" ng-disabled="!canEdit" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

@@ -1,0 +1,85 @@
+﻿@model List<VendorReturnPurchaseOrderPrintModel>
+
+<style type="text/css">
+    .Collection {
+        border-left: 10px solid;
+    }
+
+    .del-col div.watermark {
+        -webkit-transform: none;
+        -moz-transform: none;
+        color: rgba(230, 230, 230, 0.5);
+        font-size: 10em;
+        z-index: -100;
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        visibility: visible;
+    }
+</style>
+<span style="white-space:nowrap">
+    <table class="main">
+        <thead>
+            <tr>
+                <th colspan="2">Product Code</th>
+                <th style="text-align: left">Description</th>
+                <th class="number">Quantity Received</th>
+                <th class="number">Quantity Returned</th>
+                <th class="number">Unit Landed Cost</th>
+                <th class="number">Line Landed Cost</th>
+                <th colspan="2">Purchase Order Number</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var purchaseOrder in Model) {
+            foreach (var product in purchaseOrder.Products)
+            {
+            <tr class="item noborder" style="border-top: 1px solid black;">
+                  
+                <td class="del-col" rowspan="2" style="text-align:left">
+                    <div style="top: 110px; right: -5px;">@product.ProductCode</div>
+                </td>
+
+                <td rowspan="2" style="vertical-align: middle">
+                    @Html.Barcode(product.ProductCode, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER, true)
+                </td>
+
+                 <td class="larger" style="white-space:normal">
+                    @product.Description
+                </td>
+
+                <td class="number">
+                    <div class="qty">@product.QuantityReceived</div>
+                </td>
+                
+                <td class="number">
+                    <div class="qty">@product.QuantityReturned</div>
+                </td>
+
+                <td class="number">
+                    <div class="qty">@product.UnitLandedCost</div>
+                </td>
+                
+                <td class="number">
+                    <div class="qty">@product.LineLandedCost</div>
+                </td>
+                
+                <td class="del-col" rowspan="2">
+                    <div style="top: 100px; right: 0; left: 50px;">@purchaseOrder.PurchaseOrderId</div>
+                </td>
+
+                <td rowspan="2" style="vertical-align: middle; text-align: center">
+                    @Html.Barcode("po$" + purchaseOrder.PurchaseOrderId, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER, true)
+                </td>
+
+            </tr>
+            <tr class="item noborder" style="border-bottom: 1px solid black;">
+                <td colspan="8" style="padding-top: 10px">
+                    Comments: <span class="larger">@product.Comments</span>
+                </td>
+            </tr>
+            }
+        }
+        </tbody>
+    </table>
+</span>

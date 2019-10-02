@@ -1,0 +1,59 @@
+﻿@{ ViewBag.Title = "Warranty Promotions"; }
+<div id="WarrantyReturnContainer" data-module="warranty/warrantyPromotions" ng-controller="WarrantyPromotionsController" class="warranty-promotions-module" data-view-warranty-permission="@ViewBag.viewWarrantyPermission" data-edit-price-permission="@ViewBag.editPricePermission" ng-cloak>
+    <article class="warranty-promotions">
+        <div class="row">
+            <div class="col-lg-10">
+                <div class="form-horizontal ng-pristine ng-valid">
+                    <div class="section">Search</div>
+                    <div class="form-group">
+                        <label for="filterName" class="col col-lg-2 control-label">Name</label>
+                        <div class="col col-lg-6">
+                            <input ng-model="filterPromotions.Warranty" class="form-control" type="text" maxlength="50" id="searchName" ui-reset placeholder="Warranty Number"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterEffectiveDateStart" class="col col-lg-2 control-label">Store Type</label>
+                        <div class="col col-lg-4">
+                            <select ui-select2="select2Options" ng-model="filterPromotions.BranchType" data-placeholder="Store Type" style="width: 80%;">
+                                <option></option>
+                                <option value="{{value}}" ng-repeat="(value, branchType) in MasterData.BranchTypes">{{branchType}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="filterEffectiveDateStart" class="col col-lg-2 control-label">Store Location</label>
+                        <div class="col col-lg-4">
+                            <select ui-select2="select2Options" ng-model="filterPromotions.BranchNumber" data-placeholder="Store Location" style="width: 80%;">
+                                <option></option>
+                                <option value="{{value}}" ng-repeat="(value, branch) in MasterData.Branches">{{branch}}</option>
+                            </select>
+                        </div>                    
+                    </div>
+                    <div class="form-group">
+                        <label for="filterEffectiveDateStart" class="col col-lg-2 control-label">Effective Date</label>
+                        <div class="col col-lg-3">
+                            <input id="filterEffectiveDateStart" ui-date="datePicker" ng-model="filterPromotions.ActiveFrom" class="date form-control ng-pristine ng-valid" placeholder="From Effective Date">
+                        </div>
+                        <div class="col col-lg-3">
+                            <input id="filterEffectiveDateEnd" ui-date="datePicker" ng-model="filterPromotions.ActiveTo" class="date form-control ng-pristine ng-valid" placeholder="To Effective Date">
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button type="reset" class="btn btn-default" ng-click="clearFilter()" title="Clear Search">Clear</button>
+                        <button type="submit" class="btn btn-primary" ng-click="performSearch()" ng-disabled="!filterPromotions.Warranty && !(filterPromotions.ActiveFrom || filterPromotions.ActiveTo) && !filterPromotions.BranchType && !filterPromotions.BranchNumber" disabled="disabled">Search</button>
+                    </div>
+                </div>
+                <br />
+                @{
+                    ViewBag.ShowFooter = true;
+                    Html.RenderPartial("PromotionResult", "");
+                }
+                <br/>
+            </div>
+        </div>
+    </article>
+    
+    <div class="col col-lg-12">
+        <pagination num-pages="filterPromotions.PageCount" max-size="filterPromotions.PageSize" current-page="filterPromotions.PageIndex" on-select-page="selectPage(page)"></pagination>
+    </div>
+</div>

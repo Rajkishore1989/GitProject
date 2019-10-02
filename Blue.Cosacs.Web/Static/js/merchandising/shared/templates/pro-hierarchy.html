@@ -1,0 +1,32 @@
+<div ng-repeat="level in options" class="row">
+    <div class="col-md-12">
+        <div class="form-group" ng-show="horizontal">
+            <label for="{{name || 'hierarchy'}}" class="control-label col-md-4">{{level.name|inflector:humanize}}</label>
+            <div class="col-md-8">
+                <p for="{{name || 'hierarchy'}}" class="form-control-static" ng-show="readonly()">{{ (ngModel[level.id] && ngModel[level.id].name) || 'none' }}</p>
+                <div ng-hide="readonly()">
+                    <list name="{{name || 'hierarchy'}}"
+                          ng-model="ngModel[level.id]"
+                          scope="options[$index].tags"
+                          placeholder="{{placeholder || 'Select a tag'}}"></list>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" ng-hide="horizontal">
+            <div class="row">
+                <label for="{{name || 'hierarchy'}}" class="control-label col-md-12">{{level.name|inflector:humanize}}</label>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <p for="{{name || 'hierarchy'}}" class="form-control-static" ng-show="readonly()">{{ (ngModel[level.id] && ngModel[level.id].name) || 'none' }}</p>
+                    <div ng-hide="readonly()">
+                        <list name="{{name || 'hierarchy'}}"
+                              ng-model="ngModel[level.id]"
+                              scope="options[$index].tags"
+                              placeholder="{{placeholder || 'Select a tag'}}"></list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

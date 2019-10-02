@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "Replacement Data Report";
+}
+<div data-module="report/ReplacementData" ng-controller="ReplacementDataController"
+    class="ng-scope report" ng-cloak>
+    <div class="section">
+        Parameters</div>
+      <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group"  ng-class="{'has-error': !dateFrom }">
+            <label for ="dateFrom" class="col col-lg-4 control-label">
+                {{ dateFromLabel }}
+            </label>
+            <div class="col col-lg-4">
+                <input ui-date="linkDatePicker" ng-model="dateFrom" placeholder="" class="date form-control" />
+            </div>
+        </div>
+        <div class="col col-lg-6 form-group" ng-class="{'has-error': !dateTo }">
+            <label for="dateTo" class="col col-lg-4 control-label">
+                {{ dateToLabel }}
+            </label>
+            <div class="col col-lg-4">
+                <input ui-date="linkDatePicker" ng-model="dateTo" placeholder="" class="date form-control" />
+            </div>
+        </div>
+    </div>
+    <div class="search row">
+        <div class="col col-lg-6 form-group">
+            <label for="supplierName" class="col col-lg-4 control-label">
+                {{ supplierLabel }}
+            </label>
+            <div class="col col-lg-6">
+                 <select ui-select2 class="select2Box picklist" ng-model="supplier" placeholder="Please select a supplier">
+                    <option></option>
+                    <option value="{{value}}" ng-repeat="value in MasterData.ServiceSuppliers | orderBy:'toString()'">
+                        {{value}}
+                    </option>
+                 </select>
+             </div>
+        </div>
+        <div class="col col-lg-6 form-group">
+            <label for="warrantyType" class="col col-lg-4 control-label">
+                {{ warrantyTypeLabel }}
+            </label>
+            <div class="col col-lg-4">
+                <select ui-select2 class="select2Box picklist" ng-model="warrantyType" placeholder="Select Warranty Type">
+                    <option></option>
+                    <option value="F">Free</option>
+                    <option value="E">Extended</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="search row">
+        <div class="col col-lg-6 form-group">
+            <label for="exchangeReason" class="col col-lg-4 control-label">
+                {{ exchangeReasonLabel }}
+            </label>
+            <div class="col col-lg-6">
+                 <select ui-select2 type="text" class="select2Box picklist" ng-model="exchangeReason" placeholder="Please select an Exchange Reason">
+                    <option></option>
+                    <option value="{{value}}" ng-repeat="value in MasterData.ExchangeReasons | orderBy:'toString()'">
+                        {{value}}
+                    </option>
+                 </select>
+             </div>
+        </div>
+        <div class="col col-lg-6 form-group">
+            <label for="supplierName" class="col col-lg-4 control-label">
+                GRT Processed
+            </label>
+            <div class="col col-lg-4">
+                 <list ui-select2 scope="MasterData.GrtProcesses" ng-model="grtProcess" placeholder="Please select an option"></list>
+             </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+
+       <table class="table table-striped table-bordered table-hover" ng-show="displayTotals">
+        <thead>
+            <tr>
+                <td>Total Number Of Exchanges</td>
+                <td>Total Exchanges FYW</td>
+                <td>Total Claim FYW</td>
+                <td>Total Exchanges Supplier</td>
+                <td>Total Claim Supplier</td>
+                <td>Total Exchanges EW</td>
+                <td>Total Claim EW</td>
+                <td>Total Exchanges Internal</td>
+                <td>Total Claim Internal</td>
+                <td>Total Claims</td>
+            </tr>
+                
+        </thead>
+        <tbody>            
+            <tr>
+                <td>{{totalExchanges}}</td>
+                <td>{{fywExchangeCount}}</td>
+                <td>{{fywChargeAmount}}</td>
+                <td>{{supplierExchangeCount}}</td>
+                <td>{{supplierChargeAmount}}</td>
+                <td>{{ewExchangeCount}}</td>
+                <td>{{ewChargeAmount}}</td>
+                <td>{{internalExchangeCount}}</td>
+                <td>{{internalChargeAmount}}</td>
+                <td>{{totalCharges}}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+

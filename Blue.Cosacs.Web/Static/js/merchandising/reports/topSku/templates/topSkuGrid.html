@@ -1,0 +1,30 @@
+    
+    <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+        <tbody ng-repeat="location in data.locations">
+        <tr>
+            <td colspan="{{columns.length}}"><h4>{{location.location}}</h4></td>
+        </tr>
+        <tr>
+            <th class="hidable-col" ng-repeat="col in columns" ng-style="{'display': isDisplayed($index)}">
+                {{col.name}}
+            </th>
+        </tr>
+        <tr ng-repeat="product in location.products">
+            <td class="hidable-col" ng-repeat="level in product.hierarchyTags" ng-style="{'display': isDisplayed($index)}">
+                {{level}}
+            </td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length)}">
+                <a href="{{product.link}}">{{product.sku}}</a>
+            </td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length+1)}">{{product.longDescription}}</td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length+2)}">{{product.brandName}}</td>
+            <td class="hidable-col" ng-style="{'display': isDisplayed(product.hierarchyTags.length+3)}">{{product.tags}}</td>
+            <td class="hidable-col quantity" ng-style="{'display': isDisplayed(product.hierarchyTags.length+4)}">{{product.quantityDelivered}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(product.hierarchyTags.length+5)}">{{product.valueDelivered }}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(product.hierarchyTags.length+6)}">{{product.netValueDelivered}}</td>
+            <td class="hidable-col percentage" ng-style="{'display': isDisplayed(product.hierarchyTags.length+7)}">{{product.contribution}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(product.hierarchyTags.length+8)}">{{product.cumulativeValueDelivered}}</td>
+            <td class="hidable-col currency" ng-style="{'display': isDisplayed(product.hierarchyTags.length+9)}">{{product.cumulativeNetValueDelivered}}</td>
+        </tr>
+        </tbody>
+    </table>

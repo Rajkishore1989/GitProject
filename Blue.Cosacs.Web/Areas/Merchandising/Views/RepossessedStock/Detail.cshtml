@@ -1,0 +1,435 @@
+﻿@model ProductViewModel
+@{
+    if (Model.Product.Id > 0)
+    {
+        ViewBag.Title = "Repossessed Stock Maintenance - " + Model.Product.SKU;
+    }
+    else
+    {
+        ViewBag.Title = "Create Repossessed Stock";
+    }
+}
+
+<div data-module="merchandising/product/init" ng-controller="ProductCtrl" ng-init="vm=@Html.RawJson(Model);" ng-cloak>
+    <div class="row section productRequired">
+        <div class="col-md-12">
+            Tags
+        </div>
+    </div>
+    <div class="row productRequired">
+        <div class="col-md-12">
+            <div class="well well-sm">
+                <pb-tag-list tags="options.productTags" 
+                             selected-tags="selectedTags" 
+                             add-callback="saveProductTags()" 
+                             remove-callback="saveProductTags()"
+                             placeholder="Type to add product tags" editable="isEditable()" />
+            </div>
+        </div>
+    </div>
+    <div class="row buffer-sm top">
+        <div class="col-md-8">
+            <div class="row section">
+                <div class="col-md-12">
+                    Details
+                </div>
+            </div>
+            <ng-form name="productForm" class="form-horizontal product-form" novalidate>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.sku.$invalid}">
+                            <label for="sku" class="col-md-4 control-label">
+                                SKU
+                            </label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{vm.product.sku}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.skuStatus.$invalid}">
+                            <label for="skuStatus" class="col-md-4 control-label">
+                                Corporate Status Code
+                            </label>
+                            <div class="col-md-8">
+                                <select class="form-control" name="skuStatus" ng-model="vm.product.skuStatus" ng-required="true" ng-readonly="!isEditable()">
+                                    <option>A</option>
+                                    <option>D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.posDescription.$invalid}">
+                            <label for="posDescription" class="col-md-4 control-label">
+                                POS Description
+                            </label>
+                            <div class="col-md-8">
+                                <textarea rows="4" style="resize: none;" class="form-control" name="posDescription" ng-model="vm.product.posDescription" ng-required="true" maxlength="240" ng-maxlength="240" ng-readonly="!isEditable()"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.longDescription.$invalid}">
+                            <label for="longDescription" class="col-md-4 control-label">
+                                Long Description
+                            </label>
+                            <div class="col-md-8">
+                                <textarea rows="4" style="resize: none;" class="form-control" name="longDescription" ng-model="vm.product.longDescription" ng-required="true" maxlength="240" ng-maxlength="240" ng-readonly="!isEditable()"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.corporateUPC.$invalid}">
+                            <label for="corporateUPC" class="col-md-4 control-label">
+                                Corporate UPC
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="corporateUPC" ng-model="vm.product.corporateUPC" ng-required="true" maxlength="20" ng-maxlength="20" ng-readonly="!isEditable()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.vendorUPC.$invalid}">
+                            <label for="vendorUPC" class="col-md-4 control-label">
+                                Vendor UPC
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="vendorUPC" ng-model="vm.product.vendorUPC" maxlength="60" ng-maxlength="60" ng-readonly="!isEditable()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.vendorStyleLong.$invalid}">
+                            <label for="vendorStyleLong" class="col-md-4 control-label">
+                                Vendor Model Number
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="vendorStyleLong" ng-model="vm.product.vendorStyleLong" ng-required="true" maxlength="50" ng-maxlength="50" ng-readonly="!isEditable()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.countryOfOrigin.$invalid}">
+                            <label for="countryOfOrigin" class="col-md-4 control-label">
+                                Country of Origin
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="countryOfOrigin" ng-model="vm.product.countryOfOrigin" ng-required="true" maxlength="2" ng-maxlength="2" ng-readonly="!isEditable()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.vendorWarranty.$invalid}">
+                            <label for="vendorWarranty" class="col-md-4 control-label">
+                                Vendor Warranty
+                            </label>
+                            <div class="col-md-8">
+                                <input pb-integer class="form-control" name="vendorWarranty" ng-model="vm.product.vendorWarranty" maxlength="2" ng-maxlength="2" ng-readonly="!isEditable()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.replacingTo.$invalid}">
+                            <label for="replacingTo" class="col-md-4 control-label">
+                                Previous Model
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="replacingTo" ng-model="vm.product.replacingTo" maxlength="20" ng-maxlength="20" ng-readonly="!isEditable()" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error': productForm.brand.$invalid}">
+                            <label for="brand" class="col-md-4 control-label">
+                                Brand
+                            </label>
+                            <div class="col-md-8">
+                                <select name="brand" ng-model="vm.product.brandId" required ng-required="true" class="form-control"
+                                        ng-options="brand.id as (brand.brandCode + ' - ' + brand.brandName) for brand in brands | orderBy: 'brandName'"
+                                        placeholder="Select a brand" ng-disabled="!isEditable()"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" ng-class="{'has-error':!vm.product.primaryVendorId}">
+                            <label for="primaryVendor" class="col-md-4 control-label">
+                                Primary Vendor
+                            </label>
+                            <div class="col-md-8">
+                                <list name="primaryVendor" ng-model="vm.primaryVendorId" ng-change="updateVendor()" scope="vendors" placeholder="Select a Vendor" ng-disabled="!isEditable()"></list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" ng-show="exists()">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">
+                                Created Date
+                            </label>
+                            <div class="col-md-8">
+                                <p ng-show="vm.product.externalCreationDate" class="form-control-static">{{ vm.product.externalCreationDate | pbDate }}</p>
+                                <p ng-show="!vm.product.externalCreationDate" class="form-control-static">{{ vm.product.createdDate | pbDate : true }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">
+                                Last Updated Date
+                            </label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{vm.product.lastUpdatedDate | pbDate : true}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-group buffer top" id="accordion" role="tablist">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="attributesHeading" data-toggle="collapse" data-parent="#accordion" href="#attributes">
+                            <h4 class="panel-title" style="cursor:pointer">
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        Attributes
+                                    </div>
+                                    <div class="col-md-1">
+                                        <span class="halflings chevron-down" data-name="chevron-down" data-type="" data-prefix="halflings" data-utf="E114"></span>
+                                    </div>
+                                </div>
+                            </h4>
+                        </div>
+                        <div id="attributes" class="panel-collapse collapse" role="tabpanel">
+                            <div class="panel-body">
+                                <div class="row" ng-repeat="rows in partitionedAttributeData">
+                                    <div class="col-md-6" ng-repeat="item in rows">
+                                        <div class="form-group">
+                                            <label for="{{item.name}}" class="col-md-4 control-label">
+                                                {{item.displayName}}
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="input-group" ng-show="isEditable()">
+                                                    <input type="text" class="form-control" name="{{item.name}}" ng-model="item.value" ng-maxlength="50" maxlength="50" />
+                                                    <span class="input-group-addon"><span class="glyphicons glyph-btn bin" ng-click="removeAttribute(item.name, 'attribute')"></span></span>
+                                                </div>
+
+                                                <input type="text" class="form-control" name="{{item.name}}" ng-model="item.value" ng-maxlength="50" ng-show="!isEditable()" readonly maxlength="50" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-show="isEditable()">
+                                    <p>Add Attribute</p>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="attributeName" class="col-md-4 control-label">
+                                                    Name
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="attributeName" ng-model="attributeName" ng-maxlength="50" ng-readonly="!isEditable()" maxlength="50" />
+                                                        <span class="input-group-addon"><span class="glyphicons glyph-btn plus" ng-click="addAttribute(attributeName, 'attribute')"></span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="featuresAndBenefitsHeading" data-toggle="collapse" data-parent="#accordion" href="#featuresBenefits">
+                            <h4 class="panel-title" style="cursor:pointer">
+                                <div class="row">
+                                    <div class="col-md-11">
+                                        Features & Benefits
+                                    </div>
+                                    <div class="col-md-1">
+                                        <span class="halflings chevron-down" data-name="chevron-down" data-type="" data-prefix="halflings" data-utf="E114"></span>
+                                    </div>
+                                </div>
+                            </h4>
+                        </div>
+                        <div id="featuresBenefits" class="panel-collapse collapse" role="tabpanel">
+                            <div class="panel-body">
+                                <div class="row" ng-repeat="rows in partitionedFeatureData">
+                                    <div class="col-md-6" ng-repeat="item in rows">
+                                        <div class="form-group">
+                                            <label for="{{item.name}}" class="col-md-4 control-label">
+                                                {{item.displayName}}
+                                            </label>
+                                            <div class="col-md-8">
+                                                <div class="input-group" ng-show="isEditable()">
+                                                    <input type="text" class="form-control" name="{{item.name}}" ng-model="item.value" ng-maxlength="50" maxlength="50" />
+                                                    <span class="input-group-addon"><span class="glyphicons glyph-btn bin" ng-click="removeAttribute(item.name, 'feature')"></span></span>
+                                                </div>
+
+                                                <input type="text" class="form-control" name="{{item.name}}" ng-model="item.value" ng-maxlength="50" ng-show="!isEditable()" readonly maxlength="50" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div ng-show="isEditable()">
+                                    <p>Add Feature</p>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="featureName" class="col-md-4 control-label">
+                                                    Name
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" name="featureName" ng-model="featureName" ng-maxlength="50" ng-readonly="!isEditable()" maxlength="50" />
+                                                        <span class="input-group-addon"><span class="glyphicons glyph-btn plus" ng-click="addAttribute(featureName, 'feature')"></span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row buffer top" ng-show="isEditable()">
+                    <div class="col-md-12">
+                        <button class="btn btn-primary" type="submit" ng-click="saveProduct()" ng-disabled="productForm.$invalid || !vm.product.primaryVendorId">Save</button>
+                    </div>
+                </div>
+            </ng-form>
+        </div>
+      
+        <div class="col-lg-4">
+            <div class="row productRequired">
+                <div class="col-md-12">
+                    <div class="buffer bottom">
+                        <div class="section">
+                            Status
+                        </div>
+                        <div>
+                            <select name="type" ng-model="vm.product.status" required ng-required="true" class="form-control"
+                                    ng-change="saveProduct()" ng-show="isNonActive()"
+                                    ng-options="stat.id as stat.name for stat in validInactiveOptions"
+                                    placeholder="Select a status" ng-disabled="!isEditable()"></select>
+
+
+                            <select name="type" ng-model="vm.product.status" required ng-required="true" class="form-control"
+                                    ng-change="saveProduct()" ng-show="isAged()"
+                                    ng-options="stat.id as stat.name for stat in validAgedStatuses()"
+                                    placeholder="Select a status" ng-disabled="!isEditable()"></select>
+
+                            <select name="type" ng-model="vm.product.status" required ng-required="true" class="form-control"
+                                    ng-change="saveProduct()" ng-show="!isNonActive() && !isAged()"
+                                    ng-options=" stat.id as stat.name for stat in vm.statuses"
+                                    pb-disabled-options="stat.isAutomatic for stat in vm.statuses"
+                                    placeholder="Select a status" ng-disabled="!isEditable()"></select>
+                        </div>
+                    </div>
+                    <div class="buffer bottom">
+                        <div class="section">
+                            Store Types
+                        </div>
+                        <div>
+                            <pb-tag-list tags="options.storeType" selected-tags="selectedStoreTypes" add-callback="saveStoreTags(item)" remove-callback="saveStoreTags(item)" placeholder="Type to add store types" editable="isEditable()"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+            <div class="row productRequired">
+                <div class="col-lg-12">
+                    <div class="buffer bottom">
+                        <div class="section">
+                            Repossession Details
+                        </div>
+                                  
+                        <div class="form-group">
+                            <label for="condition" class="col-lg-4 control-label">Condition</label>
+                            <div class="col-lg-8">
+                                <input type="text" class="form-control" disabled="disabled" name="condition" value="{{vm.repossessionDetails.condition}}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buffer bottom">
+                        <div class="section">
+                            Export Settings
+                        </div>
+                        <div class="row">
+                            <div class="col-md-5">
+                                Print Price Ticket
+                            </div>
+                            <div class="col-md-1"><input type="checkbox" ng-model="vm.product.priceTicket" ng-change="saveProduct()" ng-disabled="!isEditable()" /></div>
+                            <div class="col-md-4">
+                                Requires Label
+                            </div>
+                            <div class="col-md-1">
+                                <input type="checkbox" ng-model="vm.product.labelRequired" ng-change="saveProduct()" ng-disabled="!isEditable()" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="buffer bottom">
+                        <div class="section">
+                            Hierarchy
+                        </div>
+                        <pb-hierarchy options="hierarchyOptions" selections="hierarchy" callback="saveHierarchySettings(tag, level)" editable="isEditable()" />
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="buffer top bottom" ng-show="vm.product.id">
+        <pb-stock-levels stock-levels="stockLevels" />
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <section class="buffer top" ng-show="vm.product.id">
+                <pb-sales sales="vm.product.sales.sales" />         
+            </section>
+        </div>
+    </div>
+    <div class="row" ng-show="canEditTax">
+        <div class="col-md-12">      
+            <section class="buffer top" ng-show="vm.product.id">
+                <div class="section">
+                    Product Tax Overrides
+                </div>
+                <pb-tax-rate-grid tax-rates="taxRates" product-id="vm.product.id"/>
+            </section>
+        </div>        
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <pb-retail-price product="vm.product" retail-prices="vm.product.retailPrices" tax-rates="taxRates" locations="vm.locations" product-type="vm.product.productType" average-weighted-cost="vm.product.costPrice.averageWeightedCost" />
+        </div>
+         
+    </div>
+    <div class="row buffer-lg bottom">
+        <div class="col-md-12">
+            <pb-cost-controls cost-price="vm.product.costPrice" currencies="options.vendorCurrencies" product="vm.product" product-type="vm.product.productType"/>
+        </div>        
+    </div>
+</div>

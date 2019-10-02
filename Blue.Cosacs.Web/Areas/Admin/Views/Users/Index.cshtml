@@ -1,0 +1,11 @@
+﻿@model string
+@{ ViewBag.Title = "Search Users"; }
+<div id="facetSearchContainer" data-module="admin/users" ng-controller="SearchController" class="facetsearch-container">
+    <facetsearch data-results="@Model"
+        data-results-template="/Static/js/admin/Templates/UserSearch.htm" 
+        data-search-url="/Admin/Users/SearchInstant"
+        data-history-url="/Admin/Users"
+		data-field-labels='{"HomeBranchName": "Default Branch"}'
+        data-half-fields='["Locked"]'>
+    </facetsearch>
+</div>

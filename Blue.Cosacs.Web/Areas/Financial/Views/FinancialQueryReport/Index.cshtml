@@ -1,0 +1,80 @@
+﻿<div data-module="merchandising/reports/financialQueryReport/init" ng-controller="FinancialQueryReportCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="btn btn-default" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="btn btn-default" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="btn btn-default" ng-click="paginator.reset()">Clear</button>
+                    <button id="buttonSearch" class="btn btn-primary" ng-click="paginator.get()" ng-disabled="paginator.loading()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <list name="location" ng-model="query.locationId" scope="locations" placeholder="Select a Location"></list>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="runNumber">Run Number</label>
+                    <input class="form-control" name="runNumber" ng-model="query.runNumber" pb-integer min="1" max="32767"/>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="fromDate">Created From</label>
+                    <input class="form-control" name="fromDate" ng-model="query.fromDate" type="date" placeholder="Select Date" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="transactionCode">Transaction Code</label>
+                    <input class="form-control" name="transactionCode" ng-model="query.transactionCode" />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="accountNumber">Account Number</label>
+                    <input class="form-control" name="accountNumber" ng-model="query.accountNumber" />
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="toDate">Created To</label>
+                    <input class="form-control" name="toDate" ng-model="query.toDate" type="date" placeholder="Select Date" />
+                </div>
+            </div>
+
+        </div>
+        
+        <pb-pagination get="search" params="query" preload="false" control="paginator" page-size="50" no-results-message="There are no results matching the query.">
+            <table class="table table-striped table-bordered table-hover table-responsive active pb-table">
+                <tbody>
+                    <tr>
+                        <th class="col-sm">Run Number</th>
+                        <th class="col-sm">Account Number</th>
+                        <th class="col-sm">Location</th>
+                        <th class="col-sm">Transaction Code</th>
+                        <th class="col-sm currency">Transaction Value</th>
+                        <th class="col-sm">Transaction Date</th>
+                        <th class="col-sm">Original Transaction Id</th>
+                    </tr>
+                    <tr ng-repeat="x in paginator.page">
+                        <td>{{x.runNumber}}</td>
+                        <td>{{x.accountNumber}}</td>
+                        <td><a href="{{resolve('Merchandising/Locations/Detail/' + x.locationId)}}">{{x.location}}</a></td>
+                        <td>{{x.transactionCode}}</td>
+                        <td class="currency">{{x.transactionValue | pbCurrency}}</td>
+                        <td class="date">{{x.transactionDate | pbDate }}</td>
+                        <td><p class="pb-text" pb-ref-link ng-model="x.originalTransactionId"></p></td>
+                    </tr>
+                </tbody>
+            </table>
+        </pb-pagination>
+    </div>
+</div>

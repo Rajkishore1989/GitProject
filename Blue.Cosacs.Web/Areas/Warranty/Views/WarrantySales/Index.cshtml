@@ -1,0 +1,12 @@
+﻿@model string
+@{ ViewBag.Title = "Warranty Sales"; }
+<div id="warrantySalesContainer" data-module="warranty/warrantySales" data-view-warranty-permission="@ViewBag.viewWarrantyPermission" ng-controller="WarrantySalesController" class="facetsearch-container" ng-cloak>
+	<facetsearch data-results="@Model" 
+		data-results-template="/Static/js/warranty/Templates/warrantySalesSearchResult.html" 
+		data-date-fields='{"SoldOn": "Date Sold"}'
+		data-search-url="/Warranty/WarrantySales/SearchInstant"
+		data-history-url="/Warranty/WarrantySales"
+		data-field-labels='{"SaleBranchName": "Branch", "SoldBy": "Sold By", "ItemSupplier": "Item Supplier", "WarrantySaleStatus" : "Status"}'
+		data-half-fields='["WarrantySaleStatus"]'>
+	</facetsearch>
+</div>

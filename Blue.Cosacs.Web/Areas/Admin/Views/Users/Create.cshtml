@@ -1,0 +1,72 @@
+﻿@model  Blue.Cosacs.Web.Areas.Admin.Models.ProfileNew
+@{ ViewBag.Title = "Create New User";
+ViewBag.Create = true;
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createUserForm"}))
+{
+    var minReqPassLen = Blue.Admin.PasswordComplexityParameters.Current.MinRequiredPasswordLength;
+    var minReqNonAlphaNumChar = Blue.Admin.PasswordComplexityParameters.Current.MinRequiredNonalphanumericChar;
+<div data-module="admin/userCreate" class="row"
+     data-min-password-length="@minReqPassLen" data-min-alphanumeric-char-num="@minReqNonAlphaNumChar">
+    <div class="createUser col-lg-6 form-horizontal">
+        <div class="form-group">
+            <label for="FirstName" class="col col-lg-4 control-label">First Name</label>
+            <div class="col col-lg-8">
+                @Html.TextBoxFor(u => u.FirstName, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="LastName" class="col col-lg-4 control-label">Last Name</label>
+            <div class="col col-lg-8">
+                @Html.TextBoxFor(u => u.LastName, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Login" class="col col-lg-4 control-label">User Name</label>
+            <div class="col col-lg-8">
+                @Html.TextBoxFor(u => u.Login, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Login)
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="eMail" class="col col-lg-4 control-label">Email</label>
+            <div class="col col-lg-8">
+                @Html.TextBoxFor(u => u.eMail, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="ExternalLogin" class="col col-lg-4 control-label">External Directory Login</label>
+            <div class="col col-lg-8">
+                @Html.TextBoxFor(u => u.ExternalLogin, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="FactEmployee" class="col col-lg-4 control-label">Fact Employee Id</label>
+            <div class="col col-lg-8">
+                @Html.TextBoxFor(u => u.FactEmployee, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FactEmployee)
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="BranchNo" class="col col-lg-4 control-label">Branch Name</label>
+            <div class="col col-lg-8">
+                <div class="pickListInputValidationClass input-validation-error" >
+                @Html.TextBoxFor(m => m.BranchNo, new { @class = "picklist", data_pick_list_id="BRANCH", data_placeholder = "Select a Default Branch", style = "width: 358px;"})
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="Password" class="col col-lg-4 control-label">Default Password</label>
+            <div class="col col-lg-8">
+                @Html.TextBoxFor(u => u.Password, new { @class = "form-control passwordComplexity", type = "password" })
+                @Html.ValidationMessageFor(m => m.Password)
+            </div>
+        </div>
+        <button type="submit" name="submit" class="btn btn-primary">Create</button>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="col-lg-6">
+    </div>
+</div>
+}

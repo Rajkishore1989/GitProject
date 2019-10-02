@@ -1,0 +1,64 @@
+<section class="buffer top" ng-show="product.id && retailPrices.length > 0">
+    <div class="section">
+        Promotional Pricing
+    </div>
+                
+    <table class="table table-bordered table-striped aligned pb-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Fascia</th>
+                <th>Location</th>
+                <th>Effective Date</th>
+                <th>Tax Rate</th>
+                <th>Cash Price</th>
+                <th>Margin</th>
+                <th>Regular Price</th>
+                <th>Duty Free Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="retailPrice in retailPrices | orderBy:'sortDate'">
+                <td>
+                    <span ng-hide="promotionActive(retailPrice.effectiveDate)">Active</span>
+                    <span ng-hide="!promotionActive(retailPrice.effectiveDate)">Inactive</span>
+                </td>
+                <td class="fascia">
+                    {{retailPrice.fascia}}
+                    <span ng-show="!retailPrice.fascia && !retailPrice.location">All Fascias</span>
+                </td>
+                <td class="location">
+                    <a href="{{generateUrl('Merchandising/Locations/Detail/' + retailPrice.locationId)}}">{{retailPrice.location}}</a>
+                    <span ng-show="!retailPrice.fascia && !retailPrice.location && !retailPrice.locationId">All Locations</span>
+                </td>
+                <td class="date short">
+                    {{ rawDate(retailPrice.effectiveDate)  | date:'d MMM yyyy'}}
+                </td>
+                <td>
+                    <div>{{retailPrice.taxRate | pbPercentage}} Inclusive</div>
+                    <div>{{retailPrice.taxRate | pbPercentage}} Exclusive</div>
+                </td>
+                <td class="currency">   
+                    <div>{{calculateInclusive(retailPrice.cashPrice, retailPrice.taxRate) | pbCurrency}}</div>                
+                    <div>{{retailPrice.cashPrice | pbCurrency}}</div>
+                </td>
+                <td class="margin">
+                    <span ng-hide="!averageWeightedCost || averageWeightedCost <= 0">
+                        {{margin(retailPrice.cashPrice) | pbPercentage}}
+                    </span>
+                    <span ng-hide="averageWeightedCost && averageWeightedCost > 0">
+                        N/A
+                    </span>
+                </td>
+                 <td class="currency">
+                    <div>{{calculateInclusive(retailPrice.regularPrice, retailPrice.taxRate) | pbCurrency}}</div>                
+                    <div>{{retailPrice.regularPrice | pbCurrency}}</div>
+                </td>
+                <td class="currency long">
+                    <div>{{calculateInclusive(retailPrice.dutyFreePrice, retailPrice.taxRate) | pbCurrency}}</div>                
+                    <div>{{retailPrice.dutyFreePrice | pbCurrency}}</div>
+                </td>  
+            </tr>
+        </tbody>
+    </table>
+</section>

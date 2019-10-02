@@ -1,0 +1,194 @@
+﻿@model Blue.Cosacs.Web.Areas.Warehouse.Models.DeliveryConfirmation
+@using Blue.Cosacs.Warehouse.Utils;
+@{
+    ViewBag.Title = string.Format("Delivery List #{0} Confirmation", Model.Id);
+}
+
+@Html.Partial("Legend")
+
+@{ Html.BeginForm("Confirmation", "Delivery", FormMethod.Post, new { Id = "deliveryForm" }); }
+<div data-module="warehouse/deliveryConfirm">
+    @Html.HiddenFor(s => s.ScheduleCreatedOn)
+    @Html.HiddenFor(h => h.Complete)
+    <div>
+        <table id="pickingItems" class="table table-bordered booking">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th style="width:6%">Shipment</th>
+                    <th style="width: 8%">Requested Date</th>
+                    <th>Recipient</th>
+                    <th>Product</th>
+                    <th style="width: 20%">Rejection</th>
+                    <th>Comments</th>
+                    <th>Confirmed Del/Col Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ var i = 0; }
+                @foreach (var item in Model.Items)
+                {
+                    <tr data-id="@item.Booking.Id" class="pickingItem @(item.Booking.CancelDate != null ? "cancelled" : "")">
+                        <td class="del-col align-middle">
+                            <div>@DeliveryOrCollection.FromString(item.Booking.DeliveryOrCollection).Name</div>
+                        </td>
+                        <td class="Booking-Columnn align-middle">
+                            <a class="Booking-Id" href='@Url.Action("detail", "Bookings")/@item.Booking.Id'>#@item.Booking.Id</a>
+                            @Html.Hidden("Items[" + i + "].Id", item.Id)
+                        </td>
+                        <td class="date align-middle text-center">
+                            <div><b>@item.Booking.DeliveryOrCollectionDate.ToString("ddd").ToUpper()</b></div>
+                            <div>@item.Booking.DeliveryOrCollectionDate.ToString("dd MMM").ToUpper()</div>
+                            <div><b>@item.Booking.DeliveryOrCollectionSlot</b></div>
+                            <!--<div><b>@item.Booking.DeliveryOrCollectionDate.ToString("tt")</b></div>-->
+                        </td>
+                        <td class="customer">
+                            <small>
+                                <div><strong>@item.Booking.CustomerName.HtmlDecode()</strong></div>
+                                <div>@item.Booking.AcctNo</div>
+                                <div class="address">
+                                    <div>@item.Booking.AddressLine1.HtmlDecode()</div>
+                                    <div>@item.Booking.AddressLine2.HtmlDecode()</div>
+                                    <div>@item.Booking.AddressLine3.HtmlDecode()</div>
+                                    <div>@item.Booking.PostCode.HtmlDecode()</div>
+                                    <div>@(item.Booking.ContactInfo == null ? "" : item.Booking.ContactInfo.HtmlDecode())</div>
+                                </div>
+                            </small>
+                        </td>
+                        <td class="product">
+                            <div class="itemQuantity pull-right">@item.Booking.ScheduleQuantity</div>
+                            <small>
+                                @Html.GetNonStockServicesHtml(item.Booking)
+                                <div title="Damaged" class=" @(item.Booking.Damaged == true ? "ui-icon ui-icon-alert" : "") "></div>
+                                <div title="Assembly Required" class=" @(item.Booking.AssemblyReq == true ? "glyphicons text-background" : "") "></div>
+                                <div>
+                                    <label>Item No</label>&nbsp;@item.Booking.ItemNo
+                                </div>
+                                <div>
+                                    <label>UPC</label>&nbsp;@item.Booking.ItemUPC
+                                </div>
+                                <div>@item.Booking.ProductDescription.HtmlDecode()</div>
+                                <div>@item.Booking.ProductBrand</div>
+                                <div>@item.Booking.ProductModel</div>
+                                <div><label>Booked</label>&nbsp;@item.Booking.OrderedOn.Value.ToString("dddd, dd MMMM yyyy, h:mm tt") </div>
+                            </small>
+                        </td>
+                        <td>
+                            @if (Model.Complete || item.Booking.DeliveryConfirmedDate.HasValue)
+                            {
+                                if (@item.Booking.DeliveryRejected.HasValue && @item.Booking.DeliveryRejected.Value)
+                                {
+                                    <div class="reasonDisplay"><strong>@item.RejectionReason</strong></div>
+                                    <div style="line-height: 1.6em">
+                                        <div class="itemQuantity pull-right">@item.Booking.DeliverQuantity</div>
+                                        <div>Amount @(item.Booking.DeliveryOrCollection.Equals("C") ? "Collected" : "Delivered"):</div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>All Item(s) 
+                                        @(item.Booking.DeliveryOrCollection.Equals("C") ? "Collected" : "Delivered")
+                                    Successfully</div>
+                                }
+                            }
+                            else
+                            {
+                                if (item.Booking.CancelDate != null || item.Booking.CurrentQuantity == 0)
+                                {
+                                    <div class="rejectItem max">
+                                        <select class="chosendropdown rejectItemSel" data-placeholder="Item(s) Rejected at Scheduling stage" name="Items[@i].RejectionReason" disabled="disabled" style="width: 100%;">
+                                            <option></option>
+                                            @foreach (var itemStatus in Model.RejectionCodes)
+                                            {
+                                                <option value='@itemStatus.v'>@itemStatus.v</option>
+                                            }
+                                        </select>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="rejectItem max">
+                                        <select class="chosendropdown rejectItemSel" data-placeholder="Item(s) @(item.Booking.DeliveryOrCollection.Equals("C") ? "Collected" : "Delivered") Successfully" name="Items[@i].RejectionReason" style="width: 100%;">
+                                            <option></option>
+                                            @foreach (var itemStatus in Model.RejectionCodes)
+                                            {
+                                                <option value='@itemStatus.v'>@(item.Booking.DeliveryOrCollection.Equals("C") ? itemStatus.v.Replace("Delivery", "Collection") : itemStatus.v)</option>
+                                            }
+                                        </select>
+                                    </div>
+                                }
+                                if (item.Booking.CurrentQuantity > 1 && (item.Booking.DeliveryOrCollection != "C" || item.Booking.DeliveryOrCollection != "R"))
+                                {
+                                    <div class="delQuantity max">
+                                        <select class="chosendropdown delQtySel" style="width: 100%;" data-placeholder="None Delivered" name="Items[@i].Quantity">
+                                            <option></option>
+                                            @for (var x = 1; x < @item.Booking.CurrentQuantity; x++)
+                                            {
+                                                <option value='@x'>@String.Format("{0} delivered", x)</option>
+                                            }
+                                        </select>
+                                    </div>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (Model.Complete || item.Booking.DeliveryConfirmedDate.HasValue)
+                            {
+                                @item.Booking.DeliveryRejectionNotes
+                            }
+                            else
+                            {
+                                if (item.Booking.CancelDate != null)
+                                {
+                                    <div>
+                                        @item.Booking.CancelReason
+                                    </div>
+
+                                    @Html.TextArea("Items[" + i + "].Notes", new { rows = 4, cols = 35, maxlength = 160, hidden = "true" })
+                                }
+                                else
+                                {
+                                    @Html.TextArea("Items[" + i + "].Notes", new { rows = 4, cols = 35, maxlength = 160 })
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (Model.Complete || item.Booking.DeliveryConfirmedDate.HasValue)
+                            {
+                                <span class="nowrap">@(((DateTime)item.Booking.DeliveryConfirmedDate).ToString("ddd, d MMMM, yyyy"))</span>
+                            }
+                            else if (!Model.Complete &&
+                                (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.DeliveryConfirmationAllBranches) ||
+                                (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.DeliveryConfirmation) && Html.IsUserBranch(Model.DeliveryBranch))))
+                            {
+                                <p>
+                                    <input style="width: 140px" class="form-control date date-picker" readonly="true" placeholder="Confirmation date" id="ConfirmDate@(item.Id)" name="ConfirmDate@(item.Id)" value="@item.Booking.DeliveryConfirmedDate" data-id="@item.Id" />
+                                    <div class="single-warning-date"> </div>
+                                </p>
+                                <p>
+                                    <button style="width: 140px" class="btn btn-default confirm-delivery disabled single-click" disabled="disabled" id="ConfirmOrder@(item.Id)" data-id="@item.Id">Confirm</button>
+                                </p>
+                            }
+                        </td>
+                        @{ i++; }
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="form-inline">
+            @if (!Model.Complete &&
+            (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.DeliveryConfirmationAllBranches) ||
+            (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.DeliveryConfirmation) && Html.IsUserBranch(Model.DeliveryBranch))))
+            {
+                <input style="width: 170px" class="form-control date date-picker" readonly="true" placeholder="Delivery confirmed date" id="DeliveryOn" name="DeliveryOn" value='@Model.DeliveryOn.ToString("ddd, d MMMM, yyyy")' data-id="@Model.Id" />
+                <button id="save" class="btn btn-primary single-click" type="submit">Confirm All</button>
+            }
+            @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.ReprintSchedule))
+            {
+                <button id="reprint" class="btn btn-default external-link single-click" type="button" data-schedule-id="@Model.Id">Reprint Schedule</button>
+            }
+        </div>
+    </div>
+    <div class="warning-date text-danger">*Pick list confirmation date cannot be before the Picklist creation date. Please select a date between the Picklist creation date and todays date.</div>
+</div>
+@{ Html.EndForm(); }

@@ -1,0 +1,244 @@
+﻿@{ ViewBag.Title = "Warranty Simulator"; }
+<div class="simulator" data-module="warranty/simulatorController" ng-controller="simulatorCtrl"
+    ng-cloak>
+    <div class="section">
+        Search Fields</div>
+    <div id="search" class="col col-lg-12">
+        <div class="row form-horizontal">
+            <div class="col-md-4 form-group" ng-class="{'has-error': !filter.SearchType }">
+                <label for="listSearchTypes" class="col-md-5 control-label">
+                    Search Type</label>
+                <div class=" col-md-7 checkbox">
+                    <list id="listSearchTypes" name="listSearchTypes" ng-model="filter.SearchType" scope="SearchTypes" ng-required
+                          placeholder="Search Type"></list>
+                </div>
+            </div>
+            <div class="col-md-4 form-group" ng-hide="filter.SearchAllProducts" ng-class="{'has-error': !filter.SearchAllProducts && !filter.product}">
+                <label for="product" class="col-md-4 control-label">
+                    Item</label>
+                <div class="col-md-8">
+                    <input type="text" ui-reset="" ng-model="filter.product" id="product" name="product" ng-required
+                        class="form-control" />
+                </div>
+            </div>
+            <div class="col-md-4 form-group" ng-show="filter.SearchAllProducts" ng-class="{'has-error': filter.SearchAllProducts && !filter.Department}">
+                <label for="Level_1" class="col-md-4 control-label">
+                    Department</label>
+                <div class="col-md-8">
+                    <ng-include src="productHierarchy.productDepartmentTemplate" ng-model="filter.Department"></ng-include>
+                </div>
+            </div>
+            <div class="form-group col-md-4" ng-show="filter.SearchAllProducts" ng-class="{'has-error': filter.SearchAllProducts && !filter.CategoryId}">
+                <label for="Level_2" class="col-md-6 control-label">
+                    Product's Category</label>
+                <div class="col-md-6">
+                    <ng-include src="productHierarchy.productCategoryTemplate" ng-model="filter.CategoryId"></ng-include>
+                </div>
+            </div>
+            <div class="form-group col-md-4" ng-show="!filter.SearchAllProducts">
+                <label for="price" class="col-md-6 control-label">
+                    Price</label>
+                <div class="col-md-6">
+                    <input type="text" ng-model="filter.price" id="price" name="price" ui-reset class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row form-horizontal">
+            <div class="col-md-4 form-group">
+                <label for="listType" class="col col-md-5 control-label">
+                    Warranty's Type</label>
+                <div class="col col-md-7">
+                    <list name="listType" ng-model="filter.WarrantyType" scope="WarrantyTypes" placeholder="Type"></list>
+                </div>
+            </div>
+            <div class="form-group col-md-4" ng-class="{'has-error': !filter.location}">
+                <label for="location" class="col-md-4 control-label">
+                    Location</label>
+                <div class="col-md-8">
+                    <list name="listBranch" ng-model="filter.location" ng-required lookup="BRANCH" placeholder="Select Branch"></list>
+                </div>
+            </div>
+            <div class="col-md-4 form-group">
+                <label for="sellDate" class="col-md-6 control-label">
+                    Date</label>
+                <div class="col-md-6">
+                    <input ui-date="dateOptions" readonly="true" name="SellDate" ui-reset ng-model="filter.sellDate"
+                        id="sellDate" name="sellDate" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row form-vertical" ng-show="filter.SearchAllProducts">
+            <div class="col-md-2">
+                Show results for Products
+            </div>
+            <div class="col-md-10">
+                <label>
+                    <input type="radio" name="resultType" value="withWarranties" ng-model="filter.resultType" />
+                    With Warranties
+                </label>
+                <label class="leftMargin">
+                    <input type="radio" name="resultType" value="withOutWarranties" ng-model="filter.resultType" />
+                    Without Warranties
+                </label>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="row">
+        <div class="col-md-6">
+            <button id="buttonClear" class="clear btn btn-default" ng-click="clear()">
+                Clear</button>
+            <button class="btn btn-primary" ng-click="search()" ng-disabled="isMissingParameters()">
+                Search</button>
+            <button class="btn btn-default" ng-click="exportResults()">
+                Export</button>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <section id="productWithWarranties" ng-show="showWithWarrantiesSection()">
+        <div class="section" ng-show="filter.SearchAllProducts">
+            Products with Warranties<span class="badge leftMargin" ng-show="warrantiesCount>0">{{warrantiesCount}}</span></div>
+        <table class="table table-bordered table-striped" ng-show="results">
+            <thead>
+                <tr>
+                    <th class="col-md-1">
+                        Product No.
+                    </th>
+                    <th class="col-md-1">
+                        Product Description
+                    </th>
+                    <th class="col-md-1">
+                        Product Retail Price
+                    </th>
+                    <th class="col-md-1">
+                        Warranty/Product Price(%)
+                    </th>
+                    <th>
+                        Link
+                    </th>
+                    <th>
+                        Warranty
+                    </th>
+                    <th class="col-md-1">
+                        Warranty Length (Months)
+                    </th>
+                    <th class="col-md-1">
+                        Warranty Tax(%)
+                    </th>
+                    <th class="col-md-1">
+                        Warranty Price
+                    </th>
+                    <!-- th>Effective Date</th -->
+                    <th class="col-md-1">
+                        Is Free
+                    </th>
+                    <th class="col-md-1">
+                        Promotion Link
+                    </th>
+                    <th class="col-md-1">
+                        Promotion Price
+                    </th>
+                    <th class="col-md-1">
+                        Promotion Match Type
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="result in results  | orderBy:'warrantyLink.ProductItemNo'">
+                    <td class="col-md-1">
+                        {{result.warrantyLink.ProductItemNo}}
+                    </td>
+                    <td class="col-md-1">
+                        {{result.warrantyLink.ProductDescription}}
+                    </td>
+                    <td class="col-md-1">
+                        {{result.warrantyLink.ProductRetailPrice && (result.warrantyLink.ProductRetailPrice
+                        | currency : culture.CurrencySymbol : culture.DecimalPlaces) || 'None'}}
+                    </td>
+                    <td class="col-md-1">
+                        {{ (result.WarrantyProductPricePercentage || 0).toFixed(2) }}
+                    </td>
+                    <td>
+                        <a ng-href="{{urlLink(result.warrantyLink.LinkName)}}">{{result.warrantyLink.LinkName}}</a>
+                    </td>
+                    <td>
+                        <a ng-href="{{urlWarranty(result.warrantyLink.Id)}}">{{result.warrantyLink.Number}}</a>
+                        - {{result.warrantyLink.Description}}
+                    </td>
+                    <td class="col-md-1">
+                        {{result.warrantyLink.Length}}
+                    </td>
+                    <td class="col-md-1">
+                        {{result.warrantyLink.TaxRate}}
+                    </td>
+                    <td class="text-right">
+                        {{result.price.RetailPrice && (result.price.RetailPrice | currency : culture.CurrencySymbol
+                        : culture.DecimalPlaces) || 'None'}}
+                    </td>
+                    <!-- td>{{getResultPriceDate(result)}}</td -->
+                    <td>
+                        {{isFreeWarranty(result.warrantyLink)}}
+                    </td>
+                    <td>
+                        <a ng-show="result.promotion.Promotion.PromoId" ng-href="{{urlPromo(result.promotion.Promotion.PromoId)}}"
+                            class="external-link" target="_blank">{{result.promotion.Promotion.PromoId}}</a>
+                    </td>
+                    <td class="text-right">
+                        {{result.promotion.Price && (result.promotion.Price | currency : culture.CurrencySymbol
+                        : culture.DecimalPlaces) || 'None'}}
+                    </td>
+                    <td>
+                        {{warrantyPromotionMatch(result)}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <p class="searchrow" />
+    <section id="productWithoutWarranties" ng-hide="showWithWarrantiesSection()">
+        <div class="section">
+            Products without Warranties<span class="badge leftMargin" ng-show="noWarrantiesCount>0">{{noWarrantiesCount}}</span></div>
+        <table class="table table-bordered table-striped" ng-show="resultsNoWarranties">
+            <thead>
+                <tr>
+                    <th class="col-md-1">
+                        Product No.
+                    </th>
+                    <th class="col-md-8">
+                        Product Description
+                    </th>
+                    <th>
+                        Product Category
+                    </th>
+                    <th>
+                        Product Retail Price
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="result in resultsNoWarranties  | orderBy:'warrantyLink.ItemNoWarrantyLink'">
+                    <td class="col-md-1">
+                        {{result.ItemNoWarrantyLink}}
+                    </td>
+                    <td class="col-md-1">
+                        {{result.Description}}
+                    </td>
+                    <td class="col-md-1">
+                        {{result.Category}}
+                    </td>
+                    <td class="text-right">
+                        {{result.CashPrice && (result.CashPrice | currency : culture.CurrencySymbol : culture.DecimalPlaces)
+                        || 'None'}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+    <div class="panel panel-default" ng-hide="hasResults()">
+        <div class="panel-body text-center text-muted">
+            No results</div>
+    </div>
+    <div ng-show="hasPagination">
+        <pagination num-pages="filter.PageCount" max-size="filter.PageSize || 250" current-page="filter.PageIndex" on-select-page="selectPage(page)"></pagination>
+    </div>
+</div>

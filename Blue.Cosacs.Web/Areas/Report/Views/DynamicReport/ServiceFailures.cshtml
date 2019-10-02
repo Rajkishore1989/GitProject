@@ -1,0 +1,77 @@
+﻿@{
+    ViewBag.Title = "Service Failures Report";
+}
+<div data-module="report/ServiceFailure" ng-controller="serviceFailuresController"
+    class="ng-scope report" ng-cloak>
+    <div id="Parameters" class="section">
+        Parameters</div>
+    <div class="search row">
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label" for="inputYear">
+                    Financial Year:
+                </label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.year }">
+                    <input id="inputYear" type="number" name="year" min="2000" max="2050" class="form-control"
+                           ng-model="filterParameters.year" placeholder="Financial Year">
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label" for="inputMinQtr">
+                    {{ qtrDeliveredFromLabel }}</label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.firstQtr }">
+                    <input id="inputMinQtr" type="number" name="minQtr" min="1" max="4" class="form-control" ng-model="filterParameters.firstQtr" placeholder="Delivered Qtr 1-4">
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label" for="inputMaxQtr">
+                    {{ qtrDeliveredToLabel }}</label>
+                <div class="col col-lg-6" ng-class="{'has-error': !filterParameters.lastQtr }">
+                    <input id="inputMaxQtr" type="number" name="maxQtr" min="1" max="4" class="form-control" ng-model="filterParameters.lastQtr" placeholder="Delivered Qtr 1-4">
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label">
+                    {{ branchLabel }}
+                </label>
+                <div class="col col-lg-6">
+                    <list name="listBranch" ng-model="filterParameters.branch" ng-required lookup="BRANCH" placeholder="Branch"></list>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-4">
+            <div class="form-group">
+                <label class="col col-lg-6 control-label" for="inputFail">
+                    {{ failRateLabel }}</label>
+                <div class="col col-lg-4" ng-class="{'has-error': !filterParameters.failureRate }">
+                    <input name="failRate" ng-model="filterParameters.failureRate" maxlength="3" id="inputFail" type="number" scope="failureRate" min="1" max="100" class="form-control" ng-model="fail" placeholder="1-100">
+                </div>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <label class="col col-lg-2 control-label">
+            {{ categoryLabel }}
+        </label>
+        <div class="col col-lg-10">
+            <select multiple name="Level_2" ng-model="filterParameters.categories" ui-select2="select2Options" style="width: 100%;" 
+                    data-placeholder="Category">
+                <option ng-repeat="cat in categories"
+                        value="{{cat[0]}}"> {{cat[1]}}
+                </option>
+            </select>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

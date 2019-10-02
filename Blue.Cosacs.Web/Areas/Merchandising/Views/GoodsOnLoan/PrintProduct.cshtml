@@ -1,0 +1,84 @@
+﻿@model List<GoodsOnLoanProductPrintModel>
+
+<style type="text/css">
+    .Collection {
+        border-left: 10px solid;
+    }
+
+    .del-col div.watermark {
+        -webkit-transform: none;
+        -moz-transform: none;
+        color: rgba(230, 230, 230, 0.5);
+        font-size: 10em;
+        z-index: -100;
+        position: absolute;
+        top: -25px;
+        left: 250px;
+        visibility: visible;
+    }
+</style>
+<span style="white-space:nowrap">
+    <table class="main">
+        <tbody>
+        @{foreach (var product in Model)
+        {
+            <tr class="item noborder" style="border-top: 1px solid black;">
+                <td rowspan="4" style="vertical-align: middle">
+                    @Html.Barcode(product.Sku, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER, true)
+                </td>
+                <td style="white-space: normal; padding-left: 200px">
+                    <strong>SKU</strong>
+                </td>
+                
+                <td style="white-space: normal">
+                    @product.Sku
+                </td>
+                <td style="white-space: normal; padding-left: 200px">
+                    <strong>Corporate UPC</strong>
+                </td>
+                <td style="white-space: normal">
+                    @product.CorporateUpc
+                </td>
+            </tr>
+            <tr class="item noborder">
+                <td style="white-space: normal; padding-left: 200px">
+                    <strong>Description</strong>
+                </td>
+                <td style="white-space: normal">
+                    @product.Description
+                </td>
+                <td style="white-space: normal; padding-left: 200px">
+                    <strong>Model</strong>
+                </td>
+                <td style="white-space: normal">
+                    @product.Model
+                </td>
+            </tr>
+            <tr class="item noborder">
+                <td style="white-space: normal; padding-left: 200px">
+                    <strong>Brand</strong>
+                </td>
+                <td style="white-space: normal">
+                    @product.Brand
+                </td>
+                <td style="white-space: normal; padding-left: 200px">
+                    <strong>Comments</strong>
+                </td>
+                <td style="white-space: normal">
+                    @product.Comments
+                </td>
+            </tr>
+            <tr class="item noborder" style="border-bottom: 1px solid black;">
+                <td style="white-space: normal; padding-left: 200px">
+                    <strong>Quantity for Pick up</strong>
+                </td>
+                <td style="white-space: normal" class="larger">
+                    @product.Quantity
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        }}
+        </tbody>
+    </table>
+</span>

@@ -1,0 +1,210 @@
+﻿@model StockAdjustmentViewModel
+
+<div data-module="merchandising/stockAdjustment/init" ng-controller="StockAdjustmentCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <button class="btn btn-default" ng-click="print()" ng-hide="!canPrint()">Print <span class="glyphicons new_window"></span></button>
+                <button class="btn btn-default" ng-click="approve()" ng-hide="!canApprove()">Approve</button>
+                <button class="btn btn-primary" ng-click="save()" ng-hide="!canSave()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="buffer top">
+        <ng-form name="reasonForm" class="form-horizontal" novalidate>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group"  ng-class="{'has-error': !adjustment.locationId}">
+                                <label class="control-label col-md-4" for="locations">Location</label>
+                                <div class="col-md-8">
+                                    <div ng-show="editing">
+                                        <list name="location"
+                                              ng-model="adjustment.locationId"
+                                              ng-required
+                                              ng-change="updateLocation()"
+                                              scope="locations"
+                                              placeholder="Select a Location"
+                                              ng-disabled="!canEdit()"></list>
+                                    </div>
+                                    <div ng-hide="editing" class="form-control-static"><a href="{{resolve('Merchandising/Locations/Detail/' + adjustment.locationId)}}">{{adjustment.location}}</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': !adjustment.primaryReasonId}">
+                                <label class="control-label col-md-4" for="primaryReason">Primary Reason</label>
+                                <div class="col-md-8">
+                                    <div ng-show="editing">
+                                        <list name="primaryReasons"
+                                              ng-disabled="!canEdit() || reasons.length < 1"
+                                              ng-model="adjustment.primaryReasonId" ng-change="updateSecondaryReason(adjustment.primaryReasonId)"
+                                              placeholder="Select a primary reason"
+                                              scope="primaryReasons"></list>
+                                    </div>
+                                    <div ng-hide="editing" class="form-control-static">{{adjustment.primaryReason}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': !adjustment.secondaryReasonId}">
+                                <label class="control-label col-md-4" for="defaultForCountAdjustment">Secondary Reason</label>
+                                <div class="col-md-8">
+                                    <div ng-show="editing">
+                                        <list name="secondaryReasons"
+                                              ng-disabled="!canEdit() || !secondaryReasons.length"
+                                              ng-model="adjustment.secondaryReasonId"
+                                              placeholder="Select a secondary reason"
+                                              scope="secondaryReasons"></list>
+                                    </div>
+                                    <div ng-hide="editing" class="form-control-static">{{adjustment.secondaryReason}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="comments">Comments</label>
+                        <div class="col-md-8">
+                            <textarea id="comments" ng-disabled="!canAddComments()" ng-hide="isApproved()" rows="5" ng-model="adjustment.comments" class="form-control"></textarea>
+                            <div ng-hide="!isApproved()"><p class="pb-text" pb-ref-link ng-model="adjustment.comments"></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Document Reference Number</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="adjustment.referenceNumber" maxlength="50" ng-show="editing" />
+                            <div class="form-control-static" ng-show="!editing">{{adjustment.referenceNumber}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" ng-show="isCreated()">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Created On</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">{{adjustment.createdDate | pbDate : true}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="isCreated()">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Created By</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">{{adjustment.createdBy}}</div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" ng-show="isApproved()">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="comments">Approved On</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">{{adjustment.authorisedDate | pbDate : true}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="isApproved()">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="comments">Approved By</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">{{adjustment.authorisedBy}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row buffer top" ng-show="editing" ng-disabled="saving">
+                <div class="col-md-12">
+                    <h4>Add Products</h4>
+                    <div class="well well-sm" ng-form="productForm">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div ng-class="{'has-error': productForm.sku.$invalid && canEditProduct()}">
+                                    <input ui-select2="productSearchSetup()" id="productSku" ng-disabled="!canEditProduct()" ng-required="true" name="sku" ng-model="newProduct.searchResult" ng-change="processSearchResult(newProduct.searchResult)" style="width: 100%" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-class="{'has-error': productForm.referenceNumber.$invalid}">
+                                    <input name="referenceNumber" maxlength="50" ng-disabled="!canEditProduct()" class="form-control" placeholder="Enter a reference number" ng-model="newProduct.referenceNumber" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div ng-class="{'has-error': adjustedProductsForm.quantity.$invalid}">
+                                    <input name="quantity" pb-integer ng-required="true" ng-disabled="!canEditProduct()" class="form-control" placeholder="Enter a quantity" ng-model="newProduct.quantity" data-toggle="tooltip" data-placement="top" title="Please enter a negative sign (-) before the quantity to deduct from stock. If no negative sign is added stock quantities will be increased." />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div ng-class="{'has-error': productForm.comments.$invalid}">
+                                    <input name="comments" id="productComments" placeholder="Enter a comment" ng-disabled="!canEditProduct()" class="form-control" ng-model="newProduct.comments" max-length="100" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <span class="glyphicons btn-icon plus" ng-click="addProduct(newProduct, productForm)" ng-class="{disabled:!canAddProduct(productForm)}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row buffer top" ng-show="showProducts()">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped aligned pb-table">
+                        <thead>
+                            <tr>
+                                <th class="component-controls" ng-show="editing"></th>
+                                <th>SKU</th>
+                                <th>Description</th>
+                                <th>Reference</th>
+                                <th>Comments</th>
+                                <th>AWC</th>
+                                <th>Quantity</th>
+                                <th>Line Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in adjustment.products">
+                                <td class="component-controls" ng-show="$parent.editing">
+                                    <span class="glyphicons glyph-btn bin" ng-click="removeProduct($index)" ng-hide="editMode"></span>
+                                </td>
+                                <td><a href="{{resolve('Merchandising/Products/Details/' + product.productId)}}">{{product.sku}}</a></td>
+                                <td>{{product.description}}</td>
+                                <td>{{product.referenceNumber}}</td>
+                                <td><span ng-model="product.comments" pb-ref-link></span></td>
+                                <td class="currency">{{product.averageWeightedCost | pbCurrency}}</td>
+                                <td class="currency">{{product.quantity}}</td>
+                                <td class="currency">{{$parent.lineCost(product) | pbCurrency}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td ng-show="editing"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Total</td>
+                                <td>{{totalLineCost() | pbCurrency}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+﻿@model StockTransferPrintModel
+
+<div style="width:100%;display:inline-block;margin:0 0 20px 0;">
+    <div style="display:inline-block;vertical-align:top;">
+        <table class="header-info">
+            <tr><th>Reference Number:</th><td>@Model.ReferenceNumber</td></tr>
+            <tr><th>Sending Location:</th><td>@Model.SendingLocation</td></tr>
+            <tr><th>Receiving Location:</th><td>@Model.ReceivingLocation</td></tr>
+            <tr><th>Via Location:</th><td>@Model.ViaLocation</td></tr>
+        </table>
+    </div>
+    <div style="display:inline-block;vertical-align:top;">
+        <table class="header-info">
+            <tr><th>Date Created:</th><td>@Model.CreatedDate</td></tr>
+            <tr><th>Created By:</th><td>@Model.CreatedBy</td></tr>
+        </table>
+    </div>
+    <div style="display:inline-block;vertical-align:top;float:right;">
+        <div class="document-id">
+            <div>
+                <div class="ref">Stock Transfer #@Model.Id</div>
+                <div class="barcode">@Html.Barcode("ST$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+            </div>
+            <div>
+                <div class="createdOn">@Model.CreatedDate</div>
+                <div class="createdBy">@Model.CreatedBy</div>
+            </div>
+        </div>
+    </div>
+</div>

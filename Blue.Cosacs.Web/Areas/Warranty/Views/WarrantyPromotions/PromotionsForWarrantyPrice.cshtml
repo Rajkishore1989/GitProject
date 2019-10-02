@@ -1,0 +1,19 @@
+﻿@{ ViewBag.Title = "Warranty Promotions"; }
+<div id="WarrantyReturnContainer" data-module="warranty/warrantyPricePromotions" ng-controller="WarrantyPricePromotionsController" class="warranty-promotions-module" ng-cloak>
+    <article class="warranty-promotions">
+        <div class="row">
+            <div class="col-lg-10">
+                <div>
+                    Showing promotions for Warranty Number: <b>{{filterPromotions.WarrantyNumber}}</b>
+                    and Price Effective date: <b>{{ moment(filterPromotions.EffectiveDate).format('ddd, D MMMM, YYYY')}}</b>.
+                </div>
+                <br />
+                @{
+                    ViewBag.ShowFooter = false;
+                    Html.RenderPartial("PromotionResult", "");
+                }
+                <br />
+            </div>
+        </div>
+    </article>
+</div>

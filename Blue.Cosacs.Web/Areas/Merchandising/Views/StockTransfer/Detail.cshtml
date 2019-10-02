@@ -1,0 +1,198 @@
+﻿@model StockTransferViewModel
+
+<div data-module="merchandising/stockTransfer/init" ng-controller="StockTransferCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <button class="btn btn-default" ng-click="printStockSheet()" ng-hide="!canPrint()">Print Stock Identifying Sheet <span class="glyphicons new_window"></span></button>
+                <button class="btn btn-default" ng-click="printTransferNote()" ng-hide="!canPrint()">Print Transfer Note <span class="glyphicons new_window"></span></button>
+                <button class="btn btn-default" ng-click="newTransfer()" ng-hide="!canPrint()">Create New</button>
+                <button class="btn btn-primary" ng-click="save()" ng-hide="!canSave()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="buffer top">
+        <ng-form name="reasonForm" class="form-horizontal" novalidate>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': !sendingLocationValid }">
+                                <label class="control-label col-md-4" for="sendingLocations">Sending Location</label>
+                                <div class="col-md-8">
+                                    <div ng-show="editing">
+                                        <list name="sendingLocations"
+                                              ng-model="stockTransfer.sendingLocationId"
+                                              ng-required
+                                              scope="locations"
+                                              ng-change="validateLocation()"
+                                              placeholder="Select a Location"
+                                              ng-disabled="!canEdit()"></list>
+                                    </div>
+                                    <div ng-hide="editing" class="form-control-static">
+                                        <a href="{{resolve('Merchandising/Locations/Detail/' + stockTransfer.sendingLocationId)}}">{{stockTransfer.sendingLocation}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': !receivingLocationValid }">
+                                <label class="control-label col-md-4" for="receivingLocations">Receiving Location</label>
+                                <div class="col-md-8">
+                                    <div ng-show="editing">
+                                        <list name="receivingLocations"
+                                              ng-model="stockTransfer.receivingLocationId"
+                                              ng-required
+                                              scope="locations"
+                                              ng-change="validateLocation()"
+                                              placeholder="Select a Location"
+                                              ng-disabled="!canEdit()"></list>
+                                    </div>
+                                    <div ng-hide="editing" class="form-control-static">
+                                        <a href="{{resolve('Merchandising/Locations/Detail/' + stockTransfer.receivingLocationId)}}">{{stockTransfer.receivingLocation}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group" ng-class="{'has-error': !viaLocationValid }">
+                                <label class="control-label col-md-4" for="viaLocations">Via Location</label>
+                                <div class="col-md-8">
+                                    <div ng-show="editing">
+                                        <list name="viaLocations"
+                                              ng-model="stockTransfer.viaLocationId"
+                                              scope="locations"
+                                              ng-change="validateLocation()"
+                                              placeholder="Select a Location"
+                                              ng-disabled="!canEdit()"></list>
+                                    </div>
+                                    <div ng-hide="editing" class="form-control-static"><a href="{{resolve('Merchandising/Locations/Detail/' + stockTransfer.viaLocationId)}}">{{stockTransfer.viaLocation}}</a></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4" for="comments">Comments</label>
+                        <div class="col-md-8">
+                            <textarea id="comments" ng-show="editing" ng-disabled="!canAddComments()" rows="5" maxlength="200" ng-model="stockTransfer.comments" class="form-control"></textarea>
+                            <div ng-hide="editing" class="form-control-static"><p class="pb-text" pb-ref-link ng-model="stockTransfer.comments"></p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Document Reference Number</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" ng-model="stockTransfer.referenceNumber" maxlength="50" ng-show="editing" />
+                            <div class="form-control-static" ng-show="!editing">{{stockTransfer.referenceNumber}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6" ng-show="isCreated()">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Created On</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">{{stockTransfer.createdDate | pbDate : true}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="isCreated()">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Created By</label>
+                        <div class="col-md-8">
+                            <div class="form-control-static">{{stockTransfer.createdBy}}</div> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row buffer top" ng-show="editing" ng-disabled="saving">
+                <div class="col-md-12">
+                    <h4>Add Products</h4>
+                    <div class="well well-sm" ng-form="productForm">
+
+                        <div class="row">
+                            <div class="col-md-2">
+                                <div ng-class="{'has-error': (!newProduct || !newProduct.sku) && canEditProduct()}">
+                                    <pb-search-dropdown endpoint="searchEndpoint" is-disabled="!canEditProduct()" model="newProduct" params="getSearchParams" result-processor="processSearchResult" />
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div ng-class="{'has-error': productForm.referenceNumber.$invalid}">
+                                    <input name="referenceNumber" maxlength="50" ng-disabled="!canEditProduct()" class="form-control" placeholder="Enter other reference" ng-model="newProduct.referenceNumber" />
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div ng-class="{'has-error': productForm.quantity.$invalid && canEditProduct()}">
+                                    <input id="quantity" name="quantity" pb-integer ng-required="true" ng-change="checkQuantity()" ng-min="1" min="1" ng-max="20000" max="20000" maxlength="5" ng-disabled="!canEditProduct()" class="form-control" placeholder="Enter a quantity" ng-model="newProduct.quantity" data-toggle="tooltip" data-placement="top" />
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div ng-class="{'has-error': productForm.comments.$invalid}">
+                                    <input name="comments" id="productComments" placeholder="Enter a comment" maxlength="200" ng-disabled="!canEditProduct()" class="
+                                           form-control" ng-model="newProduct.comments" />
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <span class="glyphicons btn-icon plus" ng-click="addProduct(newProduct, productForm)" ng-class="{disabled:!canAddProduct(productForm)}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row buffer top" ng-show="showProducts()">
+                <div class="col-md-12">
+                    <table class="table table-bordered table-striped aligned pb-table">
+                        <thead>
+                            <tr>
+                                <th class="component-controls" ng-show="editing"></th>
+                                <th>SKU</th>
+                                <th>Description</th>
+                                <th>Reference</th>
+                                <th>Comments</th>
+                                <th>AWC</th>
+                                <th>Quantity</th>
+                                <th>Line Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in stockTransfer.products">
+                                <td class="component-controls" ng-show="$parent.editing">
+                                    <span class="glyphicons glyph-btn bin" ng-click="removeProduct($index)" ng-hide="editMode"></span>
+                                </td>
+                                <td><a href="{{resolve('Merchandising/Products/Details/' + product.productId)}}">{{product.sku}}</a></td>
+                                <td>{{product.description}}</td>
+                                <td>{{product.referenceNumber}}</td>
+                                <td><div class="form-control-static"><p class="pb-text" pb-ref-link class="form-control-static" ng-model="product.comments"></p></div></td>
+                                <td>{{product.averageWeightedCost | pbCurrency}}</td>
+                                <td>{{product.quantity}}</td>
+                                <td>{{$parent.lineCost(product) | pbCurrency}}</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td ng-show="editing"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>Total</td>
+                                <td>{{totalLineCost() | pbCurrency}}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </ng-form>
+    </div>
+</div>

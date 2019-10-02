@@ -1,0 +1,218 @@
+.facetsearch-container {
+	.facetSearch {
+		.facetrow {
+			margin-top: 15px;
+		}
+		.buttonsRow {
+			.generatedButtons {
+				button {
+					margin-right: 3px !important;
+				}
+			}
+		}
+		.fieldsRow {
+			font-size: 12px;
+
+			.searchFields {
+				.facet {
+					ul {
+						height: 180px;
+						overflow-y: scroll;
+						border: 1px solid @box-border-color;
+						margin-top: 5px;
+
+						&.halfHeight {
+							height: 80px;
+						}
+
+						li {
+		                    font-size: 11px;
+		                    padding: 5px;
+		                    border-bottom: 0.5px solid @box-border-color;
+		                    cursor: pointer;
+		                
+		                    &.selected {
+		                        background: @border-color;
+		                        color: @dark-blue;
+		                    }
+		                    &:hover {
+		                        background: @bb-contrast;
+		                        color: White;
+		                    }
+		                    &.selected:hover {
+		                        background: @bb-contrast;
+		                        color: White;
+		                    }
+		                }
+					}
+					
+				}
+			}
+
+			.form-control {
+				font-size: 11px;
+			}
+		}
+		.resultsRow {
+			.search-result {
+				&:hover {
+		            cursor: pointer;
+		            background: @lightgrey-hover;
+		            color: black;
+		        }
+
+				margin-bottom: 10px;
+				font-size: 12px;
+
+				.panel-heading {
+					font-size: 14px;
+
+					.resultType {
+						font-size: 16px;
+						font-weight: 600;
+					}
+					.refLink, .itemQuantity {
+				    	font-size: 18px;
+				    	font-weight: bold;
+				    }
+				    .refLink {
+				      color: @bb-contrast;
+				    }
+				}
+				.title {
+			        text-align: center;
+			        font-weight: bold;
+			        color: @dark-neutral-color;
+			        font-size: 14px;
+			    }
+			    .status {
+			    	font-size: 14px;
+			    	font-weight: 600;
+			    }
+			    .expandable {
+				    &:hover {
+				      cursor: pointer;
+					}
+				}
+				.expandable-toggle {
+				    font-size: 18px;
+				}
+			}
+		}
+		
+		&.medium {
+			.facet-data {
+				.facetrow {
+					margin-top: 0px;
+				}
+			}
+
+			.paging-row {
+				margin-bottom: 6px;
+			}
+
+			.search-result {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.grid-item {
+		border: 1px solid @neutral-color;
+		height: 0;
+		padding-bottom: 12%;
+		font-size: 1.5em;
+		text-align: center;
+		position: relative;
+
+		&:hover {
+            cursor: pointer;
+            background: @lightgrey-hover;
+            color: black;
+        }
+
+		.grid-content {
+			height: 100%;
+			margin-top: 30px;
+		}
+
+		&.touch-field-value, &.touch-selected-field {
+			border-color: #ffffff;
+		}
+	}
+
+	.Level_1 {
+		background-color: @brand-success;
+		&:hover {
+			background-color: darken(@brand-success, 10%);
+		}
+	}
+
+	.Level_2 {
+		background-color: @brand-warning;
+		&:hover {
+			background-color: darken(@brand-warning, 10%);
+		}
+	}
+
+	.Level_3 {
+		background-color: @brand-info;
+		&:hover {
+			background-color: darken(@brand-info, 10%);
+		}
+	}
+
+	.selected-fields {
+		padding-top: 8px;
+	}
+
+	.selected-field {
+		font-size: 1.2em;
+		display: inline-block;
+		width: 100%;
+		padding: .2em .6em .3em;
+		font-weight: bold;
+		color: #ffffff;
+		text-align: center;
+		white-space: nowrap;
+		vertical-align: baseline;
+	}
+
+	.search-remove {
+		position: absolute;
+		right: 5px;
+		top: 5px;
+		color: #ffffff;
+	}
+
+	.page-left:before {
+		font-family: 'Glyphicons Regular';
+		font-style: normal;
+		font-weight: normal;
+		line-height: 1;
+		vertical-align: middle;
+		-webkit-font-smoothing: antialiased;
+		content: "\E225 ";
+		position: absolute;
+		left: 40px;
+		top: 10px;
+	}
+
+	.page-right:after {
+		font-family: 'Glyphicons Regular';
+		font-style: normal;
+		font-weight: normal;
+		line-height: 1;
+		vertical-align: middle;
+		-webkit-font-smoothing: antialiased;
+		content: " \E224";
+		position: absolute;
+		right: 40px;
+		top: 10px;
+	}
+
+	.facet-data-container {
+		width: 100%;
+		overflow: hidden;
+	}
+}

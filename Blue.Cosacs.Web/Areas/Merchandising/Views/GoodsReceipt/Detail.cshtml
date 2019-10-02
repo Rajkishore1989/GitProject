@@ -1,0 +1,71 @@
+﻿@model object
+
+<div data-module="merchandising/goodsreceipt/init" ng-controller="ReceiptCtrl" ng-init="receipt=@Html.RawJson(Model)" ng-cloak class="buffer-sm bottom">
+
+    <div class="buffer-sm top" ng-form="receiptForm">
+
+        <div ng-show="isCreateMode()">
+            <create-goods-receipt></create-goods-receipt>
+        </div>
+
+        <div ng-show="isEditMode() || isViewMode()">
+            <edit-goods-receipt></edit-goods-receipt>
+        </div>
+
+        <div class="row">
+            <div class="col-md-9">
+                <div class="section">Comments</div>
+                <div class="form-group" ng-class="{'has-error': receipt.comments.$invalid}">
+                    <div ng-hide="editing">
+                        <p class="pb-text" pb-ref-link ng-model="receipt.comments"></p>
+                        <p ng-hide="receipt.comments.length > 0">
+                            No comments
+                        </p>
+                    </div>
+                    <div ng-show="editing">
+                        <textarea class="form-control" rows="3" name="comments" ng-model="receipt.comments" maxlength="500"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-show="isCreateMode() && receipt.vendorId > 0 && purchaseOrders.length > 0">
+            <div class="form-group col-md-12" ng-class="{'has-error': receiptForm.purchaseOrderId.$invalid}">
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="purchaseOrderId">Add purchase order</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <select name="purchaseOrderId" ng-model="selectedPurchaseOrderId" required class="form-control" ng-required="true" ng-options="v.purchaseOrderId as v.summary for v in purchaseOrders | orderBy: 'purchaseOrderId':reverse">
+                            <option value="">Select purchase order</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <p class="halflings plus btn-icon aligned" ng-hide="!selectedPurchaseOrderId" ng-click="addPurchaseOrder()"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div ng-repeat="purchaseOrder in receipt.purchaseOrders">
+            <div ng-show="isCreateMode()">
+                <create-items></create-items>
+            </div>
+            <div ng-show="isEditMode()">
+                <view-items></view-items>
+            </div>
+        </div>
+
+        <div ng-show="isCreateMode()">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <button class="btn btn-primary" ng-click="save(receiptForm)" ng-disabled="!canSave(receiptForm)" ng-show="receipt.purchaseOrders.length > 0">Create Receipt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

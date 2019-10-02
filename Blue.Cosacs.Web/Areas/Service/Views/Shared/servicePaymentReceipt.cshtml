@@ -1,0 +1,161 @@
+﻿<div id="paymentReceipt-modal" class="modal fade border paymentPopup" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;</button>
+                <div>
+                    <h3>
+                        Print Payment Receipt</h3>
+                </div>
+            </div>
+            <div class="popup-body modal-body" id="paymentReceiptContent">
+                <div class="text-center"><b>{{ receipt.branchName }}</b></div>
+                <div class="text-center">{{ receipt.branchAddress1 }}</div>
+                <div class="text-center">{{ receipt.branchAddress2 }}</div>
+                <div class="text-center">{{ receipt.branchAddress3 }}</div>
+                <div>&nbsp;</div>
+                <div class="text-center">VAT Registration No: {{ receipt.vatRegistration }}</div>
+                <div>&nbsp;</div>
+                <div class="text-center">Bringing Value Home!!</div>
+                <div>&nbsp;</div>
+                <div>&nbsp;</div>
+                <div><b>Payment Receipt</b></div>
+                <hr style="border-top: dashed 1px;" />
+                <table>
+                    <tr>
+                        <td class="col-lg-2">
+                            Customer Name
+                        </td>
+                        <td class="col-lg-2">
+                            <b> {{ receipt.customerName }}</b>
+                     
+                        </td>
+                      
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">
+                            &nbsp;
+                        </td>
+                        <td class="col-lg-2">
+                            Delivery Details:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">
+                            Customer Address
+                        </td>
+                        <td class="col-lg-2">
+                            <b> {{ receipt.DELTitleC }} {{ receipt.DELFirstName }} {{ receipt.DELLastName }}</b>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">
+                            &nbsp;
+                        </td>
+                        <td class="col-lg-2">
+                            {{ receipt.customerAddress1 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">
+                            &nbsp;
+                        </td>
+                        <td class="col-lg-2">
+                            {{ receipt.customerAddress2 }}
+                        </td>
+                    </tr>
+                    <tr ng-hide="!receipt.customerAddress3">
+                        <td class="col-lg-2">
+                            &nbsp;
+                        </td>
+                        <td class="col-lg-2">
+                            {{ receipt.customerAddress3 }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-4" colspan="2">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">
+                            Reference Number
+                        </td>
+                        <td class="col-lg-2">
+                            {{ receipt.referenceNumber }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">
+                            Date Paid
+                        </td>
+                        <td class="col-lg-2">
+                            {{ receipt.datePaid | moment: "DD/MM/YYYY HH:mm:ss" }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-2">
+                            Total
+                        </td>
+                        <td class="col-lg-2">
+                            {{ receipt.balanceTotal | currency : culture.CurrencySymbol : culture.DecimalPlaces }}
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    &nbsp;</div>
+                <div><b>Payments</b></div>
+                <hr style="border-top: dashed 1px;" />
+                <table class="payment-table" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <td class="receipt-col-2">
+                                Type
+                            </td>
+                            <td class="receipt-col-2">
+                                Amount
+                            </td>
+                            <td class="receipt-col-2">
+                                Tendered
+                            </td>
+                            <td class="receipt-col-2">
+                                Change
+                            </td>
+                            <td class="receipt-col-2">
+                                Balance
+                            </td>
+
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td class="receipt-col-2">
+                            {{ receipt.type }}
+                        </td>
+                        <td class="receipt-col-2">
+                            {{ receipt.balanceTotal | currency : culture.CurrencySymbol : culture.DecimalPlaces }}
+                        </td>
+                        <td class="receipt-col-2">
+                            {{ receipt.tendered | currency : culture.CurrencySymbol : culture.DecimalPlaces }}
+                        </td>
+                        <td class="receipt-col-2">
+                            {{ receipt.change | currency : culture.CurrencySymbol : culture.DecimalPlaces }}
+                        </td>
+                        <td class="receipt-col-2">
+                            {{ receipt.balance | currency : culture.CurrencySymbol : culture.DecimalPlaces }}
+                        </td>
+                    </tr>
+                </table>
+                <hr style="border-top: dashed 1px #000000;" />
+                <p  class="text-center">Thank you for your payment!!!. </p>
+            </div>
+            <div class="popup-footer modal-footer">
+                <button class="ok btn btn-primary" ng-print print-element-id="paymentReceiptContent">
+                    Print</button>
+                <button class="cancel btn btn-default" ng-click="cancelReceiptPrinting()">
+                    Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

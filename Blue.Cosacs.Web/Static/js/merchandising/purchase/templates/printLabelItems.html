@@ -1,0 +1,37 @@
+<div class="row">
+    <div id="productsContainer" class="col-lg-12">
+        <table class="table table-bordered table-striped pb-table">
+            <thead>
+                <tr>
+                    <th class="col-sm sku">Product Code</th>
+                    <th class="col-sm-2">Description</th>
+                    <th class="col-sm date">Requested Delivery Date</th>
+                    <th class="col-sm date">Estimated Delivery Date</th>
+                    <th class="col-sm quantity">QTY Ordered</th>
+                    <th class="col-sm quantity">QTY Received</th>
+                    <th class="col-sm quantity" ng-hide="closed()">QTY Backordered</th>
+                    <th class="col-sm quantity" ng-show="closed()">QTY Cancelled</th>
+                    <th class="col-sm currency">Vendor Unit Cost</th>
+                    <th class="col-sm currency">Vendor Line Cost</th>
+                    <th class="col-sm-2">QTY To Print</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in purchase.products" ng-form="productForm" ng-controller="ProductCtrl" ng-class="{'has-error': productForm.$invalid}">
+                    <td><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + product.sku)}}">{{product.sku}}</a></td>
+                    <td>{{product.description}}</td>
+                    <td class="date">{{product.requestedDeliveryDate | pbDate }}</td>
+                    <td class="date">{{product.estimatedDeliveryDate | pbDate }}</td>
+                    <td class="quantity">{{product.quantityOrdered}}</td>
+                    <td class="quantity">{{product.totalQuantityReceived || 0}}</td>
+                    <td class="quantity">{{product.quantityOrdered - product.totalQuantityReceived}}</td>
+                    <td class="currency">{{product.unitCost | pbCurrency:purchase.currency}}</td>
+                    <td class="currency">{{lineCost(product) | pbCurrency:purchase.currency}}</td>
+                    <td class="quantity">
+                        <input type="text" class="form-control" pb-integer ng-min="0" ng-max="product.quantityOrdered - product.totalQuantityReceived" ng-disabled="!product.labelRequired" name="printQuantity" ng-model="product.printQuantity" />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

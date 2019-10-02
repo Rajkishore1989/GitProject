@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    ViewBag.Title = "Promotion Search";
+}
+<div id="facetSearchContainer" data-module="merchandising/search/initSearch" ng-controller="SearchController" class="facetsearch-container">
+    <facetsearch data-results="@Model"
+                 data-results-template="/Static/js/merchandising/promotion/templates/searchResult.html"
+                 data-search-url="/Merchandising/Promotion/SearchInstant"
+                 data-history-url="/Merchandising/Promotion"
+                 data-date-fields='{"StartDate": "Start Date","EndDate": "End Date"}'
+                 data-convert-dates='false'
+                 data-field-labels="@ViewBag.labels">
+    </facetsearch>
+</div>

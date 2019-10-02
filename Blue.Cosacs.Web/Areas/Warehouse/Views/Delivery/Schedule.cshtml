@@ -1,0 +1,103 @@
+﻿@{
+	ViewBag.Title = "Load and Delivery Schedule";
+}
+@Html.Partial("Legend")
+
+<div id="load" data-module="warehouse/load" data-default-branch='@ViewBag.DefaultBranch' data-trucks='@Html.ActionJson("Trucks", "Picking")'>
+	<div class="section">Search</div>
+	<div class="search row">
+		<div class="col col-lg-8 form-horizontal">
+			<div class="form-group">
+				<label class="col col-lg-3 control-label" for="deliveryBranch">Delivery Branch </label>
+				<div class="col col-lg-6">
+		            @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.WarehouseAllBranches))
+		            {
+					<select id="deliveryBranch" name="deliveryBranch" class="pickList form-control" data-pick-list-id="BRANCH" data-placeholder="Select a Delivery Branch" ></select>
+		            }
+		            else
+		            {
+		            <select id="deliveryBranch" name="deliveryBranch" class="pickList form-control" data-pick-list-id="BRANCH" data-placeholder="Select a Delivery Branch" disabled="disabled"></select>
+		            }
+		        </div>
+        	</div>
+		    <div class="form-group">
+		        <label class="col col-lg-3 control-label" for="trucks">Truck </label>
+		        <div class="col col-lg-6">
+                    <select id="trucks" data-placeholder="Select a Truck" class="form-control"></select>
+		        </div>
+		    </div>
+            <div class="form-group">
+                <label class="col col-lg-3 control-label" for="type">Type </label>
+                <div class="col col-lg-6">
+                    <select id="type" data-placeholder="Select a type" class="form-control">
+                    	<option value="false">External</option>
+                        <option value="true">Internal</option>
+                    </select>
+                </div>
+            </div>
+		</div>
+	</div>
+
+	<div class="section">Actions</div>
+	<div class="row">
+		<div id="actions" class="col-lg-6" style="display:none;">
+            <div id="load_delivery_buttons" style="display: inline-block;">
+                @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.PrintLoad))
+                {
+			    <a class="btn btn-default external-link" id="print" target="_blank">Print Load</a>
+                }
+                @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.CreateSchedules))
+                {
+                <button class="btn btn-primary btn-default single-click" id="createDeliverySchedule">Create Delivery Schedule</button>
+                }
+                <a class="btn btn-primary single-click" id="saveDeliverySchedule">Save</a>
+                <button class="btn btn-default" id="cancel">Cancel</button>
+            </div>
+            <div id="transfer_buttons" style="display: inline-block;">
+                @if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.SchedulingTransferItemsToTruck))
+                {
+	             <button class="btn btn-default single-click" id="transferOrders">Transfer Shipments</button>
+                }
+                <div id="transfer">
+                    <select id="reassignTrucks" class="form-control" data-placeholder="Select a Truck to transfer to" style="width: 100%;"></select>
+                    <button class="btn single-click" id="confirmTransfer">Confirm Transfer</button>
+                    <button class="btn" id="cancelTransfer">Cancel Transfer</button>
+                </div>
+            </div>
+        </div>
+	</div>
+	<p>&nbsp;</p>
+
+	<div id="items-container" title="Drag and Drop the items into the correct order">
+		<table id="items" class="table table-bordered">
+			<thead>
+				<tr>
+					<th class="order" style="width:10%">Order</th>
+					<th style="width: 2%"></th>
+					<th style="width: 7%">Shipment</th>
+					<th class="date" style="width:10%">Req. Del. Date</th>
+					<th class="customer" style="width:15%">Recipient Details</th>
+					<th class="product" style="width:18%">Product</th>
+					<th class="rejections" style="width:19%">Rejections</th>
+					<th class="comments" style="width:19%">Comments</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+	</div>
+
+	<script id="itemTemplate" type="text/template">
+		<tr data-id=<%- BookingId %> class="booking <%= CancelDate ? 'cancelled' : typeof Express !== "undefined" && Express  ? "express" : "" %>">
+			<td class="order"></td>
+			@Html.Partial("BookingTemplate")
+			@Html.Partial("BookingTemplateReject")
+		</tr>
+	</script>
+
+	<script id="itemTemplateEmpty" type="text/template">
+		<tr class="empty">
+			<td colspan="8">There are no items to be Scheduled.</td>
+		</tr>
+	</script>
+
+</div>

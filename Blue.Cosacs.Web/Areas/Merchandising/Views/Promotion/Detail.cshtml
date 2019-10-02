@@ -1,0 +1,533 @@
+﻿@model PromotionViewModel
+@{
+    ViewBag.Title = Model.Promotion.Id > 0 ? string.Format("{0} Promotion", Model.Promotion.Name) : "Create Promotion";
+
+    var routes = new { route = Url.RouteUrl(new { Controller = "Promotion", Area = "Merchandising", Action = "Detail" }) };
+}
+
+<div data-module="merchandising/promotion/init" ng-controller="promotionCtrl" ng-init="vm=@Html.RawJson(Model);routes=@Html.RawJson(routes)" ng-cloak>
+    <div class="row">
+        <div class="col-md-12">
+            <ng-form name="promoForm" class="form-horizontal">
+                <section class="buffer top">
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="form-group" ng-class="{'has-error': promoForm.promoName.$invalid}">
+                                <label for="promoName" class="col-md-2 control-label">
+                                    Promotion Name
+                                </label>
+                                <div class="col-md-4">
+                                    <input ng-hide="!canEditLockableField()" type="text" class="form-control" name="promoName" ng-model="vm.promotion.name" ng-required="true" required maxlength="100" ng-maxlength="100" tabindex="1" />
+                                    <p class="form-control-static" ng-show="!canEditLockableField()">{{vm.promotion.name}}</p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="fascia" class="col-md-2 control-label">
+                                    Fascia
+                                </label>
+                                <div class="col-md-4">
+                                    <list name="fascia" ng-model="vm.promotion.fascia" scope="options.fascia" placeholder="Select a Fascia" ng-disabled="vm.promotion.locationId || !canEditLockableField()" tabindex="2"></list>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': promoForm.location.$invalid}">
+                                <label for="location" class="col-md-2 control-label">
+                                    Location
+                                </label>
+                                <div class="col-md-4">
+                                    <list name="location" ng-model="vm.promotion.locationId" scope="vm.locations" placeholder="Select a Location" ng-disabled="vm.promotion.fascia || !canEditLockableField()" tabindex="3"></list>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': promoForm.startDate.$invalid}">
+                                <label for="startDate" class="col-md-2 control-label">
+                                    Start Date
+                                </label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-required="true" type="date" ng-change="updateValidEndDate(startDate)" id="startDate" name="startDate" min="{{today}}" placeholder="Select start date" ng-model="startDate" ng-hide="!canEditLockableField()" tabindex="4">
+                                    <p class="form-control-static" ng-show="!canEditLockableField()">{{vm.promotion.startDate | pbDate }}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': promoForm.endDate.$invalid}">
+                                <label for="endDate" class="col-md-2 control-label">
+                                    End Date
+                                </label>
+                                <div class="col-md-4">
+                                    <input class="form-control" ng-required="true" type="date" id="endDate" name="endDate" required placeholder="Select end date" min="{{today}}" ng-model="endDate" tabindex="5" ng-hide="!canEditEndDate()">
+                                    <p class="form-control-static" ng-show="!canEditEndDate()">{{vm.promotion.endDate | pbDate }}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-group" ng-class="{'has-error': promoForm.promoType.$invalid}">
+                                <label for="promoType" class="col-md-2 control-label">
+                                    Type
+                                </label>
+                                <div class="col-md-4">
+                                    <select id="promoType" name="promoType" class="form-control" ng-model="vm.promotion.type" required ng-required="true" ng-change="clearDetails()" ng-hide="!canEditLockableField()" tabindex="6">
+                                        <option value="1">Set Price</option>
+                                        <option value="2">Value Off</option>
+                                        <option value="3">Discount Percentage</option>
+                                    </select>
+                                    <p class="form-control-static" ng-show="!canEditLockableField()">{{vm.promotion.promotionType | inflector:humanize}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-10">
+                            <div class="row">
+
+                                <div class="form-group">
+                                    <label for="fascia" class="col-md-2 control-label">
+                                        Add Time
+                                    </label>
+
+                                    <div class="col-md-4">
+                                        <input type="checkbox" id="chkhideshow">
+                                    </div>
+                                </div>
+
+                                @*Change for ZEN/UNC/CRF/CR2018-011 Pricing Promotion - Happy Hour*@
+                                <div id="hasallow">
+
+                                    <div class="form-group" ng-class="{'has-error': promoForm.StartTime.$invalid}">
+                                        <label for="StartTime" class="col-md-2 control-label">
+                                            Start Time (24 hrs)
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" ng-required="true" type="time" id="StartTime" name="StartTime" placeholder="Select start Time" ng-model="startTime" tabindex="4">
+                                            <p id="startp" class="form-control-static">{{vm.promotion.startTime}}</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group" ng-class="{'has-error': promoForm.EndTime.$invalid}">
+                                        <label for="EndTime" class="col-md-2 control-label">
+                                            End Time (24 hrs)
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input class="form-control" ng-required="true" type="time" id="EndTime" name="EndTime" min="{{StartTime}}" required placeholder="Select end Time" ng-model="endTime" tabindex="5">
+                                            <p id="endp" class="form-control-static" ng-show="!canEditEndTime()">{{vm.promotion.endTime}}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+            </ng-form>
+            <div class="animate-switch-container">
+                <section class="buffer top bottom" ng-class="{'animate-enter': vm.promotion.type == 1 && promoForm.$valid, 'animate-leave': vm.promotion.type != 1 || promoForm.$invalid}">
+                    <div class="section">Set Price</div>
+                    <div class="row" ng-hide="!canEditLockableField()">
+                        <ng-form name="setPriceForm" class="form-horizontal" novalidate>
+                            <div class="col-md-9">
+                                <div class="form-group" ng-class="{'has-error': setPriceForm.product.$invalid}">
+                                    <label for="product" class="col-md-2 control-label">
+                                        Search Products
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input ui-select2="productSearchSetup()" name="product" ng-model="setPrice.product" data-placeholder="Enter a sku or description" ng-required="true" ng-change="updateProductValidity(vm.promotion.type)" />
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{'has-error': setPriceForm.priceType.$invalid}">
+                                    <label for="priceType" class="col-md-2 control-label">
+                                        Price Type
+                                    </label>
+                                    <div class="col-md-4">
+                                        <select name="priceType" class="form-control" required ng-required="true" ng-model="setPrice.priceType" ng-change="updateProductValidity(vm.promotion.type)">
+                                            <option value="1">Regular</option>
+                                            <option value="2">Cash</option>
+                                            <option value="3">Duty Free</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group" ng-class="{'has-error': setPriceForm.setPrice.$invalid}">
+                                    <label for="setPrice" class="col-md-2 control-label">
+                                        Price <br /> (Please enter prices {{taxSetting()}} of tax)
+                                    </label>
+                                    <div class="col-md-4">
+                                        <input pb-currency class="form-control" name="setPrice" ng-model="setPrice.setPrice" required ng-required="true" ng-readonly="!canEdit()" ng-change="updateProductValidity(vm.promotion.type)" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button class="btn btn-default" type="button" ng-disabled="setPriceForm.$invalid || !setPrice.canAdd" ng-click="addProduct(setPrice)">Add to Promotion</button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </ng-form>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 buffer top">
+                            <table class="table table-bordered table-striped aligned" ng-hide="!vm.promotion.details || vm.promotion.details.length == 0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Product Code</th>
+                                        <th>Long Description</th>
+                                        <th>Price Type</th>
+                                        <th>Price (tax {{taxSetting()}})</th>
+                                        <th>Margin</th>
+                                        <th>Promo Price (tax {{taxSetting()}})</th>
+                                        <th>Promo Margin</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="promoItem in vm.promotion.details">
+                                        <td class="col-btn">
+                                            <span class="glyphicons glyph-btn bin" title="Remove" ng-show="canEdit() && !promotionHasEnded && !promoItem.isEditing" ng-click="removeItem(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn pencil" title="Edit" ng-show="canEdit() && !promotionHasEnded && !promoItem.isEditing" ng-click="editItem(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn floppy_disk" title="Edit" ng-show="promoItem.isEditing" ng-click="confirmEdit(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn undo" title="Revert" ng-show="promoItem.isEditing" ng-click="revertEdit(promoItem)"></span>
+                                        </td>
+                                        <td><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + promoItem.sku)}}">{{promoItem.sku}}</a></td>
+                                        <td class="col-lg">{{promoItem.name}}</td>
+                                        <td>{{promoItem.priceTypeName}}</td>
+                                        <td>{{addTax(promoItem.originalPrice, promoItem.taxRate)| pbCurrency}}</td>
+                                        <td ng-show="promoItem.averageWeightedCost && promoItem.priceType == 2">{{margin(promoItem.originalPrice, promoItem) | pbPercentage}}</td>
+                                        <td ng-hide="promoItem.averageWeightedCost && promoItem.priceType == 2">0%</td>
+                                        <td ng-hide="promoItem.isEditing">{{addTax(promoItem.setPrice, promoItem.taxRate) | pbCurrency}}</td>
+                                        <td ng-show="promoItem.isEditing"><input pb-currency class="form-control" name="setPriceTemp" ng-model="promoItem.setPriceTemp" required ng-required="true" /></td>
+                                        <td ng-show="promoItem.averageWeightedCost && promoItem.priceType == 2">{{margin(promoItem.setPrice, promoItem) | pbPercentage}}</td>
+                                        <td ng-hide="promoItem.averageWeightedCost && promoItem.priceType == 2">0%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="buffer top bottom" ng-class="{'animate-enter': vm.promotion.type == 2 && promoForm.$valid, 'animate-leave': vm.promotion.type != 2 || promoForm.$invalid}">
+                    <div class="section">Value Off</div>
+
+                    <div class="row form-horizontal" ng-hide="!canEditLockableField()">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    Applies To
+                                </label>
+                                <div class="col-md-4">
+                                    <div class="btn-group">
+                                        <button type="button" id="valueOffSku" class="btn btn-default" ng-class="{'active' : itemMode == 'sku'}" ng-click="appliesTo(valueOff,'sku')">SKU</button>
+                                        <button type="button" id="valueOffHierarchy" class="btn btn-default" ng-class="{'active' :itemMode == 'hierarchy'}" ng-click="appliesTo(valueOff,'hierarchy')">Hierarchy</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-class="{'animate-enter': itemMode == 'sku', 'animate-leave': itemMode != 'sku'}">
+                                <ng-form name="valueOffSkuForm" novalidate>
+                                    <div class="form-group" ng-class="{'has-error': valueOffSkuForm.product.$invalid}">
+                                        <label for="product" class="col-md-2 control-label">
+                                            Search Products
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input ui-select2="productSearchSetup()" name="product" ng-model="valueOff.product" data-placeholder="Enter a sku or description" ng-required="true" ng-change="updateProductValidity(vm.promotion.type)" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': valueOffSkuForm.priceType.$invalid}">
+                                        <label for="priceType" class="col-md-2 control-label">
+                                            Price Type
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select name="priceType" class="form-control" required ng-required="true" ng-model="valueOff.priceType" ng-change="updateProductValidity(vm.promotion.type)">
+                                                <option value="1">Regular</option>
+                                                <option value="2">Cash</option>
+                                                <option value="3">Duty Free</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': valueOffSkuForm.discValue.$invalid}">
+                                        <label for="discValue" class="col-md-2 control-label">
+                                            Value Off <br />(Please enter prices {{taxSetting()}} of tax)
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input pb-currency class="form-control" name="discValue" ng-model="valueOff.valueDiscount" required ng-required="true" ng-change="updateProductValidity(vm.promotion.type)" />
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button class="btn btn-default" type="button" ng-disabled="valueOffSkuForm.$invalid || !valueOff.canAdd" ng-click="addProduct(valueOff)">Add to Promotion</button>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+
+                            <div ng-class="{'animate-enter': itemMode == 'hierarchy', 'animate-leave': itemMode != 'hierarchy'}">
+                                <ng-form name="valueOffHierarchyForm" class="form-horizontal" novalidate>
+                                    <div class="form-group" ng-class="{'has-error': valueOffHierarchyForm.priceType.$invalid}">
+                                        <label for="priceType" class="col-md-2 control-label">
+                                            Price Type
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select name="priceType" class="form-control" required ng-required="true" ng-model="valueOff.priceType" ng-change="updateHierarchyValidity(vm.promotion.type)">
+                                                <option value="1">Regular</option>
+                                                <option value="2">Cash</option>
+                                                <option value="3">Duty Free</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': valueOffHierarchyForm.discValue.$invalid}">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-md-4 control-label">
+                                                    Value Off <br />(Please enter prices {{taxSetting()}} of tax)
+                                                </label>
+                                                <div class="col-md-4">
+                                                    <input pb-currency class="form-control" name="discValue" ng-model="valueOff.valueDiscount" ng-required="true" min="0" />
+                                                </div>
+                                                <div class="col-md-4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <pb-hierarchy options="hierarchyOptions" selections="hierarchy" callback="updateHierarchyValidity(vm.promotion.type)" editable="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-8">
+                                                <button class="btn btn-default" type="button" ng-disabled="valueOffHierarchyForm.$invalid || !valueOff.canAdd" ng-click="addHierarchy(valueOff)">Add to Promotion</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 buffer top">
+                            <table class="table table-bordered table-striped aligned" ng-hide="!vm.promotion.details || vm.promotion.details.length == 0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th ng-repeat="(level,opt) in hierarchyOptions" ng-hide="itemMode == 'sku'">{{opt.key | pbTitlecase}}</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Product Code</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Long Description</th>
+                                        <th>Price Type</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Price (tax {{taxSetting()}})</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Margin</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Promo Price (tax {{taxSetting()}})</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Promo Margin</th>
+                                        <th>Value Off</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="promoItem in vm.promotion.details">
+                                        <td class="col-btn">
+                                            <span class="glyphicons glyph-btn bin" title="Remove" ng-show="canEdit() && !promotionHasEnded" ng-click="removeItem(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn pencil" title="Edit" ng-show="canEdit() && !promotionHasEnded" ng-click="editItem(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn floppy_disk" title="Edit" ng-show="promoItem.isEditing" ng-click="confirmEdit(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn undo" title="Revert" ng-show="promoItem.isEditing" ng-click="revertEdit(promoItem)"></span>
+                                        </td>
+                                        <td ng-show="itemMode=='hierarchy'" ng-repeat="(level,opt) in hierarchyOptions">
+                                            <span>{{getHierarchyValue(promoItem, opt)}}</span>
+                                        </td>
+                                        <td ng-hide="itemMode == 'hierarchy'"><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + promoItem.sku)}}">{{promoItem.sku}}</a></td>
+                                        <td ng-hide="itemMode == 'hierarchy'" class=" col-lg">{{promoItem.name}}</td>
+                                        <td>{{promoItem.priceTypeName}}</td>
+                                        <td ng-hide="itemMode == 'hierarchy'">{{addTax(promoItem.originalPrice, promoItem.taxRate) | pbCurrency}}</td>
+                                        <td ng-show="(promoItem.averageWeightedCost && promoItem.priceType == 2) && itemMode!='hierarchy'">{{margin(promoItem.originalPrice, promoItem) | pbPercentage}}</td>
+                                        <td ng-hide="(promoItem.averageWeightedCost && promoItem.priceType == 2) || itemMode=='hierarchy'">0%</td>
+                                        <td ng-hide="itemMode == 'hierarchy'">{{addTax(promoItem.originalPrice - promoItem.valueDiscount, promoItem.taxRate) | pbCurrency}}</td>
+                                        <td ng-show="(promoItem.averageWeightedCost && promoItem.priceType == 2) && itemMode!='hierarchy'">{{margin(promoItem.originalPrice - promoItem.valueDiscount, promoItem) | pbPercentage}}</td>
+                                        <td ng-hide="(promoItem.averageWeightedCost && promoItem.priceType == 2) || itemMode=='hierarchy'">0%</td>
+                                        <td ng-show="!promoItem.isEditing">{{addTax(promoItem.valueDiscount, promoItem.taxRate) | pbCurrency}}</td>
+                                        <td ng-show="promoItem.isEditing"><input pb-currency class="form-control" name="valueDiscountTemp" ng-model="promoItem.valueDiscountTemp" required ng-required="true" /></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="buffer top bottom" ng-class="{'animate-enter': vm.promotion.type == 3 && promoForm.$valid, 'animate-leave': vm.promotion.type != 3 || promoForm.$invalid}">
+                    <div class="section">Discount Percentage</div>
+                    <div class="row form-horizontal" ng-hide="!canEditLockableField()">
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label class="col-md-2 control-label">
+                                    Applies To
+                                </label>
+                                <div class="col-md-4">
+                                    <div class="btn-group">
+                                        <button type="button" id="percentOffSku" class="btn btn-default" ng-class="{'active' : itemMode == 'sku'}" ng-click="appliesTo(discountPercentage,'sku')">SKU</button>
+                                        <button type="button" id="percentOffHierarchy" class="btn btn-default" ng-class="{'active' : itemMode == 'hierarchy'}" ng-click="appliesTo(discountPercentage,'hierarchy')">Hierarchy</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div ng-class="{'animate-enter': itemMode == 'sku', 'animate-leave': itemMode != 'sku'}">
+                                <ng-form name="discountPercentageSkuForm" class="form-horizontal" novalidate>
+                                    <div class="form-group" ng-class="{'has-error': discountPercentageSkuForm.product.$invalid}">
+                                        <label for="product" class="col-md-2 control-label">
+                                            Search Products
+                                        </label>
+                                        <div class="col-md-4">
+                                            <input ui-select2="productSearchSetup()" name="product" ng-model="discountPercentage.product" data-placeholder="Enter a sku or description" ng-required="true" ng-change="updateProductValidity(vm.promotion.type)" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': discountPercentageSkuForm.priceType.$invalid}">
+                                        <label for="priceType" class="col-md-2 control-label">
+                                            Price Type
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select name="priceType" class="form-control" required ng-required="true" ng-model="discountPercentage.priceType" ng-change="updateProductValidity(vm.promotion.type)">
+                                                <option value="1">Regular</option>
+                                                <option value="2">Cash</option>
+                                                <option value="3">Duty Free</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': discountPercentageSkuForm.discountPercentage.$invalid}">
+                                        <label class="col-md-2 control-label" for="discountPercentage">
+                                            Discount Percentage
+                                        </label>
+                                        <div class="col-md-4">
+                                            <div class="input-group">
+                                                <input pb-percentage class="form-control" name="discountPercentage" ng-model="discountPercentage.percentage" ng-required="true" ng-change="updateProductValidity(vm.promotion.type)" min="1" max="99" />
+                                                <span class="input-group-addon">%</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button class="btn btn-default" type="button" ng-disabled="discountPercentageSkuForm.$invalid || !discountPercentage.canAdd" ng-click="addProduct(discountPercentage)">Add to Promotion</button>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+
+                            <div ng-class="{'animate-enter': itemMode == 'hierarchy', 'animate-leave': itemMode != 'hierarchy'}">
+                                <ng-form name="discountPercentageHierarchyForm" class="form-horizontal" novalidate>
+                                    <div class="form-group" ng-class="{'has-error': discountPercentageHierarchyForm.priceType.$invalid}">
+                                        <label for="priceType" class="col-md-2 control-label">
+                                            Price Type
+                                        </label>
+                                        <div class="col-md-4">
+                                            <select name="priceType" class="form-control" required ng-required="true" ng-model="discountPercentage.priceType" ng-change="updateHierarchyValidity(vm.promotion.type)">
+                                                <option value="1">Regular</option>
+                                                <option value="2">Cash</option>
+                                                <option value="3">Duty Free</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': discountPercentageHierarchyForm.discValue.$invalid}">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <label class="col-md-4 control-label" for="discValue">
+                                                    Discount Percentage
+                                                </label>
+                                                <div class="col-md-8">
+                                                    <div class="input-group">
+                                                        <input pb-percentage class="form-control" name="discValue" ng-model="discountPercentage.percentage" ng-required="true" min="1" maxlength="99" />
+                                                        <span class="input-group-addon">%</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <pb-hierarchy options="hierarchyOptions" selections="hierarchy" callback="updateHierarchyValidity(vm.promotion.type)" editable="true" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="col-md-6">
+                                            <div class="col-md-4"></div>
+                                            <div class="col-md-8">
+                                                <button class="btn btn-default" type="button" ng-disabled="discountPercentageHierarchyForm.$invalid || !discountPercentage.canAdd" ng-click="addHierarchy(discountPercentage)">Add to Promotion</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 buffer top">
+                            <table class="table table-bordered table-striped aligned" ng-hide="!vm.promotion.details || vm.promotion.details.length == 0">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th ng-repeat="(level,opt) in hierarchyOptions" ng-hide="itemMode == 'sku'">{{opt.key | pbTitlecase}}</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Product Code</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Long Description</th>
+                                        <th>Price Type</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Price (tax {{taxSetting()}})</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Margin</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Promo Price (tax {{taxSetting()}})</th>
+                                        <th ng-hide="itemMode == 'hierarchy'">Promo Margin</th>
+                                        <th>Discount Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="promoItem in vm.promotion.details">
+                                        <td class="col-btn">
+                                            <span class="glyphicons glyph-btn bin" title="Remove" ng-show="canEdit() && !promotionHasEnded" ng-click="removeItem(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn pencil" title="Edit" ng-show="canEdit() && !promotionHasEnded" ng-click="editItem(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn floppy_disk" title="Edit" ng-show="promoItem.isEditing" ng-click="confirmEdit(promoItem)"></span>
+                                            <span class="glyphicons glyph-btn undo" title="Revert" ng-show="promoItem.isEditing" ng-click="revertEdit(promoItem)"></span>
+                                        </td>
+                                        <td ng-show="itemMode=='hierarchy'" ng-repeat="(level,opt) in hierarchyOptions">
+                                            <span>{{getHierarchyValue(promoItem, opt)}}</span>
+                                        </td>
+                                        <td ng-hide="itemMode == 'hierarchy'"><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + promoItem.sku)}}">{{promoItem.sku}}</a></td>
+                                        <td ng-hide="itemMode == 'hierarchy'" class=" col-lg">{{promoItem.name}}</td>
+                                        <td>{{promoItem.priceTypeName}}</td>
+                                        <td ng-hide="itemMode == 'hierarchy'">{{addTax(promoItem.originalPrice, promoItem.taxRate) | pbCurrency}}</td>
+                                        <td ng-show="(promoItem.averageWeightedCost && promoItem.priceType == 2) && itemMode!='hierarchy'">{{margin(promoItem.originalPrice, promoItem) | pbPercentage}}</td>
+                                        <td ng-hide="(promoItem.averageWeightedCost && promoItem.priceType == 2) || itemMode=='hierarchy'">0%</td>
+                                        <td ng-hide="itemMode == 'hierarchy'">{{promoPrice(promoItem) | pbCurrency}}</td>
+                                        <td ng-show="(promoItem.averageWeightedCost && promoItem.priceType == 2) && itemMode!='hierarchy'">{{margin(removeTax(promoPrice(promoItem), promoItem.taxRate), promoItem) | pbPercentage}}</td>
+                                        <td ng-hide="(promoItem.averageWeightedCost && promoItem.priceType == 2) || itemMode=='hierarchy'">0%</td>
+                                        <td ng-show="promoItem.isEditing"><input pb-percentage class="form-control" name="discValue" ng-model="promoItem.percentDiscountTemp" ng-required="true" min="0" maxlength="100" /></td>
+                                        <td ng-show="!promoItem.isEditing">{{promoItem.percentDiscount | pbPercentage}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <div class="row">
+                <div class="col-md-12 buffer-lg bottom">
+                    <button class="btn btn-primary" type="button" ng-click="save()" ng-disabled="promoForm.$invalid || !canEdit()" ng-hide="promotionHasEnded && !hasPermission">Save Promotion</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+   //Change for ZEN/UNC/CRF/CR2018-011 Pricing Promotion - Happy Hour
+    $(document).ready(function () {
+        $('#hasallow').hide();
+        
+        $('#chkhideshow').change(function () {
+           
+     
+            if (this.checked) {
+                $('#hasallow').show();
+
+                $('#startp').hide();
+                $('#endp').hide();
+            }
+            else {
+
+                $('#hasallow').hide();
+            }
+
+               
+        });
+
+
+       
+    });
+</script>

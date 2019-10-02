@@ -1,0 +1,5 @@
+﻿@model string
+@{ ViewBag.Title = "Warranty Hierarchy"; }
+<div class="warranty-structure" data-module="warranty/warrantyTags" ng-controller="TagsController" ng-cloak>
+    <warranty data-warranty-data="@Model" />
+</div>

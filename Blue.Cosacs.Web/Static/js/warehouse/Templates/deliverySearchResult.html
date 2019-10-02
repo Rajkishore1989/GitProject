@@ -1,0 +1,44 @@
+<div class="panel panel-default load result search-result" data-id="{{result.LoadId}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-lg-3">
+                <span class="resultType">Delivery Schedule</span>
+                <a class="refLink" ng-click="showSchedule($event)" data-id="{{result.LoadId}}">#{{result.LoadId}}</a>
+            </div>
+            <div class="col-lg-3">
+                <span class="itemQuantity" title="Quantity">{{result.ItemsCount}}</span>
+                <span> Item(s)</span>
+            </div>
+            <div class="col-lg-4">
+                <span class="DeliveryCollection" title="{{result.CreatedOn | fromNow }}">
+                    <span class="title">Created on</span>
+                    <span class="weekday">{{result.CreatedOn | date:"EEE" | uppercase }}</span>
+                    <span class="day">{{result.CreatedOn | date:"dd" }}</span>
+                    <span class="month">{{result.CreatedOn | date:"MMM" | uppercase }}</span>
+                    <span class="month">{{result.CreatedOn | date:"yyyy" }}</span>
+                    <span class="time">{{result.CreatedOn | date:"a" }}</span>
+                </span>
+            </div>
+            <div class="col-lg-2 text-right">
+            	<div class="status" >{{result.DeliveryStatus}}</div>
+            </div>
+        </div>
+    </div>
+	<div class="panel-body centre-section">
+		<div class="row">
+			<div class="col-lg-4">
+				<div><span><b>Created</b></span></div>
+                <div><div class="date" title="{{result.CreatedOn | date:'dd/MM/yyyy'}}">{{result.CreatedOn | fromNow}}</div> by {{result.CreatedBy}}</div>
+			</div>
+			<div class="truck col-lg-4">
+				<div><span><b>Truck</b></span></div>
+				<div class="truck">{{result.Truck}}</div>
+			</div>
+			<div class="driver col-lg-4">
+				<div><span><b>Driver</b></span></div>
+				<div class="driver">{{result.Driver}}</div>
+			</div>
+		</div>            
+	</div>
+	<div class="clearfix"></div>
+</div>

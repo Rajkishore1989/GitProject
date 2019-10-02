@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "Buyer Sales History Report";
+}
+<div data-module="merchandising/reports/buyerSalesHistoryReport/init" ng-controller="buyerSalesHistoryCtrl" ng-cloak class="buffer-sm bottom">
+
+    <div class="buffer-sm top" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="btn btn-default" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="btn btn-default" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="btn btn-default" ng-click="reset()">Clear</button>
+                    <button id="buttonSearch" class="btn btn-primary" ng-click="search()" ng-disabled="paginator.loading() || !vm.query.kpi">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group" ng-class="{'has-error': !vm.query.kpi }">
+                            <label for="kpi">KPI</label>
+                            <list name="kpi" ng-model="vm.query.kpi" ng-change="clearData()"required ng-required="true" scope="vm.kpi" placeholder="Select a KPI"></list>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <list name="location" ng-model="vm.query.locationId" scope="vm.locations" placeholder="Select a location" ng-disabled="vm.query.fascia"></list>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="fascia">Fascia</label>
+                            <list name="fascia" ng-model="vm.query.fascia" scope="vm.options.fascia" placeholder="Select a fascia" ng-disabled="vm.query.locationId"></list>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <label for="productType">Stock Type</label>
+                            <list name="productType" ng-model="vm.query.productType" scope="vm.stockTypes" placeholder="Select a stock type"></list>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="discountInclusive">Include Discounts</label>
+                            <input type="checkbox" name="discountInclusive" ng-model="vm.query.discountInclusive"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="taxInclusive">Include Tax</label>
+                            <input type="checkbox" name="taxInclusive" ng-model="vm.query.taxInclusive"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <pb-pro-hierarchy ng-model="vm.query.hierarchy" readonly="false" placeholder="Any" horizontal="false" value-property="name"/>
+            </div>
+        </div>
+
+        <pb-column-select data="vm.results" columns="vm.columns" template-url="vm.gridTemplate" utils="vm.gridUtils" count="vm.resultCount" has-data="hasData"></pb-column-select>
+        <div ng-show="vm && vm.results.products.length == 0 && !vm.searching">
+            There are no results to display.
+        </div>
+    </div>
+</div>

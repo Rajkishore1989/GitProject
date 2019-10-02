@@ -1,0 +1,116 @@
+﻿@model AllocatedStockPrintModel
+    
+@{
+    ViewBag.Title = "Allocated Stock";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+    
+@section Head
+{
+    <style type="text/css">
+        table { margin: 10px !important; }
+
+        td, th {
+            border: 1px solid #333 !important;
+            padding: 5px !important;
+        }
+
+        th {
+            background-color: #eee !important;
+        }
+
+        td.clear { border: none !important; }
+
+        tbody::before {
+            content: none !important;
+            display: none !important;
+            height: 0 !important;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+
+        .buffer { padding: 10px; }
+    </style>
+}
+
+<div data-module="merchandising/reports/allocatedStockReport/init" ng-controller="allocatedStockReportPrintCtrl" ng-init="result=@Html.RawJson(Model)" class="ng-scope" ng-cloak>
+    <table>
+        <tr>
+            <td>
+                <label for="location">Location: </label>
+            </td>
+            <td>
+                <span class="form-control-static" id="location">{{vm.query.locationName}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="fascia">Fascia: </label>
+            </td>
+            <td>
+                <span class="form-control-static" id="fascia">{{vm.query.fascia}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="sku">Sku: </label>
+            </td>
+            <td>
+                <span class="form-control-static" id="sku">{{vm.query.sku}}</span>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <label for="tags">Tags: </label>
+            </td>
+            <td>
+                <span class="form-control-static" id="tags">{{vm.query.tagList}}</span>
+            </td>
+        </tr>
+    </table>
+    <table class="table table-striped table-bordered table-hover table-responsive active pb-table pageBreak" ng-repeat="pg in vm.pages">
+        <tbody ng-repeat="group in pg" class="pageBreak">
+            <tr>
+                <th ng-show="vm.columns[0].selected">Sku</th>
+                <th ng-show="vm.columns[1].selected">Description</th>
+                <th ng-show="vm.columns[2].selected">Location</th>
+                <th ng-show="vm.columns[3].selected">Stock On Hand Quantity</th>
+                <th ng-show="vm.columns[4].selected">Stock On Hand Value</th>
+                <th ng-show="vm.columns[5].selected">Stock Available Quantity</th>
+                <th ng-show="vm.columns[6].selected">Stock Available Value</th>
+                <th ng-show="vm.columns[7].selected">Stock Allocated Quantity</th>
+                <th ng-show="vm.columns[8].selected">Stock Allocated Value</th>
+                <th ng-show="vm.columns[9].selected">Reference Number</th>
+                <th ng-show="vm.columns[10].selected">Date Allocated</th>
+            </tr>
+            <tr ng-repeat="detail in group.details">
+                <td ng-show="vm.columns[0].selected">{{group.sku}}</td>
+                <td ng-show="vm.columns[1].selected">{{detail.description}}</td>
+                <td ng-show="vm.columns[2].selected">{{group.locationName}}</td>
+                <td ng-show="vm.columns[3].selected"></td>
+                <td ng-show="vm.columns[4].selected"></td>
+                <td ng-show="vm.columns[5].selected"></td>
+                <td ng-show="vm.columns[6].selected"></td>
+                <td ng-show="vm.columns[7].selected">{{detail.stockAllocatedQuantity}}</td>
+                <td ng-show="vm.columns[8].selected">{{detail.stockAllocatedValue | pbCurrency}}</td>
+                <td ng-show="vm.columns[9].selected">{{detail.referenceNumber}}</td>
+                <td ng-show="vm.columns[10].selected">{{detail.dateAllocated | pbDate }}</td>
+            </tr>
+            <tr class="total">
+                <td ng-show="vm.columns[0].selected">TOTAL</td>
+                <td ng-show="vm.columns[1].selected"></td>
+                <td ng-show="vm.columns[2].selected"></td>
+                <td ng-show="vm.columns[3].selected">{{group.totalStockOnHandQuantity}}</td>
+                <td ng-show="vm.columns[4].selected">{{group.totalStockOnHandValue | pbCurrency}}</td>
+                <td ng-show="vm.columns[5].selected">{{group.totalStockAvailableQuantity}}</td>
+                <td ng-show="vm.columns[6].selected">{{group.totalStockAvailableValue | pbCurrency}}</td>
+                <td ng-show="vm.columns[7].selected">{{group.totalStockAllocatedQuantity}}</td>
+                <td ng-show="vm.columns[8].selected">{{group.totalStockAllocatedValue | pbCurrency}}</td>
+                <td ng-show="vm.columns[9].selected"></td>
+                <td ng-show="vm.columns[10].selected"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

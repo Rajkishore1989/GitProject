@@ -1,0 +1,71 @@
+﻿<div id="dialogueTechAllocatedJobs" class="modal fade border" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close ui-icon ui-icon-closethick" title="Close"
+                      ng-click="dialogueTechAllocatedJobs.show = false">
+                </span>
+                <h3>
+                    {{dialogueTechAllocatedJobs.headerText}}
+                </h3>
+            </div>
+            <div class="popup-body modal-body">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Override</th>
+                            <th>Service Type</th>
+                            <th>Job Current Status</th>
+                            <th>Account Number</th>
+                            <th>Service Request Number</th>
+                            <th>Logged On</th>
+                            <th>Delivered On</th>
+                            <th>Warranty Type</th>
+                            <th>Item Code-Description</th>
+                            <th>Service Scheduled Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="result in TechnicianCurrentAllocatedJobs">
+                            <td>
+                                <input type="radio" id="cb1" ng-model="check" ng-change="checkAll(result.RequestId)" />
+                            </td>
+                            <td class="align-right">
+                                {{result.ServiceType}}
+                            </td>
+                            <td>
+                                {{result.CurrentJobState}}
+                            </td>
+                            <td>
+                                {{result.AccountNumber}}
+                            </td>
+                            <td>
+                                {{result.RequestId}}
+                            </td>
+                            <td>
+                                {{result.strDateLogged}}
+                            </td>
+                            <td>
+                                {{result.strDeliveredOn}}
+                            </td>
+                            <td>
+                                {{result.WarrantyType}}
+                            </td>
+                            <td>
+                                {{result.ItemCodeDescription}}
+                            </td>
+                            <td>
+                                {{result.strSlotDate}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="popup-footer modal-footer">
+                <button class="cancel btn btn-default" ng-show="!dialogueTechAllocatedJobs.showAlternate" ng-click="dialogueTechAllocatedJobs.CancelClicked()">
+                    {{dialogueTechAllocatedJobs.cancelButtonText}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

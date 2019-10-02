@@ -1,0 +1,86 @@
+<div class="panel panel-default searchWarrantySales result search-result" data-id="{{result.WarrantyId}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-lg-3">
+                <span class="resultType">Invoice #</span>
+                <span class="refLink">{{result.InvoiceNumber}}</span>
+            </div>
+            <div class="col-lg-4">
+                <span>{{result.Customer}} ({{result.CustomerId}})</span>
+            </div>
+            <div class="col-lg-3">
+                <span class="DeliveryCollection" title="{{result.SoldOn | fromNow }}">
+                    <span class="title">Sold on</span>
+                    <span class="weekday">{{result.SoldOn | date:"EEE" | uppercase }}</span>
+                    <span class="day">{{result.SoldOn | date:"dd" }}</span>
+                    <span class="month">{{result.SoldOn | date:"MMM" | uppercase }}</span>
+                    <span class="month">{{result.SoldOn | date:"yyyy" }}</span>
+                    <span class="time">{{result.SoldOn | date:"a" }}</span>
+                </span>
+            </div>
+            <div class="col-lg-2 text-right">
+                <div class="status label label-default">{{result.WarrantySaleStatus}}</div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body centre-section">
+        <div class="row">
+            <div class="col-lg-4 customerDetails">
+                <div class="row">
+                    <div class="col-lg-12" title="Customer Address">
+                        <div>{{result.Customer}} (<b>{{result.CustomerId}}</b>)</div>
+                        <div class="CustomerAddressLine">{{result.Address}}</div>
+                    </div>
+                </div>
+                <div class="row contact-details">
+                    <div class="col-lg-5">
+                        <div class="contact-type" ng-repeat="type in result.ContactType">
+                            <b>{{type | humanize | titleize }}</b>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 contact-values">
+                        <div class="contact-value" ng-repeat="value in result.ContactValue">
+                            {{value}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 itemDetails">
+                <div class="row">
+                    <div class="col-lg-4"><b>Item No</b></div>
+                    <div class="col-lg-8">{{result.ItemNo}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4"><b>Serial No</b></div>
+                    <div class="col-lg-8">{{result.SerialNo}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4"><b>Price</b></div>
+                    <div class="col-lg-8">{{result.ItemPrice | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4"><b>Description</b></div>
+                    <div class="col-lg-8">{{result.ItemDescription}}</div>
+                </div>
+            </div>
+            <div class="col-lg-4 warrantyDetails">
+                <div class="row">
+                    <div class="col-lg-5"><b>Warranty Number</b></div>
+                    <div class="col-lg-7"><a ng-href="{{getWarrantyLink(result.WarrantyId)}}">{{result.WarrantyNumber}}</a></div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5"><b>Contract Number</b></div>
+                    <div class="col-lg-7">{{result.WarrantyContractNo}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5"><b>Price</b></div>
+                    <div class="col-lg-7">{{result.WarrantySalePrice | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-5"><b>Free</b></div>
+                    <div class="col-lg-7">{{result.WarrantyIsFree}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

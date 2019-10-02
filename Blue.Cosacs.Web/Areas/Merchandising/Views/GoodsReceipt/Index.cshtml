@@ -1,0 +1,14 @@
+﻿@model string
+@{
+    ViewBag.Title = "Goods Receipt Search";
+}
+<div id="facetSearchContainer" data-module="merchandising/goodsreceipt/init" ng-controller="GoodsReceiptSearchController" class="facetsearch-container">
+    <facetsearch data-buttons="@ViewBag.buttons" data-results="@Model"
+                 data-results-template="/Static/js/merchandising/goodsReceipt/templates/searchResult.html"
+                 data-search-url="/Merchandising/GoodsReceipt/SearchInstant"
+                 data-history-url="/Merchandising/GoodsReceipt"
+                 data-date-fields='{"CreatedDate": "Date Created", "DateReceived": "Date Received", "DateApproved": "Date Approved"}'
+                 data-convert-dates='true'
+                 data-field-labels='{"ReceiptType": "Receipt Type","Status": "Status","Vendor": "Vendor","ReceivingLocation": "Receiving Location", "ReceivedBy": "Received By", "ApprovedBy": "Approved By"}'>
+    </facetsearch>
+</div>

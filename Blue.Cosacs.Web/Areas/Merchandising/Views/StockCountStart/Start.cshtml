@@ -1,0 +1,69 @@
+﻿@model int
+@{
+    ViewBag.Title = "Stock Count Start";
+}
+
+    <div data-module="merchandising/stockCountStart/init" ng-init="stockCountId = load(@Model)" ng-controller="StockCountStartCtrl" ng-cloak class="buffer-sm bottom">
+        <div class="buffer-sm top">
+            <div ng-form="countForm" class="form-horizontal">
+                <div class="row buffer top">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Location:</label>
+                                    <div class="col-md-8 form-control-static">
+                                        <a href="{{generateUrl('Merchandising/Locations/Detail/' + countStart.locationId)}}">{{countStart.location}}</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Type:</label>
+                                    <div class="col-md-8 form-control-static">
+                                        {{countStart.type}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-hide="countStart.type == 'Quarterly'">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Included:</label>
+                                    <div class="col-md-8">
+                                        <div ng-repeat="(id, hierarchy) in countStart.hierarchy" class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-control-static">{{hierarchy}}<span ng-hide="$last">, </span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row buffer-sm top">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-2">Please confirm:</label>
+                                    <div class="col-md-8">
+                                        <div class="row" ng-repeat="(question, answer) in countStart.questions">
+                                            <div class="col-md-8" ng-form="checkBoxForm">
+                                                <div class="checkbox"><input type="checkbox" name="startQuestions" ng-model="checkBoxForm.$index" ng-disabled="$parent.saved" required ng-required="true" /> {{question}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row buffer top">
+                            <div class="col-lg-12">
+                                <button class="btn btn-primary" ng-disabled="!canSave(countForm)" ng-click="save(countForm)">Start Count</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

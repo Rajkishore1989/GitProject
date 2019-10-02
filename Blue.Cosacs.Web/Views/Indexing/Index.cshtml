@@ -1,0 +1,70 @@
+﻿@{ ViewBag.Title = "Re-Indexing"; }
+
+@{ Html.BeginForm("Reindex", "Indexing"); }
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="checkbox">
+            <label><input id="selectall" type="checkbox" />Select All</label>
+        </div>
+        <div class="allcheckboxs form-group col-lg-6">
+            <div class="checkbox">
+                <label>@Html.CheckBox("doPicking" ) Picking</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doBooking") Booking</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doDelivery") Delivery</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doUsers") Users</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doService") Service</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doWarranty") Warranty</label>
+            </div>
+            @*<div class="checkbox">
+                <label>@Html.CheckBox("doWarrantySales") Warranty Sales</label>
+            </div>*@
+           @* <div class="checkbox">
+                <label>@Html.CheckBox("doStock") Winform Stock</label>
+            </div>*@
+            <div class="checkbox">
+                <label>@Html.CheckBox("doLocation") Location</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doMerchandiseStockLevels") Product Stock Levels</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doVendors") Vendors</label>
+            </div>
+             <div class="checkbox">
+                <label>@Html.CheckBox("doPromotions") Promotions</label>
+            </div>
+             <div class="checkbox">
+                <label>@Html.CheckBox("doPurchaseOrders") Purchase Orders</label>
+            </div>
+            <div class="checkbox">
+                <label>@Html.CheckBox("doGoodsReceipt") Goods Receipts</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    <button type="submit" class="btn btn-primary">Re-Index</button>
+</div>
+@{ Html.EndForm(); }
+
+@section Script {
+    <script>
+        $(document).ready(function () {
+            $('input#selectall').on('click', function () {
+                var checked = $(this).is(':checked');
+                $('.allcheckboxs input:checkbox').attr('checked', checked);
+            });
+        });
+    </script>
+}

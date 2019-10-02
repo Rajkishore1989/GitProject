@@ -1,0 +1,99 @@
+<section class="buffer top" ng-show="product.id && canView">
+    <div class="section">
+        Retail Pricing
+    </div>
+
+    <table class="table table-bordered table-striped aligned pb-table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Fascia</th>
+                <th>Location</th>
+                <th>Effective Date</th>
+                <th>Tax Rate</th>
+                <th>Cash Price</th>
+                <th>Margin</th>
+                <th>Regular Price</th>
+                <th>Duty Free Price</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="retailPrice in retailPrices | orderBy:'sortDate'">
+            <td >
+                <span ng-hide="!canEdit || retailPrice.editing || editMode || !canDelete(retailPrice)" class="glyphicons glyph-btn bin" ng-click="remove(retailPrice)"></span>
+                <span ng-show="!canEdit || retailPrice.editing || !canDelete(retailPrice)">Active</span>
+            </td>
+            <td class="fascia">
+                {{retailPrice.fascia}}
+                <span ng-show="!retailPrice.fascia && !retailPrice.location">All Fascias</span>
+            </td>
+            <td class="location">
+                <a href="{{generateUrl('Merchandising/Locations/Detail/' + retailPrice.locationId)}}">{{retailPrice.location}}</a>
+                <span ng-show="!retailPrice.fascia && !retailPrice.location && !retailPrice.locationId">All Locations</span>
+            </td>
+            <td class="date short">
+                {{ retailPrice.effectiveDate | pbDate }}
+            </td>
+            <td>
+                <div>{{retailPrice.taxRate | pbPercentage}} Inclusive</div> <!--to do: get tax rate-->
+                <div>{{retailPrice.taxRate | pbPercentage}} Exclusive</div>
+            </td>
+            <td class="currency">
+                <div>{{calculateInclusive(retailPrice.cashPrice, retailPrice.taxRate) | pbCurrency}}</div>
+                <div>{{retailPrice.cashPrice | pbCurrency}}</div>
+            </td>
+            <td class="margin">
+                {{margin(retailPrice.cashPrice, retailPrice.taxRate) | pbPercentage}}
+            </td>
+            <td class="currency">
+                <div>{{calculateInclusive(retailPrice.regularPrice, retailPrice.taxRate) | pbCurrency}}</div>
+                <div>{{retailPrice.regularPrice | pbCurrency}}</div>
+            </td>
+            <td class="currency long">
+                <div>{{calculateInclusive(retailPrice.dutyFreePrice, retailPrice.taxRate) | pbCurrency}}</div>
+                <div>{{retailPrice.dutyFreePrice | pbCurrency}}</div>
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+            <tr ng-hide="!canEdit  || productType == 'RepossessedStock'"  ng-form="retailPriceForm">                            
+                <td>
+                    <span ng-hide="editMode" class="glyphicons glyph-btn plus" ng-click="add()"></span>
+
+                    <span ng-show="editMode" class="glyphicons glyph-btn floppy_disk" ng-class="{'disabled':retailPriceForm.$invalid}" ng-click="retailPriceForm.$invalid ||create(retailPrice)"></span>
+                    <span ng-show="editMode" class="glyphicons glyph-btn undo" ng-click="cancel()"></span>
+                </td>
+                <td colspan ="8" ng-hide="editMode"></td>
+                <td ng-show="editMode" ng-class="{'has-error': retailPriceForm.fascia.$invalid}">
+                    <list name="fascia" ng-model="newPrice.fascia" scope="options.fascia"  placeholder="Select a Fascia" ng-disabled="newPrice.locationId" tabindex="1" ></list>
+                </td>
+                <td class="location" ng-show="editMode" ng-class="{'has-error': retailPriceForm.location.$invalid}">
+                    <list name="location" ng-model="newPrice.locationId" scope="locations" ng-change="updateLocation(newPrice)" placeholder="Select a Location" ng-disabled="newPrice.fascia" tabindex="2" ></list>
+                </td>
+                <td class="currency" ng-show="editMode" ng-class="{'has-error': retailPriceForm.effectiveDate.$invalid}">
+                    <input class="form-control effectiveDate" required type="text" name="effectiveDate" required ng-required="true" ui-date-format ui-date="dateFormat" placeholder="Select Effective Date" ng-model="newPrice.effectiveDate" ng-disabled="!retailPriceForm.effectiveDate.$invalid" tabindex="3" >
+                </td>
+                <td ng-show="editMode">
+                    <div>{{newPrice.taxRate | pbPercentage}} Inclusive</div> 
+                    <div>{{newPrice.taxRate | pbPercentage}} Exclusive</div>
+                </td>
+                <td class="currency" ng-show="editMode" ng-class="{'has-error': retailPriceForm.cashPriceInclusive.$invalid ||retailPriceForm.cashPriceExclusive.$invalid}">
+                    <input pb-currency name="cashPriceInclusive" ng-model="cashPriceInclusive" ng-change="updateExclusiveCashPrice()" class="form-control buffer-sm bottom" required ng-required="true" ng-disabled="retailPriceForm.effectiveDate.$invalid" tabindex="4" />
+                    <input pb-currency name="cashPriceExclusive" ng-model="newPrice.cashPrice" ng-change="updateInclusiveCashPrice()" class="form-control" required ng-required="true" ng-disabled="retailPriceForm.effectiveDate.$invalid" tabindex="7" />
+                </td>
+                <td class="margin" ng-show="editMode">
+                    {{margin(retailPrice.cashPrice, retailPrice.taxRate) | pbPercentage}}
+                </td>
+                <td class="currency" ng-show="editMode" ng-class="{'has-error': retailPriceForm.regularPriceInclusive.$invalid ||retailPriceForm.regularPriceExclusive.$invalid}">
+                    <input pb-currency name="regularPriceInclusive" ng-model="regularPriceInclusive" ng-change="updateExclusiveRegularPrice()" class="form-control buffer-sm bottom" required ng-required="true" ng-disabled="retailPriceForm.effectiveDate.$invalid" tabindex="5" />
+                    <input pb-currency name="regularPriceExclusive" ng-model="newPrice.regularPrice" ng-change="updateInclusiveRegularPrice()" class="form-control" required ng-required="true" ng-disabled="retailPriceForm.effectiveDate.$invalid" tabindex="8" />
+                </td>
+                <td class="currency long" ng-show="editMode" ng-class="{'has-error': retailPriceForm.dutyFreePriceInclusive.$invalid ||retailPriceForm.dutyFreePriceExclusive.$invalid }">
+                    <input pb-currency name="dutyFreePriceInclusive" ng-model="dutyFreePriceInclusive" ng-change="updateExclusiveDutyFreePrice()" class="form-control buffer-sm bottom" required ng-required="true" ng-disabled="retailPriceForm.effectiveDate.$invalid" tabindex="6" />
+                    <input pb-currency name="dutyFreePriceExclusive" ng-model="newPrice.dutyFreePrice" ng-change="updateInclusiveDutyFreePrice()" class="form-control" required ng-required="true" ng-disabled="retailPriceForm.effectiveDate.$invalid" tabindex="9" />
+                </td>     
+                
+            </tr>
+        </tfoot>
+    </table>
+</section>

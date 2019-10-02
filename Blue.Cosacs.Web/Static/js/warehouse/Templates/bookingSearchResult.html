@@ -1,0 +1,88 @@
+<div class="panel panel-default pick-list result search-result" data-booking-no="{{result.BookingNo}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-lg-2">
+                <span class="resultType">Shipment</span>
+                <a class="Booking-Id refLink" href="detail/{{result.BookingNo}}">#{{result.BookingNo}}</a>
+            </div>
+            <div class="col-lg-6">
+                <span class="itemQuantity" title="Quantity">{{result.ItemsCount}}</span>
+                <span> x </span>
+                <span class="ItemDescription" title="Item Description">{{result.ItemDescription}} </span>
+                <span ng-show="result.Damaged" title="Damaged" class="halflings warning-sign"></span>
+            </div>
+            <div class="col-lg-4 text-right">
+                <span ng-show="result.OriginalId" title="Linked to Booking {{result.OriginalId}}" class="halflings link"></span>
+                <span class="DeliveryCollection" title="{{result.DueOn | fromNowDays }}">
+                    <span class="title">{{result.DelCol}}</span> for  
+                    <span class="weekday">{{result.DueOn | date:"EEE" | uppercase }}</span>
+                    <span class="day">{{result.DueOn | date:"dd" }}</span>
+                    <span class="month">{{result.DueOn | date:"MMM" | uppercase }}</span>
+                    <span class="month">{{result.DueOn | date:"yyyy" }}</span>
+                    <span class="time">{{result.DeliveryOrCollectionSlot}}</span>
+                    <!--<span class="time">{{result.DueOn | date:"a" }}</span>-->
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body centre-section expandable">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="CustomerNameAccount">
+                            <div class="CustomerAccountNo" title="Account No"><b>{{result.Account}}</b></div>
+                            <div class="CustomerName" title="Recipient">{{result.Customer}}</div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="CustomerAddress" title="Customer Address">
+                            <div class="CustomerAddressLine" ng-bind-html-unsafe="result.Address | linebreak"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div><b>Stock Branch</b></div>
+                        <div><b>Item No</b></div>
+                        <div><b>Item UPC</b></div>
+                        <div><b>Category</b></div>
+                    </div>
+                    <div class="col-lg-8">
+                        <div>{{result.StockBranchName}}</div>
+                        <div>{{result.ItemNo}}</div>
+                        <div>{{result.ItemUPC}}</div>
+                        <div>{{result.ProductCat}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div><b>Delivery Branch</b></div>
+                    </div>
+                    <div class="col-lg-5">
+                        <div>{{result.DeliveryBranchName}}</div>
+                    </div>
+                    <div class="col-lg-4 text-right">
+                        <span ng-show="!linkRequired(result)" class="label label-default status">{{result.BookingStatus}}</span>
+                        <span ng-show="linkRequired(result)" ng-click="showDetail(result)" class="external-link label label-primary status"><span class="BookingStatus">{{result.BookingStatus}}</span></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div>
+                            <span><b>Ordered On</b></span>
+                        </div>
+                        <div>
+                            <span class="date" title="{{result.CreatedOn | date:'EEE dd MMM yyyy' }}">{{moment(result.CreatedOn).fromNow()}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center expandable-toggle"><span class="glyphicons more"></span></div>
+    </div>
+</div>

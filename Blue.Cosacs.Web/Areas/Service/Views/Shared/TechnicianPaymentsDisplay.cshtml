@@ -1,0 +1,78 @@
+﻿<div id="paymentView" class="techPaymentsView col-lg-12" ng-controller='technicianPaymentsDisplayController' ng-init="User=@(Model == null ? 0 : Model)" ng-cloak>
+
+@{
+    var canEditTechnicianPayments = ViewBag.canEditTechnicianPayments;  
+}
+    <button ng-show="Payments" type="button" value="Export" class="btn download-link" ng-click="exportCsv()">Export</button>
+    <button ng-show="Payments" type="button" value="Print" class="btn external-link" ng-click="print()">Print</button>
+    <div class="row" ng-show="Payments">&nbsp;</div>
+    <table class="table table-bordered">
+        <thead>
+        <tr class="setColumnWidth">
+            @if (canEditTechnicianPayments)
+            {
+                <th ng-show="!User"></th>
+            }
+            <th>Request No</th>
+            <th>Allocated On</th>
+            <th>Parts</th>
+            <th>Labour</th>
+            <th>Total</th>
+            @if (canEditTechnicianPayments)
+            {
+                <th ng-show="!User">
+                    <div title="Hold payment - click to toggle hold for all" class="glyphicons click"
+                         ng-class="{true:'unlock', false:'lock'}[holdAll]"
+                         ng-click="setHold()" ng-model="holdAll"></div>
+                </th>
+                <th ng-show="!User" class="text-center"><input type=checkbox ng-model="selectAll" ng-click="allSelected()"/></th>
+            }
+            <th ng-show="User">Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="payment in Payments">
+             @if (canEditTechnicianPayments)
+             {
+                <td ng-show="!User">
+                    <div title="Delete Payment" class="halflings trash"
+                         ng-class="(payment.State == 'D' ||
+                                    payment.State == 'H' || payment.State == 'P') && 'disabled' || 'click'"
+                         ng-click="remove(payment.RequestId, payment.State)">
+                    </div>
+                </td>
+             }
+            <td>
+                <a ng-href="{{goRequest(payment.RequestId)}}">{{payment.RequestId}} </a>
+            </td>
+            <td>{{payment.AllocatedOn | moment:'ddd, MMM D YYYY'}}</td>
+            <td class="text-right">{{payment.PartsOther | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</td>
+            <td class="text-right">{{payment.Labour | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</td>
+            <td class="text-right">{{payment.Total | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</td>
+            @if (canEditTechnicianPayments)
+            {
+                <td ng-show="!User">
+                    <div title="{{(payment.State == 'H') && 'Release Payment' || 'Hold Payment'}}" class="glyphicons"
+                         ng-class="clickState('H',payment.State)"
+                         ng-click="hold(payment.RequestId, payment.State)">
+                    </div>
+                </td>
+                <td ng-show="!User">
+                    <input ng-disabled="payment.State == 'D' || payment.State == 'P' || payment.State == 'H'" type="checkbox"
+                           ng-model="payment.selected"
+                           ng-hide="payment.State == 'D' || payment.State == 'P'  || payment.State == 'H'"/>
+
+                    <div ng-show="payment.State == 'D' || payment.State == 'P' || payment.State == 'H'">{{stateText(payment.State)}}</div>
+                </td>
+            }
+            <td ng-show="User">{{stateText(payment.State)}}</td>
+        </tr>
+        <tr>
+            <td colspan="8">
+                <div ng-show="Payments">{{paymentRangeText}} - {{Payments.length}} payments, with a total cost of {{retTotCost() | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</div>
+                <div ng-hide="Payments">There are no payments to show.</div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,104 @@
+﻿@{ ViewBag.Title = "Stock Count Scheduling"; }
+
+<div data-module="merchandising/stockCountSchedule/init" ng-controller="StockCountScheduleCtrl" ng-cloak class="buffer-sm bottom">
+
+    <div class="buffer-sm top">
+        <div ng-form="stockCountForm" class="form-horizontal" novalidate>
+            <div class="row buffer-sm bottom">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <div id="preview-tooltip" style="display:inline-block" data-toggle="tooltip" data-placement="top" title="Preview is not available for Fascia selection">
+                            <button class="btn btn-default" ng-disabled="!canPreview(stockCountForm)" ng-click="preview()">Preview</button>
+                        </div>
+                        <button class="btn btn-primary" ng-disabled="!canSave(stockCountForm)" ng-click="save(stockCountForm)">Schedule</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12" ng-class="{'has-error': !stockCount.locationId && !stockCount.fascia}">
+                            <div class="form-group">
+                                <label for="fascia" class="col-md-4 control-label">
+                                    Fascia
+                                </label>
+                                <div class="col-md-8">
+                                    <list name="fascia" ng-model="stockCount.fascia" scope="options.fascia" placeholder="Select a Fascia" ng-disabled="stockCount.locationId"></list>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" ng-class="{'has-error': !stockCount.locationId && !stockCount.fascia}">
+                            <div class="form-group">
+                                <label class="control-label col-md-4" for="locationId">Location</label>
+                                <div class="col-md-8">
+                                    <list name="locationId"
+                                          ng-model="stockCount.locationId"
+                                          scope="locations"
+                                          ng-disabled="stockCount.fascia"
+                                          placeholder="Select a Location"></list>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12" ng-class="{'has-error': stockCountForm.countDate.$invalid}">
+                            <div class="form-group">
+                                <label class="control-label col-md-4" for="countDate">Count Date</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" id="countDate" ng-model="stockCount.countDate" name="countDate" type="date" required placeholder="Select Date">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-4" for="type">Type</label>
+                                <div class="col-md-8">
+                                    <div class="radio">
+                                        <label><input type="radio" name="type" ng-model="stockCount.type" value="Perpetual"/>Perpetual</label>
+                                    </div>
+                                    <div class="radio">
+                                        <label><input type="radio" name="type" ng-model="stockCount.type" value="Quarterly" />Quarterly</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6" ng-show="showHierarchy()">
+                    <pb-pro-hierarchy ng-model="stockCount.hierarchy" horizontal="true" readonly="false" placeholder="Any" />
+                </div>
+            </div>
+
+            <div ng-show="showPreview(stockCountForm)" class="buffer top">
+                <pb-pagination get="getPreview" default-params="newStockCount" params="stockCount" control="paginator" preload="false" no-results-message="There are no matching products.">
+                    <table class="table table-bordered table-striped pb-table">
+                        <thead>
+                            <tr>
+                                <th class="col-sm sku">SKU</th>
+                                <th class="col-sm-2">Description</th>
+                                <th class="col-sm quantity">Stock On Hand</th>
+                                <th class="col-sm quantity">Last Variance</th>
+                                <th class="col-sm date">Last Count Date</th>
+                                <th class="col-sm">Count Reference</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="product in paginator.page">
+                                <td><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + product.sku)}}">{{product.sku}}</a></td>
+                                <td>{{product.longDescription}}</td>
+                                <td class="quantity">{{product.stockOnHand || 0}}</td>
+                                <td class="quantity"><a href="{{resolve('Merchandising/StockCountPrevious/Detail/' + product.productId)}}">{{product.lastVariance}}</a></td>
+                                <td class="date">{{product.lastCountDate | pbDate }}</td>
+                                <td><a ng-hide="!product.stockCountId" href="{{generateUrl('Merchandising/StockCount/Detail/' + product.stockCountId)}}">#{{product.stockCountId}}</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </pb-pagination>
+            </div>
+        </div>
+    </div>
+</div>

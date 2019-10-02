@@ -1,0 +1,60 @@
+﻿@model int
+@{
+    ViewBag.Title = "My Payments";
+    var canEditTechnicianPayments = ViewBag.canEditTechnicianPayments;
+}
+
+<div id="technicianPayments" data-module="service/myPayments" ng-init="User=@Model" ng-controller='myPaymentsController'  ng-cloak class="techPaymentsPayments">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="filterTable">
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label class="control-label" for="paymentsFrom">Payments From</label>
+                        <input class="form-control" id="paymentsFrom" type="text" ng-model="dateFrom" ui-date="datePicker" ui-reset name="TechnicianPaymentsFrom"/>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label class="control-label" for="paymentsTo">Payments To</label>
+                        <input class="form-control" id="paymentsTo" type="text" ng-model="dateTo" ui-date="datePicker" ui-reset name="TechnicianPaymentsTo"/>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group">
+                        <label class="control-label" for="statusFilter">Status Filter</label>
+                        <select class="picklist" id="statusFilter" ui-select2 ng-model="type">
+                            <option value="All">All</option>
+                            <option value="D">Deleted</option>
+                            <option value="H">On Hold</option>
+                            <option value="P">Paid</option>
+                            <option value="">Pending</option>
+                        </select>
+                    </div>
+                </div>
+                @if (canEditTechnicianPayments)
+                {
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <label class="control-label" for="paymentsTo">Service Request</label>
+                            <input class="form-control" ui-reset id="requestFilter" type="text" ng-model="requestFilters" ng-model="requestFilter"/>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="section col-lg-12"></div>
+        <div class="col-lg-6">
+            <div class="col-lg-2">
+                <button class="btn btn-default form-control" ng-click="search()" ng-class="{false:'disabled', true:'click'}[canSearch()]">Search</button>
+            </div>
+            <div class="col-lg-2"> 
+                <button class="btn btn-default form-control" ng-click="clear()">Clear</button>
+            </div>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+    @Html.Partial("TechnicianPaymentsDisplay")
+</div>

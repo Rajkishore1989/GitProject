@@ -1,0 +1,60 @@
+<div id="goodsReceipt-{{result.ReceiptId}}" class="panel panel-default result search-result" data-request-id="{{result.ReceiptId}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-lg-6" ng-show="result.Direct">
+                <span class="resultType">{{result.ReceiptType}} Goods Receipt</span>
+                <a class="refLink" href="{{generateUrl('Merchandising/GoodsReceipt'+ result.ReceiptType +'/Detail/'+result.ReceiptId)}}">#{{result.ReceiptId}}</a>
+            </div>
+            <div class="col-lg-6" ng-hide="result.Direct">
+                <span class="resultType">Goods Receipt</span>
+                <a class="refLink" href="{{generateUrl('Merchandising/GoodsReceipt/Detail/'+result.ReceiptId)}}">#{{result.ReceiptId}}</a>
+            </div>
+            <div class="col-lg-6">
+                <span>{{result.Status}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body centre-section">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div><b>Vendor</b></div>
+                        <div><b>Vendor Delivery Number</b></div>
+                        <div><b>Vendor Invoice Number</b></div>
+                        <div><b>Receiving Location</b></div>
+                    </div>
+                    <div class="col-lg-8 result-panel">
+                        <div>{{result.Vendor}}</div>
+                        <div>{{result.VendorDeliveryNumber || 'Not Entered'}}</div>
+                        <div>{{result.VendorInvoiceNumber || 'Not Entered'}}</div>
+                        <div>{{result.ReceivingLocation}}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="row">
+                    <div class="col-lg-3">
+
+                        <div><b>Created By</b></div>
+                        <div><b>Created Date</b></div>
+                        <div><b>Received By</b></div>
+                        <div><b>Received Date</b></div>
+                        <div><b>Approved By</b></div>
+                        <div><b>Approved Date</b></div>
+                    </div>
+                    <div class="col-lg-9 result-panel">
+
+                        <div>{{result.CreatedBy}}</div>
+                        <div>{{result.CreatedDate | pbDate : true}}</div>
+                        <div>{{result.ReceivedBy}}</div>
+                        <div>{{result.DateReceived | pbDate }}</div>
+                        <div>{{result.ApprovedBy}}</div>
+                        <div>{{result.DateApproved | pbDate : true }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

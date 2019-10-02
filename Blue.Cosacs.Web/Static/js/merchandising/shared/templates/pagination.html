@@ -1,0 +1,16 @@
+<div ng-show="!!result">
+    <div class="row" ng-show="result.count > 0">
+        <div class="col-lg-12">
+            <div ng-transclude></div>
+        </div>
+    </div>
+    <div class="row" ng-hide="result.count > 0">
+        <div class="col-lg-12">
+            {{noResultsMessage}}
+        </div>
+    </div>
+</div>
+<div ng-show="result && result.count > 0" class="text-center">
+    <pagination num-pages="pageCount()" current-page="pageNumber" boundary-links="true" max-size="50" on-select-page="getPage(control.pageSize(), page)"></pagination>
+    <small>{{resultCountText()}}</small>
+</div>

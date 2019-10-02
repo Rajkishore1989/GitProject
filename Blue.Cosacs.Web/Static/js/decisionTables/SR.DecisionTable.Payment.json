@@ -1,0 +1,549 @@
+{
+  "conditions": [
+    {
+      "expression": "\"Cheque\" &&
+parseInt(this.payMethod,10) === 2"
+    },
+    {
+      "expression": "\"Credit Card / Debit Card\" &&
+parseInt(this.payMethod,10) === 3 || parseInt(this.payMethod,10) === 4"
+    },
+    {
+      "expression": "\"US$\" &&
+parseInt(this.payMethod,10) === 100 || parseInt(this.payMethod,10) === 101"
+    },
+    {
+      "expression": "\"Cash\" &&
+parseInt(this.payMethod,10) === 1"
+    },
+    {
+      "expression": "\"US$ Cheque\" &&
+parseInt(this.payMethod,10) === 102"
+    },
+    {
+      "expression": "\"Standing Order\" &&
+parseInt(this.payMethod,10) === 5"
+    },
+    {
+      "expression": "\"Cheque Bank Darft\" &&
+parseInt(this.payMethod,10) === 7"
+    },
+    {
+      "expression": "\"Gift Voucher\" &&
+parseInt(this.payMethod,10) === 8"
+    },
+    {
+      "expression": "\"Not Applicable\" &&
+this.payMethod === undefined || parseInt(this.payMethod,10) === 0"
+    },
+    {
+      "expression": "\"Credit Card BNS / Debit Card BNS\" &&
+parseInt(this.payMethod,10) === 6 || parseInt(this.payMethod,10) === 9"
+    },
+    {
+      "expression": "\"EPAY-ePayment\" &&
+parseInt(this.payMethod,10) === 11"
+    },
+    {
+      "expression": "\"Store Card\" &&
+parseInt(this.payMethod,10) === 13"
+    }
+  ],
+  "actions": [
+    {
+      "expression": "this.sections.bank.visible = true"
+    },
+    {
+      "expression": "this.sections.bank.visible = false"
+    },
+    {
+      "expression": "this.sections.cardType.visible = true"
+    },
+    {
+      "expression": "this.sections.cardType.visible = false"
+    },
+    {
+      "expression": "this.sections.cardNumber.visible = true"
+    },
+    {
+      "expression": "this.sections.cardNumber.visible = false"
+    },
+    {
+      "expression": "this.sections.bankAccountNumber.visible = true"
+    },
+    {
+      "expression": "this.sections.bankAccountNumber.visible = false"
+    },
+    {
+      "expression": "this.sections.amountToPay.visible = true"
+    },
+    {
+      "expression": "this.sections.amountToPay.visible = false"
+    },
+    {
+      "expression": "this.sections.tendered.visible = true"
+    },
+    {
+      "expression": "this.sections.tendered.visible = false"
+    },
+    {
+      "expression": "this.sections.change.visible = true"
+    },
+    {
+      "expression": "this.sections.change.visible = false"
+    },
+    {
+      "expression": "this.sections.chequeNumber.visible = true"
+    },
+    {
+      "expression": "this.sections.chequeNumber.visible = false"
+    },
+    {
+      "expression": "this.sections.paymentMethodNotSupported.visible = true"
+    },
+    {
+      "expression": "this.sections.paymentMethodNotSupported.visible = false"
+    }
+  ],
+  "rules": [
+    {
+      "values": [
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "",
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true"
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false
+      ]
+    }
+  ],
+  "extensions": "var lastDigit = function(value) {
+  if (value) {
+    value = value.toString();
+    return value.substring(value.length - 1, value.length);
+  }
+  return null;
+};"
+}

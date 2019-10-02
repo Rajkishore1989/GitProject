@@ -1,0 +1,87 @@
+<div>
+    <div class="row" ng-show="purchase.vendorId && purchase.receivingLocationId">
+        <div id="productsContainer" class="col-lg-12">
+            <table class="table table-bordered table-striped pb-table aligned">
+                <thead>
+                    <tr>
+                        <th class="component-controls col-lg-1"></th>
+                        <th class="sku col-lg-2">Product Code</th>
+                        <th class="col-lg-2">Description</th>
+                        <th class="quantity col-lg-1">QTY on order</th>
+                        <th class="date col-lg-1">Requested Delivery Date</th>
+                        <th class="quantity col-lg-1">QTY</th>
+                        <th class="currency col-lg-1">Vendor Unit Cost</th>
+                        <th class="currency col-lg-1">Vendor Line Cost</th>
+                        <th class="requiresLabel col-lg-1">Requires Label</th>
+                        <th class="col-lg-1">Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="product in purchase.products" ng-form="productForm" ng-controller="ProductCtrl">
+                        <td class="component-controls">
+                            <span class="glyphicons glyph-btn bin" ng-click="removeProduct($index)" ng-show="canRemove() && !editingProduct"></span>
+                            <span class="glyphicons glyph-btn pencil" ng-click="edit()" ng-show="canEdit() && !editingProduct"></span>
+                            <span class="glyphicons glyph-btn undo" ng-click="cancel($index)" ng-show="canCancel()"></span>
+                            <span class="glyphicons glyph-btn ok_2" ng-click="accept(productForm, purchase.products, product)" ng-show="canAccept(productForm, purchase.products)" ng-class="{'disabled': productForm.$invalid }"></span>
+                        </td>
+
+                        <td ng-hide="editing">
+                            <a href="{{generateUrl('Merchandising/Products/Ref?sku=' + product.sku)}}">{{product.sku}}</a>
+                        </td>
+                        <td class="sku" ng-show="editing">
+                            <div ng-class="{'has-error': productForm.sku.$invalid}">
+                                <input ui-select2="searchProducts(product)" name="sku" ng-disabled="!canAddProducts()" ng-model="product.searchResult" ng-change="processSearchResult(product.searchResult)" style="width:100%" />
+                            </div>
+                        </td>
+
+                        <td>
+                            {{product.description}}
+                        </td>
+
+                        <td class="quantity">{{product.quantityOnOrder}}</td>
+                        <td class="date" ng-hide="editing">{{product.requestedDeliveryDate | pbDate }}</td>
+                        <td class="date" ng-show="editing" ng-class="{'has-error': productForm.requestedDeliveryDate.$invalid}">
+                            <input class="form-control itemRequestedDate"
+                                   required type="date"
+                                   name="requestedDeliveryDate"
+                                   min="{{today}}"
+                                   ng-disabled="!canAddProducts()"
+                                   placeholder="Select Delivery Date"
+                                   ng-model="product.requestedDeliveryDate"
+                                   pb-keypress="{ enter: 'accept(product, productForm)'}">
+                        </td>
+
+                        <td class="quantity" ng-hide="editing">{{product.quantityOrdered}}</td>
+                        <td class="quantity" ng-show="editing">
+                            <div ng-class="{'has-error': productForm.quantityOrdered.$invalid}" style="width:50px;">
+                                <input pb-integer name="quantityOrdered" ng-model="product.quantityOrdered" ng-disabled="!canAddProducts()" class="form-control" ng-min="1" ng-required pb-keypress="{ enter: 'accept(product, productForm)'}" />
+                            </div>
+                        </td>
+
+                        <td class="currency">{{product.unitCost | pbCurrency:purchase.vendor.currency}}</td>
+                        <td class="currency">{{lineCost(product) | pbCurrency:purchase.vendor.currency}}</td>
+                        
+                        <td class="requiresLabel">
+                            <input type="checkbox" ng-disabled="!canAddProducts() || !editing" name="requiresLabel" ng-model="product.labelRequired">
+                        </td>
+
+                        <td ng-hide="editing" class="comments">
+                            <span ng-model="product.comments" pb-ref-link></span>
+                        </td>
+                        <td ng-show="editing">
+                            <input type="text" ng-disabled="!canAddProducts()" name="comments" ng-model="product.comments">
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="addNew" ng-show="canAddProducts() && !editingProduct">
+                        <td class="component-controls" colspan="1">
+                            <span class="glyphicons glyph-btn plus" ng-click="addProduct()"></span>
+                        </td>
+                        <td colspan="9"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@model IEnumerable<Blue.Cosacs.Merchandising.Models.TaxRateModel>
+@{
+     ViewBag.Title = "Standard Tax Rate Maintenance";
+}
+
+<div data-module="merchandising/taxRate/init" ng-controller="taxRateCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+    <ng-form name="taxForm" class="form-horizontal" novalidate>
+        <div class="row">
+            <div class="col-lg-9">
+                <pb-tax-rate-grid tax-rates="taxRates"/>
+            </div>
+        </div>
+    </ng-form>
+<div class="warning">You must reindex products after updating tax rates.</div>
+</div>

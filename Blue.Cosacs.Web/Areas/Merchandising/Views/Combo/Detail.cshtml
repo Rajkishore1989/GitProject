@@ -1,0 +1,255 @@
+﻿@model ComboViewModel
+@{
+    if (Model.Combo.Id > 0)
+    {
+        ViewBag.Title = "Combo - " + Model.Combo.SKU;
+    }
+    else
+    {
+        ViewBag.Title = "Create Combo";
+    }
+}
+
+<div data-module="merchandising/combo/init" ng-controller="ComboCtrl" ng-init="vm=@Html.RawJson(Model);" ng-cloak>
+    <div class="buffer-lg bottom">
+        <ng-form name="rootForm" class="set-form" novalidate>
+
+            <div class="buffer-sm top">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group" ng-class="{'has-error': rootForm.status.$invalid}">
+                            <label for="status">Status</label>
+                            <select name="status" ng-model="vm.combo.status" required ng-required="true" ng-disabled="isLocked() || !hasComponents()" class="form-control" placeholder="Select a status"
+                                    ng-options="s.id as s.name for s in getStatuses()"
+                                    pb-disabled-options="s.isAutomatic for s in getStatuses()"></select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3">
+                        <div class="form-group" ng-class="{'has-error': rootForm.startDate.$invalid}">
+                            <label for="startDate">Start Date</label>
+                            <input id="startDate" class="form-control startDate" required ng-hide="hasStarted()" type="date" name="startDate"
+                                   ng-disabled="isLocked()" placeholder="Select Start Date" ng-model="vm.combo.startDate" min="{{today}}">
+                            <div ng-hide="!hasStarted()"><p class="form-control-static aligned" name="readOnlyStartDate">{{vm.combo.startDate | pbDate }}</p></div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2" ng-show="vm.combo.lastUpdatedDate">
+                        <div class="form-group">
+                            <label for="lastUpdatedDate">Last Updated</label>
+                            <p class="form-control-static aligned" name="lastUpdatedDate">{{vm.combo.lastUpdatedDate | pbDate : true}}</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <button class="btn btn-primary pull-right" ng-click="save()" ng-disabled="isLocked() || rootForm.$invalid" ng-hide="isReadonly()">Save</button>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-3">
+                        <div class="form-group" ng-class="{'has-error': rootForm.longDescription.$invalid}">
+                            <label for="longDescription">Description</label>
+                            <input class="form-control" required type="text" name="longDescription" placeholder="Enter a Description" ng-model="vm.combo.longDescription" ng-disabled="isLocked()">
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group" ng-class="{'has-error': rootForm.endDate.$invalid}">
+                            <label for="endDate">End Date</label>
+                            <input id="endDate" class="form-control endDate" required type="date" name="endDate" placeholder="Select End Date" ng-model="vm.combo.endDate" ng-disabled="isLocked()" min="{{today}}">
+                        </div>
+                    </div>
+                    <div class="col-lg-2" ng-show="vm.combo.createdDate">
+                        <div class="form-group">
+                            <label for="createdDate">Created</label>
+                            <p class="form-control-static aligned" name="createdDate">{{vm.combo.createdDate | pbDate : true }}</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="form-group" ng-class="{'has-error': rootForm.longDescription.$invalid}">
+                            <label for="priceTicket">Print Price Ticket</label>
+                            <input class="checkbox" type="checkbox" name="priceTicket" ng-model="vm.combo.priceTicket" ng-disabled="isLocked()" />
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div class="form-group" ng-class="{'has-error': rootForm.longDescription.$invalid}">
+                            <label for="fascia">
+                                Add Time
+                            </label>
+                            <input type="checkbox" id="chkhideshow">
+                        </div>
+                    </div>
+                </div>
+                @*Change for ZEN/UNC/CRF/CR2018-011 Pricing Promotion - Happy Hour*@
+                <div class="row">
+
+                    <div id="hasallow" style="border:black 2px">
+                        <div class="col-lg-3">
+                            <div class="form-group" ng-class="{'has-error': rootForm.StartTime.$invalid}">
+                                <label for="StartTime">Start Time (24 hrs)</label>
+                                <input id="StartTime" class="form-control StartTime" required type="time" name="StartTime" placeholder="Select Start Time" ng-model="vm.combo.startTime">
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group" ng-class="{'has-error': rootForm.endTime.$invalid}">
+                                <label for="endTime">End Time (24 hrs)</label>
+                                <input id="endTime" class="form-control endTime" required type="time" name="endTime" placeholder="Select End Time" ng-model="vm.combo.endTime">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row" ng-hide="!vm.combo.id || vm.combo.id == '0'">
+                    <div class="col-lg-6 buffer bottom">
+                        <label>
+                            Hierarchy
+                        </label>
+                        <pb-hierarchy options="hierarchyOptions" selections="hierarchy" callback="saveHierarchySettings(tag, level)" editable="true" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row buffer-sm top bottom" ng-hide="!vm.combo.id || vm.combo.id == '0'">
+                <div class="col-md-12">
+                    <label>Tags</label>
+                    <div class="well well-sm productRequired">
+                        <pb-tag-list tags="options.productTags"
+                                     selected-tags="selectedTags"
+                                     add-callback="saveProductTags()"
+                                     remove-callback="saveProductTags()"
+                                     placeholder="Type to add product tags" editable="!isReadonly()" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" ng-show="vm.combo.id > 0">
+
+                <div class="col-lg-12">
+
+                    <table class="table table-bordered table-striped pb-table">
+                        <thead>
+                            <tr>
+                                <th class="col-md component-controls">Components</th>
+                                <th class="col-sm">SKU</th>
+                                <th class="col-sm">Description</th>
+                                <th class="col-sm quantity">QTY</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="9" ng-show="canAddComponent() && uniqueComponents.length < 1"><span class="glyphicons glyph-btn plus" ng-click="addComponent()"></span></td>
+                            </tr>
+                            <tr ng-repeat="component in uniqueComponents" ng-form="componentForm" ng-controller="ComponentCtrl" ng-class="{'has-error': !validComponentPrices(component)}">
+                                <td class="component-controls">
+                                    <span class="glyphicons glyph-btn bin" ng-click="removeComponent(component)" ng-show="canRemoveComponents()"></span>
+                                    <span class="glyphicons glyph-btn pencil" ng-click="edit()" ng-show="canEdit()"></span>
+                                    <span class="glyphicons glyph-btn undo" ng-click="cancel()" ng-show="canCancel()"></span>
+                                    <span class="glyphicons glyph-btn ok_2" ng-click="accept(componentForm, uniqueComponents, component)" ng-show="canAccept(componentForm, uniqueComponents)" ng-class="{'disabled': componentForm.$invalid }"></span>
+                                </td>
+
+                                <td ng-hide="isEditing(component)" class="sku"><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + component.sku)}}">{{component.sku}}</a></td>
+                                <td ng-hide="!isEditing(component)" class="sku">
+                                    <div>
+                                        <input ui-select2="searchProducts(component)" name="sku" ng-model="component.product" style="width: 100%" />
+                                    </div>
+                                </td>
+                                <td>
+                                    {{component.longDescription}}
+                                    <span ng-show="!validComponentPrices(component)" class="has-error"> - Missing retail price data for specified locations</span>
+                                </td>
+                                <td class="quantity" ng-hide="isEditing(component)">{{component.quantity}}</td>
+                                <td class="quantity" ng-hide="!isEditing(component)">
+                                    <div ng-class="{'has-error': componentForm.quantity.$invalid}">
+                                        <input pb-integer name="quantity" ng-model="component.quantity" class="form-control" ng-min="1" ng-required pb-keypress="{ enter: 'acceptEdit(component, componentForm)'}" />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="addNew">
+                                <td class="component-controls" ng-show="canAddComponents()">
+                                    <span class="glyphicons glyph-btn plus" ng-click="addComponent()"></span>
+                                </td>
+                                <td colspan="8" ng-show="canAddComponents()"></td>
+                                <td colspan="9" ng-show="!canAddComponents()"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+            <div class="row buffer top" ng-show="canAddLocations()">
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <list name="fascia" ng-model="fasciaSelection" scope="options.fascia" placeholder="Select a Fascia" ng-disabled="isLocked() || locationSelection" tabindex="1"></list>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="form-group">
+                        <list name="locationOptions" ng-model="locationSelection" scope="listOptions.location" placeholder="Select a Location" ng-disabled="isLocked() || fasciaSelection"></list>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <button name="addLocation" class="btn btn-default btn-fixed" ng-click="addLocation(fasciaSelection, locationSelection)" ng-disabled="isLocked()">Add</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 buffer-xl bottom">
+                    <ng-form name="pricesForm">
+                        <div class="panel-group">
+                            <div class="panel panel-primary" ng-repeat="comboPrice in vm.combo.comboPrices" ng-controller="LocationCtrl" ng-form="locationForm">
+                                <div class="panel-heading">
+                                    <span class="panel-title">{{ (comboPrice.locationName || comboPrice.fascia) || "Any Location, Any Fascia" }}</span>
+                                    <span class="pull-right">
+                                        <span class="glyphicons glyph-btn pencil" ng-click="edit()" ng-show="canEdit()"></span>
+                                        <span class="glyphicons glyph-btn ok_2" ng-click="accept(locationForm)" ng-show="isEditing() && !pricesForm.$invalid"></span>
+                                        <span class="glyphicons glyph-btn undo" ng-click="cancel()" ng-show="canCancel()"></span>
+                                        <span class="glyphicons glyph-btn bin" ng-click="removeLocation(comboPrice.fascia, comboPrice.locationId)" ng-show="canRemove()"></span>
+                                    </span>
+                                </div>
+                                <price-panel panel-title="Cash Price" components="locationComponents" standard-price="cashPrice" price-model="modelPrices.cashPrice"
+                                             total="total" total-inc-tax="totalIncTax" avg-tax="comboAvgTax" is-editing="isEditing" show-margin="true" adjusted-total="comboTotal" is-combo="true"></price-panel>
+
+                                <price-panel panel-title="Regular Price" components="locationComponents" standard-price="regularPrice" price-model="modelPrices.regularPrice"
+                                             total="total" total-inc-tax="totalIncTax" avg-tax="comboAvgTax" is-editing="isEditing" show-margin="false" adjusted-total="comboTotal" is-combo="true"></price-panel>
+
+                                <price-panel panel-title="Duty Free Price" components="locationComponents" standard-price="dutyFreePrice" price-model="modelPrices.dutyFreePrice"
+                                             total="total" total-inc-tax="totalIncTax" avg-tax="comboAvgTax" is-editing="isEditing" show-margin="false" adjusted-total="comboTotal" is-combo="true"></price-panel>
+                            </div>
+                        </div>
+                    </ng-form>
+                </div>
+            </div>
+
+        </ng-form>
+    </div>
+</div>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+<script>
+     //Change for ZEN/UNC/CRF/CR2018-011 Pricing Promotion - Happy Hour
+    $(document).ready(function () {
+        $('#hasallow').hide();
+
+        $('#chkhideshow').change(function () {
+           
+            if (this.checked)
+
+                $('#hasallow').show();
+            else
+                $('#hasallow').hide();
+        });
+
+
+
+    });
+</script>

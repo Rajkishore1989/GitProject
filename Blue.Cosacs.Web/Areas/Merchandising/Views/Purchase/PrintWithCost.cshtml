@@ -1,0 +1,216 @@
+﻿@model PurchaseOrderPrintModel
+
+@{
+    ViewBag.Title = "Purchase Order " + Model.Id;
+    ViewBag.Currency = Model.Currency;
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var pagesize = 3;
+}
+
+@section Head
+{
+    <style type="text/css">
+        .reject {
+            white-space: nowrap;
+        }
+
+        .reject span {
+            margin-left: 5px;
+        }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+
+        .details {
+            width: 50%;
+            display: inline-block;
+            margin-top: 200px;
+        }
+
+        .supplier {
+            float: left;
+            width: 50%;
+            display:inline-block;
+            vertical-align: top;
+            text-align: left;
+            font-size: 1.5em;
+        }
+
+        .address {
+            float: right;
+            width: 50%;
+            display:inline-block;
+            vertical-align: top;
+            text-align: left;
+            font-size: 1.5em;
+        }
+
+        table.divide tr th{
+            width: 25%;
+        }
+
+        table.divide tr td{
+            width: 25%;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        .order {
+            width:100%;
+            display:inline-block;
+        }
+
+        .divide {
+            width: 100%;
+        }
+    </style>
+}
+
+<div>
+    <header>
+        <div class="details">
+            <div class="supplier">
+                <table>
+                    <tr><td>@Model.VendorDetails.Name</td></tr>
+                    <tr><td>@Model.VendorDetails.AddressLine1</td></tr>
+                    <tr><td>@Model.VendorDetails.AddressLine2</td></tr>
+                    <tr><td>@Model.VendorDetails.City</td></tr>
+                    <tr><td>@Model.VendorDetails.Country</td></tr>
+                    <tr><td>@Model.VendorDetails.PostCode</td></tr>
+                </table>
+            </div>
+            <div class="address">
+                <table>
+                    <tr><th>Delivery Address:</th></tr>
+                    <tr><td>@Model.LocationDetails.Name</td></tr>
+                    <tr><td>@Model.LocationDetails.AddressLine1</td></tr>
+                    <tr><td>@Model.LocationDetails.AddressLine2</td></tr>
+                    <tr><td>@Model.LocationDetails.City</td></tr>
+                    <tr><td>@Model.LocationDetails.PostCode</td></tr>
+                </table>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="order">
+            <table class="larger divide">
+                <tr>
+                    <th>Order No</th>
+                    <th>Supplier</th>
+                    <th>Order Date</th>
+                    <th>Date Required</th>
+                </tr>
+                <tr>
+                    <td>@Model.Id</td>
+                    <td>@Model.VendorDetails.Code</td>
+                    <td>@Model.CreatedDateLocal.Date.ToString("D") </td>
+                    <td>@Model.RequestedDeliveryDate.Date.ToString("D")</td>
+                </tr>
+            </table>
+        </div>
+    </header>
+
+    @for (var x = 0; x < Model.Products.Count; x += pagesize)
+    {
+        <div style="position: relative">
+            @if (!Model.OriginalPrint.HasValue)
+            {
+                @*<!-- HACK FIX: layout fix for the 'Delivery Print Schedules' original copy -->*@
+                @*<!-- This layout is broken when printing the original copy (only works when the copy-watermark  -->*@
+                @*<!-- style is present). So this is why an opacity:0 (invisible) watermark element was placed here. -->*@
+                <div class="copy-watermark" style="opacity:0;">ORIG.</div> @*<!-- HACK -->*@
+                @*<!-- HACK!!! -->*@
+            }
+            @if (Model.OriginalPrint.HasValue)
+            {
+                <div class="copy-watermark">COPY</div>
+            }
+        </div>
+        @Html.Partial("PrintProductWithCost", Model.Products.Skip(x).Take(pagesize).ToList());
+       
+         <div class="clear"></div>     
+       
+        if (x + pagesize < Model.Products.Count)
+        {
+             <div class="leftFooter">
+                 @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+
+            <div class="pageBreak"></div>
+        }
+        else
+        {
+            <div class="larger" style="float:right;">Total Cost: @Model.Currency @Model.FormattedTotalCost</div>
+            <div class="clear"></div>
+            <div class="larger" style="text-align:center;">
+                <div>Payment Terms</div>
+                <div>@Model.PaymentTerms</div>
+            </div>
+             if (!Model.OriginalPrint.HasValue)
+            { 
+	            <div class="sign">
+		            <div>Authorised By</div>
+		            <div>Signed</div>                                    
+		            <div>Date</div>
+	            </div>
+            }
+             <div class="leftFooter">
+                 @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+        }
+
+    }
+     
+</div>

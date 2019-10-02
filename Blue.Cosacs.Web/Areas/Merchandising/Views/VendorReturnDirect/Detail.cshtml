@@ -1,0 +1,176 @@
+﻿@model object
+
+<div data-module="merchandising/vendorReturnDirect/init" ng-controller="VendorReturnDirectCtrl" ng-init="vendorReturn=@Html.RawJson(Model)" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top" ng-form="vendorReturnForm">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button class="btn btn-default" ng-click="print()" ng-hide="creating" ng-disabled="!canPrint()">Print Without Cost <span class="glyphicons new_window"></span></button>
+                    <button class="btn btn-default" ng-click="printWithCost()" ng-hide="creating" ng-disabled="!canPrint()">Print With Cost <span class="glyphicons new_window"></span></button>
+                    <button class="btn btn-default" ng-click="approve()" ng-show="canApprove()">Approve</button>
+                    <button class="btn btn-primary" ng-click="create()" ng-show="creating" ng-disabled="!canCreate()">Create</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row buffer top">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Sending Location</label>
+                    <p><a href="{{generateUrl('Merchandising/Locations/Detail/' + vendorReturn.locationId)}}">{{vendorReturn.location}}</a></p>
+                
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Date Received</label>
+                    <p>{{vendorReturn.dateReceived | pbDate : true}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Received By</label>
+                    <p>{{vendorReturn.receivedBy}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Direct Goods Receipt Number</label>
+                    <p><a href="{{generateUrl('Merchandising/GoodsReceiptDirect/Detail/' + vendorReturn.goodsReceiptId)}}">#{{vendorReturn.goodsReceiptId}}</a></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Vendor</label>
+                    <p><a href="{{generateUrl('Merchandising/Vendors/Detail/' + vendorReturn.vendorId)}}">{{vendorReturn.vendor}}</a></p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Vendor Delivery Number</label>
+                    <p>{{vendorReturn.vendorDeliveryNumber || 'Not Entered'}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Vendor Invoice Number</label>
+                    <p>{{vendorReturn.vendorInvoiceNumber || 'Not Entered'}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3"  ng-show="!creating && !canApprove()" >
+                <div class="form-group">
+                    <label>Document Reference Number</label>
+                    <p>{{vendorReturn.referenceNumber || 'Not Entered'}}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-show="vendorReturn.createdDate">
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Date Created</label>
+                    <p>{{vendorReturn.createdDate | pbDate : true}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label>Created By</label>
+                    <p>{{vendorReturn.createdBy}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3" ng-show="vendorReturn.approvedDate">
+                <div class="form-group">
+                    <label>Date Approved</label>
+                    <p>{{vendorReturn.approvedDate | pbDate}}</p>
+                </div>
+            </div>
+            <div class="col-lg-3" ng-show="vendorReturn.approvedBy">
+                <div class="form-group">
+                    <label>Approved By</label>
+                    <p>{{vendorReturn.approvedBy}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="row" ng-show="creating || canApprove()" >
+            <div class="form-group">
+                <label class="control-label col-lg-3" >Document Reference Number</label>
+                <div class="col-lg-3">
+                    <input type="text" class="form-control" ng-model="vendorReturn.referenceNumber" maxlength="50" />
+                </div>
+            </div>
+        </div>
+        <div class="row buffer top" ng-show="creating || vendorReturn.comments">
+            <div class="col-md-12">
+                <div class="section">Comments</div>
+                <div class="form-group" ng-class="{'has-error': vendorReturn.comments.$invalid}">
+                    <div ng-hide="creating || canApprove()">
+                        <p class="pb-text" ng-model="vendorReturn.comments" pb-ref-link></p>
+                    </div>
+                    <div ng-show="creating || canApprove()">
+                        <textarea class="form-control" rows="3" name="comments" ng-model="vendorReturn.comments" maxlength="500"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-striped pb-table">
+                    <thead>
+                        <tr>
+                            <th class="col-sm sku">Product Code</th>
+                            <th class="col-sm-2">Description</th>
+                            <th class="col-sm quantity" ng-show="creating">Quantity Received</th>
+                            <th class="col-sm quantity" ng-show="creating">Quantity Previously Returned</th>
+                            <th class="col-sm quantity" ng-show="creating">Quantity Remaining</th>
+                            <th class="col-sm quantity">Quantity Returned</th>
+                            <th class="col-sm quantity">Unit Landed Cost</th>
+                            <th class="col-sm quantity">Line Landed Cost</th>
+                            <th class="col-sm-2">Comments</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="product in vendorReturn.products" ng-form="productForm">
+                            <td><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + product.productCode)}}">{{product.productCode}}</a></td>
+                            <td>{{product.description}}</td>
+                            <td class="quantity" ng-show="creating">{{product.quantityReceived}}</td>
+                            <td class="quantity" ng-show="creating">{{product.quantityPreviouslyReturned}}</td>
+                            <td class="quantity" ng-show="creating">{{product.quantityRemaining}}</td>
+                            <td class="quantity">
+                                <div ng-hide="!creating" ng-class="{'has-error': productForm.quantityReturned.$invalid}">
+                                    <input pb-integer class="form-control" name="quantityReturned" ng-model="product.quantityReturned" ng-min="0" required ng-change="validateQuantityReturned(productForm.quantityReturned, product)" />
+                                </div>
+                                <span ng-hide="creating">{{product.quantityReturned}}</span>
+                            </td>
+                            <td class="currency">{{product.lastLandedCost | pbCurrency}}</td>
+                            <td class="currency">{{product.quantityReturned * product.lastLandedCost | pbCurrency}}</td>
+                            <td>
+                                <input ng-show="creating" class="form-control" type="text" name="comments" ng-model="product.comments">
+                                <div ng-hide="creating">
+                                    <span pb-ref-link ng-model="product.comments"></span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td>Total</td>
+                            <td ng-show="creating"></td>
+                            <td ng-show="creating"></td>
+                            <td ng-show="creating"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="currency">{{totalLineCost() | pbCurrency}}</td>
+                            <td></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

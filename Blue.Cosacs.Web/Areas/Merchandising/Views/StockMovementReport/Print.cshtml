@@ -1,0 +1,235 @@
+﻿@model StockMovementPrintModel
+@using System.Linq;
+@{
+    var pages = Model.Results;
+    var query = Model.Query;
+    var cols = Model.ColIndicies;
+}
+
+<h3>Stock Movement Report @DateTime.Now.ToString("yyyy-MM-dd")</h3>
+<div class="buffer-sm bottom">
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="pb-table pb-report print">
+                <tbody>
+                @if (!string.IsNullOrEmpty(query.Division))
+                {
+                    <tr>
+                        <th class="col-sm">Division</th>
+                        <td>@query.Division</td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(query.Department))
+                {
+                    <tr>
+                        <th class="col-sm">Department</th>
+                        <td>@query.Department</td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(query.Class))
+                {
+                    <tr>
+                        <th class="col-sm">Class</th>
+                        <td>@query.Class</td>
+                    </tr>
+                }
+                @if (query.LocationId != null)
+                {
+                    <tr>
+                        <th class="col-sm">Location</th>
+                        <td>@Model.Location</td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(query.Fascia))
+                {
+                    <tr>
+                        <th class="col-sm">Fascia</th>
+                        <td>@query.Fascia</td>
+                    </tr>
+                }
+                @if (!string.IsNullOrEmpty(query.Sku))
+                {
+                    <tr>
+                        <th class="col-sm">SKU</th>
+                        <td>@query.Sku</td>
+                    </tr>
+                }
+                @if (query.CreatedFrom != null)
+                {
+                    <tr>
+                        <th class="col-sm">Created From</th>
+                        <td>@query.CreatedFrom.ToPrintDateString()</td>
+                    </tr>
+                }
+                @if (query.CreatedFrom != null)
+                {
+                    <tr>
+                        <th class="col-sm">Created To</th>
+                        <td>@query.CreatedTo.ToPrintDateString()</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="buffer-sm bottom">
+    @if (pages.Any()) {
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="print main bordered small">
+                @{var counter = 0;}
+                @foreach (var page in pages) 
+                {
+                    counter++;
+                    <tbody class="pageBreak">
+                        <tr>
+                        <th @if (!cols.Contains(0))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Division</th>
+                        <th @if (!cols.Contains(1))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Department</th>
+                        <th @if (!cols.Contains(2))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Class</th>
+                        <th @if (!cols.Contains(3))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Type</th>
+                        <th @if (!cols.Contains(4))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Transaction</th>
+                        <th @if (!cols.Contains(5))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Product</th>
+                        <th @if (!cols.Contains(6))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Brand</th>
+                        <th @if (!cols.Contains(7))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Product Tags</th>
+                        <th @if (!cols.Contains(8))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">Location</th>
+                        <th @if (!cols.Contains(9))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm quantity">Quantity</th>
+                        <th @if (!cols.Contains(10))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm quantity">Stock On Hand</th>
+                        <th @if (!cols.Contains(11))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm date">Date</th>
+                        <th @if (!cols.Contains(12))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm date">Date Processed</th>
+                        <th @if (!cols.Contains(13))
+                            {
+                                <text>style="display: none;"</text>
+                            } class="col-sm">User</th>
+                    </tr>
+                        @foreach (var row in page)
+                        {        
+                            <tr @if (row.Type == "Opening Balance")
+                                {
+                                    <text>class="total"</text>
+                                }>
+                                <td @if (!cols.Contains(0))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@row.Division</td>
+                                <td @if (!cols.Contains(1))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@row.Department</td>
+                                <td @if (!cols.Contains(2))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@row.Class</td>
+                                <td @if (!cols.Contains(3))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@row.Type</td>
+                                <td @if (!cols.Contains(4))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@row.Narration</td>
+                                <td @if (!cols.Contains(5))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@row.SKU - @row.LongDescription</td>
+                                <td @if (!cols.Contains(6))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    } class="col-sm">@row.BrandName</td>
+                                <td @if (!cols.Contains(7))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    } class="col-sm">
+                                    @foreach (var tag in row.Tags)
+                                    {
+                                        <span>@tag</span>
+                                    }
+                                </td>
+                                <td @if (!cols.Contains(8))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@row.Location</td>
+                                <td @if (!cols.Contains(9))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    } class="quantity">@row.Quantity</td>
+                                <td @if (!cols.Contains(10))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    } class="quantity">@row.StockLevel</td>
+                                <td @if (!cols.Contains(11))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    } class="date">@(String.IsNullOrEmpty(row.DateUTC.ToString()) ? row.Date.ToString("yyyy-MM-dd") : row.DateUTC.ToLocalDateTime().ToString("yyyy-MM-dd"))</td>
+                                <td @if (!cols.Contains(12))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    } class="date">@(String.IsNullOrEmpty(row.DateProcessedUTC.ToString()) ? "" : row.DateProcessedUTC.ToLocalDateTime().ToString("yyyy-MM-dd"))</td>
+                                <td @if (!cols.Contains(13))
+                                    {
+                                        <text>style="display: none;"</text>
+                                    }>@(string.IsNullOrEmpty(row.User) ? "System" : row.User)</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="9"></td>
+                            <td>
+                                @if (!cols.Contains(9))
+                                {
+                                    <text>style="display: none;"</text>
+                                }@page.Sum(p => p.Quantity)
+                            </td>
+                            <td>
+                                @if (!cols.Contains(10))
+                                {
+                                    <text>style="display: none;"</text>
+                                }@page.Sum(p => p.StockLevel)
+                            </td>
+                            <td colspan="3"></td>
+                        </tr>
+                    </tbody>
+                }
+            </table>
+        </div>
+    </div>
+    }
+</div>

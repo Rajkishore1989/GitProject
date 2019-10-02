@@ -1,0 +1,369 @@
+[  { 
+"UserId": "112",
+"Name": "ADRAIN PARRIS",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "113",
+"Name": "ALLAN HALL",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "114",
+"Name": "ANDRE MAYNARD",
+"Internal":"false",
+"StartTime": "0800",
+"EndTime": "1730",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "115",
+"Name": "APSC LTD",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "116",
+"Name": "CALTRON SERVICES",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "117",
+"Name": "CARLOS JOHNSON",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "118",
+"Name": "CHARLES GLOUMAEU",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "119",
+"Name": "CLYDE CHERRY",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "120",
+"Name": "COLTON SLOCOMBE",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "121",
+"Name": "DALE WAITHE",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "122",
+"Name": "DANIEL BOVELL",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "123",
+"Name": "DAVID STUART",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "124",
+"Name": "EVERRETTE DRAKES",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "125",
+"Name": "GEFFREY MEDFORD",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "126",
+"Name": "GORDON ELDER",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "127",
+"Name": "GREG LARRIER",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1730",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "128",
+"Name": "HENDERSON LINTON",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "129",
+"Name": "HILTON WOOD",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "130",
+"Name": "JASON HUBBANDS",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "131",
+"Name": "JENNYS UPHOLSTERY",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "132",
+"Name": "JULIAN SHEPHERD",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "133",
+"Name": "KAB ELECTRONICS",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "134",
+"Name": "KEITH SOBERS",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "135",
+"Name": "KELLYANN NEWTON",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "136",
+"Name": "MARK ELECTRONICS",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "137",
+"Name": "MCM BEDDING",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "138",
+"Name": "MICHAEL HINDS",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "139",
+"Name": "MICHAEL WILLIAMS",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "140",
+"Name": "MISC TECHNICIAN",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "141",
+"Name": "MYRT-MAC AIR CONDITIONING",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "142",
+"Name": "MYRT-MAC AIR CONDITIONING",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "143",
+"Name": "NEVILLE HOLDER",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "144",
+"Name": "RAY MAXWELL",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "145",
+"Name": "REGINAL MOORE",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "146",
+"Name": "Renaldo Lowe",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "147",
+"Name": "RENRIC PHIILIPS",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "148",
+"Name": "RSB RSB",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "149",
+"Name": "SERVALL GARDEN EQUIPMENT",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "150",
+"Name": "SHAWN EDWARDS",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1730",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "151",
+"Name": "STEPHEN BASCOMBE",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "152",
+"Name": "TREVOR CLARKE",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "153",
+"Name": "TREVOR MILLINGTON",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1730",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "154",
+"Name": "VICTOR LEACH",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1730",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "155",
+"Name": "WALEED BROWN",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "156",
+"Name": "WAYNE WEEEKES",
+"Internal": "true",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ } ,  { 
+"UserId": "157",
+"Name": "WINSTON LEGALL",
+"Internal": "false",
+"StartTime": "0800",
+"EndTime": "1800",
+"Slots": "16",
+"Categories": "null"
+ }  ]

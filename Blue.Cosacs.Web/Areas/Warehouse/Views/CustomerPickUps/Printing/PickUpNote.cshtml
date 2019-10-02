@@ -1,0 +1,78 @@
+﻿@model Blue.Cosacs.Warehouse.BookingView
+@{
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+@section Head
+{
+    <style type="text/css">
+        .reject { white-space: nowrap; }
+        .reject span { margin-left: 5px; }
+        .rejection { page-break-inside: avoid; }
+        .block {  display: block; }
+        .item td { border-bottom: 1px solid black; padding: 3px 2px; vertical-align: top; }
+        .watermark { color:rgba(230, 230, 230, 0.3); font-size: 400px; z-index: -100; -webkit-transform: rotate(-45deg); -moz-transform: rotate(-45deg); position:absolute; top: 100px; left: 100px; visibility:visible; }
+        th.number, td.number { text-align: right; }
+        img { vertical-align: middle; }
+
+        .collection-attributes th { text-align: left;  padding: 3px 2px; width: 200px; }
+        .collection-attributes td { text-align: left; padding: 3px 2px; }
+        
+    </style>
+    @if (!(bool)ViewBag.IsCopy)
+    {
+        @*<!-- HACK FIX: layout fix for the 'Delivery Print Schedules' original copy -->*@
+        @*<!-- This layout is broken when printing the original copy (only works when the copy-watermark  -->*@
+        @*<!-- style is present). So this is why an opacity:0 (invisible) watermark element was placed here. -->*@
+        <div class="copy-watermark" style="opacity:0;">ORIGINAL</div> @*<!-- HACK -->*@
+        @*<!-- HACK!!! -->*@
+    }
+    @if((bool)ViewBag.IsCopy)
+    {    
+        <div style="position:relative">
+           <div class="watermark">COPY</div>   
+        </div>
+    }
+
+}
+
+@{
+    var docDescription = (Model.PickUp == false) ? "Collection Note" : (Model.DeliveryOrCollection == "D" || Model.DeliveryOrCollection == "R") ? "Pick Up Note" : "Return Note";
+}
+
+<div data-module="warehouse/PickUpNotePrinting">
+    <div style="text-align: center; font-size: 21px; font-weight: bold">Customer @docDescription</div>
+    <div style="width:100%;display:inline-block;margin:0px 0px 20px 0px;">
+        @if(Model.StoreType == "C")
+        {
+            @Html.FileToImage(new Blue.Config.Settings().PrintoutLogoCourts, 267, 89)
+        }
+        else
+        {
+            @Html.FileToImage(new Blue.Config.Settings().PrintoutLogoNonCourts, 267, 89)
+        }
+        <div style="display:inline-block;vertical-align:top;margin-left:120px;">
+            <table class="header-info">
+                <tr><th>Delivery Branch:</th><td class="branchNo">@ViewBag.DeliveryBranch</td></tr>
+                <tr><th>Quantity for @(Model.PickUp == false? " Collection": Model.DeliveryOrCollection == "D"? " Pick Up": " Return"):</th><td>@Model.Quantity</td></tr>
+            </table>
+        </div>
+        <div style="display:inline-block;vertical-align:top;float:right;">
+            <div class="document-id">
+                <div>
+                    <div class="ref">@docDescription #@ViewBag.id</div>
+                    <div class="barcode">@Html.Barcode((string)("DL$" + ViewBag.id), BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                </div>
+                <div>
+                    <div class="createdOn">@ViewBag.PickUpDatePrinted.ToLocalTime().ToString("f")</div>
+                    <div class="createdBy">@ViewBag.loadCreatedByLogin</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+    @Html.Partial("Printing/CollectionNote", Model)
+    <div class="leftFooter">
+        @string.Format("{0} #{1}", docDescription, ViewBag.id) &nbsp;
+    </div>
+    <div class="rightFooter">Page 1 of 1</div>
+</div>

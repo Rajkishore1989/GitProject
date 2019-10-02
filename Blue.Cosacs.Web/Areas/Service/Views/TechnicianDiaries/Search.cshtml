@@ -1,0 +1,10 @@
+﻿@model string
+<div id="facetSearchContainer" data-module="service/techPrintSearch" ng-controller="SearchController" class="facetsearch-container">
+	<facetsearch data-relativeurl="../" data-results="@Model" data-buttons="@ViewBag.buttons"
+		data-results-template="/Static/js/service/Templates/searchResult.html" 
+		data-search-url="/Service/TechnicianDiaries/SearchInstant"
+		data-history-url="/Service/TechnicianDiaries/SearchMyJobs"
+		data-date-fields='{"TechAllocated": "Schedule / Repair Date"}'
+		data-field-labels='{"ServiceHomeBranch": "Branch","SRType": "Type","FaultTags": "Fault Tags","ServiceStatus":"Status"}'>
+	</facetsearch>
+</div>

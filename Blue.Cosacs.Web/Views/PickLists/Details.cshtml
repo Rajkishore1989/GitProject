@@ -1,0 +1,9 @@
+﻿@{
+    ViewBag.Title = "Code List: " + Model.Name;
+}
+@model Blue.IPickListProvider
+<ul>
+    @foreach (var row in Model.Load()) { 
+        <li><span style="font-weight: bold;">@row.k</span> @row.v</li>
+    }
+</ul>

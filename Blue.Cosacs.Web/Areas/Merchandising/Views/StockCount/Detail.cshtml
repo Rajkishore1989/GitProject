@@ -1,0 +1,248 @@
+﻿@model StockCountViewModel
+@{ ViewBag.Title = "Stock Count #" + Model.Id; }
+<div data-module="merchandising/stockCount/init" ng-controller="StockCountCtrl"
+     ng-init="stockCount=@Html.RawJson(Model);" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top">
+        <div ng-form="stockCountForm" class="form-horizontal" novalidate>
+            <div class="row buffer-sm bottom">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <button class="btn btn-default" ng-disabled="!canPrint()" ng-hide="!showPrint()"
+                                ng-click="print()">Print Stock Count Sheets <span class="glyphicons new_window"></span>
+                        </button>
+                        <button class="btn btn-default" ng-disabled="!canPrintVariances()"
+                                ng-hide="!showPrintVariances()" ng-click="printVariances()">Print Variances <span
+                                class="glyphicons new_window"></span></button>
+                        <button class="btn btn-default" ng-click="exportProducts()">Export</button>
+                        <button class="btn btn-default" ng-disabled="!canClose()" ng-hide="!showClose()"
+                                ng-hide="!inProgress()" ng-click="close()">Close Stock Count
+                        </button>
+                        <button class="btn btn-danger" ng-disabled="!canCancel()" ng-hide="!showCancel()"
+                                ng-click="cancel()">Cancel Stock Count
+                        </button>
+                        <button class="btn btn-primary" ng-disabled="!canSave(stockCountForm)"
+                                ng-hide="!showSave(stockCountForm)" ng-click="save(stockCountForm)">Save All
+                        </button>
+                        <button class="btn btn-primary" ng-hide="!canStart()" ng-click="start()">Start</button>
+
+                    </div>
+                </div>
+            </div>
+            <div class="row buffer-sm bottom">
+                <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-6">Location</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static"><a
+                                        href="{{resolve('Merchandising/Locations/Detail/' + stockCount.locationId)}}">{{stockCount.location}}</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-6">Scheduled Date</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static">{{stockCount.countDate | pbDate }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-6">Type</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static">{{stockCount.type}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-6">Status</label>
+                            <div class="col-md-6">
+                                <p class="form-control-static">{{status}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-show="stockCount.type != 'Quarterly'">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-6">Hierarchy</label>
+                            <div class="col-md-6">
+
+                                <div ng-repeat="(id, hierarchy) in stockCount.hierarchy" class="form-control-static">
+                                    {{hierarchy}}<span ng-hide="$last"> </span></div>
+
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-md-4">
+                    <div class="row" ng-hide="!stockCount.createdBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Created By</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.createdBy}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="!stockCount.startedBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Started By</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.startedBy}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="!stockCount.closedBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Closed By</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.closedBy}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="!stockCount.cancelledBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Cancelled By</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.cancelledBy}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="!stockCount.stockAdjustmentId">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Stock Adjustment</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static"><a
+                                        href="{{resolve('Merchandising/StockAdjustment/Detail/' + stockCount.stockAdjustmentId)}}">#{{stockCount.stockAdjustmentId}}</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="row" ng-hide="!stockCount.createdBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Created On</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.createdDate | pbDate : true}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="!stockCount.startedBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Started On</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.startedDate | pbDate : true }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="!stockCount.closedBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Closed On</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.closedDate | pbDate : true }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="!stockCount.cancelledBy">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Cancelled On</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{stockCount.cancelledDate | pbDate : true}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" ng-hide="!canSearch()">
+                <div class="col-lg-12 form-inline">
+                    <div class="well well-sm">
+                        <div class="row">
+                            <label class="col-md-2 control-label">Find Product</label>
+                            <div class="col-md-8">
+                                <input ui-select2="productSearchSetup()" name="searchQuery" ng-model="searchResult"
+                                       ng-change="processSearchResult(searchResult)" style="width: 100%"/>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-default" ng-click="clear()">Clear Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-hide="!stockCount.startedDate">
+                <pb-pagination get="productSearch" params="params" control="paginator" default-params="defaultParams"
+                               no-results-message="There are no matching products.">
+                    <table class="table table-bordered table-striped pb-table">
+                        <thead>
+                        <tr>
+                            <th class="col-md component-controls" ng-hide="!canVerify()"></th>
+                            <th class="col-sm sku">SKU</th>
+                            <th class="col-sm-2">Description</th>
+                            <th class="col-sm quantity">Recorded Stock On Hand</th>
+                            <th class="col-sm quantity">Count</th>
+                            <th class="col-sm quantity">System Adjustments</th>
+                            <th class="col-sm quantity">Variance</th>
+                            <th ng-hide="stockCount.closedDate || stockCount.cancelledDate" class="col-sm quantity">Net
+                                Movement
+                            </th>
+                            <th ng-hide="stockCount.closedDate || stockCount.cancelledDate" class="col-sm quantity">
+                                Current Stock On Hand
+                            </th>
+                            <th class="col-sm-2">Comments</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="product in paginator.page" ng-form="productForm" ng-controller="ProductCtrl">
+                            <td class="component-controls" ng-hide="!canVerify()">
+                                <span class="glyphicons glyph-btn undo" ng-click="undo()"
+                                      ng-class="{'invisible' : !canUndo()}"></span>
+                            </td>
+                            <td><a href="{{resolve('Merchandising/Products/Details/' + product.productId)}}">{{product.sku}}</a>
+                            </td>
+                            <td>{{product.longDescription}}</td>
+                            <td class="quantity">{{product.startStockOnHand}}</td>
+                            <td class="quantity">
+                                <div ng-class="{'has-error': productForm.count.$invalid}" ng-hide="!canVerify()">
+                                    <input pb-integer class="form-control" type="text" name="count"
+                                           ng-model="product.count">
+                                </div>
+                                <p class="form-control-static" ng-hide="canVerify()">{{product.count}}</p>
+                            </td>
+                            <td class="quantity">
+                                <div ng-class="{'has-error': productForm.systemAdjustment.$invalid}"
+                                     ng-hide="!canVerify()">
+                                    <input pb-integer class="form-control" type="text" name="systemAdjustment"
+                                           ng-model="product.systemAdjustment">
+                                </div>
+                                <p class="form-control-static" ng-hide="canVerify()">{{product.systemAdjustment}}</p>
+                            </td>
+                            <td class="quantity"><a
+                                    href="{{resolve('Merchandising/StockCountPrevious/Detail/' + product.productId)}}">{{product.count
+                                + product.systemAdjustment - product.startStockOnHand}}</a></td>
+                            <td class="quantity" ng-hide="stockCount.closedDate || stockCount.cancelledDate">
+                                <a href="{{resolve('Merchandising/StockMovement?sku=' + product.sku + '&stockCountId=' + stockCount.id)}}">{{product.currentStockOnHand
+                                    - product.startStockOnHand}}</a>
+                            </td>
+                            <td class="quantity" ng-hide="stockCount.closedDate || stockCount.cancelledDate">
+                                {{product.currentStockOnHand}}
+                            </td>
+                            <td>
+                                <input class="form-control" type="text" name="comments" ng-model="product.comments"
+                                       maxlength="100" ng-hide="!canVerify()">
+                                <p ng-hide="canVerify()">
+                                    <span class="form-control-static" ng-model="product.comments" pb-ref-link></span>
+                                </p>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </pb-pagination>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+﻿@model Blue.Cosacs.Web.HandleErrorInfoExtended
+@{
+    ViewBag.Title = "Application Error";
+}
+
+<div class="error">
+    <p>
+        Ooppps... bad CoSaCS. Please report this to your support staff.
+    </p>
+    <p>
+        Error message: @Model.Exception.Message
+    </p>
+    @if (Model.ErrorLogId != null) { 
+        <text>
+        <p>
+            Error ID: <span class="errorLogId">@Model.ErrorLogId</span>
+        </p>
+        </text>
+    }
+</div>

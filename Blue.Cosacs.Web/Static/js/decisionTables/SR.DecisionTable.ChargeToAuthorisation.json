@@ -1,0 +1,503 @@
+{
+  "conditions": [
+    {
+      "expression": "this.serviceRequest.Resolution"
+    },
+    {
+      "expression": "\"Inside Supplier Warranty\" &&
+resolutionValidForWarranty(this.serviceRequest.Resolution) &&
+this.serviceRequest.ManufacturerWarrantyContractNo &&
+insideWarranty(this.serviceRequest, this.serviceRequest.ManufacturerWarrantyLength || 12)"
+    },
+    {
+      "expression": "\"Inside Extended Warranty\" &&
+resolutionValidForWarranty(this.serviceRequest.Resolution) &&
+this.serviceRequest.WarrantyContractNo &&
+insideWarranty(this.serviceRequest, (this.serviceRequest.WarrantyLength || 0) + (this.serviceRequest.ManufacturerWarrantyLength || 0))"
+    },
+    {
+      "expression": "isServiceRequest(this.serviceRequest.Type);"
+    },
+    {
+      "expression": "\"Internal installation\" && (this.serviceRequest.Type === \"II\" || this.srType === \"II\")"
+    },
+    {
+      "expression": "\"External installation\" && (this.serviceRequest.Type === \"IE\" || this.srType === \"IE\")"
+    },
+    {
+      "expression": "'Stock repair' && (this.serviceRequest.Type === 'S')"
+    }
+  ],
+  "actions": [
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: false
+}, {
+    key: 'Deliverer',
+    authorisationRequired: false
+}, {
+    key: 'Internal',
+    authorisationRequired: false
+}, {
+    key: 'Supplier',
+    authorisationRequired: false
+}]);"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: false
+}, {
+    key: 'Deliverer',
+    authorisationRequired: false
+}, {
+    key: 'Internal',
+    authorisationRequired: false
+}, {
+    key: 'Supplier',
+    authorisationRequired: false
+}]);
+
+setDefaultPrimaryCharge('Deliverer', this.serviceRequest);"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: false
+}, {
+    key: 'Deliverer',
+    authorisationRequired: false
+}, {
+    key: 'Unicomer Warranty',
+    authorisationRequired: false
+}, {
+    key: 'EW',
+    authorisationRequired: false
+}, {
+    key: 'Internal',
+    authorisationRequired: false
+}, {
+    key: 'Supplier',
+    authorisationRequired: false
+}]);
+
+setDefaultPrimaryCharge('Internal', this.serviceRequest);"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: false
+}, {
+    key: 'Deliverer',
+    authorisationRequired: false
+}, {
+    key: 'Internal',
+    authorisationRequired: false
+}, {
+    key: 'Supplier',
+    authorisationRequired: true
+}]);
+
+setPrimaryCharge('Customer', this.serviceRequest);
+
+this.serviceRequest.RepairType = 'Assessment';"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: false
+}, {
+    key: 'Deliverer',
+    authorisationRequired: false
+}, {
+    key: 'Unicomer Warranty',
+    authorisationRequired: false
+}, {
+    key: 'Internal',
+    authorisationRequired: false
+}, {
+    key: 'Supplier',
+    authorisationRequired: true
+}]);
+
+setDefaultPrimaryCharge('Supplier', this.serviceRequest);"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: false
+}, {
+    key: 'Deliverer',
+    authorisationRequired: false
+}, {
+    key: 'EW',
+    authorisationRequired: false
+}, {
+    key: 'Internal',
+    authorisationRequired: false
+}, {
+    key: 'Supplier',
+    authorisationRequired: false
+}]);
+
+setDefaultPrimaryCharge('EW', this.serviceRequest);"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: true
+}, {
+    key: 'Installation Charge Electrical',
+    authorisationRequired: false
+}, {
+    key: 'Installation Charge Furniture',
+    authorisationRequired: false
+}]);
+
+setDefaultPrimaryCharge('Installation Charge Electrical', this.serviceRequest);"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Customer',
+    authorisationRequired: false
+}, {
+    key: 'Installation Charge Electrical',
+    authorisationRequired: true
+}, {
+    key: 'Installation Charge Furniture',
+    authorisationRequired: true
+}]);
+
+setDefaultPrimaryCharge('Customer', this.serviceRequest);"
+    },
+    {
+      "expression": "setDefaultPrimaryCharge('Customer', this.serviceRequest);"
+    },
+    {
+      "expression": "chargeTos(this, [{
+    key: 'Internal',
+    authorisationRequired: false
+}]);
+
+setPrimaryCharge('Internal', this.serviceRequest);"
+    }
+  ],
+  "rules": [
+    {
+      "values": [
+        "",
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "Damage On Delivery",
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "Beyond Economic Repair",
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "Misuse by the customer",
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "Event or terms NOT covered",
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        "true",
+        "",
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        "false",
+        "true",
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        "false",
+        "false",
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        "",
+        "true",
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        "false",
+        "false",
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true"
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ]
+    }
+  ],
+  "extensions": "var addMonths = function (d, months) {
+  d = new Date(+d);
+  d.setMonth(d.getMonth() + months);
+  return d;
+};
+
+var insideWarranty = function (sr, months) {
+  return addMonths(sr.ItemDeliveredOn, months) >= new Date();
+};
+
+var chargeTos = function(scope, list) {
+ scope.MasterData.AvailableChargeTos = list;
+};
+
+var resolutionValidForWarranty = function (resolution) {
+  return resolution !== 'Damage On Delivery' && resolution !== 'Beyond Economic Repair' && resolution !== 'Misuse by the customer' && resolution !== 'Event or terms NOT covered';
+};
+
+var isServiceRequest = function (srType) {
+  return srType === 'SI' || srType === 'SE' || srType === 'S';
+};
+
+var isInstallationRequest = function (srType) {
+  return srType === 'II' || srType === 'IE';
+};
+
+var isPrimaryChargeNotSet = function (resolutionPrimaryCharge) {
+  return resolutionPrimaryCharge === undefined || resolutionPrimaryCharge === null || resolutionPrimaryCharge === '';
+};
+
+var setDefaultPrimaryCharge = function (charge, serviceRequest) {
+  if (isPrimaryChargeNotSet(serviceRequest.ResolutionPrimaryCharge)) {
+    serviceRequest.ResolutionPrimaryCharge = charge;
+  }
+};
+
+var setPrimaryCharge = function (charge, serviceRequest) {
+  serviceRequest.ResolutionPrimaryCharge = charge;
+};"
+}

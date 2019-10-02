@@ -1,0 +1,86 @@
+﻿@* These are the common booking fields to display *@
+@{
+    var isSummary = ((bool?)ViewBag.IsSummary ?? false);
+    var showStatus = ((bool?)ViewBag.ShowStatus ?? false);
+}
+
+<td class="del-col align-middle">
+    <div class="rotate-90"><%- DeliveryOrCollectionDescription  %></div>
+</td>
+<td class="Booking-Columnn" style="vertical-align:middle">
+    <a class="Booking-Id refLink" href='@Url.Action("detail", "Bookings")/<%- BookingId %>'>#<%- BookingId %></a>
+        <% if (typeof OriginalId  !== "undefined" && OriginalId !== null) { %>
+            <div title="Linked to Booking <%= OriginalId %>" class="ui-icon ui-icon-link"></div>
+        <% } %>
+        <% if (typeof Express  !== "undefined" && Express) { %>
+            <div title="Express Delivery" class="ui-icon ui-icon-seek-next"></div>
+        <% } %>
+</td>
+<td class="date" style="text-align:center">
+    <% var d = DeliveryOrCollectionDate.replace("Z","") %>
+    <div><b><%- moment(d).format("ddd").toUpperCase() %></b></div>
+    <div>
+        <span><%- moment(d).format("DD") %></span>
+        <span><%- moment(d).format("MMM").toUpperCase() %>
+    </div>
+    <div><b><%- DeliveryOrCollectionSlot %></b></div>
+    @*<div><b><%- moment(d).format("A") %></b></div>*@
+    @*<%- moment(d).fromNow() %>*@
+</td>
+<td class=customer>
+    <small>
+        <div><strong><%- CustomerName %></strong></div> 
+        <div><%- AcctNo %></div>
+        <div class="address">
+            <div><%- AddressLine1 %></div>
+            <div><%- AddressLine2 %></div>
+            <div><%- AddressLine3 %></div>
+            <div><%- PostCode %></div>
+            <div><%= ContactInfo == null ? "" : ContactInfo %></div>
+        </div>
+    </small>
+</td>
+@if (!isSummary)
+{ 
+<td class="branch">
+    <% if (StockBranch !== DeliveryBranch) { %>
+        <div class="branchNo lead"><%- StockBranch %></div>
+    <% } else { %>
+         <div class="text-muted"> Current</div>
+    <% } %>
+</td>
+}
+<td class="product">
+    <div class="itemQuantity pull-right"><%- CurrentQuantity %></div>
+    <small>
+        <div title="Damaged" class="<%- Damaged === true ? "halflings warning-sign" : "" %>"></div>
+        <div title="Assembly Required"class="<%- AssemblyReq === true ? "glyphicons text-background" : ""%>"></div>
+
+        <% if (typeof NonStockServiceType !== "undefined" && NonStockServiceType === "inst") { %>
+        <div class="glyphicons wrench" title="Installation">&nbsp;
+            <strong>Installation <%- NonStockServiceItemNo %></strong> <%- NonStockServiceDescription %>
+        </div>
+        <% } %>
+
+        <% if (typeof NonStockServiceType !== "undefined" && NonStockServiceType === "assembly") { %>
+        <div class="glyphicons settings" title="Assembly">&nbsp;
+            <strong>Assembly <%- NonStockServiceItemNo %></strong> <%- NonStockServiceDescription %>
+        </div>
+        <% } %>
+
+        <div class="form-inline"><label>Item No/UPC</label>&nbsp;<span><%- ItemNo %> / <%- ItemUPC %></span></div>
+        @*<div class="form-inline"><label>UPC</label>&nbsp;<span><%- ItemUPC %></span></div>*@
+        <div><%- ProductDescription || '' %></div>
+        <div><%- ProductBrand || '' %></div>
+        <div><%- ProductModel || '' %></div>
+        <div><%- ProductArea || '' %></div>
+        <div><%- ProductCategory || '' %></div>
+        <div class="form-inline"><label>Booked</label>&nbsp;<span><%- OrderedOnString %></span></div>
+        <div class="form-inline"><label>Stock On Hand</label>&nbsp;<span><%- StockOnHand %></span></div>
+    </small>
+</td>
+@if (showStatus)
+{ 
+    <td class="statusfield"></td>
+}
+

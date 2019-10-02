@@ -1,0 +1,71 @@
+<div class="panel panel-default pick-list result search-result" data-id="{{result.PickListNo}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-lg-2">
+                <span class="resultType">Pick List</span>
+                <a class="refLink">#{{result.PickListNo}}</a>
+            </div>
+            <div class="col-lg-2">
+                <span class="itemQuantity" title="Quantity">{{result.BookingIds | length}}</span>
+                <span> Item(s)</span>
+            </div>
+            <div class="col-lg-4">
+                <span class="DeliveryCollection" title="{{result.CreatedOn | fromNowDays }}">
+                    <span class="title">Created on</span>
+                    <span class="weekday">{{result.CreatedOn | date:"EEE" | uppercase }}</span>
+                    <span class="day">{{result.CreatedOn | date:"dd" }}</span>
+                    <span class="month">{{result.CreatedOn | date:"MMM" | uppercase }}</span>
+                    <span class="month">{{result.CreatedOn | date:"yyyy" }}</span>
+                    <span class="time">{{result.CreatedOn | date:"a" }}</span>
+                </span>
+            </div>
+            <div class="col-lg-4">
+                <span class="DeliveryCollection" title="{{result.ConfirmedOn | fromNowDays }}" ng-show="result.ConfirmedOn">
+                    <span class="title">Confirmed on</span>
+                    <span class="weekday">{{result.ConfirmedOn | date:"EEE" | uppercase }}</span>
+                    <span class="day">{{result.ConfirmedOn | date:"dd" }}</span>
+                    <span class="month">{{result.ConfirmedOn | date:"MMM" | uppercase }}</span>
+                    <span class="month">{{result.ConfirmedOn | date:"yyyy" }}</span>
+                    <span class="time">{{result.ConfirmedOn | date:"a" }}</span>
+                </span>
+                <span ng-hide="result.ConfirmedOn">Not confirmed</span>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body centre-section">
+        <div class="row">
+            <div class="created col-lg-2">
+                <div>
+                    <span><b>Created</b></span>
+                </div>
+                <div><div class="date" title="{{result.CreatedOn | calendar}}">{{result.CreatedOn | fromNow}}</div> by {{result.CreatedBy}}</div>
+            </div>
+            <div ng-show="result.ConfirmedOn">
+                <div class="picked col-lg-2">
+                    <div>
+                        <span><b>Picked</b></span>
+                    </div>
+                    <div><div class="date" title="{{result.PickedOn | calendar}}">{{result.PickedOn | fromNowDays}}</div> by {{result.PickedBy}}</div>
+                </div>
+                <div class="checked col-lg-2">
+                    <div>
+                        <span><b>Checked</b></span>
+                    </div>
+                    by {{result.CheckedBy}}
+                </div>
+                <div class="confirmed col-lg-2">
+                    <div>
+                        <span><b>Confirmed</b></span>
+                    </div>
+                    <div><div class="date" title="{{result.ConfirmedOn | calendar}}">{{result.ConfirmedOn | fromNow}}</div> by {{result.ConfirmedBy}}</div>
+                </div>
+            </div>
+            <div ng-hide="result.ConfirmedOn">
+                <div class="col-lg-6">&nbsp;</div>
+            </div>
+            <div class="trucks col-lg-2">{{result.Trucks | stringList}}</div>
+            <div class="branch col-lg-2">{{result.StockBranchName}}</div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>

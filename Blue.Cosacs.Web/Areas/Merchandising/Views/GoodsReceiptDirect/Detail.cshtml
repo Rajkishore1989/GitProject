@@ -1,0 +1,78 @@
+﻿@model object
+
+<div data-module="merchandising/goodsreceiptdirect/init" ng-controller="DirectCtrl" ng-init="receipt=@Html.RawJson(Model)" ng-cloak class="buffer-sm bottom">
+
+    <div class="buffer-sm top" ng-form="receiptForm">
+
+        <div ng-show="isCreateMode()">
+            <create-goods-receipt></create-goods-receipt>
+        </div>
+
+        <div ng-show="isEditMode()">
+            <edit-direct-receipt></edit-direct-receipt>
+        </div>
+
+        <div class="row buffer top">
+            <div id="referenceNumberGrid" class="col-lg-6">
+                <div class="section">Reference Numbers</div>
+               
+                <table class="table table-bordered table-striped pb-table" ng-form="refForm">
+                    <tbody>
+                        <tr class="form-group" ng-repeat="referenceNumber in receipt.referenceNumbers">
+                            <td ng-hide="readonly" class="component-controls x-small">
+                                <span ng-click="removeReferenceNumber(referenceNumber)" title="Remove" ng-show="canRemove()" ng-class="{hide: receipt.referenceNumbers.length < 1}" class="halflings trash btn-icon"></span>
+                            </td>
+                            <td ng-hide="readonly" ng-class="{'has-error': !referenceNumber.key}">
+                                <list ng-model="referenceNumber.key" scope="options.referenceNumberType" ng-required required placeholder="Select Type" ng-disabled="canEdit()"></list>
+                            </td>
+                            <td ng-show="readonly">
+                                <label>{{referenceNumber.key}}</label>
+                            </td>
+                            <td ng-hide="readonly" ng-class="{'has-error': !referenceNumber.value}">
+                                <input class="form-control" type="text" ng-model="referenceNumber.value" ng-required required maxlength="100" ng-disabled="canEdit()">
+                            </td>
+                            <td ng-show="readonly">
+                                {{referenceNumber.value}}
+                            </td>
+                        </tr>
+                        <tr ng-show="editing">
+                            <td class="aligned component-controls x-small">
+                                <span ng-click="addReferenceNumber()" title="Add" class="glyphicons btn-icon plus" ng-class="{'disabled' : !canAddReference()}" ng-hide="canEdit()">
+                                </span>
+                            </td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tbody>
+                </table>               
+            </div>
+            <div class="col-md-6">
+                <div class="section">Comments</div>
+                <div class="form-group" ng-class="{'has-error': receipt.comments.$invalid}">
+                    <div ng-hide="editing">
+                        <p class="pb-text" ng-model="receipt.comments" pb-ref-link></p>
+                    </div>
+                    <textarea class="form-control" rows="5" name="comments" ng-model="receipt.comments" ng-show="editing"></textarea>
+                    <div ng-hide="receipt.comments.length || editing">
+                        No comments
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="isCreateMode()" class="buffer top">
+            <create-direct-items></create-direct-items>
+        </div>
+        <div ng-show="isEditMode()" class="buffer top">
+            <view-direct-items></view-direct-items>
+        </div>
+
+        <div ng-show="isCreateMode()">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pull-right">
+                        <button class="btn btn-primary" ng-click="save(receiptForm)" ng-disabled="!canSave(receiptForm)">Create Receipt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

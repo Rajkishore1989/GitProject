@@ -1,0 +1,234 @@
+﻿@model int?
+@{ViewBag.Title = "Technician Diary ";}
+<div ng-controller="DiaryCtrl" data-module='service/technicianDiary' id="diary-view"
+    ng-cloak>
+    <div ng-show="(data.Found || !portalUser)" class="technicianDiary" data-user="@Model" data-portal="@ViewBag.PortalUser" data-exceptions="@ViewBag.Exceptions" data-permissions="@ViewBag.PermissionIds" data-rejectlimit="@ViewBag.RejectLimit">
+        <div ng-show="!exceptions">
+            <div class="row selectors">
+                <div class="col-lg-4 TecnitianSelection" ng-show="!portalUser">
+                    <div ng-show="!portalUser">
+                        <label>
+                            Technician Name</label>
+                        <select ui-select2 ng-model="UserId" ng-change="SetupChange()" style="width: 100%;"
+                            ng-disabled="dialogueShowing()" placeholder="Select Technician">
+                            <option value=""></option>
+                            <option value="{{t.Id}}" ng-repeat="t in Technicians">{{t.Name}} : {{t.Id}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-4 DateStartSelection">
+                    <div>
+                        <label>
+                            Date of Start Week to View</label>
+                        <input class="form-control" ui-date ng-model="displayStartDate" ng-change="SetupChange()"
+                            ng-disabled="dialogueShowing()" />
+                    </div>
+                </div>
+                <div class="col-lg-4 WeeksNumberSelection">
+                    <div>
+                        <label>
+                            Visible Weeks</label>
+                        <input class="form-control" type="number" ng-model="displayWeeks" min="1" max="3"
+                            ng-change="SetupChange()" ng-disabled="dialogueShowing()" />
+                    </div>
+                </div>
+            </div>
+            @Html.Partial("showDiary")
+            <div>
+                <div ng-show="data != null">
+                    <div class="section">
+                        Availablity</div>
+                    <div class="form-group">
+                        <label class="col-lg-3 control-label">
+                            {{text.available}}</label>
+                        <div class="col-lg-7">
+                            <div class="row">
+                                <div class="col-lg-5">
+                                    <input type="text" class="form-control" ng-model="holiday.requestStart" ui-date /></div>
+                                <div class="col-lg-1">
+                                    <label class="control-label">
+                                        to</label></div>
+                                <div class="col-lg-5">
+                                    <input type="text" class="form-control" ng-model="holiday.requestEnd" ui-date /></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2 text-right">
+                            <button class="btn btn-default" ng-disabled="checkHolidayDates()" ng-click="addHoliday()">
+                                Submit</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="dialogueEditBooking" class="modal fade border" style="display: none;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header colorLink">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                    &times;</button>
+                                <div ng-hide="dialogue.editBooking.newBooking">
+                                    <h3>
+                                        <a href="{{ dialogue.editBooking.link }}" title="Click to view full details">{{convertType(dialogue.editBooking.Type)}}
+                                            {{ dialogue.editBooking.RequestId}} </a><span ng-show="checkPermission('DeleteBooking')"
+                                                ng-click="editBookingClickDelete(dialogue.editBooking.Id,dialogue.editBooking.RequestId,dialogue.editBooking.id,dialogue.editBooking.requestId)"
+                                                class="halflings trash click" title="Delete"></span><span ng-show="!checkPermission('DeleteBooking')"
+                                                    class="halflings trash disabled" title="Delete (No Permission)"></span>
+                                    </h3>
+                                </div>
+                                <div ng-show="dialogue.editBooking.newBooking">
+                                    <h3>
+                                        Assign New</h3>
+                                </div>
+                            </div>
+                            <div class="popup-body modal-body">
+                                <p>
+                                    <div ng-show="dialogue.editBooking.newBooking" class="newBooking">
+                                        <div class="newBookingTab row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group" ng-class="{'has-error': !dialogue.editBooking.bookingRequestId}">
+                                                    <label class="control-label">
+                                                        Available requests</label>
+                                                    <input type="hidden" ui-select2="availableRequestOptions" ng-model="dialogue.editBooking.bookingRequestId"
+                                                        class="picklist" placeholder="Select a request" /><br />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group" ng-class="{'has-error': !dialogue.editBooking.newDate}">
+                                                    <label class="control-label" ng-hide="!dialogue.editBooking.newBooking">
+                                                        Assign to</label>
+                                                    <label class="control-label" ng-hide="dialogue.editBooking.newBooking">
+                                                        Move booking to</label>
+                                                    <input class="form-control" ui-date type="text" ng-model="dialogue.editBooking.newDate" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div ng-hide="dialogue.editBooking.newBooking">
+                                        <p>
+                                            <div class="descriptionPopup">
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        Scheduled</div>
+                                                    <div class="col-lg-8">
+                                                        {{ dialogue.editBooking.dateDisplay | moment:'dddd, MMMM Do YYYY'}} (Slots - {{dialogue.editBooking.slots
+                                                        +1}})
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        Logged on</div>
+                                                    <div class="col-lg-8">
+                                                        {{dialogue.editBooking.info.CreatedOn | moment:'dddd, MMMM Do YYYY'}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        Reference</div>
+                                                    <div class="col-lg-8">
+                                                        {{dialogue.editBooking.info.InvoiceNumber}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        Item Description</div>
+                                                    <div class="col-lg-8">
+                                                        {{dialogue.editBooking.info.Item}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        Supplier</div>
+                                                    <div class="col-lg-8">
+                                                        {{dialogue.editBooking.info.ItemSupplier}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        Customer</div>
+                                                    <div class="col-lg-8">
+                                                        {{dialogue.editBooking.info.CustomerTitle}} {{dialogue.editBooking.info.CustomerFirstName}}
+                                                        {{dialogue.editBooking.info.CustomerLastName}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-4">
+                                                        Address</div>
+                                                    <div class="col-lg-8">
+                                                        {{dialogue.editBooking.info.CustomerAddressLine1}} {{dialogue.editBooking.info.CustomerAddressLine2}}
+                                                        {{dialogue.editBooking.info.CustomerAddressLine3}} {{dialogue.editBooking.info.CustomerPostcode}}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </p>
+                                    </div>
+                                    <div class="editor" ng-show="checkPermission('AddBooking')">
+                                        <div class="reshedule row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Slot</label>
+                                                    <select class="picklist" ui-select2 ng-model="dialogue.editBooking.newSlot">
+                                                        <option value="{{slot}}" ng-repeat="slot in slotNumbers">{{slot + 1}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="control-label">
+                                                        Required Slots</label>
+                                                    <select class="picklist" ui-select2 ng-model="dialogue.editBooking.newExtendSlots">
+                                                        <option value="{{slot}}" ng-repeat="slot in slotNumbers">{{slot + 1}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-danger" ng-show="dialogue.editBooking.error">
+                                        The selected date and slots are not free
+                                    </div>
+                                    <div class="text-danger" ng-show="dialogue.editBooking.newErrorFill">
+                                        Please enter all the required data on the page.
+                                    </div>
+                                    <div class="text-danger" ng-show="dialogue.editBooking.newErrorCanNotSave">
+                                        The selected slot is invalid. Please try a new slot.
+                                    </div>
+                                </p>
+                            </div>
+                            <div class="popup-footer modal-footer" ng-show="checkPermission('AddBooking')">
+                                <button class="ok btn btn-primary" ng-click="assignRescheduleBookingEdit()" ng-show="dialogue.editBooking.newBooking">
+                                    Assign</button>
+                                <button class="ok btn btn-primary" ng-click="assignRescheduleBookingEdit()" ng-hide="dialogue.editBooking.newBooking">
+                                    Reschedule</button>
+                                <button class="cancel btn btn-default" ng-click="cancelEditBooking()">
+                                    Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Partial("Dialogue")
+            </div>
+        </div>
+        <br />
+        <div class="row">
+            <div class="col-lg-6 alpha pendingDates">
+                <div class="section">
+                    Dates Unavailable Pending</div>
+                <ul>
+                    <li class="click" ng-repeat="days in pending" ng-click="linkDiary(days.StartDate,days.UserId)">
+                        {{days.StartDate | moment:'DD-MMMM-YYYY'}} to {{days.EndDate | moment:'DD-MMMM-YYYY'}}
+                        <span ng-show="days.UserId">- {{days.FullName}} ({{days.UserId}})</span> </li>
+                </ul>
+            </div>
+            <div class="col-lg-6 omega rejectedJobs">
+                <div class="section">
+                    Rejected Jobs</div>
+                <div>
+                    <div class="{{portalClick()}} job" ng-repeat="booking in rejectBookings" ng-click="linkDiary(booking.Date,booking.UserId,booking)">
+                        <a href="#">{{booking.RequestId}} ({{types[booking.Type]}}) - Rejected for {{booking.Date
+                            | moment:'DD-MMMM-YYYY'}} <span ng-show="booking.UserId">by {{booking.FullName}} ({{booking.UserId}})</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="portalUser && !data.Found && !Exceptions">
+        No Technician profile added.</div>
+</div>

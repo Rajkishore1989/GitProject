@@ -1,0 +1,299 @@
+﻿@model SalesComparisonPrintModel
+@{
+    var pages = Model.Results;
+    var query = Model.Query;
+    var cols = Model.Query.ColIndices;
+    ViewBag.Title = "Sales Comparison Report";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+@section Head
+{
+    <style type="text/css">
+        table {
+            border-collapse: collapse;
+            margin: 0px !important;
+        }
+
+        td, th {
+            border: 1px solid #333 !important;
+            margin: 0;
+            padding: 5px !important;
+        }
+
+            td.clear {
+                border: none !important;
+            }
+
+        tbody::before {
+            content: none !important;
+            display: none !important;
+            height: 0 !important;
+        }
+    </style>
+}
+
+<h3>Sales Comparison Report @DateTime.Now.ToString("yyyy-MM-dd")</h3>
+<div class="buffer header-info">
+    <table>
+        <tr>
+            <th class="col-sm">Period End: </th>
+            <td>@query.PeriodEnd.ToPrintDateString()</td>
+        </tr>
+        @if (query.LocationId != null)
+        {
+            <tr>
+                <th class="col-sm">Location: </th>
+                <td>@Model.Location</td>
+            </tr>}
+        @if (query.BrandId != null)
+        {
+            <tr>
+                <th class="col-sm">Brand: </th>
+                <td>@Model.Brand</td>
+            </tr>}
+        @if (!string.IsNullOrEmpty(query.Fascia))
+        {
+            <tr>
+                <th class="col-sm">Fascia: </th>
+                <td>@query.Fascia</td>
+            </tr>}
+        @if (query.Hierarchy != null)
+        {
+            if (query.Hierarchy.ContainsKey("Division"))
+            {
+                <tr>
+                    <th class="col-sm">Division: </th>
+                    <td>@query.Hierarchy["Division"]</td>
+                </tr>}
+            if (query.Hierarchy.ContainsKey("Department"))
+            {
+                <tr>
+                    <th class="col-sm">Department: </th>
+                    <td>@query.Hierarchy["Department"]</td>
+                </tr>}
+            if (query.Hierarchy.ContainsKey("Class"))
+            {
+                <tr>
+                    <th class="col-sm">Class: </th>
+                    <td>@query.Hierarchy["Class"]</td>
+                </tr>}
+        }
+    </table>
+</div>
+
+@if (pages != null)
+{
+    <div class="buffer-sm bottom">
+        <h4>This Year</h4>
+
+        @if (pages.Any())
+        {
+            <table class="main bordered small">
+                @foreach (var page in pages)
+                {
+                    <tbody class="pageBreak">
+                    <tr>
+                        <th class="col-sm" @if (!cols.Contains(0))
+                                            {
+                                                <text> style="display: none;" </text>
+                                            }>Division</th>
+                        <th class="col-sm" @if (!cols.Contains(1))
+                                            {
+                                                <text> style="display: none;" </text>
+                                            }>Department</th>
+                        <th class="col-sm" @if (!cols.Contains(2))
+                                            {
+                                                <text> style="display: none;" </text>
+                                            }>Class</th>
+                        <th class="col-sm" @if (!cols.Contains(3))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Sku</th>
+                        <th class="col-sm" @if (!cols.Contains(4))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Description</th>
+                        <th class="col-sm" @if (!cols.Contains(5))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Brand</th>
+                        <th class="col-sm" @if (!cols.Contains(6))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Product Tags</th>
+                        <th class="col-sm" @if (!cols.Contains(7))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Stock On Hand</th>
+                        <th class="col-sm" @if (!cols.Contains(8))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Stock On Order</th>
+                        <th class="col-sm" @if (!cols.Contains(9))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Stock Requested</th>
+                        <th class="col-sm" @if (!cols.Contains(10))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Cash Price</th>
+                        <th class="col-sm" @if (!cols.Contains(11))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Regular Price</th>
+                        <th class="col-sm" @if (!cols.Contains(12))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Promo Cash Price</th>
+                        <th class="col-sm" @if (!cols.Contains(13))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Promo Regular Price</th>
+                        <th class="col-sm" @if (!cols.Contains(14))
+                                            {
+                                                <text>style="display: none;"</text>
+                                            }>Location</th>
+                        <th class="col-sm">Quantity</th>
+                        <th class="col-sm">Gross Value</th>
+                        <th class="col-sm">Net Value</th>
+                        <th class="col-sm">Gross Margin Value</th>
+                        <th class="col-sm">Net Margin Value</th>
+                        <th class="col-sm">Gross Margin %</th>
+                        <th class="col-sm">Net Margin %</th>
+                    </tr>
+                    @foreach (var row in page)
+                    {
+                        <tr>
+                            <td @if (!cols.Contains(0))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.Division</td>
+                            <td @if (!cols.Contains(1))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.Department</td>
+                            <td @if (!cols.Contains(2))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.Class</td>
+                            <td @if (!cols.Contains(3))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.Sku</td>
+                            <td @if (!cols.Contains(4))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.LongDescription</td>
+                            <td @if (!cols.Contains(5))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.BrandName</td>
+                            <td @if (!cols.Contains(6))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.Tags</td>
+                            <td @if (!cols.Contains(7))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.StockOnHand</td>
+                            <td @if (!cols.Contains(8))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@row.StockOnOrder</td>
+                            <td @if (!cols.Contains(9))
+                                {
+                                    <text> style="display: none;" </text>
+                                }>@(row.StockRequested ?? 0)</td>
+                            <td @if (!cols.Contains(10))
+                                {
+                                    <text>style="display: none;"</text>
+                                } class="currency">@row.CurrentCashPrice.ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(11))
+                                {
+                                    <text>style="display: none;"</text>
+                                } class="currency">@row.CurrentRegularPrice.ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(12))
+                                {
+                                    <text>style="display: none;"</text>
+                                } class="currency">@row.PromotionalCashPrice.ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(13))
+                                {
+                                    <text>style="display: none;"</text>
+                                } class="currency">@row.PromotionalRegularPrice.ToCurrencyWithSymbol()</td>
+                            <td @if (!cols.Contains(14))
+                                {
+                                    <text>style="display: none;"</text>
+                                }>@row.LocationName</td>
+                            <td class="quantity">@row.ThisYear.Quantity</td>
+                            <td class="currency">@row.ThisYear.GrossValue.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.ThisYear.NetValue.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.ThisYear.GrossMarginValue.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.ThisYear.NetMarginValue.ToCurrencyWithSymbol()</td>
+                            <td class="percentage">@row.ThisYear.GrossMarginPercent.ToPercentage()</td>
+                            <td class="percentage">@row.ThisYear.NetMarginPercent.ToPercentage()</td>
+                        </tr>
+                    }
+                    </tbody>
+                }
+            </table>
+        }
+    </div>
+    <div class="buffer-sm bottom pageBreakBefore">
+        <h4>Last Year</h4>
+        @if (pages.Any())
+        {
+            <table class="main bordered small">
+                @foreach (var page in pages)
+                {
+                    <tbody class="pageBreak">
+                        <tr>
+                            <th class="col-sm" @if (!cols.Contains(0)) { <text> style="display: none;" </text>  }>Sku</th>
+                            <th class="col-sm" @if (!cols.Contains(1)) { <text> style="display: none;" </text>  }>Description</th>
+                            <th class="col-sm" @if (!cols.Contains(2)) { <text> style="display: none;" </text>  }>Brand</th>
+                            <th class="col-sm" @if (!cols.Contains(3)) { <text> style="display: none;" </text>  }>Product Tags</th>
+                            <th class="col-sm" @if (!cols.Contains(4)) { <text> style="display: none;" </text>  }>Stock On Hand</th>
+                            <th class="col-sm" @if (!cols.Contains(5)) { <text> style="display: none;" </text>  }>Stock On Order</th>
+                            <th class="col-sm" @if (!cols.Contains(6)) { <text> style="display: none;" </text>  }>Stock Requested</th>
+                            <th class="col-sm" @if (!cols.Contains(7)) { <text> style="display: none;" </text>  }>Cash Price</th>
+                            <th class="col-sm" @if (!cols.Contains(8)) { <text> style="display: none;" </text>  }>Regular Price</th>
+                            <th class="col-sm" @if (!cols.Contains(9)) { <text> style="display: none;" </text>  }>Promo Cash Price</th>
+                            <th class="col-sm" @if (!cols.Contains(10)) { <text> style="display: none;" </text>  }>Promo Regular Price</th>
+                            <th class="col-sm" @if (!cols.Contains(11)) { <text> style="display: none;" </text>  }>Location</th>
+                            <th class="col-sm">Quantity</th>
+                            <th class="col-sm">Gross Value</th>
+                            <th class="col-sm">Net Value</th>
+                            <th class="col-sm">Gross Margin Value</th>
+                            <th class="col-sm">Net Margin Value</th>
+                            <th class="col-sm">Gross Margin %</th>
+                            <th class="col-sm">Net Margin %</th>
+                        </tr>
+                        @foreach (var row in page)
+                        {
+                            <tr>
+                                <td @if (!cols.Contains(0)) { <text> style="display: none;" </text>  }>@row.Sku</td>
+                                <td @if (!cols.Contains(1)) { <text> style="display: none;" </text>  }>@row.LongDescription</td>
+                                <td @if (!cols.Contains(2)) { <text> style="display: none;" </text>  }>@row.BrandName</td>
+                                <td @if (!cols.Contains(3)) { <text> style="display: none;" </text>  }>@row.Tags</td>
+                                <td @if (!cols.Contains(4)) { <text> style="display: none;" </text>  }>@row.StockOnHand</td>
+                                <td @if (!cols.Contains(5)) { <text> style="display: none;" </text>  }>@row.StockOnOrder</td>
+                                <td @if (!cols.Contains(6)) { <text> style="display: none;" </text>  }>@(row.StockRequested ?? 0)</td>
+                                <td @if (!cols.Contains(7)) { <text> style="display: none;" </text>  } class="currency">@row.CurrentCashPrice.ToCurrencyWithSymbol()</td>
+                                <td @if (!cols.Contains(8)) { <text> style="display: none;" </text>  } class="currency">@row.CurrentRegularPrice.ToCurrencyWithSymbol()</td>
+                                <td @if (!cols.Contains(9)) { <text> style="display: none;" </text>  } class="currency">@row.PromotionalCashPrice.ToCurrencyWithSymbol()</td>
+                                <td @if (!cols.Contains(10)) { <text> style="display: none;" </text>  } class="currency">@row.PromotionalRegularPrice.ToCurrencyWithSymbol()</td>
+                                <td @if (!cols.Contains(11)) { <text> style="display: none;" </text>  }>@row.LocationName</td>
+                                <td class="quantity">@row.LastYear.Quantity</td>
+                                <td class="currency">@row.LastYear.GrossValue.ToCurrencyWithSymbol()</td>
+                                <td class="currency">@row.LastYear.NetValue.ToCurrencyWithSymbol()</td>
+                                <td class="currency">@row.LastYear.GrossMarginValue.ToCurrencyWithSymbol()</td>
+                                <td class="percentage">@row.LastYear.NetMarginValue.ToCurrencyWithSymbol()</td>
+                                <td class="percentage">@row.LastYear.GrossMarginPercent.ToPercentage()</td>
+                                <td class="percentage">@row.LastYear.NetMarginPercent.ToPercentage()</td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+        }
+    </div>
+}

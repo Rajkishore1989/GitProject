@@ -1,0 +1,48 @@
+<div class="col-lg-2">
+    <div class="CustomerNameAccount">
+        <div class="CustomerAccountNo" title="Account No"><b><%- AcctNo %></b></div>
+        <div class="CustomerName" title="Customer Name"><b><%- CustomerName %></b></div>
+        
+        <div class="CustomerAddress" title="Customer Address">
+            <div class="CustomerAddressLine"><%- AddressLine1 %></div>
+            <div class="CustomerAddressLine"><%- AddressLine2 %></div>
+            <div class="CustomerAddressLine"><%- AddressLine3 %></div>
+            <div class="CustomerAddressLine"><%- PostCode %></div>
+            <div class="CustomerAddressLine"><%= ContactInfo == null ? "" : ContactInfo %></div>
+        </div>
+    </div>
+</div>
+<div class="col-lg-3">
+    <div class="row">
+        <div class="col-lg-5"><span><b>Item No</b></span></div>
+        <div class="col-lg-7"><span class="ItemNo"><%- ItemNo %></span></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5"><span><b>Item UPC</b></span></div>
+        <div class="col-lg-7"><span class="ItemUPC"><%- ItemUPC %></span></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5"><span><b>Category</b></span></div>
+        <div class="col-lg-7"><span class="ProductCategory"><%- ProductCategory || '' %></span></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5"><span><b>Brand</b></span></div>
+        <div class="col-lg-7"><span class="ProductBrand"><%- ProductBrand || '' %></span></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5"><span><b>Model</b></span></div>
+        <div class="col-lg-7"><span class="ProductModel"><%- ProductModel || '' %></span></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5"><span><b>Area</b></span></div>
+        <div class="col-lg-7"><span class="ProductArea"><%- ProductArea || '' %></span></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5"><span><b>Ordered On</b></span></div>
+        <div class="col-lg-7"><span class="OrderedOn date"><%- OrderedOnString %></span></div>
+    </div>
+    <div class="row">
+        <div class="col-lg-5"><span><b>Stock On Hand</b></span></div>
+        <div class="col-lg-7"><span class="StockOnHand date"><%- StockOnHand %></span></div>
+    </div>
+</div>

@@ -1,0 +1,65 @@
+﻿@model ProductDescriptor
+@{ ViewBag.Title = "Previous Counts"; }
+
+<div data-module="merchandising/stockCountPrevious/init" ng-controller="PreviousCountCtrl" ng-init="stockCount=@Html.RawJson(Model);" ng-cloak class="buffer-sm bottom">
+
+    <div class="buffer-sm top">
+
+        <div ng-form="stockCountForm" class="form-horizontal" novalidate>
+
+            <div class="row buffer-sm bottom">
+                <div class="col-md-4">
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">SKU</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">
+                                    <a href="{{resolve('/Merchandising/Products/Ref?sku=' + sku)}}">{{sku}}</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <label class="control-label col-md-4">Description</label>
+                            <div class="col-md-8">
+                                <p class="form-control-static">{{description}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <pb-pagination get="search" control="paginator" default-params="defaultParams" params="params" no-results-message="There are no previous counts.">
+                <div class="col-lg-12 buffer top">
+                    <table class="table table-bordered table-striped pb-table">
+                        <thead>
+                            <tr>
+                                <th class="col-sm sku">Stock Count</th>
+                                <th class="col-sm-2">Count Date</th>
+                                <th class="col-sm-2">Location</th>
+                                <th class="col-sm-2">Type</th>
+                                <th class="col-sm quantity">Count</th>
+                                <th class="col-sm quantity">Variance</th>
+                                <th class="col-sm-2">Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="s in paginator.page">
+                                <td><a href="{{resolve('/Merchandising/StockCount/Detail/' + s.stockCountId)}}">{{s.stockCountId}}</a></td>
+                                <td>{{s.countDate | pbDate }}</td>
+                                <td class=""><a href="{{resolve('/Merchandising/Locations/Detail/' + s.locationId)}}">{{s.locationName}}</a></td>
+                                <td class="">{{s.type}}</td>
+                                <td class="quantity">{{s.count}}</td>
+                                <td class="quantity">{{s.variance}}</td>
+                                <td class=""><span ng-model="s.comments" pb-ref-link></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </pb-pagination>
+        </div>
+    </div>
+</div>

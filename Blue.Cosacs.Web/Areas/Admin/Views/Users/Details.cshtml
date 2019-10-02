@@ -1,0 +1,119 @@
+﻿@model  Blue.Cosacs.Web.Areas.Admin.Models.Profile
+<div id="viewer" class="form-horizontal">
+    @if (System.Web.HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.EditUsers) ||
+    System.Web.HttpContext.Current.GetUser().HasPermission(Blue.Admin.AdminPermissionEnum.ChangeBranch))
+    {
+        <span style="float: right" class='glyphicons pencil click' title='Edit Details' data-id="@Model.Id" id="edit"></span>
+    }
+    <div class="col-lg-2">
+        <img src='@Url.Content("~/static/images/avatar.png")' title="@string.Format("{0} {1}", Model.FirstName, Model.LastName)" alt="Profile Image" />
+    </div>
+    <div class="col-lg-9">
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">First Name</label>
+            <div class="form-control-static">
+                @Model.FirstName
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">Last Name</label>
+            <div class="form-control-static">
+                @Model.LastName
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">User Name</label>
+            <div class="form-control-static">
+                @Model.Login
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">Email</label>
+            <div class="form-control-static">
+                @if (!string.IsNullOrWhiteSpace(Model.eMail))
+                {
+                <a href="mailto:@Model.eMail">@Model.eMail</a>
+                }
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                External Directory Login</label>
+
+            <div class="form-control-static">
+                @Model.ExternalLogin
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                Fact Employee Id</label>
+            <div class="form-control-static">
+                @Model.FactEmployee
+            </div>
+        </div>
+        @if (!(string.IsNullOrWhiteSpace(Model.AddressLine1) && string.IsNullOrWhiteSpace(Model.AddressLine2) &&
+        string.IsNullOrWhiteSpace(Model.AddressLine3) && string.IsNullOrWhiteSpace(Model.PostCode)))
+        {
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                Address Line 1</label>
+
+            <div class="form-control-static">
+                @Model.AddressLine1
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                Address Line 2</label>
+
+            <div class="form-control-static">
+                <span>@Model.AddressLine2</span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                Town/City</label>
+
+            <div class="form-control-static">
+                <span>@Model.AddressLine3</span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                PostCode</label>
+
+            <div class="form-control-static">
+                @Model.PostCode
+            </div>
+        </div>
+        }
+        @if (!(string.IsNullOrWhiteSpace(Model.Phone) && string.IsNullOrWhiteSpace(Model.PhoneAlternate)))
+        {
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                Phone Number</label>
+        
+            <div class="form-control-static">
+                @Model.Phone
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                Alternate Phone Number</label>
+
+            <div class="form-control-static">
+                @Model.PhoneAlternate
+            </div>
+        </div>
+        }
+
+        <div class="form-group row">
+            <label class="col-lg-4 control-label">
+                Branch Name</label>
+
+            <div class="form-control-static">
+                @Model.BranchName
+            </div>
+        </div>
+    </div>
+</div>

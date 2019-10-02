@@ -1,0 +1,152 @@
+#divLegendService {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    height: 30px;
+}
+.cosacs-legend-service
+{
+    width: 120px;
+    height: 30px;
+    display: inline-block;
+    margin-left:5px;
+    float: right;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+    padding: 5px;
+    font-size: 12px;
+    color: #ffffff;
+
+    &.publicHoliday {
+        background-color: @colour-pantone-maroon;
+    }
+    &.Service {
+        background-color: @colour-pantone-cyan;
+    }
+    &.Installation {
+        background-color: @colour-pantone-red;
+    }
+    &.stockRepair {
+        background-color: @colour-pantone-green;
+    }
+    &.holidayApproved {
+        background-color: @colour-pantone-magenta;
+    }
+    &.holidayPending {
+        background-color: @colour-pantone-yellow;
+    }
+    &.rejected {
+        background-color: @colour-pantone-grey;
+    }
+}
+
+.diaryTable {
+
+    .publicHoliday {
+        background-color: @colour-pantone-maroon;
+    }
+    .Service {
+        background-color: @colour-pantone-cyan;
+    }
+    .Installation {
+        background-color: @colour-pantone-red;
+    }
+    .stockRepair {
+        background-color: @colour-pantone-green;
+    }
+    .holidayApproved {
+        background-color: @colour-pantone-magenta;
+    }
+    .holidayPending {
+        background-color: @colour-pantone-yellow;
+    }
+    .rejected {
+        background-color: @colour-pantone-grey;
+    }
+
+    td {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        height: 20px;
+        line-height: 20px;
+        color: #ffffff;
+        &.time {
+            color: #000000;
+        }
+        a {
+           color: #ffffff; 
+        }
+
+        .selectedCell {
+            background-color: @bb-contrast;
+        }
+    }
+
+    .slotTable {
+        border-left: 1px solid @table-border-color;
+        tr:last-child {
+            border-bottom: 1px solid @table-border-color;
+        }
+        td {
+            cursor: pointer;
+        }
+    }
+
+    td:first-child {
+        .slotTable {
+            tr:last-child {
+                td:last-child {
+                    border-right: 1px solid @table-border-color;
+                }
+            }
+        }
+    }
+    td:last-child {
+        .slotTable {
+            border-right: 1px solid @table-border-color;
+        }
+    }
+}
+
+#stock-modal {
+    .stockDialog {
+        width: 90%;
+        .modal-content {
+            overflow: auto;
+        }
+    }
+}
+
+#diary-view .modal-dialog {
+    width: 50%;
+}
+
+.payload {
+  font-size: 10px;
+ .t td { padding: 2px; white-space: normal; }
+ .t th { padding: 2px; white-space: normal; }
+ .a { display: table; }
+ .ai { display: table-row; }
+ .fs { display: table; }
+ .f { display: table-row; }
+ .n { font-weight: bold; }
+ .v { display: table-cell; padding: 1px 2px; border-bottom: 1px dashed #eee; }
+}
+
+.resolutionPart {
+    //margin-bottom: 2px;
+    .inner-table {
+        margin-bottom: 0px;
+        td {
+            border: none;
+            padding: 0px 2px 0px 2px;
+        }
+    }
+}
+
+.add-part.form-inline {
+    .form-group {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}

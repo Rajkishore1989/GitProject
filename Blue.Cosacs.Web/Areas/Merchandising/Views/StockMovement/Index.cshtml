@@ -1,0 +1,63 @@
+﻿@model StockMovementViewModel
+
+@{ ViewBag.Title = "Stock Movement for SKU " + Model.SKU; }
+
+<div data-module="merchandising/stockMovement/init" ng-controller="StockMovementCtrl" ng-init="stockMovement=@Html.RawJson(Model);" ng-cloak class="buffer-sm bottom">
+    <div class="buffer-sm top">
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Description</label>
+            </div>
+            <div class="col-lg-10">
+                <a href="{{resolve('Merchandising/Products/Ref?sku=' + stockMovement.sku)}}">{{stockMovement.longDescription}}</a>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-2">
+                <label>Movement Since</label>
+            </div>
+            <div class="col-lg-2">
+                {{stockMovement.movementSince | pbDate }} {{stockMovement.movementSince | date:'hh:mm'}}
+            </div>
+            <div class="col-lg-1" ng-hide="!stockMovement.movementUntil">
+                <label>Until</label>
+            </div>
+            <div class="col-lg-2" ng-hide="!stockMovement.movementUntil">
+                {{stockMovement.movementUntil | pbDate }} {{stockMovement.movementUntil | date:'hh:mm'}}
+            </div>
+        </div>
+        
+        <div class="row buffer-sm top">
+            <div class="col-lg-12">
+                <table class="table table-bordered table-striped aligned pb-table">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th class="quantity">Movement</th>
+                            <th class="quantity">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td>Inital Stock Count</td>
+                            <td>{{stockMovement.movementSince | pbDate }}</td>
+                            <td></td>
+                            <td class="quantity">{{stockMovement.initalCount}}</td>
+                        </tr>
+                        <tr ng-repeat="movement in stockMovement.movements | orderBy: 'date'">
+                            <td><a href="{{generateUrl(movement)}}">{{movement.id}}</a></td>
+                            <td>{{movement.type}}</td>
+                            <td>{{movement.date | pbDate }}</td>
+                            <td class="quantity">{{movement.movement}}</td>
+                            <td class="quantity">{{movement.total}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

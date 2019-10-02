@@ -1,0 +1,3024 @@
+{
+  "conditions": [
+    {
+      "expression": "this.serviceRequest.ResolutionPrimaryCharge"
+    },
+    {
+      "expression": "'Inside Supplier Warranty' && isInsideManufacturerWarranty(this)"
+    },
+    {
+      "expression": "'Inside Extended Warranty'  && isInsideExtendedWarrantyPeriod(this)"
+    },
+    {
+      "expression": "this.isItemBer"
+    },
+    {
+      "expression": "this.serviceRequest.Type"
+    },
+    {
+      "expression": "'Warranty covered' && isWarrantyCovered(this)"
+    },
+    {
+      "expression": "'Is service request' &&
+this.serviceRequest.Type === 'SI' ||
+this.serviceRequest.Type === 'SE'"
+    },
+    {
+      "expression": "this.serviceRequest.RepairType"
+    },
+    {
+      "expression": "this.serviceRequest.Evaluation"
+    },
+    {
+      "expression": "!_.isNull(this.serviceRequest.ResolutionPrimaryCharge) && 
+!_.isUndefined(this.serviceRequest.Type) && 
+!_.isNull(this.serviceRequest.Type) && 
+!_.isUndefined(this.Evaluation) &&
+!(this.serviceRequest.Type === 'S' || this.serviceRequest.Type === 'IE' || this.serviceRequest.Type === 'II')  &&  
+this.Evaluation !== 'Warranty Covered'"
+    }
+  ],
+  "actions": [
+    {
+      "expression": "'Init charges array';
+this.serviceRequest.Charges = [];"
+    },
+    {
+      "expression": "_.each(this.serviceRequest.Parts, function (part) {
+  if (_.isUndefined(part.CashPrice)) {
+    part.CashPrice = part.price;
+  }
+  part.price = part.CostPrice;
+});"
+    },
+    {
+      "expression": "_.each(this.serviceRequest.Parts, function (part) {
+  part.price = (part.CashPrice || part.price) || part.CostPrice;
+});"
+    },
+    {
+      "expression": "if (!isServiceRequest(this.serviceRequest) && this.serviceRequest.Type !== 'S') {
+    this.serviceRequest.NoCostMatrixData = true;
+    setResolutionLabourCost(this, 0);
+    return;
+}
+
+var charge = getLabourChargeMatrixEntry(this);
+
+if (!charge) {
+    this.serviceRequest.NoCostMatrixData = true;
+    setResolutionLabourCost(this, 0);
+    return;
+}
+
+this.serviceRequest.NoCostMatrixData = false;
+
+if (this.serviceRequest.Type === 'SE') {
+    setResolutionLabourCost(this, charge.ChargeCustomer);
+    return;
+}
+if (this.serviceRequest.AllocationTechnicianIsInternal) {
+    setResolutionLabourCost(this, charge.ChargeInternalTech);
+} else {
+    setResolutionLabourCost(this, charge.ChargeContractedTech);
+}"
+    },
+    {
+      "expression": "setLabourChargeCustomer(this);"
+    },
+    {
+      "expression": "'Calculate charges for customer and deliverer';
+var sr = this.serviceRequest;
+var mainChargeTo = 'ChargeCustomer';
+
+if (this.serviceRequest.ResolutionPrimaryCharge === 'Deliverer') {
+    mainChargeTo = 'ChargeInternal';
+}
+
+//markupNonInternalPartsForCustomer(sr.Parts, mainChargeTo, this);
+var totalExternalCostPrice = calculateTotalParts(partSourceIsExternal, 'CostPrice', this);
+var totalSalvagedCostPrice = calculateTotalParts(partSourceIsSalvaged, 'CostPrice', this);
+
+var totalExternalValue = markupAmount(totalExternalCostPrice, mainChargeTo, this);
+var totalSalvagedValue = markupAmount(totalSalvagedCostPrice, mainChargeTo, this);
+
+// Cosacs Catalog Parts always come from the web interface (C# method StockSearch -
+// Blue.Cosacs.Service.Repositories) with correct 'tax' and 'tax exclusive price'
+//var totalCosacsTax = sum(_.filter(sr.Parts, partSourceIsInternal), function (part) {
+    //return part.quantity * part.price * ((part.TaxRate || 0) / 100);
+//});
+
+var taxType = this.MasterData.Settings.TaxType;
+var taxRate = this.MasterData.Settings.TaxRate;
+
+var totalExternalTax = 0;
+var totalSalvagedTax = 0;
+var totalCosacsTax = 0;
+
+var labourChargeValue = getResolutionLabourCost(this);
+var labourChargeTax = 0;
+var labourChargeDisplayValue = null;
+if (taxType === 'E') { // calculate labour charge value
+    labourChargeTax = labourChargeValue * taxRate / 100;
+} else if (taxType === 'I') {
+    var labourTaxExclusivePrice = labourChargeValue / (1 + (taxRate / 100));
+    labourChargeTax = labourChargeValue - labourTaxExclusivePrice;
+    labourChargeValue = labourTaxExclusivePrice;
+    labourChargeDisplayValue = labourChargeValue + labourChargeTax;
+}
+
+var additionalChargeValue =sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)]);
+var additionalChargeTax = 0;
+var additionalChargeDisplayValue = null;
+var totalCosacs = 0;
+var totalCosacsWithMarkup = 0;
+
+if (this.serviceRequest.ResolutionPrimaryCharge === 'Deliverer') {
+    totalCosacs = calculateTotalParts(partSourceIsInternal, 'CostPrice', this);
+    totalCosacsWithMarkup = calculateTotalPartsWithMarkup(partSourceIsInternal, 'CostPrice', this);
+}
+else {
+    totalCosacs = calculateTotalParts(partSourceIsInternal, 'price', this);
+    totalCosacsWithMarkup = calculateTotalPartsWithMarkup(partSourceIsInternal, 'price', this); 
+}
+
+if (taxType === 'E') { // calculate additional charge value
+    additionalChargeTax = additionalChargeValue * taxRate / 100;
+} else if (taxType === 'I') {
+    var taxper = (1 + (taxRate / 100));
+    var additionalTaxExclusivePrice = additionalChargeValue / taxper;
+    
+    additionalChargeTax = additionalChargeValue - additionalTaxExclusivePrice;
+    additionalChargeValue = additionalTaxExclusivePrice;
+    additionalChargeDisplayValue = additionalChargeValue + additionalChargeTax;
+}
+
+if (taxType === 'I') {
+    var taxper = (1 + (taxRate / 100));
+    var partsCosacsExclusivePrice = totalCosacsWithMarkup / taxper;
+    var totalExternalValueExclusivePrice = totalExternalValue / taxper;
+    var totalSalvagedValueExclusivePrice = totalSalvagedValue / taxper;
+}
+
+totalCosacsTax = totalCosacsWithMarkup - partsCosacsExclusivePrice;
+
+sr.Charges.push({
+    CustomerId: sr.ResolutionDelivererToCharge,
+    Label: getChargeLabels().partsCosacs,
+    IsExternal: false,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: null,
+    Cost: totalCosacs,
+    Value: taxType === 'I' ? partsCosacsExclusivePrice : totalCosacsWithMarkup,
+    Tax: totalCosacsTax,
+    displayValue: totalCosacsWithMarkup
+});
+
+totalExternalTax = totalExternalValue - totalExternalValueExclusivePrice;
+
+if (totalExternalCostPrice > 0) {
+    sr.Charges.push({
+        CustomerId: sr.ResolutionDelivererToCharge,
+        Label: getChargeLabels().partsExternal,
+        IsExternal: true,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: null,
+        Cost: totalExternalCostPrice,
+        Value: taxType === 'I' ? totalExternalValueExclusivePrice : totalExternalValue,
+        Tax: totalExternalTax,
+        displayValue: totalExternalValue
+    });
+}
+
+totalSalvagedTax = totalSalvagedValue - totalSalvagedValueExclusivePrice;
+
+if (totalSalvagedCostPrice > 0) {
+    sr.Charges.push({
+        CustomerId: sr.ResolutionDelivererToCharge,
+        Label: getChargeLabels().partsSalvaged,
+        IsExternal: false,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: null,
+        Cost: totalSalvagedCostPrice,
+        Value: taxType === 'I' ? totalSalvagedValueExclusivePrice : totalSalvagedValue,
+        Tax: totalSalvagedTax,
+        displayValue : totalSalvagedValue
+    });
+}
+
+if (this.serviceRequest.Type === 'IE') {
+    // This charges the customer
+    setResolutionLabourCost(this, getLabourCost(this));
+}
+
+sr.Charges.push({
+    CustomerId: sr.ResolutionDelivererToCharge,
+    Label: \"Labour\",
+    IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: null,
+    Cost: getLabourCost(this),
+    Value: labourChargeValue,
+    Tax: labourChargeTax,
+    displayValue: labourChargeDisplayValue
+});
+
+sr.Charges.push({
+    CustomerId: sr.ResolutionDelivererToCharge,
+    Label: \"Additional\",
+    IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: null,
+    Cost: sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)]),
+    Value: additionalChargeValue,
+    Tax: additionalChargeTax,
+    displayValue: additionalChargeDisplayValue
+});"
+    },
+    {
+      "expression": "markupParts(this.serviceRequest.Parts, getPartsMarkupField(this.serviceRequest.ResolutionPrimaryCharge), this);"
+    },
+    {
+      "expression": "'Calculate EW (extended warranty) charges - without replacement';
+var scope = this;
+var sr = scope.serviceRequest;
+var berCharge = {Cost: 0, Value: 0};
+
+var totalCatalog = calculateTotalParts(partSourceIsInternal, 'price', this);
+var totalCatalogWithMarkup = calculateTotalPartsWithMarkup(partSourceIsInternal, 'price', this);
+
+var totalExternal = calculateTotalParts(partSourceIsExternal, 'CostPrice', this);
+var totalExternalWithMarkup = calculateTotalPartsWithMarkup(partSourceIsExternal, 'CostPrice', this);
+
+var totalSalvaged = calculateTotalParts(partSourceIsSalvaged, 'CostPrice', this);
+var totalSalvagedWithMarkup = calculateTotalPartsWithMarkup(partSourceIsSalvaged, 'CostPrice', this);
+
+var labourCost = getLabourCost(scope);
+var labourTotal = sum([labourCost, getResolutionAdditionalCost(scope), getResolutionTransportCost(scope)]);
+var ewCovered = labourEWCovered(scope);
+
+if (_.isNull(this.serviceRequest.ReplacementIssued) ? false :  this.serviceRequest.ReplacementIssued){
+    berCharge = calculateBerCharge(this);
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  IsExternal: false,
+  ChargeType: sr.ResolutionPrimaryCharge,
+  Account: scope.MasterData.Settings.ServiceWarranty,
+  Cost: totalCatalog - berCharge.Cost,
+  Value: totalCatalogWithMarkup - berCharge.Value
+});
+
+if (totalExternal > 0) {
+    sr.Charges.push({
+      Label: getChargeLabels().partsExternal,
+      IsExternal: true,
+      ChargeType: sr.ResolutionPrimaryCharge,
+      Account: scope.MasterData.Settings.ServiceWarranty,
+      Cost: totalExternal,
+      Value: totalExternalWithMarkup
+    });
+}
+
+if (totalSalvaged > 0) {
+    sr.Charges.push({
+      Label: getChargeLabels().partsSalvaged,
+      IsExternal: false,
+      ChargeType: sr.ResolutionPrimaryCharge,
+      Account: scope.MasterData.Settings.ServiceWarranty,
+      Cost: totalSalvaged,
+      Value: totalSalvagedWithMarkup
+    });
+}
+
+if (ewCovered > 0) {
+  sr.Charges.push({
+    Label: getChargeLabels().labourAndAdditional,
+    IsExternal: !scope.serviceRequest.AllocationTechnicianIsInternal,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: scope.MasterData.Settings.ServiceWarranty,
+    Cost: ewCovered,
+    Value: ewCovered
+  });
+}
+
+if (ewCovered < labourTotal) {
+  sr.Charges.push({
+    Label: getChargeLabels().labourAndAdditional,
+    IsExternal: !scope.serviceRequest.AllocationTechnicianIsInternal,
+    ChargeType: 'FYW',
+    Account: 'FYW',
+    Cost: labourTotal - ewCovered,
+    Value: labourTotal - ewCovered
+  });
+}"
+    },
+    {
+      "expression": "'Calculate internal charges';
+var sr = this.serviceRequest;
+
+var labourCost = getLabourCost(this);
+var totalExternal = calculateTotalParts(partSourceIsExternal, 'CostPrice', this);
+var totalSalvaged = calculateTotalParts(partSourceIsSalvaged, 'CostPrice', this);
+var totalAdicional = sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)]);
+
+sr.Charges.push({
+    Label: getChargeLabels().partsCosacs,
+    IsExternal: false,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: 'Internal',
+    Cost: calculateTotalParts(partSourceIsInternal, 'CostPrice', this),
+    Value: calculateTotalPartsWithMarkup(partSourceIsInternal, 'CostPrice', this)
+});
+
+if (totalExternal > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsExternal,
+        IsExternal: true,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: 'Internal',
+        Cost: totalExternal,
+        Value: calculateTotalPartsWithMarkup(partSourceIsExternal, 'CostPrice', this)
+    });
+} 
+
+if (totalSalvaged > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsSalvaged,
+        IsExternal: false,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: 'Internal',
+        Cost: totalSalvaged,
+        Value: calculateTotalPartsWithMarkup(partSourceIsSalvaged, 'CostPrice', this)
+    });
+}
+
+if (labourCost > 0){
+    sr.Charges.push({
+        Label: \"Labour\",
+        IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: 'Internal',
+        Cost: labourCost,
+        Value: labourCost
+    });
+}
+
+if (totalAdicional > 0){
+    sr.Charges.push({
+        Label: \"Additional\",
+        IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: 'Internal',
+        Cost:  totalAdicional,
+        Value: totalAdicional
+    });
+}"
+    },
+    {
+      "expression": "'Calculate supplier charges';
+var sr = this.serviceRequest;
+var matrix = this.MasterData.SupplierCostMatrix;
+var account = this.MasterData.ServiceSuppliers[sr.ResolutionSupplierToCharge];
+var scope = this;
+
+var markupField = 'ChargeFirstYearWarranty';
+//inside only extended warranty period
+if (isInsideExtendedWarrantyPeriod(this) & !isInsideManufacturerWarranty(this)) { 
+    markupField = 'ChargeExtendedWarranty';
+}
+
+var chargeLabels = getChargeLabels();
+var totalInternalParts = 0;
+var totalExternalParts = 0;
+var totalSalvagedParts = 0;
+var labourAdditionalAndTransportCharge = 0;
+var extraPartCharge = 0;
+
+
+if (isInsideExtendedWarrantyPeriod(this)) {
+    var chargesInternalControl = supplierEwFywChargesControl(this, markupField, chargeLabels.partsCosacs, null, null);
+    var chargesExternalControl = supplierEwFywChargesControl(this, markupField, chargeLabels.partsExternal, chargesInternalControl, null);
+    var chargesSalvagedControl = supplierEwFywChargesControl(this, markupField, chargeLabels.partsSalvaged, chargesInternalControl, chargesExternalControl);
+    var chargesLabourAndAdditionalControl = supplierEwFywChargesControl(this, markupField, chargeLabels.labourAndAdditional, chargesInternalControl, chargesExternalControl, chargesSalvagedControl);
+    
+    totalInternalParts = chargesInternalControl.supplierCharge;
+    totalExternalParts = chargesExternalControl.supplierCharge;
+    totalSalvagedParts = chargesSalvagedControl.supplierCharge;
+    labourAdditionalAndTransportCharge = chargesLabourAndAdditionalControl.supplierCharge;
+}
+else{
+    totalInternalParts = partsChargeWithSupplierMatrix(this, partSourceIsInternal, matrix, markupField).covered;
+    totalExternalParts = partsChargeWithSupplierMatrix(this, partSourceIsExternal, matrix, markupField).covered;
+    totalSalvagedParts = partsChargeWithSupplierMatrix(this, partSourceIsSalvaged, matrix, markupField).covered;
+    labourAdditionalAndTransportCharge = labourSupplierCovered(sr, sum([getLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)]), matrix);
+}
+
+if (sr.DepositFromMatrix === null) {
+    sr.DepositFromMatrix = labourAdditionalAndTransportCharge;
+}
+
+var totalParts = partsChargeWithSupplierMatrix(this, null, matrix,markupField).totalPrice;
+var maxSupplierCoverage = getSupplierCoverageValue(scope, totalParts);
+var fywCharge = 0;
+
+var calculateValues = function(valueToPay, maxSuppWillPay, label, IsExternal, ChargeType){
+    
+    var result = {
+        part: Math.min(valueToPay, maxSuppWillPay),
+        fyw: valueToPay > maxSuppWillPay ? valueToPay - maxSuppWillPay : 0,
+        newSuppMax: maxSuppWillPay - valueToPay < 0 ? 0 : maxSuppWillPay - valueToPay
+    };
+    
+    sr.Charges.push({
+      Label: label,
+      IsExternal: IsExternal,
+      ChargeType: ChargeType,
+      Account: account,
+      Cost: result.part,
+      Value: result.part
+    });
+    
+    if(result.fyw > 0){
+        sr.Charges.push({
+            Label: label,
+            IsExternal: IsExternal,
+            ChargeType: 'FYW',
+            Account: account,
+            Cost: result.fyw,
+            Value: result.fyw
+        });
+    }
+    
+    return result;
+}
+
+if (totalInternalParts > 0){
+    var intResult = calculateValues(totalInternalParts, 
+        maxSupplierCoverage, 
+        chargeLabels.partsCosacs, 
+        false, 
+        'Supplier');
+    
+    maxSupplierCoverage = intResult.newSuppMax;
+    fywCharge = intResult.fyw;
+}
+
+if (totalExternalParts > 0) {
+    var intResult = calculateValues(totalExternalParts, 
+        maxSupplierCoverage,
+        chargeLabels.partsExternal,
+        true,
+        'Supplier');
+    
+    maxSupplierCoverage = intResult.newSuppMax;
+    fywCharge = fywCharge + intResult.fyw;
+}
+
+if (totalSalvagedParts > 0) {
+    var intResult = calculateValues(totalSalvagedParts, 
+        maxSupplierCoverage,
+        chargeLabels.partsSalvaged,
+        true,
+        'Supplier');
+    
+    maxSupplierCoverage = intResult.newSuppMax;
+    fywCharge = fywCharge + intResult.fyw;
+}
+
+if (labourAdditionalAndTransportCharge > 0) {
+    sr.Charges.push({
+        Label: chargeLabels.labourAndAdditional,
+        IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+        ChargeType: \"Supplier\",
+        Account: account,
+        Cost: labourAdditionalAndTransportCharge,
+        Value: labourAdditionalAndTransportCharge
+    });
+}"
+    },
+    {
+      "expression": "var sr = this.serviceRequest;
+var matrix = this.MasterData.SupplierCostMatrix;
+var account = 'FYW';
+
+
+
+var chargesInternalControl = supplierEwFywChargesControl(this, 'ChargeFirstYearWarranty', getChargeLabels().partsCosacs, null, null, null);
+
+var chargesExternalControl = supplierEwFywChargesControl(this, 'ChargeFirstYearWarranty', getChargeLabels().partsExternal, chargesInternalControl, null, null);
+
+var chargesSalvagedControl = supplierEwFywChargesControl(this, 'ChargeFirstYearWarranty', getChargeLabels().partsSalvaged, chargesInternalControl, chargesExternalControl, null);
+
+var chargesLabourAndAdditionalControl = supplierEwFywChargesControl(this, 'ChargeFirstYearWarranty', getChargeLabels().labourAndAdditional, chargesInternalControl, chargesExternalControl, chargesSalvagedControl);
+
+
+
+//var totalCatalog = partsChargeWithSupplierMatrix(this, partSourceIsInternal, matrix, 'ChargeFirstYearWarranty').remaining;
+//var totalExternal = partsChargeWithSupplierMatrix(this, partSourceIsExternal, matrix, 'ChargeFirstYearWarranty').remaining;
+//var totalSalvaged = partsChargeWithSupplierMatrix(this, partSourceIsSalvaged, matrix, 'ChargeFirstYearWarranty').remaining;
+//var labourAdditionalAndTransportCharge = labourSupplierRemaining(sr, sum([getLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)]), matrix);
+//if (sr.DepositFromMatrix === null) {
+//    sr.DepositFromMatrix = labourAdditionalAndTransportCharge;
+//}
+
+
+
+
+
+var partsCosacs_FYW_Cost = chargesInternalControl.fywCharge;
+var partsCosacs_FYW = chargesInternalControl.fywCharge;
+var partsExternal_FYW_Cost = chargesExternalControl.fywCharge;
+var partsExternal_FYW = chargesExternalControl.fywCharge;
+var partsSalvaged_FYW_Cost = chargesSalvagedControl.fywCharge;
+var partsSalvaged_FYW = chargesSalvagedControl.fywCharge;
+var labourAndAdditional_FYW_Cost = chargesLabourAndAdditionalControl.fywCharge;
+var labourAndAdditional_FYW = chargesLabourAndAdditionalControl.fywCharge;
+
+
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  IsExternal: false,
+  ChargeType: 'FYW',
+  Account: account,
+  Cost: partsCosacs_FYW_Cost,
+  Value: partsCosacs_FYW
+});
+
+if (partsExternal_FYW > 0) {
+  sr.Charges.push({
+    Label: getChargeLabels().partsExternal,
+    IsExternal: true,
+    ChargeType: 'FYW',
+    Account: account,
+    Cost: partsExternal_FYW_Cost,
+    Value: partsExternal_FYW
+  });
+}
+
+if (partsSalvaged_FYW > 0) {
+  sr.Charges.push({
+    Label: getChargeLabels().partsSalvaged,
+    IsExternal: false,
+    ChargeType: 'FYW',
+    Account: account,
+    Cost: partsSalvaged_FYW_Cost,
+    Value: partsSalvaged_FYW
+  });
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().labourAndAdditional,
+  IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+  ChargeType: 'FYW',
+  Account: account,
+  Cost: labourAndAdditional_FYW_Cost,
+  Value: labourAndAdditional_FYW
+});"
+    },
+    {
+      "expression": "var sr = this.serviceRequest;
+var matrix = this.MasterData.SupplierCostMatrix;
+var account = this.MasterData.Settings.ServiceWarranty;
+
+var chargesInternalControl = supplierEwFywChargesControl(this, 'ChargeExtendedWarranty', getChargeLabels().partsCosacs, null, null, null);
+
+var chargesExternalControl = supplierEwFywChargesControl(this, 'ChargeExtendedWarranty', getChargeLabels().partsExternal, chargesInternalControl, null, null);
+
+var chargesSalvagedControl = supplierEwFywChargesControl(this, 'ChargeExtendedWarranty', getChargeLabels().partsSalvaged, chargesInternalControl, chargesExternalControl, null);
+
+var chargesLabourAndAdditionalControl = supplierEwFywChargesControl(this, 'ChargeExtendedWarranty', getChargeLabels().labourAndAdditional, chargesInternalControl, chargesExternalControl, chargesSalvagedControl);
+
+//--------------------------------------------------------------------------------------------
+var partsCosacs_EW_Cost = chargesInternalControl.ewCharge;
+var partsCosacs_EW = chargesInternalControl.ewCharge;
+var partsExternal_EW_Cost = chargesExternalControl.ewCharge;
+var partsExternal_EW = chargesExternalControl.ewCharge;
+var partsSalvaged_EW_Cost = chargesSalvagedControl.ewCharge;
+var partsSalvaged_EW = chargesSalvagedControl.ewCharge;
+var labourAndAdditional_EW_Cost = chargesLabourAndAdditionalControl.ewCharge;
+var labourAndAdditional_EW = chargesLabourAndAdditionalControl.ewCharge;
+var partsCosacs_FYW_Cost = chargesInternalControl.fywCharge;
+var partsCosacs_FYW = chargesInternalControl.fywCharge;
+var partsExternal_FYW_Cost = chargesExternalControl.fywCharge;
+var partsExternal_FYW = chargesExternalControl.fywCharge;
+var partsSalvaged_FYW_Cost = chargesSalvagedControl.fywCharge;
+var partsSalvaged_FYW = chargesSalvagedControl.fywCharge;
+var labourAndAdditional_FYW_Cost = chargesLabourAndAdditionalControl.fywCharge;
+var labourAndAdditional_FYW = chargesLabourAndAdditionalControl.fywCharge;
+//--------------------------------------------- EW ----------------------------------------------
+if (partsCosacs_EW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsCosacs,
+        IsExternal: false,
+        ChargeType: 'EW',
+        Account: account,
+        Cost: partsCosacs_EW_Cost,
+        Value: partsCosacs_EW
+    });
+}
+if (partsExternal_EW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsExternal,
+        IsExternal: true,
+        ChargeType: \"EW\",
+        Account: account,
+        Cost: partsExternal_EW_Cost,
+        Value: partsExternal_EW
+    });
+}
+if (partsSalvaged_EW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsSalvaged,
+        IsExternal: false,
+        ChargeType: \"EW\",
+        Account: account,
+        Cost: partsSalvaged_EW_Cost,
+        Value: partsSalvaged_EW
+    });
+}
+if (labourAndAdditional_EW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().labourAndAdditional,
+        IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+        ChargeType: \"EW\",
+        Account: account,
+        Cost: labourAndAdditional_EW_Cost,
+        Value: labourAndAdditional_EW
+    });
+}
+//--------------------------------------------- FYW ----------------------------------------------
+if (partsCosacs_FYW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsCosacs,
+        IsExternal: false,
+        ChargeType: 'FYW',
+        Account: account,
+        Cost: partsCosacs_FYW_Cost,
+        Value: partsCosacs_FYW
+    });
+}
+if (partsExternal_FYW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsExternal,
+        IsExternal: true,
+        ChargeType: \"FYW\",
+        Account: account,
+        Cost: partsExternal_FYW_Cost,
+        Value: partsExternal_FYW
+    });
+}
+if (partsSalvaged_FYW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsSalvaged,
+        IsExternal: false,
+        ChargeType: \"FYW\",
+        Account: account,
+        Cost: partsSalvaged_FYW_Cost,
+        Value: partsSalvaged_FYW
+    });
+}
+if (labourAndAdditional_FYW > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().labourAndAdditional,
+        IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+        ChargeType: \"FYW\",
+        Account: account,
+        Cost: labourAndAdditional_FYW_Cost,
+        Value: labourAndAdditional_FYW
+    });
+}
+//--------------------------------------------------------------------------------------------"
+    },
+    {
+      "expression": "'Calculate Supplier Parts (no warranty)';
+var sr = this.serviceRequest;
+var matrix = this.MasterData.SupplierCostMatrix;
+var account = 'FYW';
+
+var totalCatalog = partsChargeWithSupplierMatrix(this, partSourceIsInternal, matrix, 'ChargeFirstYearWarranty').remaining;
+var totalExternal = partsChargeWithSupplierMatrix(this, partSourceIsExternal, matrix, 'ChargeFirstYearWarranty').remaining;
+var totalSalvaged = partsChargeWithSupplierMatrix(this, partSourceIsSalvaged, matrix, 'ChargeFirstYearWarranty').remaining;
+
+var labourAdditionalAndTransportCharge = labourSupplierRemaining(sr, sum([getLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)]), matrix);
+if (sr.DepositFromMatrix === null) {
+    sr.DepositFromMatrix = labourAdditionalAndTransportCharge;
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  IsExternal: false,
+  ChargeType: 'FYW',
+  Account: account,
+  Cost: totalCatalog,
+  Value: totalCatalog //markupAmountSupplierContractual(totalCatalog, 'ChargeFirstYearWarranty', this, 'FYW')
+});
+
+if (totalExternal > 0) {
+  sr.Charges.push({
+    Label: getChargeLabels().partsExternal,
+    IsExternal: true,
+    ChargeType: 'FYW',
+    Account: account,
+    Cost: totalExternal,
+    Value: totalExternal//markupAmount(totalExternal, 'ChargeFirstYearWarranty', this)
+  });
+}
+
+if (totalSalvaged > 0) {
+  sr.Charges.push({
+    Label: getChargeLabels().partsSalvaged,
+    IsExternal: true,
+    ChargeType: 'FYW',
+    Account: account,
+    Cost: totalSalvaged,
+    Value: totalSalvaged//markupAmount(totalSalvaged, 'ChargeFirstYearWarranty', this)
+  });
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().labourAndAdditional,
+  IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+  ChargeType: 'FYW',
+  Account: account,
+  Cost: labourAdditionalAndTransportCharge,
+  Value: labourAdditionalAndTransportCharge
+});"
+    },
+    {
+      "expression": "'Calculate Supplier Parts (with FYW - external)';
+var sr = this.serviceRequest;
+var matrix = this.MasterData.SupplierCostMatrix;
+var account = 'FYW';
+
+var totalCatalog = partsChargeWithSupplierMatrix(this, partSourceIsInternal, matrix, 'ChargeFirstYearWarranty').remaining;
+var totalExternal = partsChargeWithSupplierMatrix(this, partSourceIsExternal, matrix, 'ChargeFirstYearWarranty').remaining;
+var totalSalvaged = partsChargeWithSupplierMatrix(this, partSourceIsSalvaged, matrix, 'ChargeFirstYearWarranty').remaining;
+
+var labourCharge = labourSupplierRemaining(sr, sum([getLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)]), matrix);
+if (sr.DepositFromMatrix === null) {
+    sr.DepositFromMatrix = labourCharge;
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  IsExternal: false,
+  ChargeType: 'Customer',
+  Account: account,
+  Cost: totalCatalog,
+  Value: totalCatalog//markupAmount(totalCatalog, 'ChargeCustomer', this),
+  Tax: getTaxAmount(markupAmount(totalCatalog, 'ChargeCustomer', this), this)
+});
+
+if (totalExternal > 0) {
+  sr.Charges.push({
+    Label: getChargeLabels().partsExternal,
+    IsExternal: true,
+    ChargeType: 'Customer',
+    Account: account,
+    Cost: totalExternal,
+    Value: totalExternal//markupAmount(totalExternal, 'ChargeCustomer', this),
+    Tax: getTaxAmount(markupAmount(totalExternal, 'ChargeCustomer', this), this)
+  });
+}
+
+if (totalSalvaged > 0) {
+  sr.Charges.push({
+    Label: getChargeLabels().partsSalvaged,
+    IsExternal: true,
+    ChargeType: 'Customer',
+    Account: account,
+    Cost: totalSalvaged,
+    Value: totalSalvaged//markupAmount(totalSalvaged, 'ChargeCustomer', this),
+    Tax: getTaxAmount(markupAmount(totalSalvaged, 'ChargeCustomer', this), this)
+  });
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().labourAndAdditional,
+  IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+  ChargeType: 'Customer',
+  Account: account,
+  Cost: labourCharge,
+  Value: labourCharge
+});",
+      "fn": null,
+      "error": {}
+    },
+    {
+      "expression": "this.OutstandingBalance = 0;"
+    },
+    {
+      "expression": "'Goodwill replacement charged to Internal';
+var sr = this.serviceRequest;
+
+/*
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  IsExternal: false,
+  ChargeType: sr.ResolutionPrimaryCharge,
+  Account: 'Internal',
+  Cost: sr.StockItem.CostPrice,
+  Value: sr.StockItem.CostPrice
+});
+
+sr.Charges.push({
+  Label: 'Labour',
+  IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+  ChargeType: sr.ResolutionPrimaryCharge,
+  Account: 'Internal',
+  Cost: getLabourCost(this),
+  Value: getLabourCost(this)
+});
+
+sr.Charges.push({
+  Label: 'Additional',
+  IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+  ChargeType: sr.ResolutionPrimaryCharge,
+  Account: 'Internal',
+  Cost: sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)]),
+  Value: sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)])
+});
+*/
+
+this.decisionTableActivatedActions.goodWillReplacement = true;
+this.decisionTableActivatedActions.berReplacement = false;"
+    },
+    {
+      "expression": "var sr = this.serviceRequest;
+var charges = _.filter(sr.Charges, function (c) {
+  return c.ChargeType === \"Customer\" || c.ChargeType === \"Deliverer\"
+});
+
+var taxType = this.MasterData.Settings.TaxType;
+
+this.OutstandingBalance = sum(charges, function (c) {     
+    return c.Value + (c.Tax || 0); 
+}) - (sr.PaymentBalance || 0);"
+    },
+    {
+      "expression": "'Calculate installation charge electric';
+var sr = this.serviceRequest;
+var matrix = this.MasterData.SupplierCostMatrix;
+var account = this.MasterData.Settings.InstallationElectricalAccount;
+this.serviceRequest.NoCostMatrixData = true;
+setResolutionLabourCost(this, 0);
+
+var totalCatalog = partsSumCatalogCostPrice(sr,this);
+var totalExternal = calculateTotalParts(partSourceIsExternal, 'CostPrice', this);
+var totalSalvaged = calculateTotalParts(partSourceIsSalvaged , 'CostPrice', this);
+
+var mkPartsVal = markupAmount(totalCatalog, 'ChargeInternal', this);
+if (sr.Type=== 'II' || sr.Type=== 'IE') {
+    mkPartsVal = totalCatalog; // do not markup
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  ChargeType: 'Installation Charge Electrical',
+  Account: account,
+  Cost: totalCatalog,
+  Value: mkPartsVal
+});
+
+if (totalExternal > 0) {
+  var mkPartsExternalVal = markupAmount(totalExternal, 'ChargeInternal', this);
+  if (sr.Type=== 'II' || sr.Type=== 'IE') {
+    mkPartsExternalVal = totalExternal; // do not markup
+  }
+
+  sr.Charges.push({
+    Label: getChargeLabels().partsExternal,
+    ChargeType: 'Installation Charge Electrical',
+    Account: account,
+    Cost: totalExternal,
+    Value: mkPartsExternalVal
+  });
+}
+
+if (totalSalvaged > 0) {
+  var mkPartsSalvagedVal = markupAmount(totalSalvaged, 'ChargeInternal', this);
+  if (sr.Type=== 'II' || sr.Type=== 'IE') {
+    mkPartsSalvagedVal = totalSalvaged; // do not markup
+  }
+
+  sr.Charges.push({
+    Label: getChargeLabels().partsSalvaged,
+    ChargeType: 'Installation Charge Electrical',
+    Account: account,
+    Cost: totalSalvaged,
+    Value: mkPartsSalvagedVal
+  });
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().labourAndAdditional,
+  ChargeType: 'Installation Charge Electrical',
+  Account: account,
+  Cost: sum([getResolutionLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)]),
+  Value: sum([getResolutionLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)])
+});"
+    },
+    {
+      "expression": "'Calculate installation charge furniture';
+var sr = this.serviceRequest;
+var matrix = this.MasterData.SupplierCostMatrix;
+var account = this.MasterData.Settings.InstallationFurnitureAccount;
+this.serviceRequest.NoCostMatrixData = true;
+setResolutionLabourCost(this, 0);
+
+var totalCatalog = partsSumCatalogCostPrice(sr,this);
+var totalExternal = calculateTotalParts(partSourceIsExternal, 'CostPrice', this);;
+var totalSalvaged = calculateTotalParts(partSourceIsSalvaged, 'CostPrice', this);
+
+var mkPartsVal = markupAmount(totalCatalog, 'ChargeInternal', this);
+if (sr.Type=== 'II' || sr.Type=== 'IE') {
+    mkPartsVal = totalCatalog; // do not markup
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  ChargeType: 'Installation Charge Furniture',
+  Account: account,
+  Cost: totalCatalog,
+  Value: mkPartsVal
+});
+
+if (totalExternal > 0) {
+  var mkPartsExternalVal = markupAmount(totalExternal, 'ChargeInternal', this);
+  if (sr.Type=== 'II' || sr.Type=== 'IE') {
+    mkPartsExternalVal = totalExternal; // do not markup
+  }
+
+  sr.Charges.push({
+    Label: getChargeLabels().partsExternal,
+    ChargeType: 'Installation Charge Furniture',
+    Account: account,
+    Cost: totalExternal,
+    Value: mkPartsExternalVal
+  });
+}
+
+if (totalSalvaged > 0) {
+  var mkPartsSalvagedVal = markupAmount(totalSalvaged, 'ChargeInternal', this);
+  if (sr.Type=== 'II' || sr.Type=== 'IE') {
+    mkPartsSalvagedVal = totalSalvaged; // do not markup
+  }
+
+  sr.Charges.push({
+    Label: getChargeLabels().partsSalvaged,
+    ChargeType: 'Installation Charge Furniture',
+    Account: account,
+    Cost: totalSalvaged,
+    Value: mkPartsSalvagedVal
+  });
+}
+
+sr.Charges.push({
+  Label: getChargeLabels().labourAndAdditional,
+  ChargeType: 'Installation Charge Furniture',
+  Account: account,
+  Cost: sum([getResolutionLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)]),
+  Value: sum([getResolutionLabourCost(this), getResolutionAdditionalCost(this), getResolutionTransportCost(this)])
+});"
+    },
+    {
+      "expression": "'Calculate unicomer charges';
+var sr = this.serviceRequest;
+var chargeType = 'FYW';
+
+var totalCatalog = calculateTotalParts(partSourceIsInternal, 'CostPrice', this);
+
+var totalExternal = calculateTotalParts(partSourceIsExternal, 'CostPrice', this);
+var totalSalvaged = calculateTotalParts(partSourceIsSalvaged, 'CostPrice', this);
+var labourCost = getLabourCost(this);
+
+sr.Charges.push({
+  Label: getChargeLabels().partsCosacs,
+  IsExternal: false,
+  ChargeType: chargeType,
+  Account: 'FYW',
+  Cost: totalCatalog,
+  Value: markupAmount(totalCatalog, 'ChargeFirstYearWarranty', this)
+});
+
+if (totalExternal > 0) {
+    sr.Charges.push({
+      Label: getChargeLabels().partsExternal,
+      IsExternal: true,
+      ChargeType: chargeType,
+      Account: 'FYW',
+      Cost: totalExternal,
+      Value: markupAmount(totalExternal, 'ChargeFirstYearWarranty', this)
+    });
+}
+
+if (totalSalvaged > 0) {
+    sr.Charges.push({
+      Label: getChargeLabels().partsSalvaged,
+      IsExternal: true,
+      ChargeType: chargeType,
+      Account: 'FYW',
+      Cost: totalSalvaged,
+      Value: markupAmount(totalSalvaged, 'ChargeFirstYearWarranty', this)
+    });
+}
+
+sr.Charges.push({
+  Label: \"Labour\",
+  IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+  ChargeType: chargeType,
+  Account: 'FYW',
+  Cost: labourCost,
+  Value: labourCost
+});
+
+sr.Charges.push({
+  Label: \"Additional\",
+  IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+  ChargeType: chargeType,
+  Account: 'FYW',
+  Cost: sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)]),
+  Value: sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)])
+});"
+    },
+    {
+      "expression": "this.settingDepositRequiredAmount = true;
+setDepositRequiredAmount(this);
+this.settingDepositRequiredAmount = false;"
+    },
+    {
+      "expression": "clearDepositRequiredAmount(this);"
+    },
+    {
+      "expression": "'Stock repair';
+var sr = this.serviceRequest;
+
+var totalCatalog = calculateTotalParts(partSourceIsInternal, 'CostPrice', this);
+var totalExternal = calculateTotalParts(partSourceIsExternal, 'CostPrice', this);
+var totalSalvaged = calculateTotalParts(partSourceIsSalvaged, 'CostPrice', this);
+var labourCost = getLabourCost(this);
+
+sr.Charges.push({
+    Label: getChargeLabels().partsCosacs,
+    IsExternal: false,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: 'Internal',
+    Cost: totalCatalog,
+    Value: markupAmount(totalCatalog, 'ChargeInternal', this)
+});
+
+if (totalExternal > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsExternal,
+        IsExternal: true,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: 'Internal',
+        Cost: totalExternal,
+        Value: markupAmount(totalExternal, 'ChargeInternal', this)
+    });
+}
+
+if (totalSalvaged > 0) {
+    sr.Charges.push({
+        Label: getChargeLabels().partsSalvaged,
+        IsExternal: false,
+        ChargeType: sr.ResolutionPrimaryCharge,
+        Account: 'Internal',
+        Cost: totalSalvaged,
+        Value: markupAmount(totalSalvaged, 'ChargeInternal', this)
+    });
+}
+
+sr.Charges.push({
+    Label: \"Labour\",
+    IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: 'Internal',
+    Cost: labourCost,
+    Value: labourCost
+});
+
+sr.Charges.push({
+    Label: \"Additional\",
+    IsExternal: !this.serviceRequest.AllocationTechnicianIsInternal,
+    ChargeType: sr.ResolutionPrimaryCharge,
+    Account: 'Internal',
+    Cost: sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)]),
+    Value: sum([getResolutionAdditionalCost(this), getResolutionTransportCost(this)])
+});"
+    },
+    {
+      "expression": "'Add TAX';
+calculateTaxChargeDetailsRow(this);"
+    },
+    {
+      "expression": "'Makes the parts price calculations, in the resolution section, use the costPrice, instead of the retailPrice';
+calculatePartsPriceUsingCostPrice(this);"
+    },
+    {
+      "expression": "var charge = getLabourChargeMatrixEntry(this);
+
+if (!_.isUndefined(charge) && ! _.isNull(charge) && !this.serviceRequest.DepositAuthorised)  {
+    this.serviceRequest.DepositRequired = charge.ChargeCustomer;
+}"
+    },
+    {
+      "expression": "this.serviceRequest.ResolutionPrimaryCharge = 'Customer';"
+    },
+    {
+      "expression": "var scope = this;
+if (scope.serviceRequest.ResolutionPrimaryCharge === 'Installation Charge Furniture' || scope.serviceRequest.ResolutionPrimaryCharge === 'Installation Charge Electrical'){
+
+    _.map(scope.serviceRequest.Parts, function (part) {
+        part.quantityPerCostPriceDisplayInfo = part.quantity * part.CostPrice * calculateTaxPercentage(scope, part);
+    });
+}
+else {
+    var primaryCharge = this.serviceRequest.ResolutionPrimaryCharge;
+    var chargeMatrix = primaryCharge  === 'Supplier' || primaryCharge === 'EW' ? getChargeDetails(scope) : null;
+    _.map(scope.serviceRequest.Parts, function (part) {
+        var result = part.quantity * part.price * calculateTaxPercentage(scope, part);
+
+        if (chargeMatrix !== null && !_.isUndefined(chargeMatrix)) {
+            var markupPartsField = getMarkupPartsField(scope, part.Source);
+            
+            if (!_.isNull(markupPartsField)){
+                result = result * (1 + (chargeMatrix[markupPartsField] / 100));
+            }
+        }
+        part.quantityPerCostPriceDisplayInfo = result;
+    });
+}"
+    }
+  ],
+  "rules": [
+    {
+      "values": [
+        "Customer",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Internal",
+        null,
+        null,
+        "",
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Deliverer",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "EW",
+        null,
+        null,
+        "",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Supplier",
+        "true",
+        null,
+        null,
+        "SI",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Supplier",
+        "false",
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Supplier",
+        "false",
+        "false",
+        null,
+        "",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Internal",
+        "",
+        "",
+        "false",
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Installation Charge Furniture",
+        null,
+        null,
+        null,
+        "II",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Installation Charge Electrical",
+        null,
+        null,
+        null,
+        "II",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Unicomer Warranty",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        "false",
+        "false",
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Supplier",
+        "true",
+        null,
+        null,
+        "SE",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        "S",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        true,
+        false,
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "Installation Charge Furniture",
+        null,
+        null,
+        null,
+        "IE",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Installation Charge Electrical",
+        null,
+        null,
+        null,
+        "IE",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        true,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        "Customer",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "Assessment",
+        "Misuse by the Customer",
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true"
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false
+      ]
+    }
+  ],
+  "extensions": "var calculateTaxChargeDetailsRow = function (scope) {
+    var sr = scope.serviceRequest;
+    var taxType = scope.MasterData.Settings.TaxType;
+    var cosacsTaxRate = scope.MasterData.Settings.TaxRate;
+
+    var chargeLabels = getChargeLabels();
+
+    _.forEach(sr.Charges, function (charge) {
+        var chargeType = charge.ChargeType;
+        //if (chargeType === \"Customer\") {
+            charge.TaxRate = charge.TaxRate || cosacsTaxRate;
+            charge.Tax = charge.Value * charge.TaxRate / 100;
+        /*} else {
+            charge.TaxRate = 0;
+            charge.Tax = 0;
+        }*/
+    });
+};
+
+// this.MasterData.Settings.TaxType: Stock includes tax or not.(I or E)
+var addMonths = function (d, months) {
+    d = new Date(+d);
+    d.setMonth(d.getMonth() + months);
+    return d;
+};
+
+var insideWarranty = function (sr, months) {
+    return addMonths(sr.ItemDeliveredOn, months) >= sr.CreatedOn;
+};
+
+var contractualCostsByWarrantyPeriod = function (sr, months) {
+    return addMonths(sr.ItemDeliveredOn, months) >= sr.CreatedOn && addMonths(sr.ItemDeliveredOn, months - 12) < sr.CreatedOn;
+};
+
+var sum = function (list, f) {
+    f = f || function (v) {
+            return v || 0;
+        };
+    return _.reduce(list, function (memo, e) {
+        return memo + (f(e) || 0);
+    }, 0);
+};
+
+var partSourceIsInternal = function (part) {
+    return part.Source === 'Internal';
+};
+
+var partSourceIsExternal = function (part) {
+    return part.Source === 'External';
+};
+
+var partSourceIsSalvaged = function (part) {
+    return part.Source === 'Salvaged';
+};
+
+var partQuantityRetailPrice = function (part) {
+    return part.quantity * part.price;
+};
+
+var findPartContractualCost = function (scope, part, matrix) {
+    return _.find(matrix, function (row) {
+        return row.partType === part.type && insideWarranty(scope.serviceRequest, row.year * 12);
+    });
+};
+
+var filterContractualCost = function (scope, coveredPartTypes) {
+    // this array is previously filtered in the server
+    var matrix = scope.MasterData.SupplierCostMatrix;
+    var contractDetails =_.filter(matrix, function (row) {
+        return (!coveredPartTypes || _.indexOf(coveredPartTypes, row.partType) > -1) && insideWarranty(scope.serviceRequest, row.year * 12);
+    });
+    var years = _.map(contractDetails, function (detail) { return detail.year; });
+    var currentYear = Math.min.apply(Math, years);
+    return _.filter(contractDetails, function (detail) { return detail.year === currentYear; });
+};
+
+var additionalSupplierCovered = function (scope, matrix, price) {
+    var cost = filterContractualCost(scope);
+    if (cost) {
+        var rPrice = 0;
+        var rRest = 0;
+
+        if (cost.additionalPcent) {
+            rPrice = price * cost.additionalPcent/ 100;
+            if (cost.additionalPcent > 0 && cost.additionalPcent < 100) {
+                rRest = price - retPrice;
+            }
+        }
+        if (cost.additionalVal) {
+            rPrice = Math.min(price, cost.additionalVal);
+            if (price > cost.additionalVal) {
+                rRest = price - cost.additionalVal;
+            }
+        }
+        return { price: rPrice, rest: rRest };
+    }
+    return { price: 0, rest: 0 };
+};
+
+// part cost covered by supplier
+var partSupplierCovered = function (scope, part, matrix, pricePerQuantity, markupField) {
+    var costDetails = findPartContractualCost(scope, part, matrix);
+    if (costDetails) {
+        var contractCoveredPrice = 0;
+        if (costDetails.partPcent) {
+            contractCoveredPrice = markupAmount(pricePerQuantity, markupField, scope) * costDetails.partPcent / 100;
+        }
+        if (costDetails.partVal) {
+            contractCoveredPrice = Math.min(pricePerQuantity, costDetails.partVal);
+        }
+        return {
+            partType: costDetails.partType,
+            coveredPrice: contractCoveredPrice
+        };
+    }
+    return { // no value covered 
+        partType: null,
+        coveredPrice: 0
+    };
+};
+
+var labourSupplierCovered = function (sr, labour, matrix) {
+    if (!matrix) {
+        return 0;
+    }
+    return _.max(_.map(matrix, function (row) {
+            if (contractualCostsByWarrantyPeriod (sr, row.year * 12) && (row.labourPcent || row.labourVal)) {
+                var v = labour;
+                if (row.labourPcent) {
+                    v = v * row.labourPcent / 100;
+                }
+                if (row.labourVal) {
+                    v = Math.min(v, row.labourVal);
+                }
+                return v;
+            }
+            return 0;
+        })) || 0;
+};
+
+var labourSupplierRemaining = function (sr, labour, matrix) {
+    return labour - labourSupplierCovered(sr, labour, matrix) || 0;
+};
+
+var partsSumExternal = function (sr) {
+    return sum(_.filter(sr.Parts, partSourceIsExternal), partQuantityRetailPrice);
+};
+
+var partsSumSalvaged = function (sr) {
+    return sum(_.filter(sr.Parts, partSourceIsSalvaged), partQuantityRetailPrice);
+};
+
+var partsSumCatalogCostPrice = function (sr,scope) {
+    return sum(_.filter(sr.Parts, partSourceIsInternal), function(part){return part.quantity * Math.round(part.CostPrice * calculateTaxPercentage(scope, part) * 100) / 100;});
+};
+
+var partsChargeWithSupplierMatrix = function (scope, filter, matrix, markupField) {
+    
+    var filteredParts = [];
+    
+    if(filter){
+        filteredParts = _.filter(scope.serviceRequest.Parts, filter);
+    }else{
+        filteredParts = scope.serviceRequest.Parts;
+    };
+    
+    // info for filtered part type
+    var partSplitInfo = _.map(filteredParts, function (part) {
+        var pricePerQuantity = part.quantity * (Math.round(part.price * calculateTaxPercentage(scope, part) * 100) / 100);
+        var covered = partSupplierCovered(scope, part, matrix, pricePerQuantity, markupField);
+
+        return {
+            coveredPartType: covered.partType,
+            maxCoveredForPart: covered.coveredPrice,
+            price: pricePerQuantity,
+            source: part.Source
+        };
+    });
+
+    var coveredPartTypes = {};
+    var contractualPartTypes = getCoveredPartTypes(partSplitInfo);
+    var supplierContractualChargesByPartType = _.map(contractualPartTypes, function (partType) {
+        // total summed price for these filtered parts
+        var totalPrice = sum(partSplitInfo, function (part) {
+            if (part.coveredPartType === partType) {
+                coveredPartTypes[partType] = null;
+                return part.price;
+            }
+        });
+
+        var partsCoverageValues = _.map(
+            _.filter(partSplitInfo, function (part) { return part.coveredPartType === partType; }), function (part) {
+                return part.maxCoveredForPart;
+            }
+        );
+
+        if (partsCoverageValues.length === 0) {
+            var notCoveredValue = 0;
+            var markup = 0;
+
+            _.forEach(partSplitInfo, function(current){
+                notCoveredValue += current.price;
+                markup += markupAmount(current.price, getMarkupPartsField(scope, current.Source), scope);
+            });
+
+            return {
+                covered: 0,
+                remaining: notCoveredValue,
+                totalPrice: notCoveredValue,
+                totalPriceWithMarkup: markup
+            };
+        }
+
+        var contractualCoverage = Math.max.apply(Math, partsCoverageValues);
+        var totalPriceWithMarkup = sum(partSplitInfo, function (current) {
+            return markupAmount(current.price, getMarkupPartsField(scope, current.Source), scope);
+        });
+
+        return {
+            partType: partType,
+            covered: contractualCoverage,
+            remaining: totalPriceWithMarkup > contractualCoverage ? totalPriceWithMarkup - contractualCoverage : 0,
+            totalPrice: totalPrice,
+            markupUsed: totalPrice > 0 ? Math.round(100 * totalPriceWithMarkup / totalPrice) / 100 : 0,
+            totalPriceWithMarkup: totalPriceWithMarkup
+        };
+    });
+
+    return {
+        coveredPartTypes: _.keys(coveredPartTypes),
+        coverageDetails: supplierContractualChargesByPartType,
+        covered: sum(supplierContractualChargesByPartType, function (contractualCharge) { return contractualCharge.covered; }),
+        remaining: sum(supplierContractualChargesByPartType, function (contractualCharge) { return contractualCharge.remaining; }),
+        totalPrice: sum(supplierContractualChargesByPartType, function (contractualCharge) { return contractualCharge.totalPrice; }),
+        totalPriceWithMarkup: sum(supplierContractualChargesByPartType, function (contractualCharge) { return contractualCharge.totalPriceWithMarkup; })
+    };
+};
+
+var getCoveredPartTypes = function (partSplitInfo) {
+    var allTypesObject = _.reduce(partSplitInfo,
+        function (memo, part) {
+            memo[part.coveredPartType] = null;
+            return memo;
+        }, {});
+    return _.keys(allTypesObject);
+};
+
+var getTaxAmount = function (charge, scope) {
+    var taxAmount = charge * scope.MasterData.Settings.TaxRate / 100.0;
+
+    if (scope.MasterData.Settings.TaxType === 'I') {
+        return 0;
+    } else {
+        return taxAmount.toFixed(2);
+    }
+};
+
+var calculateBerCharge = function (scope) {
+    
+    var memo = {Cost: 0, Value: 0};
+
+    var totals = _.chain(scope.serviceRequest.HistoryCharges)
+        .filter(function(current){ return current.ChargeType === 'EW' })
+        .map(function(memo, current){ 
+            memo.Cost += current.Cost;
+            memo.Value += current.Value;
+        })
+        .value();
+        
+    return totals.length == 0 ? memo : totals;
+};
+
+
+var setDepositRequiredAmount = function (scope) {
+    var labourCostMatrix = filterLabourCostMatrixEntries(scope);
+
+    if ((!labourCostMatrix || labourCostMatrix.length === 0) &&  (scope.serviceRequest.DepositRequired === 0 || isNullOrUndefined(scope.serviceRequest.DepositRequired))) {
+        setDepositRequired(scope, 0);
+
+        return;
+    }
+
+    if (scope.serviceRequest.ResolutionPrimaryCharge && scope.serviceRequest.ResolutionPrimaryCharge !== 'Customer' && scope.serviceRequest.ResolutionPrimaryCharge !== 'Deliverer') {
+        return;
+    }
+
+    if (scope.serviceRequest.DepositFromMatrix && scope.serviceRequest.DepositRequired !== scope.serviceRequest.DepositFromMatrix) {
+        return;
+    }
+
+    if (labourCostMatrix.length !== 0) {
+        scope.serviceRequest.DepositFromMatrix = labourCostMatrix[0].ChargeCustomer;
+    }
+
+    if (isNullOrUndefined(scope.serviceRequest.DepositRequired) || (scope.serviceRequest.DepositRequired !== scope.serviceRequest.DepositFromMatrix)
+        && scope.serviceRequest.DepositFromMatrix !== 0) {
+        setDepositRequired(scope, scope.serviceRequest.DepositFromMatrix);
+    }
+};
+
+var filterLabourCostMatrixEntries = function (scope) {
+    if (scope.MasterData.LabourCostMatrix.length === 0) {
+        return [{
+            ChargeContractedTech: 0,
+            ChargeCustomer: 0,
+            ChargeEWClaim: 0,
+            ChargeInternalTech: 0,
+            Label: \"\",
+            Level_1: \"\",
+            Level_2: 0,
+            Level_3: \"\",
+            RepairType: \"\",
+            Supplier: \"\"
+        }];
+    }
+
+    var sr = scope.serviceRequest;
+    var srItemNumber = sr.ItemNumber;
+    var repairType = sr.RepairType;
+    var manufacturer = sr.Manufacturer;
+    var level1 = sr.ProductLevel_1;
+    var level2 = sr.ProductLevel_2;
+    var level3 = sr.ProductLevel_3;
+
+    var scoredMatrix = _.map(scope.MasterData.LabourCostMatrix, function (cost) {
+        cost._score = 0;
+
+        if (scope.settingDepositRequiredAmount) { // used when picking the deposit value
+            // when choosing the customer charge only use assessments
+            if (!depositHasBeenSet(scope)) {
+                repairType = 'Assessment';
+            }
+
+            if (cost.RepairType && cost.RepairType === repairType) {
+                cost._score = incrementScore(cost._score, 32);  // 32 > 31 (16+8+4+1+1+1)
+            } else if (cost.RepairType && repairType) {
+                cost._repairTypeAssessmentFail = cost._matchFail = true;
+            }
+        }
+
+        if (cost.ItemList && findProductNumber(srItemNumber, cost.ItemList)) {
+            cost._score = incrementScore(cost._score, 16); // 16 > 15 (8+4+1+1+1)
+        } else if (cost.ItemList && srItemNumber) {
+            cost._itemListFail = cost._matchFail = true;
+        }
+
+        if (cost.RepairType && cost.RepairType === repairType) {
+            cost._score = incrementScore(cost._score, 8); // 8 > 7 (4+1+1+1)
+        } else if (cost.RepairType && repairType) {
+            cost._repairTypeFail = cost._matchFail = true;
+        }
+
+        if (cost.Supplier && cost.Supplier === manufacturer) {
+            cost._score = incrementScore(cost._score, 4); // 4 > 3 (1+1+1)
+        } else if (cost.Supplier && manufacturer) {
+            cost._supplierFail = cost._matchFail = true;
+        }
+
+        if (cost.Level_1 && cost.Level_1 === level1) {
+            cost._score = incrementScore(cost._score, 1);
+        } else if (cost.Level_1 && level1) {
+            cost._level1Fail = cost._matchFail = true;
+        }
+        if (cost.Level_2 && Number(cost.Level_2) === Number(level2)) {
+            cost._score = incrementScore(cost._score, 1);
+        } else if (cost.Level_2 && level2) {
+            cost._level2Fail = cost._matchFail = true;
+        }
+        if (cost.Level_3 && cost.Level_3 === level3) {
+            cost._score = incrementScore(cost._score, 1);
+        } else if (cost.Level_3 && level3) {
+            cost._level3Fail = cost._matchFail = true;
+        }
+        return cost;
+    });
+
+
+    scoredMatrix = _.sortBy(filterFailedResults(scoredMatrix), function (score) { return score._score * -1; });
+    var selectedLabourCost = _.extend({}, scoredMatrix[0]); // clones this selected matrix entry
+    cleanLabourMatrix(scope);
+
+    if (selectedLabourCost._matchFail) {
+        return [];
+    } else {
+        if (scope.settingDepositRequiredAmount && selectedLabourCost.RepairType !== 'Assessment') {
+            return [];
+        }
+        return [ selectedLabourCost ];
+    }
+};
+
+var filterFailedResults = function (scoredMatrix) {
+    return _.filter(scoredMatrix, function (f) { return !f._matchFail; });
+};
+
+var cleanLabourMatrix = function (scope) {
+    _.map(scope.MasterData.LabourCostMatrix, function (cost) {
+        delete cost._repairTypeAssessmentFail;
+        delete cost._repairTypeFail;
+        delete cost._itemListFail;
+        delete cost._supplierFail;
+        delete cost._level1Fail;
+        delete cost._level2Fail;
+        delete cost._level3Fail;
+        delete cost._matchFail;
+        delete cost._score;
+    });
+};
+
+var depositHasBeenSet = function (scope) {
+    if (_.isEmpty(scope.serviceRequest.DepositFromMatrix)) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
+var findProductNumber = function (prodNumber, itemList) {
+    var prodList = getProductList(itemList);
+    return _.contains(prodList, prodNumber);
+};
+
+var getProductList = function (prodList) {
+    return _.filter(prodList.split(','), function (item) {
+        var val = item.trim();
+        return val === '' ? null : String(val);
+    });
+};
+
+var incrementScore = function (score, value) {
+    var retStore = 0;
+    if (!isNaN(score)) {
+        value = value || 1;
+        retStore = parseInt(score, 10) + value;
+    }
+    return retStore;
+};
+
+var clearDepositRequiredAmount = function (scope) {
+    setDepositRequired(scope, 0);
+};
+
+var getChargeDetails = function (scope) {
+    if (scope.MasterData.PartsCostMatrix) {
+        // this array is previously filtered in the server
+        var srPageChargeType = scope.serviceRequest.RepairType;
+        var charge = _.find(scope.MasterData.PartsCostMatrix, function (row) {
+            return row.RepairType === srPageChargeType || !srPageChargeType;
+        });
+
+        if (charge === undefined) {
+            return {
+                Id: null,
+                ChargeCustomer: 0,
+                ChargeExtendedWarranty: 0,
+                ChargeFirstYearWarranty: 0,
+                ChargeInternal: 0,
+                IsGroupFilter: null,
+                ItemList: null,
+                Label: \"\",
+                Level_1: null,
+                Level_2: null,
+                Level_3: null,
+                Level_4: null,
+                Level_5: null,
+                Level_6: null,
+                Level_7: null,
+                Level_8: null,
+                Level_9: null,
+                Level_10: null,
+                RepairType: \"\",
+                Supplier: null
+            };
+        }
+        return charge;
+    } else {
+        return null;
+    }
+};
+
+var markupAmount = function (amount, markupField, scope) {
+    var charge = getChargeDetails(scope);
+    
+    if (!charge || _.isNull(markupField)) {
+        return amount;
+    }
+
+    return amount + (amount * (charge[markupField] / 100));
+};
+
+var markupReplacementIssuedAmount = function (amount, markupField, scope) {
+    var berMarkup = scope.MasterData.Settings.BerMarkup;
+    
+    if (!berMarkup || berMarkup === 0) {
+        return amount;
+    }
+
+    return amount + (amount * (berMarkup / 100));
+};
+
+var markupCostForPart = function (part, markupField, scope) {
+    var markedUpPrice = markupAmount(part.CostPrice, markupField, scope);
+    part.price = markedUpPrice;
+};
+
+var markupCostForExternalPart = function (part, markupField, scope) {
+    if (part.Source === 'Internal' || !scope.MasterData.PartsCostMatrix) {
+        return;
+    }
+
+    markupCostForPart(part, markupField, scope);
+};
+
+var markupParts = function (parts, markupField, scope) {
+    _.each(parts, function (part) {
+        markupCostForPart(part, markupField, scope);
+    });
+};
+
+var markupNonInternalPartsForCustomer = function (parts, markupField, scope) {
+    _.each(parts, function (part) {
+        markupCostForExternalPart(part, markupField, scope);
+    });
+};
+
+var getLabourChargeMatrixEntry = function (scope) {
+    var labourCostMatrix = filterLabourCostMatrixEntries(scope);
+    if (!labourCostMatrix || labourCostMatrix.length === 0) {
+        scope.serviceRequest.NoCostMatrixData = true;
+        setResolutionLabourCost(scope, 0);
+        return;
+    }
+
+    if (!scope.serviceRequest.RepairType) {
+        return;
+    }
+
+    var charge = _.find(labourCostMatrix, function (cost) {
+        return cost.RepairType === scope.serviceRequest.RepairType;
+    });
+
+    return charge;
+};
+
+var isServiceRequest = function (sr) {
+    return sr.Type === 'SI' || sr.Type === 'SE';
+};
+
+var setLabourChargeCustomer = function (scope) {
+
+    if (!isServiceRequest(scope.serviceRequest)) {
+        scope.serviceRequest.NoCostMatrixData = true;
+        setResolutionLabourCost(scope, 0);
+        return;
+    }
+
+    var charge = getLabourChargeMatrixEntry(scope);
+
+    if (!charge) {
+        scope.serviceRequest.NoCostMatrixData = true;
+        setResolutionLabourCost(scope, 0);
+        return;
+    }
+
+    scope.serviceRequest.NoCostMatrixData = false;
+    setResolutionLabourCost(scope, charge.ChargeCustomer);
+};
+
+var getLabourCost = function (scope) {
+    var charge = getLabourChargeMatrixEntry(scope);
+    if (!charge) {
+        scope.serviceRequest.NoCostMatrixData = true;
+        return 0;
+    }
+
+    scope.serviceRequest.NoCostMatrixData = false;
+    if (scope.serviceRequest.Type === 'SE' || scope.serviceRequest.Type === 'IE') {
+        return charge.ChargeCustomer;
+    }
+
+    if (scope.serviceRequest.AllocationTechnicianIsInternal) {
+        return charge.ChargeInternalTech;
+    } else {
+        return charge.ChargeContractedTech;
+    }
+};
+
+var labourEWCovered = function (scope) {
+    var sr = scope.serviceRequest;
+    var charge = getLabourChargeMatrixEntry(scope);
+    if (!charge) {
+        sr.NoCostMatrixData = true;
+        return 0;
+    }
+
+    sr.NoCostMatrixData = false;
+    var totalLabour = sum([getResolutionLabourCost(scope), getResolutionAdditionalCost(scope), getResolutionTransportCost(scope)]);
+
+    return totalLabour > charge.ChargeEWClaim ? charge.ChargeEWClaim : totalLabour;
+};
+
+var getPartsMarkupField = function (chargeTo) {
+    var partsMarkupFieldLookup = {
+        'Internal': 'ChargeInternal',
+        'EW': 'ChargeExtendedWarranty',
+        'Supplier': 'ChargeFirstYearWarranty',
+        'Deliverer': 'ChargeCustomer',
+        'Unicomer Warranty': 'ChargeFirstYearWarranty'
+    };
+
+    return partsMarkupFieldLookup[chargeTo];
+};
+
+var setResolutionLabourCost = function (scope, value) {
+    scope.serviceRequest.ResolutionLabourCost = truncateNegativeNumbers(value);
+    if (isNullOrUndefined(scope.serviceRequest.DepositFromMatrix) ||
+        scope.serviceRequest.DepositFromMatrix === 0) {
+        scope.serviceRequest.DepositFromMatrix = scope.serviceRequest.ResolutionLabourCost;
+    }
+};
+
+var getResolutionLabourCost = function (scope) {
+    return truncateNegativeNumbers(scope.serviceRequest.ResolutionLabourCost);
+};
+
+var getResolutionAdditionalCost = function (scope) {
+    return truncateNegativeNumbers(scope.serviceRequest.ResolutionAdditionalCost);
+};
+
+var getResolutionTransportCost = function (scope) {
+    return truncateNegativeNumbers(scope.serviceRequest.ResolutionTransportCost);
+};
+
+var truncateNegativeNumbers = function (val) {
+    val = (val >= 0 ? val : 0);
+    return val;
+};
+
+var setDepositRequired = function (scope, value) {
+    if (!scope.serviceRequest.DepositAuthorised) {
+        scope.serviceRequest.DepositRequired = value;
+    }
+};
+
+var isNullOrUndefined = function (value) {
+    return value === null || value === undefined;
+};
+
+var isInsideManufacturerWarranty = function (scope) {
+    return scope.serviceRequest.ManufacturerWarrantyContractNo &&
+        insideWarranty(
+            scope.serviceRequest,
+            scope.serviceRequest.ManufacturerWarrantyLength || 0
+        );
+};
+
+var isInsideExtendedWarrantyPeriod = function (scope) {
+    return scope.serviceRequest.WarrantyContractNo && !isInsideManufacturerWarranty(scope) &&
+        insideWarranty(
+            scope.serviceRequest,
+            (scope.serviceRequest.WarrantyLength || 0) + (scope.serviceRequest.ManufacturerWarrantyLength || 0)
+        )
+};
+
+var isWarrantyCovered = function (scope) {
+    return isInsideManufacturerWarranty(scope) || isInsideExtendedWarrantyPeriod(scope);
+};
+
+var filterLabourCostMatrix  = function (labourCostMatrix, fnCondition) {
+    return _.filter(labourCostMatrix, function (entry) {
+        return fnCondition(entry);
+    });
+};
+
+var getPartsMarkupChargeParams = function (scope) {
+    var partsMarkup = getChargeDetails(scope);
+    if (partsMarkup) {
+        return {
+            internal: partsMarkup['ChargeInternal'],
+            fyw: partsMarkup['ChargeFirstYearWarranty'],
+            ew: partsMarkup['ChargeExtendedWarranty'],
+            customer: partsMarkup['ChargeCustomer']
+        };
+    } else {
+        return null;
+    }
+};
+
+var getLabourChargesParams = function (scope) {
+    var labourCharges = filterLabourCostMatrixEntries(scope);
+    if (labourCharges && labourCharges.length > 0) {
+        return {
+            internal: labourCharges[0].ChargeInternalTech,
+            external: labourCharges[0].ChargeContractedTech,
+            ewClaim: labourCharges[0].ChargeEWClaim,
+            customer: labourCharges[0].ChargeCustomer
+        };
+    } else {
+        return null;
+    }
+};
+var calcSupplierContractualCoverage = function (contractPercent, contractValue, costToCover) {
+    if (contractPercent > 0 || contractValue > 0) {
+        /*
+            To make calculations easier these variables will be set to a HUGE imposible value
+            Otherwise a check for 0 should be made 
+        */
+        var valuePer = 999999999999999;   
+        var valueAbsolute = 999999999999999;
+        
+        if (contractPercent > 0) {
+            valuePer = (contractPercent / 100) * costToCover;
+        } 
+        
+        if (contractValue > 0){
+            valueAbsolute = Math.min(costToCover, contractValue);
+        }
+        
+        return Math.min(valuePer, valueAbsolute);        
+    }
+    
+    return 0;
+};
+
+var getContractualCostsParams = function (scope, coveredPartTypes) {
+    var contractualCosts = filterContractualCost(scope, coveredPartTypes);
+    if (contractualCosts && contractualCosts.length > 0) {
+        return _.map(contractualCosts, function (costDetail) {
+            return {
+                calcAdditionalCoverage: function (costToCover) { return calcSupplierContractualCoverage(costDetail.additionalPcent, costDetail.additionalVal, costToCover); },
+                isAdditionalCoverageFixedValue: costDetail.additionalPcent <= 0 && costDetail.additionalVal > 0,
+                additionalPcent: costDetail.additionalPcent,
+                additionalVal: costDetail.additionalVal,
+
+                calcLabourCoverage: function (costToCover) { return calcSupplierContractualCoverage(costDetail.labourPcent, costDetail.labourVal, costToCover); },
+                isLabourCoverageFixedValue: costDetail.labourPcent <= 0 && costDetail.labourVal > 0,
+                labourPcent: costDetail.labourPcent,
+                labourVal: costDetail.labourVal,
+
+                calcPartCoverage: function (costToCover) { return calcSupplierContractualCoverage(costDetail.partPcent, costDetail.partVal, costToCover); },
+                isPartCoverageFixedValue: costDetail.partPcent <= 0 && costDetail.partVal > 0,
+                partPcent: costDetail.partPcent,
+                partVal: costDetail.partVal
+            };
+        });
+    } else {
+        return [];
+    }
+};
+
+var supplierEwFywChargesControl = function (scope, markupField, chargesLabel, supplierCharges_partsCosacs, supplierCharges_partsExternal, supplierCharges_labourAndAdditional) {
+    var supplierCharge = 0;
+    var ewCharge = 0;
+    var fywCharge = 0;
+    var controlCalc = null;
+
+    var matrix = scope.MasterData.SupplierCostMatrix;
+    if (chargesLabel === getChargeLabels().partsCosacs) {
+        controlCalc = partsChargeWithSupplierMatrix(scope, partSourceIsInternal, matrix, markupField);
+        var partsTotal = controlCalc.totalPriceWithMarkup;
+
+        var maxSupplierCoverage = getSupplierCoverageValue(scope, partsTotal, controlCalc.coveredPartTypes);
+        if (partsTotal > maxSupplierCoverage) {
+            if (markupField === 'ChargeFirstYearWarranty') {
+                supplierCharge = maxSupplierCoverage;
+                ewCharge = 0;
+                fywCharge = partsTotal - maxSupplierCoverage;
+            } else if (markupField === 'ChargeExtendedWarranty') {
+                supplierCharge = maxSupplierCoverage;
+                ewCharge = partsTotal - maxSupplierCoverage;
+                fywCharge = 0;
+            }
+        } else {
+            supplierCharge = partsTotal;
+            ewCharge = 0;
+            fywCharge = 0;
+        }
+    } else if (chargesLabel === getChargeLabels().partsExternal) {
+        var chargesInternalControl = supplierCharges_partsCosacs || supplierEwFywChargesControl(scope, getChargeLabels().partsCosacs);
+        controlCalc = partsChargeWithSupplierMatrix(scope, partSourceIsExternal, matrix, markupField);
+        var partsTotal = controlCalc.totalPriceWithMarkup;
+
+        var maxSupplierCoverage = getSupplierCoverageValue(scope, partsTotal); //, controlCalc.coveredPartTypes); // TODO: fix this...
+        if (maxSupplierCoverage === chargesInternalControl.supplierCharge) {
+            supplierCharge = 0;
+            ewCharge = partsTotal;
+            fywCharge = 0;
+        } else if (maxSupplierCoverage > chargesInternalControl.supplierCharge) {
+            var supplierCoverageRemaining = maxSupplierCoverage - chargesInternalControl.supplierCharge;
+            if (supplierCoverageRemaining > partsTotal) {
+                supplierCharge = partsTotal;
+                ewCharge = 0;
+                fywCharge = 0;
+            } else {
+                if (markupField === 'ChargeFirstYearWarranty') {
+                    supplierCharge = supplierCoverageRemaining;
+                    ewCharge = 0;
+                    fywCharge = partsTotal - supplierCoverageRemaining;
+                } else if (markupField === 'ChargeExtendedWarranty') {
+                    supplierCharge = supplierCoverageRemaining;
+                    ewCharge = partsTotal - supplierCoverageRemaining;
+                    fywCharge = 0;
+                }
+            }
+        } else { 
+            if (markupField === 'ChargeFirstYearWarranty') {
+                supplierCharge = 0;
+                ewCharge = 0;
+                fywCharge = partsTotal;
+            } else {
+                supplierCharge = 0;
+                ewCharge = partsTotal;
+                fywCharge = 0;
+            }
+        }
+    } else if (chargesLabel === getChargeLabels().partsSalvaged) {
+        var chargesInternalControl = supplierCharges_partsCosacs || supplierEwFywChargesControl(scope, getChargeLabels().partsCosacs);
+        var chargesExternalControl = supplierCharges_partsExternal || supplierEwFywChargesControl(scope, getChargeLabels().partsExternal, chargesInternalControl);
+        var chargesControlSupplierInternalPlusExternalCharge = chargesInternalControl.supplierCharge + chargesExternalControl.supplierCharge;
+        controlCalc = partsChargeWithSupplierMatrix(scope, partSourceIsSalvaged, matrix, markupField);
+        var partsTotal = controlCalc.totalPriceWithMarkup;
+
+        var maxSupplierCoverage = getSupplierCoverageValue(scope, partsTotal); 
+        if (maxSupplierCoverage === chargesControlSupplierInternalPlusExternalCharge) {
+            supplierCharge = 0;
+            ewCharge = partsTotal;
+            fywCharge = 0;
+        } else if (maxSupplierCoverage > chargesControlSupplierInternalPlusExternalCharge) {
+            var supplierCoverageRemaining = maxSupplierCoverage - chargesControlSupplierInternalPlusExternalCharge;
+            if (supplierCoverageRemaining > partsTotal) {
+                supplierCharge = partsTotal;
+                ewCharge = 0;
+                fywCharge = 0;
+            } else {
+                if (markupField === 'ChargeFirstYearWarranty') {
+                    supplierCharge = supplierCoverageRemaining;
+                    ewCharge = 0;
+                    fywCharge = partsTotal - supplierCoverageRemaining;
+                } else if (markupField === 'ChargeExtendedWarranty') {
+                    supplierCharge = supplierCoverageRemaining;
+                    ewCharge = partsTotal - supplierCoverageRemaining;
+                    fywCharge = 0;
+                }
+            }
+        } else { 
+            if (markupField === 'ChargeFirstYearWarranty') {
+                supplierCharge = 0;
+                ewCharge = 0;
+                fywCharge = partsTotal;
+            } else {
+                supplierCharge = 0;
+                ewCharge = partsTotal;
+                fywCharge = 0;
+            }
+        }
+    } else if (chargesLabel === getChargeLabels().labourAndAdditional) {
+        var labourTotal = getResolutionLabourCost(scope);
+        var additionalTotal = getResolutionAdditionalCost(scope);
+        var transportTotal = getResolutionTransportCost(scope);
+        var labourAndAdditionalTotal = labourTotal + additionalTotal + transportTotal;
+
+        var supplierLabourCoverage =  labourSupplierCovered(scope.serviceRequest, getLabourCost(scope), scope.MasterData.SupplierCostMatrix);
+        var supplierAdditionalCoverage = getSupplierAdditionalValue(scope, additionalTotal + transportTotal);
+        var maxLabourAndAdditionalCoverage = supplierLabourCoverage + supplierAdditionalCoverage.covered;
+
+        if (labourAndAdditionalTotal > maxLabourAndAdditionalCoverage) {
+            supplierCharge = maxLabourAndAdditionalCoverage;
+            var maxEwCoverage = getEwCoverageValue(scope);
+            var labourAndAdditionalRemaining = labourAndAdditionalTotal - maxLabourAndAdditionalCoverage;
+            if (labourAndAdditionalRemaining > maxEwCoverage) {
+                if (markupField === 'ChargeFirstYearWarranty') {
+                    fywCharge = labourAndAdditionalRemaining;
+                } else if (markupField === 'ChargeExtendedWarranty') {
+                    ewCharge = maxEwCoverage;
+                    fywCharge = labourAndAdditionalRemaining - maxEwCoverage;
+                }
+            } else {
+                if (markupField === 'ChargeFirstYearWarranty') {
+                    fywCharge = labourAndAdditionalRemaining;
+                } else if (markupField === 'ChargeExtendedWarranty') {
+                    ewCharge = labourAndAdditionalRemaining;
+                    fywCharge = 0;
+                }
+            }
+        } else {
+            supplierCharge = labourAndAdditionalTotal;
+            ewCharge = 0;
+            fywCharge = 0;
+        }
+    }
+    return {
+        controlCalculations: controlCalc,
+        supplierCharge: supplierCharge,
+        ewCharge: ewCharge,
+        fywCharge: fywCharge
+    };
+};
+
+var getSupplierCoverageValue = function (scope, partsTotal, coveredPartTypes) {
+    var contractParams = getContractualCostsParams(scope, coveredPartTypes);
+
+    if (contractParams && contractParams.length > 0) {
+        var partsCoverage = _.map(contractParams, function (param) {
+            if (param.isPartCoverageFixedValue) {
+                return param.partVal;
+            } else {
+                return param.calcPartCoverage(partsTotal);
+            }
+        });
+        return sum(partsCoverage);
+    }
+
+    return 0;
+};
+
+var getSupplierLabourValue = function (scope, labourTotal) {
+    var contractParams = getContractualCostsParams(scope);
+
+    if (contractParams && contractParams.length > 0) {
+        var labourCoverage = _.map(contractParams, function (param) {
+            if (param.isLabourCoverageFixedValue) {
+                return param.labourVal;
+            } else {
+                return param.calcLabourCoverage(labourTotal);
+            }
+        });
+        var maxCovered = sum(labourCoverage);
+        return {
+            maxCovered: maxCovered,
+            covered: Math.min.apply(Math, [labourTotal, maxCovered])
+        };
+    }
+    return { maxCovered: 0, covered: 0 };
+};
+
+var getSupplierAdditionalValue = function (scope, additionalTotal) {
+    var contractParams = getContractualCostsParams(scope);
+
+    if (contractParams && contractParams.length > 0) {
+        var additionalCoverage = _.map(contractParams, function (param) {
+            if (param.isAdditionalCoverageFixedValue) {
+                return param.additionalVal;
+            } else {
+                return param.calcAdditionalCoverage(additionalTotal);
+            }
+        });
+        var maxCovered = sum(additionalCoverage);
+        return {
+            maxCovered: maxCovered,
+            covered: Math.min.apply(Math, [additionalTotal, maxCovered])
+        };
+    }
+    return { maxCovered: 0, covered: 0 };
+};
+
+var getEwCoverageValue = function (scope) {
+    var maxEwCoverage = 0,
+        labourParams = getLabourChargesParams(scope);
+
+    if (labourParams && labourParams.ewClaim) {
+        maxEwCoverage = labourParams.ewClaim;
+    }
+
+    return maxEwCoverage;
+};
+
+var getChargeLabels = function () {
+    return {
+        partsCosacs: 'Parts Cosacs' ,
+        partsExternal: 'Parts External',
+        partsSalvaged: 'Parts Salvaged',
+        labourAndAdditional: 'Labour and Additional'
+    };
+};
+var calculatePartsPriceUsingCostPrice = function (scope) {
+    _.map(scope.serviceRequest.Parts, function (part) {
+        var result = part.quantityPerCostPriceDisplayInfo || (part.quantity * part.price * calculateTaxPercentage(scope, part));
+
+        part.quantityPerCostPriceDisplayInfo = result;
+    });
+};
+
+var calculateTotalParts = function (filter, field, scope) {
+    return sum(_.filter(scope.serviceRequest.Parts, filter), function(part){
+        return part.quantity * Math.round(part[field] * calculateTaxPercentage(scope, part) * 100) / 100;
+    });
+};
+
+
+var calculateTaxPercentage = function(scope, part){
+    return 1 + (scope.MasterData.Settings.TaxType === 'I' ? (part.TaxRate || scope.MasterData.Settings.TaxRate) / 100 : 0);
+};
+
+var getMarkupPartsField = function(scope, source){
+    if (scope.serviceRequest.ResolutionPrimaryCharge === 'Customer' && source !== 'Internal') {
+        return 'ChargeCustomer';
+    }
+    else if (scope.serviceRequest.ResolutionPrimaryCharge === 'Internal' || scope.serviceRequest.ResolutionPrimaryCharge === 'Deliverer') {
+        return 'ChargeInternal';
+    }
+    else if (scope.serviceRequest.ResolutionPrimaryCharge === 'EW') {
+        return 'ChargeExtendedWarranty';
+    }
+    else if (scope.serviceRequest.ResolutionPrimaryCharge === 'FYW'
+        || scope.serviceRequest.ResolutionPrimaryCharge === 'Supplier'
+        || scope.serviceRequest.ResolutionPrimaryCharge === 'Unicomer Warranty') {
+        return 'ChargeFirstYearWarranty';
+    }
+
+    return null;
+};
+
+var calculateTotalPartsWithMarkup = function (filter, field, scope) {
+    var chargeMatrix = getChargeDetails(scope);
+
+    if (chargeMatrix !== null && !_.isUndefined(chargeMatrix)) {
+        return sum(_.filter(scope.serviceRequest.Parts, filter), function(part){
+            var partial = part.quantity * Math.round(part[field] * calculateTaxPercentage(scope, part) * 100) / 100;
+            var markupPartsField = getMarkupPartsField(scope, part.Source);
+
+            if (!_.isNull(markupPartsField)){
+                partial = partial * (1 + (chargeMatrix[markupPartsField] / 100));;
+            }
+
+            return partial;
+        });
+    }
+    
+    return calculateTotalParts(filter, field, scope);
+};"
+}

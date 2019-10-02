@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Outstanding SRs per Product Category";
+}
+
+<div data-module="report/OutstandingServiceRequests" ng-controller="OutstandingServiceRequestsController" class="ng-scope report">
+    <div class="section">Parameters</div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-5 control-label"> {{ dateLoggedFromLabel }} </label>
+                <div class="col col-lg-5">
+                    <input required ui-date="linkDatePicker" ng-model="dateLoggedFrom" placeholder="Logged Date" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ dateLoggedToLabel }} </label>
+                <div class="col col-lg-5">
+                    <input required ui-date="linkDatePicker" ng-model="dateLoggedTo" placeholder="Logged Date" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-5 control-label"> {{ dateAllocatedFromLabel }} </label>
+                <div class="col col-lg-5">
+                    <input required ui-date="linkDatePicker" ng-model="dateAllocatedFrom" placeholder="Allocated Date" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ dateAllocatedToLabel }} </label>
+                <div class="col col-lg-5">
+                    <input required ui-date="linkDatePicker" ng-model="dateAllocatedTo" placeholder="Allocated Date" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-5 control-label"> {{ supplierLabel }} </label>
+                <div class="col col-lg-5">
+                    <input ng-model="supplier" placeholder="Supplier" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ technicianLabel }} </label>
+                <div class="col col-lg-5">
+                    <input ng-model="technician" placeholder="Technician" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+    <div class="search row">
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-5 control-label"> {{ statusLabel }} </label>
+                <div class="col col-lg-5">
+                    <input ng-model="status" placeholder="Status" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+        <div class="col col-lg-5">
+            <div class="form-group">
+                <label class="col col-lg-4 control-label"> {{ warrantyTypeLabel }} </label>
+                <div class="col col-lg-5">
+                    <input ng-model="warranty" placeholder="Warranty Type" class="date form-control"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="search row">&nbsp;</div>
+
+        <div ng-include src="'/cosacs/Static/js/report/GenericTemplate.html'" ng-controller="GenericReportController" class="ng-scope"></div>
+</div>

@@ -1,0 +1,41 @@
+﻿@model Blue.Cosacs.Web.Areas.Warehouse.Models.DriverPayment
+<tr data-id="@Model.Id" class="edit">
+@if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.InternalDriverPaymentsEdit))
+ {
+    <td class="actions"></td>
+ }
+    <td colspan="4">
+        @using (Html.BeginForm("RecordEdit", "DriverPayment", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+        <div class="col-lg-12">
+            <div class="form-group row">
+                <label for="SendingBranch" class="col-lg-3 control-label">Sending Branch</label>
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.SendingBranch, new { @class = "picklist", data_pick_list_id="BRANCH",
+                                                            data_placeholder="Select a Delivery Branch" })
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="ReceivingBranch" class="col-lg-3 control-label">Receiving Branch</label>
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.ReceivingBranch, new { @class = "picklist", data_pick_list_id="BRANCH",
+                                                            data_placeholder="Select a Delivery Branch" })
+                </div>
+            </div>
+            <div class="form-group row">
+                    <label for="Size" class="col-lg-3 control-label">Size</label>
+                    <div class="col-lg-7">
+                        @Html.TextBoxFor(m => m.Size, new { @class = "picklist", data_pick_list_id="Blue.Cosacs.Warehouse.TRUCKSIZE",
+                                                              data_placeholder="Select a Truck Size" })
+                    </div>
+                </div>
+            <div class="form-group row">
+                <label for="Value" class="col col-lg-3 control-label">Payment Value</label>
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.Value, new { @class="form-control" })
+                </div>
+            </div>
+        </div>    
+        }
+    </td>
+</tr>

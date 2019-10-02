@@ -1,0 +1,59 @@
+<div>
+    
+    <div class="row buffer-sm bottom">
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <button class="btn btn-primary" ng-click="save(purchaseForm)" ng-disabled="!canSave(purchaseForm)">Create Order</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-4">
+           
+            <div class="form-group" ng-class="{'has-error': !purchase.receivingLocationId}">
+                <label for="receivingLocation">Receiving Location</label>
+                <list id="{{$index}}" name="receivingLocation" ng-model="purchase.receivingLocationId" ng-required ng-change="updateLocation()" scope="locations" placeholder="Select a Location" ng-disabled="purchase.products.length > 0"></list>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group" ng-class="{'has-error': purchaseForm.requestedDeliveryDate.$invalid}">
+                <label for="requestedDeliveryDate">Purchase Order Requested Delivery Date</label>
+                <input id="requestedDeliveryDate"
+                       name="requestedDeliveryDate"
+                       type="date"
+                       class="form-control"
+                       ng-model="purchase.requestedDeliveryDate"
+                       ng-change="requestedDateChanged(purchase.requestedDeliveryDate)"
+                       required
+                       placeholder="Select Date"
+                       min="{{today}}"
+                        />
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-4">
+            <div class="form-group" ng-class="{'has-error': !purchase.vendorId}">
+                <label for="vendor">Vendor</label>
+                <list name="vendor" ng-model="purchase.vendorId" ng-required ng-change="updateVendor()" scope="vendors" placeholder="Select a Vendor" ng-disabled="purchase.products.length > 0"></list>
+            
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+            
+            <div class="form-group">
+                <label for="paymentTerms">Payment Terms</label>
+                <textarea class="form-control" rows="2" name="paymentTerms" ng-model="purchase.paymentTerms" maxlength="60"></textarea>    
+            </div>
+        </div>
+
+    </div>
+</div>

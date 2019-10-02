@@ -1,0 +1,21 @@
+﻿@model IEnumerable<DateTime>
+@{
+    var modelJson = Html.ToJson(Model);
+    ViewBag.Title = "Public Holidays";
+}
+<div class="publicHolidays row" data-module="config/publicHolidays">
+    <div class="col-lg-12">
+        <div class="row">
+            <div id="yearDatePicker" class="col-lg-9"></div>
+            <div id="selectedDates" class="col-lg-3">
+                <div class="col-lg-10">
+                    <div id="dateDisplay" data-dates="@modelJson">
+                    </div>
+                </div>
+                <div class="col-lg-2"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-1">
+    </div>
+</div>

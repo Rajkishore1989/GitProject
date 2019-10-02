@@ -1,0 +1,47 @@
+﻿@model dynamic
+
+<div data-module="merchandising/reports/allocatedStockReport/init" ng-controller="allocatedStockReportCtrl" ng-cloak class="buffer-sm bottom">
+    <div class="buffer bottom container-fluid" ng-form="searchForm">
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonPrint" class="clear btn btn-default" ng-disabled="vm.searching || !vm.results.length > 0" ng-click="print()">Print</button>
+                    <button id="buttonExport" class="clear btn btn-default" ng-disabled="vm.searching || !vm.results.length > 0" ng-click="getExport()">Export</button>
+                    <button id="buttonClear" class="clear btn btn-default" ng-disabled="vm.searching" ng-click="reset()">Clear</button>
+                    <button class="btn btn-primary" ng-click="search()" ng-disabled="vm.searching || searchForm.$invalid">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="row buffer bottom">
+            <div class="row">
+                <div class="col-lg-3">
+                    <label for="locationId">Location</label>
+                    <list name="locationId" ng-model="vm.query.locationId" scope="vm.locations" placeholder="Select a Location" ng-disabled="vm.query.fascia"></list>
+                </div>
+                <div class="col-lg-3">
+                    <label for="fascia">Fascia</label>
+                    <list name="fascia" ng-model="vm.query.fascia" scope="vm.options.fascia" placeholder="Select a fascia" ng-disabled="vm.query.locationId"></list>
+                </div>
+                <div class="col-lg-3">
+                    <label for="sku">Sku</label>
+                    <div><input class="form-control" type="text" ng-model="vm.query.sku" /></div>
+
+                </div>
+                <div class="col-lg-3">
+                    <label for="tags">Tags</label>
+                    <pb-tag-list tags="vm.options.productTags"
+                                 selected-tags="vm.query.tags"
+                                 placeholder="Type to add product tags" />
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <pb-column-select data="vm.results" columns="vm.columns" template-url="vm.gridTemplate" utils="vm.utils" count="vm.resultCount" has-data="hasData"></pb-column-select>
+    <div ng-hide="!resultsNotFound">
+        There are no results returned.
+    </div>
+
+</div>

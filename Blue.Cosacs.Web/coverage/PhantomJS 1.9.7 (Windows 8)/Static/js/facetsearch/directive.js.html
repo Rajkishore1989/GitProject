@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for ./Static/js/facetsearch/directive.js</title>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="../prettify.css">
+
+    <style>
+        body, html {
+            margin:0; padding: 0;
+        }
+        body {
+            font-family: Helvetica Neue, Helvetica,Arial;
+            font-size: 10pt;
+        }
+        div.header, div.footer {
+            background: #eee;
+            padding: 1em;
+        }
+        div.header {
+            z-index: 100;
+            position: fixed;
+            top: 0;
+            border-bottom: 1px solid #666;
+            width: 100%;
+        }
+        div.footer {
+            border-top: 1px solid #666;
+        }
+        div.body {
+            margin-top: 10em;
+        }
+        div.meta {
+            font-size: 90%;
+            text-align: center;
+        }
+        h1, h2, h3 {
+            font-weight: normal;
+        }
+        h1 {
+            font-size: 12pt;
+        }
+        h2 {
+            font-size: 10pt;
+        }
+        pre {
+            font-family: Consolas, Menlo, Monaco, monospace;
+            margin: 0;
+            padding: 0;
+            line-height: 14px;
+            font-size: 14px;
+            -moz-tab-size: 2;
+            -o-tab-size:  2;
+            tab-size: 2;
+        }
+
+        div.path { font-size: 110%; }
+        div.path a:link, div.path a:visited { color: #000; }
+        table.coverage { border-collapse: collapse; margin:0; padding: 0 }
+
+        table.coverage td {
+            margin: 0;
+            padding: 0;
+            color: #111;
+            vertical-align: top;
+        }
+        table.coverage td.line-count {
+            width: 50px;
+            text-align: right;
+            padding-right: 5px;
+        }
+        table.coverage td.line-coverage {
+            color: #777 !important;
+            text-align: right;
+            border-left: 1px solid #666;
+            border-right: 1px solid #666;
+        }
+
+        table.coverage td.text {
+        }
+
+        table.coverage td span.cline-any {
+            display: inline-block;
+            padding: 0 5px;
+            width: 40px;
+        }
+        table.coverage td span.cline-neutral {
+            background: #eee;
+        }
+        table.coverage td span.cline-yes {
+            background: #b5d592;
+            color: #999;
+        }
+        table.coverage td span.cline-no {
+            background: #fc8c84;
+        }
+
+        .cstat-yes { color: #111; }
+        .cstat-no { background: #fc8c84; color: #111; }
+        .fstat-no { background: #ffc520; color: #111 !important; }
+        .cbranch-no { background:  yellow !important; color: #111; }
+        .missing-if-branch {
+            display: inline-block;
+            margin-right: 10px;
+            position: relative;
+            padding: 0 4px;
+            background: black;
+            color: yellow;
+            xtext-decoration: line-through;
+        }
+        .missing-if-branch .typ {
+            color: inherit !important;
+        }
+
+        .entity, .metric { font-weight: bold; }
+        .metric { display: inline-block; border: 1px solid #333; padding: 0.3em; background: white; }
+        .metric small { font-size: 80%; font-weight: normal; color: #666; }
+
+        div.coverage-summary table { border-collapse: collapse; margin: 3em; font-size: 110%; }
+        div.coverage-summary td, div.coverage-summary table  th { margin: 0; padding: 0.25em 1em; border-top: 1px solid #666; border-bottom: 1px solid #666; }
+        div.coverage-summary th { text-align: left; border: 1px solid #666; background: #eee; font-weight: normal; }
+        div.coverage-summary th.file { border-right: none !important; }
+        div.coverage-summary th.pic { border-left: none !important; text-align: right; }
+        div.coverage-summary th.pct { border-right: none !important; }
+        div.coverage-summary th.abs { border-left: none !important; text-align: right; }
+        div.coverage-summary td.pct { text-align: right; border-left: 1px solid #666; }
+        div.coverage-summary td.abs { text-align: right; font-size: 90%; color: #444; border-right: 1px solid #666; }
+        div.coverage-summary td.file { text-align: right; border-left: 1px solid #666; white-space: nowrap;  }
+        div.coverage-summary td.pic { min-width: 120px !important;  }
+        div.coverage-summary a:link { text-decoration: none; color: #000; }
+        div.coverage-summary a:visited { text-decoration: none; color: #333; }
+        div.coverage-summary a:hover { text-decoration: underline; }
+        div.coverage-summary tfoot td { border-top: 1px solid #666; }
+
+        div.coverage-summary .yui3-datatable-sort-indicator, div.coverage-summary .dummy-sort-indicator {
+            height: 10px;
+            width: 7px;
+            display: inline-block;
+            margin-left: 0.5em;
+        }
+        div.coverage-summary .yui3-datatable-sort-indicator {
+            background: url("http://yui.yahooapis.com/3.6.0/build/datatable-sort/assets/skins/sam/sort-arrow-sprite.png") no-repeat scroll 0 0 transparent;
+        }
+        div.coverage-summary .yui3-datatable-sorted .yui3-datatable-sort-indicator {
+            background-position: 0 -20px;
+        }
+        div.coverage-summary .yui3-datatable-sorted-desc .yui3-datatable-sort-indicator {
+            background-position: 0 -10px;
+        }
+
+        .high { background: #b5d592 !important; }
+        .medium { background: #ffe87c !important; }
+        .low { background: #fc8c84 !important; }
+
+        span.cover-fill, span.cover-empty {
+            display:inline-block;
+            border:1px solid #444;
+            background: white;
+            height: 12px;
+        }
+        span.cover-fill {
+            background: #ccc;
+            border-right: 1px solid #444;
+        }
+        span.cover-empty {
+            background: white;
+            border-left: none;
+        }
+        span.cover-full {
+            border-right: none !important;
+        }
+        pre.prettyprint {
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        .com { color: #999 !important; }
+    </style>
+</head>
+<body>
+<div class="header low">
+    <h1>Code coverage report for <span class="entity">./Static/js/facetsearch/directive.js</span></h1>
+    <h2>
+        
+        Statements: <span class="metric">1.9% <small>(3 / 158)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Branches: <span class="metric">0% <small>(0 / 49)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Functions: <span class="metric">2.86% <small>(1 / 35)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+        
+        Lines: <span class="metric">1.9% <small>(3 / 158)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        
+    </h2>
+    <div class="path"><a href="../index.html">All files</a> &#187; <a href="index.html">./Static/js/facetsearch\</a> &#187; directive.js</div>
+</div>
+<div class="body">
+<pre><table class="coverage">
+<tr><td class="line-count">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299
+300
+301
+302
+303
+304
+305
+306
+307
+308
+309
+310
+311
+312
+313
+314
+315
+316
+317
+318
+319
+320
+321
+322</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">/*global define*/
+define(['angular', 'jquery', 'underscore', 'ConvertToISO8601Date', 'url', 'lib/select2'], function (angular, $, _, isoDate, url) {
+	'use strict';
+	var searchDirective = <span class="fstat-no" title="function not covered" >function () {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >		var getSearchParameters = <span class="fstat-no" title="function not covered" >function (scope) {</span></span>
+<span class="cstat-no" title="statement not covered" >			var search = {</span>
+				'query': scope.searchString,
+				'facetFields': {},
+				'dateFields': {},
+				'customQuery': []
+			};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >			angular.forEach($('.facet-field'), <span class="fstat-no" title="function not covered" >function (field) {</span></span>
+<span class="cstat-no" title="statement not covered" >				var fieldName = $(field).data('field');</span>
+<span class="cstat-no" title="statement not covered" >				var values = [];</span>
+<span class="cstat-no" title="statement not covered" >				angular.forEach($('.field-value.selected', field), <span class="fstat-no" title="function not covered" >function (fieldValue) {</span></span>
+<span class="cstat-no" title="statement not covered" >					values.push($(fieldValue).data('value'));</span>
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				if (values.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >					search.facetFields[fieldName] = {</span>
+						Values: values
+					};
+				}
+			});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >			angular.forEach(scope.dateFields, <span class="fstat-no" title="function not covered" >function (dateField) {</span></span>
+<span class="cstat-no" title="statement not covered" >				var searchFrom = '*';</span>
+<span class="cstat-no" title="statement not covered" >				var searchTo = '*';</span>
+<span class="cstat-no" title="statement not covered" >				var values = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				if (dateField.fromValue) {</span>
+<span class="cstat-no" title="statement not covered" >					searchFrom = dateField.fromValue.toISOString();</span>
+				}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				if (dateField.toValue) {</span>
+<span class="cstat-no" title="statement not covered" >					dateField.toValue.setUTCHours(23);</span>
+<span class="cstat-no" title="statement not covered" >					dateField.toValue.setUTCMinutes(59);</span>
+<span class="cstat-no" title="statement not covered" >					dateField.toValue.setUTCSeconds(59);</span>
+<span class="cstat-no" title="statement not covered" >					searchTo = dateField.toValue.toISOString();</span>
+				}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				if (searchFrom !== '*' || searchTo !== '*') {</span>
+<span class="cstat-no" title="statement not covered" >					values.push(searchFrom);</span>
+<span class="cstat-no" title="statement not covered" >					values.push(searchTo);</span>
+				}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				if (values.length &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >					search.dateFields[dateField.name] = {</span>
+						Values: values
+					};
+				}
+			});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >			var customQuery = [];</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >			$('input[type=checkbox].field-value:checked').map(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >				customQuery.push(this.value);</span>
+			});
+<span class="cstat-no" title="statement not covered" >			search.customQuery = customQuery;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >			scope.searchParameters = search;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >			return search;</span>
+		};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >		return {</span>
+			restrict: 'EA',
+			controller: 'FacetController',
+			transclude: false,
+			replace: true,
+			scope: false,
+			templateUrl: url.resolve('/Static/js/angularShared/templates/facetsearch.html'),
+			link: <span class="fstat-no" title="function not covered" >function (scope, element, attrs, controller) {</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				var broadcastScope = scope.$parent || scope;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				element.bind('$destroy', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					$('#resultsContainer').off('.facet');</span>
+<span class="cstat-no" title="statement not covered" >					$('#resultsContainerTouch').off('.facet');</span>
+<span class="cstat-no" title="statement not covered" >					$('.buttons').off('.facet');</span>
+<span class="cstat-no" title="statement not covered" >					$('.btn.clear').off('.facet');</span>
+<span class="cstat-no" title="statement not covered" >					$('.searchFields').off('.facet');</span>
+<span class="cstat-no" title="statement not covered" >					$('#body').off('.facet');</span>
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.$on('facet:search:no-more-results', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					$('#body').off('scroll.facet');</span>
+<span class="cstat-no" title="statement not covered" >					scope.noMoreResults = true;</span>
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				$('#resultsContainer').on('click.facet', '.result', <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >					broadcastScope.$broadcast('facetsearch:result:click', {</span>
+						element: $(this),
+						resultItem: scope.results.response.docs[$(this).index('.search-result')],
+						domEvent: e
+					});
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				$('#resultsContainerTouch').on('click.facet', '.result', <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >					broadcastScope.$broadcast('facetsearch:result:click', {</span>
+						element: $(this),
+						resultItem: scope.displayResults[$(this).index('.search-result')],
+						domEvent: e
+					});
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $('#resultsContainer').on('click.facet', '.expandable-toggle', <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    var closestResultTarget =  $(this).closest('.result');</span>
+<span class="cstat-no" title="statement not covered" >                    broadcastScope.$broadcast('facetsearch:result:expandableToggle:click', {</span>
+                        element: closestResultTarget,
+                        resultItem: scope.results.response.docs[closestResultTarget.index('.search-result')],
+                        domEvent: e
+                    });
+                });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >                $('#resultsContainerTouch').on('click.facet', '.expandable-toggle', <span class="fstat-no" title="function not covered" >function (e) {</span></span>
+<span class="cstat-no" title="statement not covered" >                    var closestResultTarget =  $(this).closest('.result');</span>
+<span class="cstat-no" title="statement not covered" >                    broadcastScope.$broadcast('facetsearch:result:expandableToggle:click', {</span>
+                        element: closestResultTarget,
+                        resultItem: scope.displayResults[closestResultTarget.index('.search-result')],
+                        domEvent: e
+                    });
+                });
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				$('.generatedButtons').on('click.facet', '.btn.action', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					var action = ($(this).data('action') || '').toLowerCase();</span>
+<span class="cstat-no" title="statement not covered" >					var searchParameters = getSearchParameters(scope);</span>
+<span class="cstat-no" title="statement not covered" >					broadcastScope.$broadcast('facetsearch:action:' + action, {</span>
+						query: searchParameters,
+						results: scope.results.response.docs,
+						available: scope.results.response.numFound
+					});
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				$('.btn.clear').on('click.facet', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					$('.field-value').removeClass('selected');</span>
+<span class="cstat-no" title="statement not covered" >					angular.forEach(scope.dateFields, <span class="fstat-no" title="function not covered" >function (dateField) {</span></span>
+<span class="cstat-no" title="statement not covered" >						dateField.fromValue = null;</span>
+<span class="cstat-no" title="statement not covered" >						dateField.toValue = null;</span>
+<span class="cstat-no" title="statement not covered" >						dateField.numberOfDays = null;</span>
+					});
+<span class="cstat-no" title="statement not covered" >					scope.searchString = '';</span>
+<span class="cstat-no" title="statement not covered" >					$('input.field-value').attr('checked', false);</span>
+<span class="cstat-no" title="statement not covered" >					performSearch();</span>
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				$('.searchFields').on('click.facet', '.field-value', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					$(this).toggleClass('selected');</span>
+<span class="cstat-no" title="statement not covered" >					performSearch();</span>
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				var getMoreResults = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					var endOfList = $('#center').height() - $(window).height() - 60;</span>
+<span class="cstat-no" title="statement not covered" >					var currentPosition = $(window).scrollTop();</span>
+<span class="cstat-no" title="statement not covered" >					if (currentPosition &gt;= endOfList || (scope.touchFriendly)) {</span>
+<span class="cstat-no" title="statement not covered" >						scope.searchStartCount += 25;</span>
+<span class="cstat-no" title="statement not covered" >						var searchParameters = getSearchParameters(scope);</span>
+<span class="cstat-no" title="statement not covered" >						controller.getAdditionalResults(searchParameters);</span>
+					}
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				var addScrollListener = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					$(window).on('scroll.facet', _.debounce(getMoreResults, 250));</span>
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				var performSearch = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					var searchParameters = getSearchParameters(scope);</span>
+<span class="cstat-no" title="statement not covered" >					controller.getUpdatedResults(searchParameters, true);</span>
+<span class="cstat-no" title="statement not covered" >					addScrollListener();</span>
+<span class="cstat-no" title="statement not covered" >					scope.noMoreResults = false;</span>
+<span class="cstat-no" title="statement not covered" >					return false;</span>
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				var highlightSelectedSearchFields = <span class="fstat-no" title="function not covered" >function (scope) {</span></span>
+<span class="cstat-no" title="statement not covered" >					if (scope.searchParameters !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >						scope.selectedFields = [];</span>
+<span class="cstat-no" title="statement not covered" >						angular.forEach(scope.searchParameters.facetFields, <span class="fstat-no" title="function not covered" >function (values, fieldName) {</span></span>
+<span class="cstat-no" title="statement not covered" >							var facetField = $('.facet-field[data-field="' + fieldName + '"]');</span>
+<span class="cstat-no" title="statement not covered" >							var vals = [];</span>
+<span class="cstat-no" title="statement not covered" >							angular.forEach(values.Values, <span class="fstat-no" title="function not covered" >function (value) {</span></span>
+<span class="cstat-no" title="statement not covered" >								var fieldValue = facetField.find('.field-value[data-value="' + value + '"]');</span>
+<span class="cstat-no" title="statement not covered" >								fieldValue.addClass('selected');</span>
+<span class="cstat-no" title="statement not covered" >								if (scope.touchFriendly) {</span>
+<span class="cstat-no" title="statement not covered" >									var touchField = $('.touch-search-field[data-field="' + fieldName + '"]');</span>
+<span class="cstat-no" title="statement not covered" >									var touchValue = touchField.find('.touch-field-value[data-value="' + value + '"]');</span>
+<span class="cstat-no" title="statement not covered" >									var count = fieldValue.data('count');</span>
+<span class="cstat-no" title="statement not covered" >									touchValue.hide();</span>
+<span class="cstat-no" title="statement not covered" >									scope.selectedFields.push({</span>
+										field: fieldName,
+										value: value,
+										count: count
+									});
+								}
+							});
+						});
+<span class="cstat-no" title="statement not covered" >						if (scope.touchFriendly) {</span>
+<span class="cstat-no" title="statement not covered" >							scope.pageSize = scope.maxPageSize - scope.selectedFields.length;</span>
+<span class="cstat-no" title="statement not covered" >							controller.showFilterFields();</span>
+<span class="cstat-no" title="statement not covered" >							controller.showResultsForPage(true);</span>
+						}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >						angular.forEach(scope.searchParameters.dateFields, <span class="fstat-no" title="function not covered" >function (values, fieldName) {</span></span>
+<span class="cstat-no" title="statement not covered" >							var dateField = _.find(scope.dateFields, <span class="fstat-no" title="function not covered" >function (field) {</span></span>
+<span class="cstat-no" title="statement not covered" >								return field.name === fieldName;</span>
+							});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >							if (values.Values.length === 2) {</span>
+<span class="cstat-no" title="statement not covered" >								if (values.Values[0] !== '*') {</span>
+<span class="cstat-no" title="statement not covered" >									dateField.fromValue = new Date(values.Values[0]);</span>
+								}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >								if (values.Values[1] !== '*') {</span>
+<span class="cstat-no" title="statement not covered" >									dateField.toValue = new Date(values.Values[1]);</span>
+								}
+							}
+						});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >						angular.forEach(scope.searchParameters.customQuery, <span class="fstat-no" title="function not covered" >function (queryName) {</span></span>
+<span class="cstat-no" title="statement not covered" >							$('#custom-query-' + queryName).attr('checked', true);</span>
+						});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >						if (scope.searchString === undefined || scope.searchString === null || scope.searchString === '') {</span>
+<span class="cstat-no" title="statement not covered" >							scope.searchString = scope.searchParameters.query;</span>
+						}
+					}
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.searchByText = _.debounce(performSearch, 250);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.templateRetrieved.then(<span class="fstat-no" title="function not covered" >function () {</span></span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >					var resultsHtml = scope.resultsTemplate(scope);</span>
+<span class="cstat-no" title="statement not covered" >					if (!scope.touchFriendly) {</span>
+<span class="cstat-no" title="statement not covered" >						angular.element('#resultsContainer').html(resultsHtml);</span>
+					} else {
+<span class="cstat-no" title="statement not covered" >						angular.element('#resultsContainerTouch').html(resultsHtml);</span>
+					}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >					highlightSelectedSearchFields(scope);</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >					addScrollListener();</span>
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				if (scope.datePickerSettings) {</span>
+<span class="cstat-no" title="statement not covered" >					scope.datePickerSettings.onSelect = performSearch;</span>
+				}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.$watch('results', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					scope.templateRetrieved.then(<span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >						highlightSelectedSearchFields(scope);</span>
+					});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >					if (scope.totalResults === 0) {</span>
+<span class="cstat-no" title="statement not covered" >						scope.noMoreResults = true;</span>
+					}
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.$on('facet:searchFields:changed', <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					performSearch();</span>
+				});
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.numberOfDaysChanged = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					if (this.dateField.numberOfDays) {</span>
+<span class="cstat-no" title="statement not covered" >						this.dateField.fromValue = undefined;</span>
+<span class="cstat-no" title="statement not covered" >						var now = new Date();</span>
+<span class="cstat-no" title="statement not covered" >						this.dateField.toValue = new Date(now.getTime() - (this.dateField.numberOfDays * 24 * 60 * 60 * 1000));</span>
+<span class="cstat-no" title="statement not covered" >						performSearch();</span>
+					}
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.pageNext = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					if (scope.noMoreResults) {</span>
+<span class="cstat-no" title="statement not covered" >						return;</span>
+					}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >					scope.scrollPage += 1;</span>
+<span class="cstat-no" title="statement not covered" >					getMoreResults();</span>
+<span class="cstat-no" title="statement not covered" >					controller.showNextPage();</span>
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.pagePrevious = <span class="fstat-no" title="function not covered" >function () {</span></span>
+<span class="cstat-no" title="statement not covered" >					if (scope.scrollPage &gt; 0) {</span>
+<span class="cstat-no" title="statement not covered" >						scope.scrollPage -= 1;</span>
+					}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >					controller.showPreviousPage();</span>
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.applyFilter = <span class="fstat-no" title="function not covered" >function (event, searchField, fieldValue) {</span></span>
+<span class="cstat-no" title="statement not covered" >					var target = $(event.currentTarget);</span>
+<span class="cstat-no" title="statement not covered" >					$('.facet-field[data-field="' + searchField + '"]')</span>
+						.find('.field-value[data-value="' + fieldValue + '"]').toggleClass('selected');
+&nbsp;
+<span class="cstat-no" title="statement not covered" >					scope.scrollPage = 0;</span>
+<span class="cstat-no" title="statement not covered" >					scope.displayedItemCount = 0;</span>
+<span class="cstat-no" title="statement not covered" >					performSearch();</span>
+				};
+&nbsp;
+<span class="cstat-no" title="statement not covered" >				scope.numberOfDays = [{</span>
+					value: 1,
+					label: '1 day'
+				}, {
+					value: 7,
+					label: '1 week'
+				}, {
+					value: 14,
+					label: '2 weeks'
+				}, {
+					value: 21,
+					label: '3 weeks'
+				}, {
+					value: 30,
+					label: '1 month'
+				}];
+			}
+		};
+	};
+&nbsp;
+	return searchDirective;
+});</pre></td></tr>
+</table></pre>
+
+</div>
+<div class="footer">
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Mar 07 2014 15:49:30 GMT+0000 (GMT Standard Time)</div>
+</div>
+
+<script src="../prettify.js"></script>
+
+<script src="http://yui.yahooapis.com/3.6.0/build/yui/yui-min.js"></script>
+<script>
+
+    YUI().use('datatable', function (Y) {
+
+        var formatters = {
+          pct: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              try {
+                  return o.value.toFixed(2) + '%';
+              } catch (ex) { return o.value + '%'; }
+          },
+          html: function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.record.get(o.column.key + '_html');
+          }
+        },
+          defaultFormatter = function (o) {
+              o.className += o.record.get('classes')[o.column.key];
+              return o.value;
+          };
+
+        function getColumns(theadNode) {
+            var colNodes = theadNode.all('tr th'),
+                cols = [],
+                col;
+            colNodes.each(function (colNode) {
+                col = {
+                    key: colNode.getAttribute('data-col'),
+                    label: colNode.get('innerHTML') || ' ',
+                    sortable: !colNode.getAttribute('data-nosort'),
+                    className: colNode.getAttribute('class'),
+                    type: colNode.getAttribute('data-type'),
+                    allowHTML: colNode.getAttribute('data-html') === 'true' || colNode.getAttribute('data-fmt') === 'html'
+                };
+                col.formatter = formatters[colNode.getAttribute('data-fmt')] || defaultFormatter;
+                cols.push(col);
+            });
+            return cols;
+        }
+
+        function getRowData(trNode, cols) {
+            var tdNodes = trNode.all('td'),
+                    i,
+                    row = { classes: {} },
+                    node,
+                    name;
+            for (i = 0; i < cols.length; i += 1) {
+                name = cols[i].key;
+                node = tdNodes.item(i);
+                row[name] = node.getAttribute('data-value') || node.get('innerHTML');
+                row[name + '_html'] = node.get('innerHTML');
+                row.classes[name] = node.getAttribute('class');
+                //Y.log('Name: ' + name + '; Value: ' + row[name]);
+                if (cols[i].type === 'number') { row[name] = row[name] * 1; }
+            }
+            //Y.log(row);
+            return row;
+        }
+
+        function getData(tbodyNode, cols) {
+            var data = [];
+            tbodyNode.all('tr').each(function (trNode) {
+                data.push(getRowData(trNode, cols));
+            });
+            return data;
+        }
+
+        function replaceTable(node) {
+            if (!node) { return; }
+            var cols = getColumns(node.one('thead')),
+                data = getData(node.one('tbody'), cols),
+                table,
+                parent = node.get('parentNode');
+
+            table = new Y.DataTable({
+                columns: cols,
+                data: data,
+                sortBy: 'file'
+            });
+            parent.set('innerHTML', '');
+            table.render(parent);
+        }
+
+        Y.on('domready', function () {
+            replaceTable(Y.one('div.coverage-summary table'));
+            if (typeof prettyPrint === 'function') {
+                prettyPrint();
+            }
+        });
+    });
+</script>
+</body>
+</html>

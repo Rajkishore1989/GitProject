@@ -1,0 +1,243 @@
+﻿@model TradingReportViewModel
+@{
+    var reports = Model;
+}
+
+<h3>Trading Report @DateTime.Now.ToString("yyyy-MM-dd")</h3>
+<div class="buffer-sm bottom">
+    @if (reports.SalesReports.Any()) {
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="pb-table pb-report print">
+                <thead>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="8">This Year</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="2">Day</th><th colspan="2">Week</th><th colspan="2">Period</th><th colspan="2">Year To Date</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                </tr>
+                </thead>
+                @foreach (var report in reports.SalesReports) {
+                <tbody>
+                    @if (report.Rows != null) {
+                        foreach (var row in report.Rows.Where(r => r.IsHeaderRow)) {
+                        <tr class="header">
+                            <td>@row.Name</td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        }
+                        foreach (var row in report.Rows.Where(r => r.Statistics != null && !r.IsHeaderRow)) {
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@row.Name</td>
+                            <td class="currency">@row.Statistics.TodaySales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.TodayGrossProfit.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisWeekSales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisWeekGrossProfit.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisYearSales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisYearGrossProfit.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisPeriodSales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisPeriodGrossProfit.ToCurrencyWithSymbol()</td>
+                        </tr>
+                        }
+                    }
+                    @if (report.Totals != null && @report.Totals.Statistics != null) {
+                        <tr class="footer @if(@report.Totals.IsGrandTotal){ <text>grand</text> }">
+                        <td>@if(!@report.Totals.IsGrandTotal){<text>&nbsp;&nbsp;&nbsp;&nbsp;</text>}Total @@report.Totals.Name</td>
+                        <td class="currency">@report.Totals.Statistics.TodaySales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.TodayGrossProfit.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisWeekSales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisWeekGrossProfit.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisYearSales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisYearGrossProfit.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisPeriodSales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisPeriodGrossProfit.ToCurrencyWithSymbol()</td>
+                    </tr>
+                    }
+                </tbody>
+                }
+            </table>
+        </div>
+    </div>
+    }
+</div>
+
+<div class="buffer-sm bottom page-break">
+    @if (reports.SalesReports.Any()) {
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="pb-table pb-report print">
+                <thead>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="8">Last Year</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="2">Day</th><th colspan="2">Week</th><th colspan="2">Period</th><th colspan="2">Year To Date</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                </tr>
+                </thead>
+                @foreach (var report in reports.SalesReports) {
+                <tbody>
+                    @if (report.Rows != null) {
+                        foreach (var row in report.Rows.Where(r => r.IsHeaderRow)) {
+                        <tr class="header">
+                            <td>@row.Name</td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        }
+                        foreach (var row in report.Rows.Where(r => r.Statistics != null && !r.IsHeaderRow)) {
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@row.Name</td>
+
+                            <td class="currency">@row.Statistics.TodayLastYearSales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.TodayLastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisWeekLastYearSales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisWeekLastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.LastYearSales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.LastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisPeriodLastYearSales.ToCurrencyWithSymbol()</td>
+                            <td class="currency">@row.Statistics.ThisPeriodLastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                        </tr>
+                        }
+                    }
+                    @if (report.Totals != null && @report.Totals.Statistics != null) {
+                        <tr class="footer @if(@report.Totals.IsGrandTotal){ <text>grand</text> }">
+                        <td>@if(!@report.Totals.IsGrandTotal){<text>&nbsp;&nbsp;&nbsp;&nbsp;</text>}Total @@report.Totals.Name</td>
+                                 
+                        <td class="currency">@report.Totals.Statistics.TodayLastYearSales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.TodayLastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisWeekLastYearSales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisWeekLastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.LastYearSales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.LastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisPeriodLastYearSales.ToCurrencyWithSymbol()</td>
+                        <td class="currency">@report.Totals.Statistics.ThisPeriodLastYearGrossProfit.ToCurrencyWithSymbol()</td>
+                    </tr>
+                    }
+                </tbody>
+                }
+            </table>
+        </div>
+    </div>
+    }
+</div> 
+
+<div class="buffer-sm bottom page-break">
+    @if (reports.SalesReports.Any()) {
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="pb-table pb-report print">
+                <thead>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="8">Variance</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th colspan="2">Day</th><th colspan="2">Week</th><th colspan="2">Period</th><th colspan="2">Year To Date</th>
+                </tr>
+                <tr>
+                    <th class="clear"></th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                    <th>Sales</th><th>Gross Profit</th>
+                </tr>
+                </thead>
+                @foreach (var report in reports.SalesReports) {
+                <tbody>
+                    @if (report.Rows != null) {
+                        foreach (var row in report.Rows.Where(r => r.IsHeaderRow)) {
+                        <tr class="header">
+                            <td>@row.Name</td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        }
+                        foreach (var row in report.Rows.Where(r => r.Statistics != null && !r.IsHeaderRow)) {
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@row.Name</td>
+
+                            <td class="percentage">@row.Statistics.VarianceDaySales.ToPercentage()</td>
+                            <td class="percentage">@row.Statistics.VarianceDayGrossProfit.ToPercentage()</td>
+                            <td class="percentage">@row.Statistics.VarianceWeekSales.ToPercentage()</td>
+                            <td class="percentage">@row.Statistics.VarianceWeekGrossProfit.ToPercentage()</td>
+                            <td class="percentage">@row.Statistics.VariancePeriodSales.ToPercentage()</td>
+                            <td class="percentage">@row.Statistics.VariancePeriodGrossProfit.ToPercentage()</td>
+                            <td class="percentage">@row.Statistics.VarianceYearSales.ToPercentage()</td>
+                            <td class="percentage">@row.Statistics.VarianceYearGrossProfit.ToPercentage()</td>
+                        </tr>
+                        }
+                    }
+                    @if (report.Totals != null && @report.Totals.Statistics != null) {
+                        <tr class="footer @if(@report.Totals.IsGrandTotal){ <text>grand</text> }">
+                        <td>@if(!@report.Totals.IsGrandTotal){<text>&nbsp;&nbsp;&nbsp;&nbsp;</text>}Total @@report.Totals.Name</td>
+
+                        <td class="percentage">@report.Totals.Statistics.VarianceDaySales.ToPercentage()</td>
+                        <td class="percentage">@report.Totals.Statistics.VarianceDayGrossProfit.ToPercentage()</td>
+                        <td class="percentage">@report.Totals.Statistics.VarianceWeekSales.ToPercentage()</td>
+                        <td class="percentage">@report.Totals.Statistics.VarianceWeekGrossProfit.ToPercentage()</td>
+                        <td class="percentage">@report.Totals.Statistics.VariancePeriodSales.ToPercentage()</td>
+                        <td class="percentage">@report.Totals.Statistics.VariancePeriodGrossProfit.ToPercentage()</td>
+                        <td class="percentage">@report.Totals.Statistics.VarianceYearSales.ToPercentage()</td>
+                        <td class="percentage">@report.Totals.Statistics.VarianceYearGrossProfit.ToPercentage()</td>
+                    </tr>
+                    }
+                </tbody>
+                }
+            </table>
+        </div>
+    </div>
+    }        
+</div>
+
+@if (reports.InventoryReports.Any()) {
+<div class="row buffer-sm top">
+    <div class="col-lg-12">
+        <table class="pb-table pb-report print page-break">
+            <thead>
+            <tr>
+                <th>Stock</th>
+                <th>Value</th>
+                <th>% of Total</th>
+            </tr>
+            </thead>
+            @foreach (var report in reports.InventoryReports) {
+                if (report.Rows != null) {
+                <tbody>
+                    @foreach (var row in report.Rows.Where(r => r.Statistics != null)) { 
+                    <tr>
+                        <td>@row.Name</td>
+                        <td class="currency">@row.Statistics.StockValue.ToCurrencyWithSymbol()</td>
+                        <td class="percentage">@row.Statistics.StockFraction.ToPercentage()</td>
+                    </tr>
+                    }
+                    @if (report.Totals != null && @report.Totals.Statistics != null) {
+                    <tr class="footer @if(@report.Totals.IsGrandTotal){ <text>grand</text> }">
+                        <td>Total @report.Totals.Name</td>
+                        <td class="currency">@report.Totals.Statistics.StockValue.ToCurrencyWithSymbol()</td>
+                        <td class="percentage">@report.Totals.Statistics.StockFraction.ToPercentage()</td>
+                    </tr>
+                    }
+                </tbody>
+                }
+            }
+        </table>
+    </div>
+</div>
+}

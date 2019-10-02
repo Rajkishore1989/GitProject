@@ -1,0 +1,135 @@
+﻿<div data-module="merchandising/stockAllocation/init" ng-controller="StockAllocationCtrl" ng-cloak>
+    <div ng-form="allocation">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button class="btn btn-primary" ng-click="save()" ng-show="editing" ng-class="{'disabled': !canSave() || allocation.$invalid}">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="buffer top">
+            <ng-form name="allocationForm" class="form-horizontal" novalidate>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group" ng-class="{'has-error': !stockAllocation.warehouseLocationId}">
+                                    <label class="control-label col-md-4" for="warehouses">Warehouse</label>
+                                    <div class="col-md-8">
+                                        <div ng-show="editing">
+                                            <list name="warehouses"
+                                                  ng-model="stockAllocation.warehouseLocationId"
+                                                  scope="warehouses"
+                                                  placeholder="Select a Warehouse"
+                                                  ng-disabled="!canEdit()"></list>
+                                        </div>
+                                        <div ng-hide="editing" class="form-control-static">
+                                            <a href="{{resolve('Merchandising/Locations/Detail/' + stockAllocation.warehouseLocationId)}}">{{stockAllocation.warehouseLocation}}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-hide="editing">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Created On</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">{{stockAllocation.createdDate | pbDate : true}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" ng-hide="editing">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">Created By</label>
+                                <div class="col-md-8">
+                                    <div class="form-control-static">{{stockAllocation.createdBy}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4" for="comments">Comments</label>
+                            <div class="col-md-8">
+                                <textarea ng-show="editing" id="comments" ng-disabled="!canAddComments()" rows="5" ng-model="stockAllocation.comments" maxlength="200" class="form-control"></textarea>
+                                <div ng-hide="editing" class="form-control-static"><p class="pb-text" pb-ref-link ng-model="stockAllocation.comments"></p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row buffer top">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-striped aligned pb-table">
+                            <thead>
+                                <tr>
+                                    <th class="component-controls"></th>
+                                    <th>Receiving Location</th>
+                                    <th>Product Code</th>
+                                    <th>Description</th>
+                                    <th ng-hide="isCreated()">QTY Available</th>                            
+                                    <th>QTY</th>
+                                    <th>Average Weighted Cost</th>
+                                    <th>Line Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in products" ng-form="productForm" ng-controller="AllocationProductCtrl">
+                                    <td class="component-controls" ng-show="$parent.canEditProduct()">
+                                        <span class="glyphicons glyph-btn undo" title="Cancel new allocation product" ng-click="cancel()" ng-show="isEditing()">&nbsp;</span>
+                                        <span class="glyphicons glyph-btn ok_2" title="Save allocation product" ng-click="accept(stockAllocation.products, productForm)" ng-show="isEditing()" ng-class="{'disabled': productForm.$invalid }">&nbsp;</span>
+                                        <span class="glyphicons glyph-btn pencil" title="Edit allocation product" ng-click="edit()" ng-hide="isEditing()"></span>
+                                        <span class="glyphicons glyph-btn bin" title="Remove allocation product" ng-click="remove()" ng-hide="isEditing()"></span>
+                                    </td>
+                                    <td class="component-controls" ng-show="!$parent.canEditProduct()"></td>
+                                    <td class="location">
+                                        <div ng-class="{'has-error': !product.receivingLocationId}" ng-show="isEditing()">
+                                            <list id="receivingLocation"
+                                                  name="receivingLocation"
+                                                  ng-model="product.receivingLocationId"
+                                                  ng-change="setLocationValidity(productForm)"
+                                                  scope="$parent.locations"
+                                                  placeholder="Select a location">
+                                            </list>
+                                        </div>
+                                        <div ng-hide="isEditing()">
+                                            {{product.receivingLocation}}
+                                        </div>
+                                    </td>
+                                    <td class="sku">
+                                        <div ng-class="{'has-error': (!newProduct || !newProduct.sku) && canEditProduct() }" ng-show="isEditing()">
+                                            <pb-search-dropdown endpoint="productSearch" is-disabled="!canEditProduct() || !product.receivingLocationId" model="newProduct" mapper="mapSearchResult" params="getSearchParams" result-processor="processSearchResult" />
+                                        </div>
+                                        <div ng-hide="isEditing()">
+                                            <a href="{{resolve('Merchandising/Products/Details/' + product.productId)}}">{{product.sku}}</a>
+                                        </div>
+                                    </td>
+                                    <td>{{product.description}}</td>
+                                    <td ng-hide="isCreated()">{{runningQtyAvailable(product)}}</td>
+                                    <td>
+                                        <div ng-class="{'has-error': productForm.quantity.$invalid}" ng-show="isEditing()">
+                                            <input id="quantity" name="quantity" pb-integer ng-required="true" ng-disabled="!canEditProduct()" min="1" ng-min="1" max="20000" ng-max="20000" class="form-control" placeholder="Enter a quantity" ng-model="product.quantity" ng-change="checkQuantity()" data-original-title="Please enter a numeric value between 1 and 20000" />
+                                        </div>
+                                        <div ng-hide="isEditing()">
+                                            {{product.quantity}}
+                                        </div>
+                                    </td>
+                                    <td class="currency">{{product.averageWeightedCost | pbCurrency}}</td>
+                                    <td class="currency">{{lineCost(product) | pbCurrency}}</td>
+                                </tr>
+                                <tr ng-show="editing">
+                                    <td>
+                                        <span class="glyphicons glyph-btn plus" title="Add new allocation product" ng-click="addProduct(allocationForm)" ng-class="{disabled:!canAddProduct(allocationForm)}">&nbsp;</span>
+                                    </td>
+                                    <td colspan="7"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </ng-form>
+        </div>
+    </div>
+</div>

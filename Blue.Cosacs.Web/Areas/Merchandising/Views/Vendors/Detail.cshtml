@@ -1,0 +1,189 @@
+﻿@model SupplierViewModel
+@{
+    if (Model.Supplier == null || Model.Supplier.Name == null)
+    {
+        ViewBag.Title = "Create Vendor";
+    }
+    else
+    {
+        ViewBag.Title = "Vendor - " + Model.Supplier.Name;
+    }
+}
+
+<div data-module="merchandising/supplier/init" ng-controller="SupplierCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+    <ng-form name="supplierForm" class="form-horizontal supplier-form" novalidate>
+        <div class="row buffer top" ng-show="vendorExists()">
+            <div class="col-lg-12">
+                <div class="well well-sm">
+                    <pb-tag-list tags="options.vendorTags"
+                                add-callback="saveVendorTags()"
+                                remove-callback="saveVendorTags()" 
+                                selected-tags="supplierTags" 
+                                placeholder="Type to add tag" 
+                                editable="!readonly" />
+                </div>
+            </div>
+        </div>
+        <div class="row buffer top bottom">
+            <div class="col-lg-6">
+                <div class="row">
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.code.$invalid}">
+                        <label for="code" class="col-lg-4 control-label">
+                            Vendor Code
+                        </label>
+                        <div class="col-lg-8">
+                            <div class="form-control-static">
+                                <input type="text" class="form-control" name="code" ng-model="vm.supplier.code" maxlength="30" required ng-disabled="readonly || vm.supplier.id" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.name.$invalid}">
+                        <label for="name" class="col-lg-4 control-label">
+                            Vendor Name
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" name="name" ng-model="vm.supplier.name" maxlength="240" required ng-disabled="readonly"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.type.$invalid}">
+                        <label for="type" class="col-lg-4 control-label">
+                            Vendor Type
+                        </label>
+                        <div class="col-lg-8">
+                            <select name="type" ng-model="vm.supplier.type" required maxlength="20" class="form-control" ng-options="type as type for type in types" ng-disabled="readonly"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.addressLine1.$invalid}">
+                        <label for="addressLine1" class="col-lg-4 control-label">
+                            Address Line 1
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" name="addressLine1" ng-model="vm.supplier.addressLine1" maxlength="240" required ng-disabled="readonly" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.addressLine2.$invalid}">
+                        <label for="addressLine2" class="col-lg-4 control-label">
+                            Address Line 2
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" name="addressLine2" ng-model="vm.supplier.addressLine2" maxlength="240" ng-disabled="readonly" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.city.$invalid}">
+                        <label for="city" class="col-lg-4 control-label">
+                            City
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" name="city" ng-model="vm.supplier.city" maxlength="25" required ng-disabled="readonly" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.state.$invalid}">
+                        <label for="state" class="col-lg-4 control-label">
+                            State
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" name="state" ng-model="vm.supplier.state" maxlength="150" ng-disabled="readonly" />
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.postCode.$invalid}">
+                        <label for="postCode" class="col-lg-4 control-label">
+                            Post Code
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" name="postCode" ng-model="vm.supplier.postCode" maxlength="20" ng-disabled="readonly"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.country.$invalid}">
+                        <label for="country" class="col-lg-4 control-label">
+                            ISO Country Code
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" class="form-control" name="country" ng-model="vm.supplier.country" required maxlength="2" ng-disabled="readonly"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': supplierForm.currency.$invalid}">
+                        <label for="currency" class="col-lg-4 control-label">
+                            Currency
+                        </label>
+                        <div class="col-lg-8">
+                            <select name="currency" ng-model="vm.supplier.currency" required class="form-control"
+                                    ng-options="curr for curr in options.vendorCurrencies"
+                                    placeholder="Select a currency"></select>
+                        </div>
+                    </div>
+                   
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row">
+                    
+                    <div class="form-group no-marginFormGroup" ng-class="{'has-error': supplierForm.status.$invalid}">
+                        <label for="status" class="col-lg-4 control-label">
+                            Status
+                        </label>
+                        <div class="col-lg-8">
+                            <select name="status" ng-model="selectedStatus" class="form-control" required ng-options="stat.id as stat.name for stat in statuses" ng-disabled="readonly"></select>
+                        </div>
+                    </div>
+
+                    <div class="form-group no-marginFormGroup" ng-class="{'has-error': supplierForm.paymentTerms.$invalid}">
+                        <label for="paymentTerms" class="col-lg-4 control-label">
+                            Payment Terms
+                        </label>
+                        <div class="col-lg-8">
+                            <textarea class="form-control" name="paymentTerms" ng-model="vm.supplier.paymentTerms" rows="4" ng-disabled="readonly" maxlength="50"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group no-marginFormGroup" ng-class="{'has-error': supplierForm.orderEmail.$invalid}">
+                        <label for="orderEmail" class="col-lg-4 control-label">
+                            Send orders via email
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="email" class="form-control" name="orderEmail" ng-model="vm.supplier.orderEmail" maxlength="100" ng-required="false" ng-disabled="readonly"/>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section">Contacts</div>
+                <div class="form-group"  ng-repeat="contact in vm.supplier.contacts">
+                    <div class="col-lg-1">
+                        <div class="control-label">
+                            <a href="#" ng-click="removeContact(contact)" title="Remove" ng-class="{hide: $first}" class="halflings trash" ng-hide="readOnly"></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <list ng-model="contact.key" scope="options.contactType" placeholder="Select Type" ng-disabled="readOnly" ng-change="updateContact(contact)"></list>
+                    </div>
+                    <div class="col-lg-6">
+                        <input class="form-control" type="text" ng-disabled="!contact.key" ng-model="contact.value" maxlength="100" ng-disabled="readOnly">
+                    </div>
+                    <div class="col-lg-1">
+                        <div class="row">
+                            <a href="#" ng-click="addContact()" title="Add" ng-hide="!$last" class="halflings plus" ng-hide="readOnly"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row buffer bottom">
+            <div class="col-lg-12">
+                <button type="submit" ng-click="save()" class="btn btn-primary" ng-disabled="supplierForm.$invalid" ng-hide="readonly">Save</button>
+            </div>
+        </div>
+    </ng-form>
+</div>

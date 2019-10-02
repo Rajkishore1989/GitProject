@@ -1,0 +1,35 @@
+<div class="row">
+    <div id="directReceiptProductsGrid" class="col-lg-12">
+        <table class="table table-bordered table-striped pb-table">
+            <thead>
+                <tr>
+                    <th class="col-sm sku">Product Code</th>
+                    <th class="col-sm-2">Description</th>
+                    <th class="col-sm quantity">QTY Received</th>
+                    <th class="col-sm currency">Unit Landed Cost</th>
+                    <th class="col-sm currency">Total Landed Cost</th>
+                    <th class="col-sm-2">Comments</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="product in receipt.products" ng-form="productForm" ng-controller="ReceiptProductCtrl" ng-class="{'has-error': productForm.$invalid}">
+                    <td>
+                        <p><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + product.sku)}}">{{product.sku}}</a></p>
+                    </td>
+
+                    <td>
+                        {{product.description}}
+                    </td>
+
+                    <td class="quantity">{{product.quantityReceived}}</td>
+                    <td class="currency">{{product.unitLandedCost | pbCurrency:purchase.vendor.currency}}</td>
+                    <td class="currency">{{lineCost(product) | pbCurrency:purchase.vendor.currency}}</td>
+
+                    <td class="comments">
+                        <span ng-model="product.comments" pb-ref-link></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

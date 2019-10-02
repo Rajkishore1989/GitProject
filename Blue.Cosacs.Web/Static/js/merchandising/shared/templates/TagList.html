@@ -1,0 +1,13 @@
+<div class="input-group" ng-show="editable()">
+    <input class="taglist form-control" placeholder="{{placeholder}}" name="tag_{{$index}}" type="text" typeahead="tag for tag in values| filter:$viewValue | unique:'toString()'" ng-model="new_value"/>
+    <span class="input-group-btn">
+        <button class="btn btn-default btn-fixed taglist" ng-click="add()" type="button">Add</button>
+    </span>
+</div>
+
+<div class="taglist">
+    <a ng-repeat="(idx, tag) in selectedTags" class="tag" ng-click="editable() && remove(idx, tag)">
+        {{tag}} 
+        <span ng-show="editable()" class="glyphicons remove_2" data-name="remove_2" data-type="" data-prefix="glyphicons" data-utf="E208"></span>
+    </a>
+</div>

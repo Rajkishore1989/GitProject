@@ -1,0 +1,437 @@
+{
+  "conditions": [
+    {
+      "expression": "\"Evaluation section is completed\" &&
+(!isEmpty(this.serviceRequest.EvaluationLocation) &&
+!isEmpty(this.serviceRequest.EvaluationAction) &&
+!isEmpty(this.serviceRequest.EvaluationClaimFoodLoss) &&
+!isEmpty(this.serviceRequest.ScriptAnswer)) ||
+isInstallation(this.serviceRequest)"
+    },
+    {
+      "expression": "\"Allocation section is completed\" &&
+isAllocationSectionCompleted(this)"
+    },
+    {
+      "expression": "\"parts date is in the future\" &&
+!isEmpty(this.serviceRequest.AllocationPartExpectOn) &&
+dateIsValid(this, this.serviceRequest.AllocationPartExpectOn) &&
+this.serviceRequest.AllocationPartExpectOn >= (new Date())"
+    },
+    {
+      "expression": "\"allocation date is in the future\" &&
+this.serviceRequest.AllocationServiceScheduledOn!==null &&
+dateIsValid(this, this.serviceRequest.AllocationServiceScheduledOn)"
+    },
+    {
+      "expression": "\"Resolution section is completed\" &&
+isResolutionSectionCompleted(this)"
+    },
+    {
+      "expression": "\"Finalize section is completed\" &&
+!isEmpty(this.serviceRequest.FinalisedFailure) &&
+dateIsValid(this, this.serviceRequest.FinaliseReturnDate)"
+    },
+    {
+      "expression": "isEmpty(this.serviceRequest.State)"
+    },
+    {
+      "expression": "\"There are non-courts charges with values unpaid\" &&
+(this.serviceRequest.ResolutionPrimaryCharge === 'Deliverer' ||
+this.serviceRequest.ResolutionPrimaryCharge === 'Customer') &&
+(this.OutstandingBalance >= 0.01)"
+    },
+    {
+      "expression": "this.isItemBer"
+    },
+    {
+      "expression": "this.serviceRequest.DepositRequired > 0 &&
+(this.serviceRequest.PaymentBalance < this.serviceRequest.DepositRequired)"
+    }
+  ],
+  "actions": [
+    {
+      "expression": "this.serviceRequest.State = 'New';"
+    },
+    {
+      "expression": "this.serviceRequest.State = 'Awaiting allocation';"
+    },
+    {
+      "expression": "this.serviceRequest.State = 'Awaiting deposit';"
+    },
+    {
+      "expression": "this.serviceRequest.State = 'Awaiting spare parts';"
+    },
+    {
+      "expression": "if (!isInstallation(this.serviceRequest)) {
+    this.serviceRequest.State = 'Awaiting repair';
+} else {
+    this.serviceRequest.State = 'Awaiting installation';
+}"
+    },
+    {
+      "expression": "if (!isInstallation(this.serviceRequest)) {
+    this.serviceRequest.State = 'Repair overdue';
+} else {
+    this.serviceRequest.State = 'Installation overdue';
+}"
+    },
+    {
+      "expression": "if (!isInstallation(this.serviceRequest)) {
+    this.serviceRequest.State = 'Resolved';
+} else {
+    this.serviceRequest.State = 'Installed';
+}"
+    },
+    {
+      "expression": "this.serviceRequest.State = 'Awaiting payment';"
+    },
+    {
+      "expression": "if (srNeedsToHaveResolutionDate(this) &&
+    isAllocationSectionCompleted(this) && !this.serviceRequest.ResolutionDate) {
+    // if there is a valid alocation, a valid ResolutionDate is also required
+    this.sections.finalise.resolutionDateRequired = true;
+} else {
+    this.sections.finalise.resolutionDateRequired = false;
+    setServiceRequestClosed(this.serviceRequest);
+}"
+    },
+    {
+      "expression": "this.serviceRequest.State = 'BER';"
+    }
+  ],
+  "rules": [
+    {
+      "values": [
+        "false",
+        "false",
+        "false",
+        "false",
+        "false",
+        "false",
+        "",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "true",
+        "false",
+        "false",
+        "false",
+        "false",
+        "false",
+        "",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "",
+        "true",
+        "false",
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "",
+        "true",
+        "",
+        "false",
+        "false",
+        "false",
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "",
+        "",
+        "",
+        "",
+        "true",
+        "false",
+        null,
+        "false",
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "true",
+        null,
+        "false",
+        "",
+        "false"
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        "false",
+        null,
+        null,
+        "true",
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        "true",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "actions": [
+        false,
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "values": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        "true"
+      ],
+      "actions": [
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "extensions": "var isEmpty = function(val) {
+    return typeof val === 'undefined' ||
+                   val === null ||
+                   val === \"\" ||
+                   (typeof val.length === 'undefined' && val.length === 0);
+};
+var dateIsValid = function(scope, val) {
+    return val !== undefined && val !== null && scope.moment(val).isValid();
+};
+var isInstallation = function (sr) {
+    return sr.Type === 'II' || sr.Type === 'IE';
+};
+var setServiceRequestClosed = function (sr) {
+    sr.State = 'Closed';
+    sr.IsClosed = true;
+};
+var isResolutionSectionCompleted = function (scope) {
+    var sr = scope.serviceRequest;
+    return \"Resolution section is completed\" &&
+        !isEmpty(sr.ResolutionDate) &&
+        dateIsValid(scope, sr.ResolutionDate) &&
+        !isEmpty(sr.ResolutionPrimaryCharge) &&
+
+        !isEmpty(sr.ItemSerialNumber) &&
+        !isEmpty(sr.ResolutionLabourCost) &&
+
+        (sr.ResolutionPrimaryCharge !== 'Supplier' ||
+        sr.ResolutionPrimaryCharge === 'Supplier' &&
+        !isEmpty(sr.ResolutionCategory));
+};
+var isAllocationSectionCompleted = function (scope) {
+    var sr = scope.serviceRequest;
+    return \"Allocation section is completed\" &&
+        !isEmpty(sr.AllocationItemReceivedOn) &&
+        dateIsValid(scope, sr.AllocationItemReceivedOn) &&
+        !isEmpty(sr.AllocationServiceScheduledOn) &&
+        dateIsValid(scope, sr.AllocationServiceScheduledOn) &&
+        !isEmpty(sr.AllocationTechnician);
+};
+var srNeedsToHaveResolutionDate = function (scope) {
+    var sr = scope.serviceRequest;
+    if (sr.Resolution === 'Save a Call' || sr.Resolution === 'No Fault Found') {
+        return false;
+    }
+    return true;
+};"
+}

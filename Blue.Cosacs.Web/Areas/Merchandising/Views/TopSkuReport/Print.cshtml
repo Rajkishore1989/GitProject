@@ -1,0 +1,117 @@
+﻿@model TopSkuPrintViewModel
+
+@{
+    ViewBag.Title = "Top Skus";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+<div data-module="merchandising/reports/topSku/init" ng-controller="topSkuPrintCtrl" ng-init="result=@Html.RawJson(Model)" class="ng-scope" ng-cloak>
+    <div class="row bottom header-info" ng-hide="vm.query">
+        <h2>@ViewBag.Title</h2>
+        The specified Top Sku report was not found. Please run the report again and then re-print.
+    </div>
+    <div class="row bottom header-info" ng-show="vm.query">
+        <h2>@ViewBag.Title</h2>
+        <table>
+            <tr>
+                <td>
+                    <label for="fromDate">From Date: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="fromDate">{{vm.query.fromDate | pbDate }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="toDate">To Date: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="toDate">{{vm.query.toDate | pbDate }}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="perfPercent">Performance Percentage: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="perfPercent">{{vm.query.performancePercentage}}%</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="perfType">Performance Type: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="perfType">{{vm.query.performanceType}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="location">Location: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="location">{{vm.query.location}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fascia">Fascia: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="fascia">{{vm.query.fascia}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="groupByLocation">Grouping: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="groupByLocation">{{vm.query.groupByLocation}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="prodTags">Product Tags: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="prodTags">{{vm.query.tagString}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="prodHier">Hierarchy: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="prodHier">{{vm.query.hierarchyString}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <table class="main bordered small pageBreak noPageCount" ng-repeat="location in vm.locations">
+        <tbody ng-repeat="pg in location.pages" ng-class="{'pageBreak': vm.locations.length > 1 }">
+            <tr>
+                <td colspan="{{vm.columns.length}}"><span class="header-row">{{location.location}}</span></td>
+            </tr>
+            <tr>
+                <th ng-repeat="col in vm.columns" ng-show="col.selected">
+                    {{col.name}}
+                </th>
+            </tr>
+            <tr ng-repeat="product in pg" class="item">
+                <td ng-repeat="level in product.hierarchyTags" ng-show="vm.columns[$index].selected">
+                    {{level}}
+                </td>
+                <td ng-show="vm.columns[product.hierarchyTags.length].selected">{{product.sku}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+1].selected">{{product.longDescription}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+2].selected">{{product.brandName}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+3].selected">{{product.tags}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+4].selected">{{product.quantityDelivered}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+5].selected">{{product.valueDelivered | pbCurrency}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+6].selected">{{product.netValueDelivered | pbCurrency}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+7].selected">{{product.contribution | pbPercentage }}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+8].selected">{{product.cumulativeValueDelivered | pbCurrency}}</td>
+                <td ng-show="vm.columns[product.hierarchyTags.length+9].selected">{{product.cumulativeNetValueDelivered | pbCurrency}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

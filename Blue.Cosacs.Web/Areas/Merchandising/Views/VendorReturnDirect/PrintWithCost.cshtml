@@ -1,0 +1,172 @@
+﻿@model VendorReturnDirectPrintModel
+
+@{
+    ViewBag.Title = "Return To Vendor #" + Model.Id;
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var pagesize = 3;
+    var totalPages = Math.Ceiling((decimal)Model.Products.Count / pagesize);
+    const int additionalPages = 2;
+}
+
+@section Head
+{
+    <style type="text/css">
+        .signature div {display: inline-block; border-top: 1px dashed black; margin: 70px 15px 15px 15px; width: 200px; }
+
+        .reject {
+            white-space: nowrap;
+        }
+
+            .reject span {
+                margin-left: 5px;
+            }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+
+<div>
+    <header>
+        <div style="width:100%;display:inline-block;margin:0 0 20px 0;">
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    <tr><th>Sending Location:</th><td>@Model.GoodsReceipt.Location</td></tr>
+                    <tr><th>Date Received:</th><td>@Model.GoodsReceipt.DateReceived.Date.ToString("D")</td></tr>
+                    <tr><th>Received By:</th><td>@Model.GoodsReceipt.ReceivedBy</td></tr>
+                    <tr><th>Created By:</th><td>@Model.CreatedBy</td></tr>
+                    <tr><th>Date Approved:</th><td>@(Model.ApprovedDate.HasValue ? Model.ApprovedDate.Value.ToString("D") : "")</td></tr>
+                    <tr><th>Approved By:</th><td>@Model.ApprovedBy</td></tr>
+                    <tr><th>Direct Receipt:</th><td>@(Model.GoodsReceipt.Id)</td></tr>
+                    <tr><th>Vendor:</th><td>@Model.Vendor</td></tr>
+                    <tr><th>Vendor Delivery Number:</th><td>@Model.GoodsReceipt.VendorDeliveryNumber</td></tr>
+                    <tr><th>Vendor Invoice Number:</th><td>@Model.GoodsReceipt.VendorInvoiceNumber</td></tr>
+                    <tr><th>Document Reference Number:</th><td>@Model.ReferenceNumber</td></tr> 
+                </table>
+            </div>
+            <div style="display:inline-block;vertical-align:top;float:right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Return to Vendor #@Model.Id</div>
+                        <div class="barcode">@Html.Barcode("RTV$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@Model.CreatedDate.ToLocalTime().ToString("f")</div>
+                        <div class="createdBy">@Model.CreatedById - @Model.CreatedBy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    @for (var x = 0; x < Model.Products.Count; x += pagesize)
+    {
+        @Html.Partial("PrintProductWithCost", Model.Products.Skip(x).Take(pagesize).ToList());
+
+        <div class="larger" style="float:right;">Total Cost: @Model.FormattedTotalCost</div>
+        <div class="clear"></div>
+        <div class="leftFooter">
+            @ViewBag.Title &nbsp;
+        </div>
+       <div class="rightFooter">
+            Page @((x / pagesize) + 1) of @(totalPages + additionalPages)
+        </div>
+
+        if (x + pagesize < Model.Products.Count)
+        {
+            <div class="pageBreak"></div>
+        }
+    }
+
+        <div class="pageBreak"></div>
+        <p class="larger">For Unicomer Use</p>
+        <div class="signature">     
+	        <div>Loading Personnel Name</div>
+	        <div>Loading Personnel Signature</div>                                    
+	        <div>Date</div>
+	    </div>
+        <div class="signature">     
+	        <div>Driver Name</div>
+	        <div>Driver Signature</div>   
+        </div>
+        <div class="signature">                                  
+	        <div>Exit Pass Number</div>
+            <div>Truck Licence Number</div>
+	    </div>
+        <div class="signature">     
+	        <div>Authorised By</div>
+	        <div>Signature</div>                                    
+	        <div>Date</div>
+	    </div>
+        <div class="signature">     
+	        <div>Driver Payment Authorised By</div>
+	        <div>Cartage Fee ($)</div>  
+        </div>
+    <div class="signature">                                   
+        <div>Dispatch Time</div>
+        <div>Arrival Time</div>
+    </div>
+    <div class="rightFooter">
+        Page @(totalPages+1) of @(totalPages +additionalPages)
+    </div>
+    <div class="pageBreak"></div>
+         <p class="larger">For Vendor Use</p>
+        <div class="signature">     
+	        <div>Goods Receiceived By </div>
+	        <div>Signature</div>                                   
+	        <div>Date</div>
+	    </div>
+
+        <div class="leftFooter">
+            @ViewBag.Title &nbsp;
+        </div>
+        <div class="rightFooter">
+            Page @(totalPages +2) of @(totalPages + additionalPages)
+        </div>
+</div>

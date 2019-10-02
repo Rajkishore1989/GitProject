@@ -1,0 +1,1660 @@
+﻿@using Blue.Glaucous.Client.Mvc
+<div data-module="service/serviceRequest" ng-controller="ServiceCtrl"
+     data-default-stock-location="@ViewBag.DefaultStockLocation" ng-cloak>
+    <div ng-hide="serviceready" class="loading">
+        <div class="loader-element">
+        </div>
+        <div>
+            Loading...
+        </div>
+    </div>
+    <div id="serviceMainContainer" style="display: none;" ng-show="serviceready && !loadError">
+        <div>
+            <div class="serviceMain">
+                <h2 id="service-heading">
+                    Service Request <span ng-hide="!serviceRequest.Id">{{serviceRequest.Id}}</span>&nbsp;<span ng-show="serviceRequest.State">[{{serviceRequest.State}}]</span>
+                </h2>
+                <div class="newSelector" ng-hide="decisionTableCtrl.structuralRule_showServiceRequestCreationForm()">
+                    <div>
+                        <p class="lead">
+                            Please select type of the New Service Request.
+                        </p>
+                    </div>
+                    <div class="selector">
+                        <div class="radio">
+                            <label for="si" class="click control-label">
+                                <input id="si" type="radio" name="SRType" id="SRType" ng-model="srType" value="SI"
+                                       ng-change="srTypeChange()" />
+                                Internal Customer
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="se" class="click control-label">
+                                <input id="se" type="radio" name="SRType" id="SRType" ng-model="srType" value="SE"
+                                       ng-change="srTypeChange()" />
+                                External Customer
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="s" class="click control-label">
+                                <input id="s" type="radio" name="SRType" id="SRType" ng-model="srType" value="S"
+                                       ng-change="srTypeChange()" />
+                                Stock Repair
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="ii" class="click control-label">
+                                <input id="ii" type="radio" name="SRType" id="SRType" ng-model="srType" value="II"
+                                       ng-change="srTypeChange()" />
+                                Internal Installation
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="ie" class="click control-label">
+                                <input id="ie" type="radio" name="SRType" id="SRType" ng-model="srType" value="IE"
+                                       ng-change="srTypeChange()" />
+                                External Installation
+                            </label>
+                        </div>
+                    </div>
+                    <form name="searchForm" id="searchForm" class="selectorSearch form-horizontal" ng-show="decisionTableCtrl.showSearchSelectorInputs()">
+                        <p>
+                            Please enter search parameters:
+                        </p>
+                        <div class="form-group">
+                            <div class="col-lg-2">
+                                <select class="picklist" ui-select2 ng-model="CustomerSearch.Type">
+                                    <option></option>
+                                    <option value="Account">Account Number</option>
+                                    <option value="Customer">Customer Number</option>
+                                    <option value="Invoice">Invoice Number</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error': searchForm.customerSearch.$invalid}">
+                            <div class="col-lg-2">
+                                <input class="form-control" required type="text" ng-model="CustomerSearch.Value"
+                                       name="customerSearch" id="customerSearch" />
+                            </div>
+                        </div>
+                        <div class="branchSearch form-group" ng-show="CustomerSearch.Type == 'Invoice'">
+                            <label class="col-lg-12">
+                                Please enter a branch.
+                            </label>
+                            <div class="col-lg-2">
+                                <select class="picklist" ui-select2 required ng-model="CustomerSearch.Branch">
+                                    <option value="{{key}}" ng-repeat="(key , value) in MasterData.Branches">{{value}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <button class="btn btn-primary" ng-disabled="DisableCreate()" ng-click="saveSrType()">
+                            {{srNewButtonText}}
+                        </button>
+                    </div>
+                    <div class="searchResults" ng-hide="decisionTableCtrl.structuralRule_hideIfEmptySearchResultArray()">
+                        <div class="section">
+                            Search Results
+                        </div>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        Item Number
+                                    </th>
+                                    <th>
+                                        Item Description
+                                    </th>
+                                    <th>
+                                        Item Sold By
+                                    </th>
+                                    <th>
+                                        Item Delivered On
+                                    </th>
+                                    <th>
+                                        Serial Number
+                                    </th>
+                                    <th>
+                                        Stock Location
+                                    </th>
+                                    <th>Supplier</th>
+                                    <th>Amount</th>
+                                    <th>Contract Number</th>
+                                    <th>Covered By</th>
+                                    <th>Quantity</th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="result in searchResult">
+                                    <td class="alignRight">
+                                        {{result.ItemNumber}}
+                                    </td>
+                                    <td>
+                                        {{result.Item}}
+                                    </td>
+                                    <td>
+                                        {{result.ItemSoldByName}} ({{result.ItemSoldBy}})
+                                    </td>
+                                    <td>
+                                        {{moment(result.ItemDeliveredOn).format(dateFormatShort)}}
+                                    </td>
+                                    <td class="alignRight">
+                                        <ul class="list-unstyled">
+                                            <li ng-show="result.ItemSerialNumber">Sale: {{result.ItemSerialNumber}} </li>
+                                            <li ng-repeat="sr in result.History">
+                                                <a href="{{sr.RequestId}}">
+                                                    {{sr.SerialNumber ||
+                                                "(none)"}}
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td class="alignRight">
+                                        {{result.ItemStockLocationName}}
+                                    </td>
+                                    <td>
+                                        {{result.ItemSupplier}}
+                                    </td>
+                                    <td class="alignRight">
+                                        {{result.ItemAmount | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                    </td>
+                                    <td class="alignRight">
+                                        {{getWarrantyCoveredContractNumber(result)}}
+                                    </td>
+                                    <td>
+                                        {{getWarrantyCoveredStatus(result)}}
+                                    </td>
+                                    <td>
+                                        {{result.Quantity}}
+                                    </td>
+                                    <td>
+                                        <btn id="{{$index}}_Select" class="btn btn-default" ng-click="AssignInternal(result)">Select</btn>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="main row" ng-hide="decisionTableCtrl.structuralRule_hideServiceRequestForm()">
+                    <div class="col-lg-2">
+                        <div id="navBar">
+                            <ul class="nav nav-stacked condensed">
+                                <li>
+                                    <a href="#" ng-click="scrollTo('#customer')" ng-show="sections.customer.visible">
+                                        Customer
+                                    </a>
+                                </li>
+                                <li ng-show="sections.evaluation.visible">
+                                    <a href="#" ng-click="scrollTo('#evaluation')">
+                                        Evaluation
+                                    </a>
+                                </li>
+                                <li ng-show="sections.deposit.visible"><a href="#" ng-click="scrollTo('#eval')">Deposit</a></li>
+                                <li><a href="#" ng-click="scrollTo('#allocation')">Allocation</a></li>
+                                <li><a href="#" ng-click="scrollTo('#resolution')">Resolution</a></li>
+                                <li ng-show="sections.foodLoss.visible()">
+                                    <a href="#" ng-click="scrollTo('#foodloss')">
+                                        Food Loss
+                                    </a>
+                                </li>
+                                <li><a href="#" ng-click="scrollTo('#finalise')">Finalise</a></li>
+                                <li><a href="#" ng-click="scrollTo('#comments')">Comments</a></li>
+                                <li><a href="#" ng-click="scrollTo('#history')">History</a></li>
+                            </ul>
+                            <div class="clearfix">
+                            </div>
+                            <button class="btn btn-primary save" ng-click="save()" ng-disabled="isSaveDisabled()">
+                                Save
+                            </button>
+                            <div class="section">
+                                Print
+                            </div>
+                            <p>
+                                <button class="btn btn-small btn-default external-link printButton" ng-click="print()"
+                                        ng-disabled="isPrintDisabled()">
+                                    Request
+                                </button>
+                            </p>
+                            <p>
+                                <button class="btn btn-small btn-default external-link printButton" ng-click="printFoodLoss()"
+                                        ng-show="showPrintFoodLoss()">
+                                    Food Loss
+                                </button>
+                            </p>
+                            <p>
+                                <button class="btn btn-small btn-default external-link printButton" ng-click="printInvoice()"
+                                        ng-show="decisionTableCtrl.showPrintInvoice() && hasPermission('PrintInvoice')">
+                                    Invoice
+                                </button>
+                            </p>
+                            <div ng-show="sections.payment.visible">
+                                @{
+                                    var hasPermission = HttpContext.Current.GetUser().HasPermission(Blue.Service.ServicePermissionEnum.AllowServicePayments);
+                                }
+                                <div class="section">
+                                    Payment
+                                </div>
+                                <div>
+                                    <p>
+                                        <b>Payments:&nbsp;</b>
+                                        <span>{{serviceRequest.PaymentBalance | currency : culture.CurrencySymbol: culture.DecimalPlaces}}</span>
+                                    </p>
+                                    <p>
+                                        <b>Deposit Outstanding:&nbsp;</b>
+                                        <span>{{getOutstandingDeposit() | currency : culture.CurrencySymbol: culture.DecimalPlaces}}</span>
+                                    </p>
+                                    <p>
+                                        <b>Balance:&nbsp;</b>
+                                        <span>{{OutstandingBalance | currency : culture.CurrencySymbol: culture.DecimalPlaces}} {{ OutstandingBalance < 0 && "CR" || "" }}</span>
+                                    </p>
+                                    <p ng-hide="MasterData.Settings.TaxType=='I'">
+                                        <b>Tax:&nbsp;</b>
+                                        <span>{{getTotalTaxAmount() | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</span>
+                                    </p>
+                                    @if (hasPermission)
+                                    {
+                                        <div>
+                                            <button class="btn btn-primary" ng-click="makePayment()" ng-disabled="!sections.payment.makePaymentEnabled">
+                                                Make Payment
+                                            </button>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form name="serviceForm" id="serviceForm" class="form-horizontal">
+                        <div class="col-lg-10 requestData">
+                            <div class="row">
+
+                                <div class="col-lg-6" ng-show="sections.customer.visible">
+                                    <div class="row">
+                                        <div id="customer" class="section">Customer</div>
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.customerId.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="customerId" class="col-lg-4 control-label">Customer Id</label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="customerId" id="customerId" type="text" maxlength="50"
+                                                       ng-required="RequiredCustomer()" ng-model="serviceRequest.CustomerId" ng-change="saveSrType2()" ng-disabled="!sections.customer.enabled" />
+                                                {{notificationresult}}
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.CustomerTitle.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="CustomerTitle" class="col-lg-4 control-label">Title</label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="CustomerTitle" id="CustomerTitle" type="text" ng-required="RequiredCustomer()"
+                                                       maxlength="25" ng-model="serviceRequest.CustomerTitle" ng-disabled="!sections.customer.enabled" />
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.CustomerFirstName.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="CustomerFirstName" class="col-lg-4 control-label">First Name</label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="CustomerFirstName" id="CustomerFirstName" type="text"
+                                                       maxlength="50" ng-required="RequiredCustomer()" ng-model="serviceRequest.CustomerFirstName"
+                                                       ng-disabled="!sections.customer.enabled" />
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.CustomerLastName.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="CustomerLastName" class="col-lg-4 control-label">
+                                                Last Name
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="CustomerLastName" id="CustomerLastName" type="text"
+                                                       maxlength="60" ng-required="RequiredCustomer()" ng-model="serviceRequest.CustomerLastName"
+                                                       ng-disabled="!sections.customer.enabled" />
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                            </div>
+											@*/// CR2018-008 by tosif ali 15/10/2018*@
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.DelieveryAddress.$invalid}" ng-show="hasShow">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="DelieveryAddress" class="col-lg-4 control-label section">
+
+                                                Choose  Delievery  Address
+                                            </label>
+                                            <div class="col-lg-6">
+
+                                                <select class="picklist" ng-model="serviceRequest.DelieveryAddress" ui-select2="{allowClear: true}"
+                                                        data-placeholder="Select Address"
+                                                        ng-change="ChangeAddress(serviceRequest.DelieveryAddress)">
+                                                    <option></option>
+                                                    <option ng-repeat="cat in serviceRequest.Address" value="{{cat.code}}">{{cat.codedescript}}</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-1">
+
+                                            </div>
+                                        </div>
+                                        @*/// End hear*@
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.CustomerAddressLine1.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="CustomerAddressLine1" class="col-lg-4 control-label">
+                                                AddressLine1
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="CustomerAddressLine1" id="CustomerAddressLine1"
+                                                       type="text" maxlength="50" ng-required="RequiredCustomer()" ng-model="serviceRequest.CustomerAddressLine1"
+                                                       ng-disabled="!sections.customer.enabled" />
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.CustomerAddressLine2.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="CustomerAddressLine2" class="col-lg-4 control-label">
+                                                AddressLine2
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="CustomerAddressLine2" id="CustomerAddressLine2"
+                                                       type="text" maxlength="50" ng-required="RequiredCustomer()" ng-model="serviceRequest.CustomerAddressLine2"
+                                                       ng-disabled="!sections.customer.enabled" />
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.CustomerAddressLine3.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="CustomerAddressLine3" class="col-lg-4 control-label">
+                                                Town/City
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="CustomerAddressLine3" id="CustomerAddressLine3"
+                                                       type="text" maxlength="50" ng-required="RequiredCustomer()" ng-model="serviceRequest.CustomerAddressLine3"
+                                                       ng-disabled="!sections.customer.enabled" />
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': serviceForm.CustomerPostcode.$invalid}">
+                                            <div class="col-lg-1">
+                                            </div>
+                                            <label for="CustomerPostcode" class="col-lg-4 control-label">
+                                                PostCode
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="CustomerPostcode" id="CustomerPostcode" type="text"
+                                                       maxlength="50" ng-model="serviceRequest.CustomerPostcode" ng-disabled="!sections.customer.enabled" />
+                                            </div>
+                                            <div class="col-lg-1">
+                                            </div>
+                                        </div>
+                                        <div class="form-group" ng-class="{'has-error': !contact.Value}" ng-repeat="contact in serviceRequest.Contacts">
+                                            <div class="col-lg-1">
+                                                <div class="control-label">
+                                                    <a href="#" ng-hide="!sections.customer.enabled" ng-click="removeContact(contact)"
+                                                       title="Remove" ng-class="{hide: $first}" class="halflings trash"></a>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <select class="picklist" name="contact[{{$index}}]Type" ui-select2 ng-model="contact.Type"
+                                                        ng-required="RequiredCustomer()" ng-disabled="!sections.customer.enabled">
+                                                    <option value="{{contact}}" ng-repeat="contact in MasterData.ContactTypes">
+                                                        {{contact
+                                                        | humanize | titleize}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" name="contact_{{$index}}_Value" type="text" ng-model="contact.Value"
+                                                       ng-required="RequiredCustomer()" maxlength="256" ng-disabled="!sections.customer.enabled">
+                                            </div>
+                                            <div class="col-lg-1">
+                                                <div class="row">
+                                                    <a href="#" ng-click="addContact()" title="Add" ng-class="{hide: !$last}" class="halflings plus"
+                                                       ng-hide="!sections.customer.enabled"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div>
+                                                Notes (Will appear on printout)
+                                            </div>
+                                            <textarea class="form-control" ng-disabled="!sections.customer.enabled" name="CustomerNotes"
+                                                      id="CustomerNotes" type="text" maxlength="4000" ng-model="serviceRequest.CustomerNotes"
+                                                      rows="5" cols="55"></textarea>
+                                        </div>
+                                    </div>
+                                    <p>
+                                        &nbsp;
+                                    </p>
+                                    <div class="row" ng-show="sections.warranty.visible">
+                                        <div class="section">
+                                            Warranty
+                                        </div>
+                                        <div class="serviceDetail" ng-show="sections.warranty.internalCustomerMode">
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-5">
+                                                    Manufacturer Warranty Contract Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{serviceRequest.ManufacturerWarrantyContractNo}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-5">
+                                                    Manufacturer Warranty Length
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{serviceRequest.ManufacturerWarrantyLength}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="WarrantyContractNo" class="control-label col-lg-5">
+                                                    Contract Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{serviceRequest.WarrantyContractNo}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="WarrantyLength" class="control-label col-lg-5">
+                                                    Warranty Length
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{serviceRequest.WarrantyLength | isNull: ''}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-5">
+                                                    Currently Covered By
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{getWarrantyCoveredStatus(serviceRequest)}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="serviceDetail" ng-hide="sections.warranty.internalCustomerMode">
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ManufacturerWarrantyContractNo.$invalid}">
+                                                <label for="ManufacturerWarrantyContractNo" class="control-label col-lg-5">
+                                                    Manufacturer Warranty Contract Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" type="text" ng-model="serviceRequest.ManufacturerWarrantyContractNo"
+                                                           name="ManufacturerWarrantyContractNo" id="ManufacturerWarrantyContractNo" ng-disabled="!sections.warranty.enabled" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ManufacturerWarrantyLength.$invalid}">
+                                                <label for="ManufacturerWarrantyLength" class="control-label col-lg-5">
+                                                    Manufacturer Warranty Length
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" type="number" min="0" max="99" ng-model="serviceRequest.ManufacturerWarrantyLength"
+                                                           name="ManufacturerWarrantyLength" id="ManufacturerWarrantyLength" ng-show="sections.product.enabled"
+                                                           ng-disabled="!sections.product.allEnabled" />
+                                                    <p class="form-control-static" ng-show="!sections.product.enabled">
+                                                        {{serviceRequest.ManufacturerWarrantyLength}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.WarrantyContractNo.$invalid}">
+                                                <label for="WarrantyContractNo" class="control-label col-lg-5">
+                                                    Contract Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" type="text" ng-model="serviceRequest.WarrantyContractNo"
+                                                           name="WarrantyContractNo" id="WarrantyContractNo" ng-disabled="!sections.warranty.enabled" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.WarrantyLength.$invalid}">
+                                                <label for="WarrantyLength" class="control-label col-lg-5">
+                                                    Warranty Length
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" type="number" min="0" max="99" ng-model="serviceRequest.WarrantyLength"
+                                                           name="WarrantyLength" id="WarrantyLength" ng-disabled="!sections.warranty.enabled" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-5">
+                                                    Currently Covered By
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{getWarrantyCoveredStatus(serviceRequest)}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <div class="section">
+                                            Request
+                                        </div>
+                                        <div class="serviceDetail">
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-4">
+                                                    Logged on
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{ moment(serviceRequest.CreatedOn).format(dateFormat) }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-4">
+                                                    Logged by
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{serviceRequest.CreatedBy}} ({{serviceRequest.CreatedById}})
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-4">
+                                                    Branch
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{MasterData.Branches[serviceRequest.Branch]}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-4">
+                                                    Request Type
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{ showType(serviceRequest.Type) }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-show="decisionTableCtrl.showFormReferenceField() && serviceRequest.InvoiceNumber">
+                                                <label class="control-label col-lg-4">
+                                                    Invoice Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{ serviceRequest.InvoiceNumber }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-show="decisionTableCtrl.showFormReferenceField() && serviceRequest.Account">
+                                                <label class="control-label col-lg-4">
+                                                    Account Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <p class="form-control-static">
+                                                        {{ serviceRequest.Account }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" ng-show="sections.product.visible">
+                                        <div class="section">Product</div>
+                                        <div class="serviceDetail">
+                                            <div class="form-group">
+                                                <hierarchy options="hierarchyOptions" selections="hierarchy" callback="saveHierarchySettings(tag, level)" editable="productItem.edit" />
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ItemNumber.$invalid}">
+                                                <label for="ItemNumber" class="col-lg-4 control-label">
+                                                    Item Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" ng-show="sections.product.enabled" ng-required="sections.product.enabled"
+                                                           ng-disabled="!sections.product.allEnabled" type="text" maxlength="25" ng-model="serviceRequest.ItemNumber"
+                                                           name="ItemNumber" id="ItemNumber" />
+                                                    <p ng-show="!sections.product.enabled" class="form-control-static">
+                                                        {{serviceRequest.ItemNumber}}
+                                                    </p>
+                                                </div>
+                                                <div class="col-lg-1 halflings search click" title="Product Search" ng-click="findStock(serviceRequest.ItemNumber)"
+                                                     ng-show="sections.product.enabled && sections.product.allEnabled">
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ItemDeliveredOn.$invalid}">
+                                                <label for="ItemDeliveredOn" class="col-lg-4 control-label">
+                                                    Delivered on
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" ng-show="sections.product.enabled" ng-disabled="!sections.product.allEnabled"
+                                                           type="text" ng-model="serviceRequest.ItemDeliveredOn" ui-date="datePastOrCurrent"
+                                                           name="ItemDeliveredOn" id="ItemDeliveredOn" />
+                                                    <p ng-show="!sections.product.enabled" class="form-control-static">
+                                                        {{serviceRequest.ItemDeliveredOn && moment(serviceRequest.ItemDeliveredOn).format(dateFormatShort) || ''}}
+                                                    </p>
+                                                </div>
+                                                <div class="col-lg-6" ng-show="serviceRequest.Type == 'II' && !serviceRequest.ItemDeliveredOn">
+                                                    <a class="external-link" href="{{getSearchShipmentsURL(serviceRequest)}}" target="_blank"
+                                                       title="Click to search shipments.">Search Shipments</a>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.Item.$invalid}">
+                                                <label for="Item" class="col-lg-4 control-label">
+                                                    Item Description
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" ng-show="sections.product.enabled" ng-required="sections.product.enabled"
+                                                           ng-disabled="!sections.product.allEnabled" type="text" maxlength="100" ng-model="serviceRequest.Item"
+                                                           name="Item" id="Item" />
+                                                    <p ng-show="!sections.product.enabled" class="form-control-static">
+                                                        {{serviceRequest.Item}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ItemSupplier.$invalid}">
+                                                <label for="ItemSupplier" class="col-lg-4 control-label">
+                                                    Supplier
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" ng-show="sections.product.enabled" ng-required="sections.product.enabled"
+                                                           ng-disabled="!sections.product.allEnabled" type="text" maxlength="50" ng-model="serviceRequest.ItemSupplier"
+                                                           name="ItemSupplier" id="ItemSupplier" />
+                                                    <p ng-show="!sections.product.enabled" class="form-control-static">
+                                                        {{serviceRequest.ItemSupplier}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.Manufacturer.$invalid}">
+                                                <label class="control-label col-lg-4">
+                                                    Manufacturer
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <select class="picklist" ui-select2 ng-model="serviceRequest.Manufacturer" required
+                                                            placeholder="Select Manufacturer" name="Manufacturer" id="Manufacturer" ng-change="getCharges()">
+                                                        <option></option>
+                                                        <option value="{{key}}" ng-repeat="(key, value) in MasterData.ServiceSuppliers">{{key}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ItemStockLocation.$invalid}"
+                                                 ng-hide="!sections.product.stockLocationVisible">
+                                                <label class="control-label col-lg-4">
+                                                    Stock Location
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <div class="select2Box" ng-required="sections.product.stockLocationRequired" ng-model="serviceRequest.ItemStockLocation">
+                                                        <select class="picklist" ui-select2="select2Options" ng-required="sections.product.stockLocationRequired"
+                                                                ng-model="serviceRequest.ItemStockLocation" ng-disabled="!sections.product.allEnabled"
+                                                                name="ItemStockLocation" id="ItemStockLocation" placeholder="Select Stock Location">
+                                                            <option></option>
+                                                            <option value="{{value}}" ng-repeat="(value, branch) in MasterData.Branches">{{branch}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-1" ng-show="!sections.product.stockLocationVisible">
+                                                    {{serviceRequest.ItemStockLocation}}
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ItemAmount.$invalid}">
+                                                <label for="ItemAmount" class="control-label col-lg-4">
+                                                    Value
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input type="number" class="form-control" ng-required="sections.product.enabled"
+                                                           ng-disabled="!sections.product.enabled || !sections.product.allEnabled" ng-model="serviceRequest.ItemAmount"
+                                                           name="ItemAmount" id="ItemAmount" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="control-label col-lg-4">
+                                                    Serial Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" type="text" readonly ng-model="serviceRequest.ItemSerialNumber" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-class="{'has-error': serviceForm.ItemModelNumber.$invalid}">
+                                                <label for="ItemModelNumber" class="control-label col-lg-4">
+                                                    Model Number
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <input class="form-control" type="text" maxlength="50" ng-model="serviceRequest.ItemModelNumber"
+                                                           name="ItemModelNumber" id="ItemModelNumber" ng-disabled="!sections.product.allEnabled" />
+                                                </div>
+                                            </div>
+                                            <div class="form-group" ng-hide="!sections.product.serviceRetailerVisible">
+                                                <label class="control-label col-lg-4">
+                                                    Service Retailer
+                                                </label>
+                                                <div class="col-lg-6">
+                                                    <select ng-show="sections.product.serviceRetailerVisible" ui-select2 ng-model="serviceRequest.Retailer"
+                                                            style="display: none; width: 150px;" placeholder="Select Retailer" name="ServiceRetailers"
+                                                            id="ServiceRetailers">
+                                                        <option></option>
+                                                        <option value="{{key}}" ng-repeat="(key , value) in MasterData.ServiceRetailers">{{value}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-lg-offset-3">
+                                                    <button class="btn btn-default" ng-click="createServiceRequestFromCurrentRequest()"
+                                                            ng-show="serviceRequest.IsClosed && serviceRequest.Type == 'SI'">
+                                                        New Request For This Product
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="sections.evaluation.visible">
+                                <div id="evaluation" class="section">
+                                    Evaluation
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ServiceEvaluation.$invalid}">
+                                        <label class="col-lg-4 control-label">
+                                            Service Evaluation
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.Evaluation" placeholder="Select Evaluation"
+                                                    name="ServiceEvaluation" id="ServiceEvaluation" ng-disabled="!sections.evaluation.enabled">
+                                                <option></option>
+                                                <option value="{{key}}" ng-repeat="key in MasterData.ServiceEvaluation">{{key}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.EvaluationLocation.$invalid}">
+                                        <label class="col-lg-4 control-label">
+                                            Service Location
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.EvaluationLocation"
+                                                    placeholder="Select Location" name="EvaluationLocation" id="EvaluationLocation"
+                                                    ng-disabled="!sections.evaluation.enabled">
+                                                <option></option>
+                                                <option value="{{key}}" ng-repeat="(key , value) in MasterData.ServiceLocations">{{value}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.EvaluationAction.$invalid}">
+                                        <label class="col-lg-4 control-label">
+                                            Action Required
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.EvaluationAction" placeholder="Select Action Required"
+                                                    name="EvaluationAction" id="EvaluationAction" ng-disabled="!sections.evaluation.enabled">
+                                                <option></option>
+                                                <option value="{{key}}" ng-repeat="(key , value) in MasterData.ServiceActions">{{value}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.EvaluationClaimFoodLoss.$invalid}">
+                                        <label class="col-lg-4 control-label">
+                                            Claim for food loss?
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.EvaluationClaimFoodLoss"
+                                                    placeholder="Select option" name="EvaluationClaimFoodLoss" id="EvaluationClaimFoodLoss"
+                                                    ng-disabled="!sections.evaluation.enabled">
+                                                <option></option>
+                                                <option value="true">Yes</option>
+                                                <option value="false">No</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-lg-offset-8">
+                                            <label>
+                                                Yes
+                                            </label>&nbsp;&nbsp;<label>No</label>&nbsp;&nbsp;<label>N/A</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-repeat="script in serviceRequest.ScriptAnswer">
+                                        <div class="col-lg-8">
+                                            <p class="form-control-static">
+                                                {{script.Question}}
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="{{$index+1}}" ng-model="script.Value" value="Yes" ng-disabled="!sections.evaluation.enabled" />
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="{{$index+1}}" ng-model="script.Value" value="No" ng-disabled="!sections.evaluation.enabled" />
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="{{$index+1}}" ng-model="script.Value" value="NA" ng-disabled="!sections.evaluation.enabled" />
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="sections.deposit.visible">
+                                <div id="eval" class="section">
+                                    Deposit
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.DepositRequired.$invalid}">
+                                        <label for="DepositRequired" class="col-lg-4 control-label">
+                                            Deposit Required
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control" type="number" ng-model="serviceRequest.DepositRequired"
+                                                   ng-disabled="DepositUpdateCheck()" name="DepositRequired" id="DepositRequired"
+                                                   ng-required="depositRequired() && !serviceRequest.DepositRequired" ng-change="checkDepositAuthorisation()" />
+                                        </div>
+                                        <div class="col-lg-2" ng-show="sections.deposit.authorisationVisible">
+                                            <button class="btn btn-primary" ng-click="requestDepositChangeAuthorisation()">
+                                                Authorise change
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="sections.allocationEntireSection.visible">
+                                <div id="allocation" class="section">
+                                    Allocation
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-7">
+                                        <div class="form-group">
+                                            <label for="AllocationItemReceivedOn" class="col-lg-5 control-label">
+                                                Date Item Received On
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" type="text" ng-model="serviceRequest.AllocationItemReceivedOn"
+                                                       readonly="true" ui-date="dateCreatedOrCurrent" ng-disabled="!hasPermission('EnableAllocation')"
+                                                       name="AllocationItemReceivedOn" id="AllocationItemReceivedOn" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="AllocationPartExpectOn" class="col-lg-5 control-label">
+                                                Parts Expected On
+                                            </label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control" type="text" ng-model="serviceRequest.AllocationPartExpectOn"
+                                                       readonly="true" ui-date="dateCurrentOrFuture" ng-disabled="!hasPermission('EnableAllocation')"
+                                                       name="AllocationPartExpectOn" id="AllocationPartExpectOn" ng-change="partExpectedChanged()" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group" @*ng-hide="serviceRequest.AllocationServiceScheduledOn"*@>
+                                    <div class="col-lg-3">
+                                        <label class="text-center">
+                                            Date Service Scheduled
+                                        </label>
+                                        <input class="form-control" type="text" ng-model="techSelect.AllocationServiceScheduledOn"
+                                               readonly="true" ui-date="techAllocationPickerSettings" ui-reset ng-disabled="!hasPermission('EnableAllocation')"
+                                               ng-change="searchTechnician()" />
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label class="text-center">
+                                            Filter by Category (Optional)
+                                        </label>
+                                        <select class="picklist" ng-model="techSelect.AllocationZone" ui-select2="{allowClear: true}"
+                                                data-placeholder="Select Category" ng-disabled="!hasPermission('EnableAllocation')"
+                                                ng-change="searchTechnician();">
+                                            <option></option>
+                                            <option ng-repeat="cat in MasterData.ServiceZones">{{cat}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label class="text-center">
+                                            Technician
+                                        </label>
+                                        <select class="picklist" ui-select2="{allowClear: true}" ng-model="techSelect.AllocationTechnician"
+                                                id="techy" data-placeholder="Select Technician" ng-disabled="!hasPermission('EnableAllocation')"
+                                                ng-change="getMaxAndCurrJobs(this.techSelect.AllocationTechnician)">
+                                            <option></option>
+                                            <option value="{{t.UserId}}" ng-repeat="t in Technicians">{{t.Name}} ({{t.UserId}})</option>
+                                        </select>
+                                    </div>
+                                    @*--- Gurpreet - CR2018-010 - 31/10/18 - Setting of max no. of Jobs & Validation with allocated jobs for a technician. ---*@
+                                    <div class="col-lg-4"></div>
+                                    <div class="col-lg-3">
+                                        <label class="text-center">
+                                            Current Assigned Jobs
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control" type="text"
+                                                   readonly="readonly" ng-disabled="true" value="{{CurrJob}}"
+                                                   name="currJobs" id="currJobs" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <label class="text-center">
+                                            Max Allowed Jobs
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control" type="text"
+                                                   readonly="readonly" ng-disabled="true" value="{{MaxJob}}"
+                                                   name="maxJobs" id="maxJobs" />
+                                        </div>
+                                    </div>
+                                    @*--- CR2018-010 Changes End ---*@
+                                </div>
+                                <div class="row technicianDiary" ng-hide="!hasPermission('ViewTechDiary')">
+                                    @Html.Partial("showDiary")
+                                </div>
+                                <div class="row technicianDiary" ng-show="!hasPermission('ViewTechDiary')">
+                                    You do not have permission to view the technician diary.
+                                </div>
+                                <div class="col-lg-7 allocationDetails" ng-show="serviceRequest.AllocationServiceScheduledOn">
+                                    <div class="form-group allocatedHeading">
+                                        <label class="control-label">
+                                            Current Allocation
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-5">
+                                            Allocated date
+                                        </label>
+                                        <div class="col-lg-5">
+                                            <p class="form-control-static">
+                                                {{ moment(serviceRequest.AllocationServiceScheduledOn).format(dateFormatDateOnly)}}
+                                            </p>
+                                        </div>
+                                        <div class="col-lg-2" ng-show="!serviceRequest.ResolutionDate">
+                                            <p class="form-control-static">
+                                                <a class="halflings trash" ng-class="disableIcon('DeleteBooking')" ng-click="deleteAllocation()"
+                                                   title="Remove Allocation"></a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-5">
+                                            Technician
+                                        </label>
+                                        <div class="col-lg-5">
+                                            <p class="form-control-static">
+                                                {{AllocatedTechName}} ({{serviceRequest.AllocationTechnician}})
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-5">
+                                            Slot Number
+                                        </label>
+                                        <div class="col-lg-5">
+                                            <p class="form-control-static">
+                                                {{ serviceRequest.AllocationSlots + 1 }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-5">
+                                            Number of slots
+                                        </label>
+                                        <div class="col-lg-5">
+                                            <p class="form-control-static">
+                                                {{ serviceRequest.AllocationSlotExtend + 1}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="sections.resolutionEntireSection.visible">
+                                <div id="resolution" class="section">
+                                    Resolution
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ItemSerialNumber.$invalid}">
+                                        <label for="ItemSerialNumber" class="control-label col-lg-5">
+                                            Serial Number
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control" ng-required="RequiredItemSerial()" type="text" maxlength="50"
+                                                   ng-model="serviceRequest.ItemSerialNumber" name="ItemSerialNumber" id="ItemSerialNumber"
+                                                   ng-disabled="!hasPermission('EnableResolution')" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.RepairType.$invalid}">
+                                        <label for="RepairType" class="control-label col-lg-5">Repair Type</label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.RepairType" ng-required="RequiredItemRepairType()"
+                                                    data-placeholder="Select Repair Type" ng-disabled="!hasPermission('EnableResolution')"
+                                                    name="RepairType" id="RepairType">
+                                                <option></option>
+                                                <option value="{{repairType}}" ng-repeat="repairType in MasterData.ServiceRepairTypes">
+                                                    {{repairType}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.Resolution.$invalid}">
+                                        <label for="Resolution" class="control-label col-lg-5">
+                                            Resolution
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.Resolution" data-placeholder="Select Resolution"
+                                                    ng-disabled="!hasPermission('EnableResolution')" name="Resolution" id="Resolution">
+                                                <option></option>
+                                                <option value="{{res}}" ng-repeat="res in ServiceResolutions">{{res}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ResolutionDate.$invalid}">
+                                        <label for="ResolutionDate" class="control-label col-lg-5">
+                                            Date Resolved
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control" type="text" ng-model="serviceRequest.ResolutionDate"
+                                                   readonly="true" ui-date="resolutionDatePickerSettings" ng-disabled="!hasPermission('EnableResolution')"
+                                                   name="ResolutionDate" id="ResolutionDate" ng-required="RequiredResolutionDate()" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ResolutionPrimaryCharge.$invalid}">
+                                        <label class="control-label col-lg-5">
+                                            Primary Charge
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.ResolutionPrimaryCharge"
+                                                    ng-disabled="!hasPermission('EnableResolution')" name="ResolutionPrimaryCharge"
+                                                    placeholder="Select Primary Charge" id="resolutionPrimaryCharge">
+                                                <option></option>
+                                                <option value="{{chargeTo.key}}" ng-repeat="chargeTo in MasterData.AvailableChargeTos | orderBy: chargeTo.key"
+                                                        data-auth-required="{{chargeTo.authorisationRequired}}">
+                                                    {{chargeTo.key}}
+                                                </option>
+                                            </select>
+                                            <span id="charge-to-authorisation"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ResolutionSupplierToCharge.$invalid}"
+                                         ng-show="sections.resolutionSection.supplierVisible">
+                                        <label class="control-label col-lg-5">
+                                            Supplier to Charge
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.ResolutionSupplierToCharge"
+                                                    ng-disabled="!hasPermission('EnableResolution')" ng-change="updateProductCategory()"
+                                                    placeholder="Select Supplier" name="ResolutionSupplierToCharge" id="ResolutionSupplierToCharge">
+                                                <option></option>
+                                                <option value="{{key}}" ng-repeat="(key, value) in MasterData.ServiceSuppliers | orderBy: key">
+                                                    {{key}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ResolutionDelivererToCharge.$invalid}"
+                                         ng-show="sections.resolutionSection.delivererVisible">
+                                        <label class="control-label col-lg-5">
+                                            Deliverer to Charge
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.ResolutionDelivererToCharge"
+                                                    ng-disabled="!hasPermission('EnableResolution')" ng-change="updateProductCategory()"
+                                                    ng-required="serviceRequest.ResolutionPrimaryCharge == 'Deliverer'" placeholder="Select Deliverer"
+                                                    name="ResolutionDelivererToCharge" id="ResolutionDelivererToCharge">
+                                                <option></option>
+                                                <option value="{{deliverer}}" ng-repeat="deliverer in MasterData.ServiceDeliverer  | orderBy: deliverer">
+                                                    {{deliverer}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ResolutionCategory.$invalid}"
+                                         ng-show="sections.resolutionSection.productVisible">
+                                        <label class="control-label col-lg-5">
+                                            Product Category
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.ResolutionCategory"
+                                                    ng-change="updatePartType()" data-placeholder="Select Category" ng-disabled="!hasPermission('EnableResolution')"
+                                                    placeholder="Select Category" name="ResolutionCategory" id="ResolutionCategory">
+                                                <option></option>
+                                                <option value="{{proCat}}" ng-repeat="proCat in MasterData.ResolutionCategories  | orderBy: proCat">
+                                                    {{proCat}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="partsTable" ng-show="sections.resolutionEntireSection.visible">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                            </th>
+                                            <th>
+                                                Part Number
+                                            </th>
+                                            <th>
+                                                Part Type
+                                            </th>
+                                            <th>
+                                                Part Source
+                                            </th>
+                                            <th>
+                                                Quantity
+                                            </th>
+                                            <th>
+                                                Price
+                                            </th>
+                                            <th>
+                                                Description
+                                            </th>
+                                            <th>
+                                                Stock Branch
+                                            </th>
+                                            <th>
+                                                Total
+                                            </th>
+                                            <th>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-hide="serviceRequest.Parts.length != 0">
+                                            <td colspan="9">
+                                                <label class="control-label">
+                                                    <a href="#" id="addPart" ng-click="addResolutionPart()" title="Add" class="halflings plus" ng-show="hasPermission('EnableResolution')"
+                                                       ng-class="{'disabled': (!serviceRequest.RepairType && !(serviceRequest.Type == 'II'
+                                                                || serviceRequest.Type == 'IE')) || serviceRequest.State=='Awaiting payment' }">
+                                                    </a>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        <tr class="form-inline resolutionPart" ng-repeat="part in serviceRequest.Parts">
+                                            <td>
+                                                <label class="control-label">
+                                                    <a href="#" ng-click="removeResolutionPart(part)" title="Remove" class="halflings trash"
+                                                       ng-show="hasPermission('EnableResolution')"></a>
+                                                </label>
+                                            </td>
+                                            <td>
+                                                {{part.number}}
+                                            </td>
+                                            <td>
+                                                {{part.type}}
+                                            </td>
+                                            <td>
+                                                {{part.Source}}
+                                            </td>
+                                            <td>
+                                                {{part.quantity}}
+                                            </td>
+                                            <td ng-show="MasterData.Settings.TaxType=='E'">
+                                                {{part.price | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                            </td>
+                                            <td ng-show="MasterData.Settings.TaxType=='I'">
+                                                {{part.price * (1 + (part.TaxRate || MasterData.Settings.TaxRate) / 100) | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                            </td>
+                                            <td>
+                                                {{part.description}}
+                                            </td>
+                                            <td>
+                                                {{part.stockbranchname}}
+                                            </td>
+                                            <td>
+                                                {{part.quantityPerCostPriceDisplayInfo | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                            </td>
+                                            <td>
+                                                <label class="control-label">
+                                                    <a href="#" id="addPartAgain{{$index}}" class="halflings plus" ng-class="{ hide: !$last, disabled: serviceRequest.State=='Awaiting payment' }"
+                                                       ng-click="addResolutionPart()" title="Add" ng-disabled="!serviceRequest.RepairType"
+                                                       ng-show="hasPermission('EnableResolution')"></a>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="add-part form-inline" ng-show="addNewPart">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label" for="part-number">
+                                                    Part Number
+                                                </label>
+                                                <div class="input-group">
+                                                    <input class="form-control" type="text" name="part-number" ng-model="newPart.number"
+                                                           maxlength="50" ng-disabled="true" />
+                                                    <span class="input-group-addon halflings search click" ng-click="searchNewPart()"
+                                                          ng-show="hasPermission('EnableResolution')"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group" ng-class="{'has-error': partTypeRequired() && !newPart.type}">
+                                                <label class="control-label" for="part-number">
+                                                    Part Type
+                                                </label>
+                                                <select class="picklist" ui-select2 ng-model="newPart.type" ng-required="partTypeRequired()"
+                                                        ng-disabled="!hasPermission('EnableResolution')" placeholder="Select Part Type">
+                                                    <option></option>
+                                                    <option value="{{cost.partType}}" ng-repeat="cost in MasterData.SupplierCostMatrix  | orderBy: cost.partType">
+                                                        {{cost.partType}}
+                                                    </option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group" ng-class="{'has-error': !newPart.description}">
+                                                <label class="control-label" for="part-description">
+                                                    Description
+                                                </label>
+                                                <input name="part-description" id="part-description" class="form-control" type="text "
+                                                       ng-model="newPart.description" ng-disabled="!hasPermission('EnableResolution') || newPart.Source == 'Internal'" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label class="control-label">
+                                                    Stock Branch
+                                                </label>
+                                                <input name="part_stockbranchname" id="part_stockbranchname" class="form-control"
+                                                       ng-model="newPart.stockbranchname" disabled="disabled" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group" ng-class="{'has-error': !newPart.Source}">
+                                                <label class="control-label" for="part-source">
+                                                    Part Source
+                                                </label>
+                                                <select id="partSourceDropdown" class="picklist" ui-select2 ng-model="newPart.Source"
+                                                        ng-disabled="!hasPermission('EnableResolution') || (hasPermission('EnableResolution') && newPart.number.length > 0) " placeholder="Select Part Source">
+                                                    <option></option>
+                                                    <option value="Internal" disabled>Internal</option>
+                                                    <option value="External">External</option>
+                                                    <option value="Salvaged">Salvaged</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group" ng-class="{'has-error': !newPart.quantity}">
+                                                <label class="control-label" for="part-quantity">
+                                                    Quantity
+                                                </label>
+                                                <input name="part-quantity" id="part-quantity" class="form-control" type="number"
+                                                       ng-model="newPart.quantity" ng-disabled="!hasPermission('EnableResolution')" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group" ng-class="{'has-error': !newPart.CostPrice}">
+                                                <label class="control-label" for="part-number">
+                                                    Cost Price
+                                                </label>
+                                                <input name="part-price" id="part-price" class="form-control" type="number" ng-model="newPart.CostPrice"
+                                                       ng-disabled="!hasPermission('EnableResolution') || newPart.Source == 'Internal'" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p>
+                                                &nbsp;
+                                            </p>
+                                            <button class="btn btn-primary" ng-click="saveNewPart()" ng-disabled="!partDataComplete()">
+                                                Add Part
+                                            </button>
+                                            <button class="btn btn-default" ng-click="cancelNewPart()">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="sections.resolutionEntireSection.visible">
+                                <div class="col-lg-12">
+                                    <p>&nbsp;</p>
+                                    <div class="row">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr class="setColumnWidth">
+                                                    <th>
+                                                        Labour Cost
+                                                    </th>
+                                                    <th>
+                                                        Additional Cost
+                                                    </th>
+                                                    <th>
+                                                        Transport
+                                                    </th>
+                                                    <th>
+                                                        Parts Total
+                                                    </th>
+                                                    <th>
+                                                        Total
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <input class="form-control" type="number" ng-model="serviceRequest.ResolutionLabourCost"
+                                                               readonly="true" />
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control" type="number" ng-model="serviceRequest.ResolutionAdditionalCost"
+                                                               ng-disabled="!hasPermission('EnableResolution')" />
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control" type="number" ng-model="serviceRequest.ResolutionTransportCost"
+                                                               ng-disabled="!hasPermission('EnableResolution')" />
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <p class="form-control-static">
+                                                            {{sumPartPrice() | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                                        </p>
+                                                    </td>
+                                                    <td class="text-center">
+                                                        <p class="form-control-static">
+                                                            {{serviceRequest.ResolutionLabourCost + serviceRequest.ResolutionAdditionalCost +
+                                                            serviceRequest.ResolutionTransportCost + sumPartPrice() | currency : culture.CurrencySymbol
+                                                            : culture.DecimalPlaces}}
+                                                        </p>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-show="serviceRequest.NoCostMatrixData">
+                                                    <td colspan="5">
+                                                        <div class="text-danger" ng-show="serviceRequest.Manufacturer && serviceRequest.RepairType">
+                                                            There is no labour charge for Manufacturer '{{serviceRequest.Manufacturer}}' with Repair Type
+                                                            '{{serviceRequest.RepairType}}'.
+                                                            Please enter the labour charge under additional costs.
+                                                        </div>
+                                                        <div class="text-danger" ng-show="!serviceRequest.Manufacturer || !serviceRequest.RepairType">
+                                                            There is no labour charge configured for this repair.
+                                                            Please enter the labour charge under additional costs.
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="sections.resolutionEntireSection.visible">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">
+                                            Technician report
+                                        </label>
+                                        <div class="col-lg-8">
+                                            <textarea class="form-control" rows="5" ng-model="serviceRequest.ResolutionReport"
+                                                      ng-disabled="!hasPermission('EnableResolution')"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">
+                                            Fault tags
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select ui-select2 multiple ng-model="serviceRequest.FaultTagsArray" style="width: 200px"
+                                                    ng-disabled="!hasPermission('EnableResolution')">
+                                                <option value="{{tag}}" ng-repeat="tag in MasterData.Settings.ServiceFaultTag">{{tag}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" ng-show="sections.foodLoss.visible()">
+                                <div id="foodloss" class="section">
+                                    Food Loss
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="row">
+                                        <table class="table">
+                                            <thead>
+                                                <tr class="setColumnWidth">
+                                                    <th style="width: 16px">
+                                                    </th>
+                                                    <th>
+                                                        Item
+                                                    </th>
+                                                    <th>
+                                                        Cost
+                                                    </th>
+                                                    <th style="width: 16px">
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-hide="serviceRequest.FoodLoss.length != 0">
+                                                    <td colspan="3">
+                                                        <label class="control-label">
+                                                            <a href="#" ng-click="addFoodLoss()" title="Add" class="halflings plus" ng-show="hasPermission('EnableFoodLoss')">
+                                                            </a>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                                <tr ng-repeat="lossItem in serviceRequest.FoodLoss">
+                                                    <td>
+                                                        <label class="control-label">
+                                                            <a href="#" ng-click="removeFoodLoss(lossItem)" title="Remove" class="halflings trash"
+                                                               ng-show="hasPermission('EnableFoodLoss')"></a>
+                                                        </label>
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control" ng-disabled="!hasPermission('EnableFoodLoss')" type="text"
+                                                               ng-model="lossItem.item" required />
+                                                    </td>
+                                                    <td>
+                                                        <input class="form-control" ng-disabled="!hasPermission('EnableFoodLoss')" type="number"
+                                                               ng-model="lossItem.value" required />
+                                                    </td>
+                                                    <td>
+                                                        <label class="control-label">
+                                                            <a href="#" ng-click="addFoodLoss()" title="Add" ng-class="{hide: !$last}" class="halflings plus"
+                                                               ng-show="hasPermission('EnableFoodLoss')"></a>
+                                                        </label>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            Items = {{serviceRequest.FoodLoss.length}}
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            Total Cost = {{foodLossSum() | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="finalise" class="section">
+                                    Finalise
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4" for="replacementIssued">
+                                            Replacement issued
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input type="checkbox" ng-model="serviceRequest.ReplacementIssued" id="replacementIssued"
+                                                   name="replacementIssued" id="replacementIssued" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group" ng-class="{'has-error': serviceForm.ReasonForExchange.$invalid}">
+                                        <label class="control-label col-lg-4">
+                                            Reason For Exchange
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2="{allowClear: true}" ng-model="serviceRequest.ReasonForExchange"
+                                                    ng-required="serviceRequest.ReplacementIssued" ng-disabled="!hasPermission('EnableFinalize')"
+                                                    placeholder="Select Reason" name="ReasonForExchange" id="ReasonForExchange">
+                                                <option></option>
+                                                <option value="{{value}}" ng-repeat="(key , value) in MasterData.ServiceReasonForExchange">
+                                                    {{key}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">
+                                            Reason For Failure
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <select class="picklist" ui-select2 ng-model="serviceRequest.FinalisedFailure" ng-disabled="!hasPermission('EnableFinalize')"
+                                                    placeholder="Select Reason" name="FinalisedFailure" id="FinalisedFailure">
+                                                <option></option>
+                                                <option value="{{res}}" ng-repeat="res in MasterData.ServiceResolutions">{{res}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="control-label col-lg-4">
+                                            Return Date
+                                        </label>
+                                        <div class="col-lg-6">
+                                            <input class="form-control" type="text" ng-model="serviceRequest.FinaliseReturnDate"
+                                                   readonly="true" ui-date="dateCreatedOrCurrent" ng-disabled="!hasPermission('EnableFinalize')"
+                                                   name="FinaliseReturnDate" id="FinaliseReturnDate" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Cost
+                                                </th>
+                                                <th>
+                                                    Actual Cost
+                                                </th>
+                                                <th ng-repeat="chargeTo in serviceRequest.ChargeTos">
+                                                    {{chargeTo}}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="charge in serviceRequest.DisplayCharges">
+                                                <td>
+                                                    {{charge.costType}}
+                                                </td>
+                                                <td>
+                                                    {{charge.charges.total | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                                </td>
+                                                <td ng-repeat="chargeTo in serviceRequest.ChargeTos">
+                                                    {{charge.charges | chargeType: chargeTo | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="comments" class="section">
+                                    Comments
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-6">
+                                        <textarea class="form-control" rows="5" cols="100" maxlength="4000" ng-model="serviceRequest.Comment"
+                                                  name="Comment" id="Comment"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-lg-6">
+                                        <button class="btn btn-primary" ng-click="saveComment()" ng-visible="serviceRequest.State == 'Closed'"
+                                                ng-disabled="!serviceRequest.Comment">
+                                            Save Comment
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="comments row" ng-repeat="comment in serviceRequest.RequestComments">
+                                        <div title="{{moment(comment.Date).format(dateFormat)}}">
+                                            Updated by <strong>{{comment.AddedBy}} {{moment(comment.Date).fromNow()}} </strong>
+                                        </div>
+                                        <pre>{{comment.Comment}}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div id="history" class="section">
+                                    Service History
+                                </div>
+                                <div class="col-lg-8" ng-show="serviceRequest.History">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Date Created
+                                                </th>
+                                                <th>
+                                                    Request
+                                                </th>
+                                                <th>
+                                                    Status
+                                                </th>
+                                                <th>
+                                                    Date Modified
+                                                </th>
+                                                <th>
+                                                    Repair Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="history in serviceRequest.History">
+                                                <td>
+                                                    {{moment(history.CreatedOn).format(dateFormatShort)}}
+                                                </td>
+                                                <td class="text-right">
+                                                    <a class="external-link" href="{{getURL(history.RequestId)}}" target="_blank" title="Click to view full details">
+                                                        {{history.RequestId}}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    {{history.Status}}
+                                                </td>
+                                                <td>
+                                                    {{moment(history.UpdatedOn).format(dateFormatShort)}}
+                                                </td>
+                                                <td class="amount text-right">
+                                                    {{getRepairTotal(history.RequestId) | currency : culture.CurrencySymbol : culture.DecimalPlaces}}
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @Html.Partial("stock")
+        @Html.Partial("payment")
+        @Html.Partial("Dialogue")
+        @*---Added Gurpreet - CR2018-010 - 31/10/18 - Setting of max no. of Jobs & Validation with allocated jobs for a technician.---*@
+        @Html.Partial("TechnicianAllocatedJobs")
+        @Html.Partial("JobOverridePopup")
+        @Html.Partial("OverrideAuthorisationPopup")
+        @*---CR2018-010 Changes End---*@
+        @Html.Partial("Authorise")
+        @Html.Partial("servicePaymentReceipt")
+    </div>
+    <article id="load-error" ng-show="serviceready && loadError" style="display: none;">
+        <div class="text-warning">
+            We're sorry but we could not load the requested SR.
+        </div>
+    </article>
+</div>

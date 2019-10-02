@@ -1,0 +1,98 @@
+<div>
+    <div class="row buffer-sm bottom">
+        <div class="col-lg-12">
+            <div class="pull-right">
+                <button class="btn btn-default" ng-click="print(true)">Print with cost <span class="glyphicons new_window"></span></button>
+                <button class="btn btn-default" ng-click="print(false)">Print without cost <span class="glyphicons new_window"></span></button>
+                <button class="btn btn-default" ng-click="printAlternate()">Print <span class="glyphicons new_window"></span></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Vendor</label>
+                <p><a href="{{generateUrl('Merchandising/Vendors/Detail/' + purchase.vendorId)}}">{{purchase.vendor}}</a></p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Date Created</label>
+                <p>{{purchase.createdDate | pbDate : true}}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Status</label>
+                <p>{{purchase.status}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Receiving Location</label>
+                <p><a href="{{generateUrl('Merchandising/Locations/Detail/' + purchase.receivingLocationId)}}">{{purchase.receivingLocation}}</a>
+                </p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Purchase Order Requested Delivery Date</label>
+                <p>{{purchase.requestedDeliveryDate | pbDate }}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Payment Terms</label>
+                <p>{{purchase.paymentTerms}}</p>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="row" ng-hide="purchase.originSystem=='COSACS'">
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Ship Via</label>
+                <p>{{purchase.shipVia}}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Ship Date</label>
+                <p>{{purchase.shipDate | pbDate }}</p>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <label>Port Of Loading</label>
+                <p>{{purchase.portOfLoading}}</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div>
+        <div class="row" ng-repeat="rows in partitionedAttributeData">
+            <div class="col-lg-4" ng-repeat="attribute in rows">
+                <div class="form-group">
+                    <label>{{attribute.id}}</label>
+                    <p>{{attribute.value}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

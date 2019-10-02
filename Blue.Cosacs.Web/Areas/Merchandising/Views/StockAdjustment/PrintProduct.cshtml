@@ -1,0 +1,77 @@
+﻿@model List<StockAdjustmentProductPrintModel>
+
+<style type="text/css">
+    .Collection {
+        border-left: 10px solid;
+    }
+
+    .del-col div.watermark {
+        -webkit-transform: none;
+        -moz-transform: none;
+        color: rgba(230, 230, 230, 0.5);
+        font-size: 10em;
+        z-index: -100;
+        position: absolute;
+        top: -25px;
+        left: 250px;
+        visibility: visible;
+    }
+</style>
+<span style="white-space:nowrap">
+    <table class="main">
+        <thead>
+            <tr>
+                <th colspan="2">Product Code</th>
+                <th style="text-align: left">Description</th>
+                <th>Reference Number</th>  
+                <th class="number">Quantity</th>
+                <th class="number">Unit Cost</th>
+                <th class="number">Line Cost</th> 
+                             
+            </tr>
+        </thead>
+        <tbody>
+        @{foreach (var product in Model) {
+            <tr class="item noborder" style="border-top: 1px solid black;">
+                  
+                <td class="del-col" rowspan="2" style="text-align:left">
+                    <div style="top: 25%; left: -15px;">@product.Sku</div>
+                </td>
+
+                <td rowspan="2" style="vertical-align: middle">
+                    @Html.Barcode(product.Sku, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER, true)
+                </td>
+
+                <td class="larger" style="white-space:normal">
+                    @product.Description
+                </td>
+
+                <td>
+                    <div class="qty">@product.ReferenceNumber</div>
+                </td>
+
+                <td class="number">
+                    <div class="qty">@product.Quantity</div>
+                </td>
+                
+                <td class="number">
+                    <div class="qty">@product.UnitCost</div>
+                </td>
+
+                <td class="number">
+                    <div class="qty">@product.LineCost</div>
+                </td>
+               
+
+            </tr>
+              <tr class="item noborder" style="border-bottom: 1px solid black;">
+                  
+                  <td colspan="8" style="padding-top: 10px">
+                      Comments: <span class="larger">@product.Comments</span>
+                  </td>
+
+              </tr>
+        }}
+        </tbody>
+    </table>
+</span>

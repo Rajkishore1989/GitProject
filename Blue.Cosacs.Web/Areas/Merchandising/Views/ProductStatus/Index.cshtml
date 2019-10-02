@@ -1,0 +1,69 @@
+﻿@model ProductStatusViewModel
+@{
+     ViewBag.Title = "Product Status";
+}
+
+<div data-module="merchandising/productStatus/init" ng-controller="productStatusCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+    <ng-form name="statusForm" class="form-horizontal supplier-form" novalidate>
+        <div class="row">
+            <div class="col-lg-9">
+                
+                <section class="buffer top">
+                    <h4>Manual</h4>
+                    <table class="table table-bordered table-striped aligned">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th class="text-center">Name</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="status in manualStatuses" ng-form="statusItemForm">
+                                <td class="col-btn" ng-hide="readonly">
+                                    <span class="glyphicons glyph-btn bin" title="Remove" ng-hide="status.isAutomatic" ng-click="remove(status)">&nbsp;</span>
+                                </td>
+                                <td>{{status.name}}</td>
+                                
+                                
+                            </tr>
+                            <tr ng-hide="readonly || !editing">
+                                <td class="col-btn" ng-hide="readonly">
+                                    <span class="glyphicons glyph-btn floppy_disk" title="Save" ng-click="saveNew(status)">&nbsp;</span>
+                                    <span class="glyphicons glyph-btn undo" title="Undo" ng-click="cancel()">&nbsp;</span>
+                                </td>
+                                <td><input type="text" class="form-control text-center" name="name" ng-model="newStatusName" maxlength="50" placeholder="Type to add a new status" ng-maxlength="50" required /></td>
+                                </tr>
+                        </tbody>
+
+                        <tfoot>
+                            <tr ng-hide="readonly || editing">
+                                <td colspan="3">
+                                     <span class="glyphicons glyph-btn plus pull-left" title="Save" ng-click="add()">&nbsp;</span>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </section>
+                
+                <section class="buffer top">
+                    <h4>System</h4>
+                    <table class="table table-bordered table-striped aligned">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Name</th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="status in systemStatuses" ng-form="statusItemForm">
+                                <td>{{status.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+            </div>
+        </div>
+    </ng-form>
+</div>

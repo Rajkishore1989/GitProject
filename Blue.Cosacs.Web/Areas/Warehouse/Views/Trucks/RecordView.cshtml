@@ -1,0 +1,11 @@
+﻿@model Blue.Cosacs.Warehouse.TruckView
+<tr data-id="@Model.Id" class="view">
+@if (Html.HasPermission(Blue.Cosacs.Warehouse.Common.WarehousePermissionEnum.TruckMaintenanceEdit))
+{
+    <td class="actions"></td>
+}
+    <td>@Model.Name</td>
+    <td>@Model.BranchName</td>
+    <td>@Model.Size</td>
+    <td>@Model.Driver</td>
+</tr>

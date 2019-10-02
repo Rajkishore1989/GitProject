@@ -1,0 +1,105 @@
+﻿
+<section class="existing">
+    <table class="data table table-striped table-bordered table-hover">
+        <thead>
+            <tr>
+                @if (ViewBag.ShowFooter)
+                {
+                    <th class="action"></th>
+                }
+                <th class="title filters">Filters</th>
+                <th class="title date">Start Date</th>
+                <th class="title date">End Date</th>
+                <th class="title price">Promotion Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="promotion" data-id="{{promo.Id}}" ng-repeat="promo in promotions">
+                @if (ViewBag.ShowFooter)
+                {
+                    <td class="action"><span ng-show="AllowEdit" class="glyphicons glyph-btn action-delete bin" title="Delete" ng-click="deletePromotion()"></span></td>
+                }
+                <td class="filters">
+                    <table class="filterstable">
+                        <tr class="filter" ng-repeat="filter in promo.Filters">
+                            <td class="level-name">{{filter.name}}:</td>
+                            <td ng-show="filter.name != 'Warranty'" class="tag-name">{{filter.value}}</td>
+                            <td ng-show="filter.name == 'Warranty'"><a class="tag-name" ng-href="{{filter.wurl}}">{{filter.value}}</a></td>
+                        </tr>
+                    </table>
+                </td>
+                <td class="date">{{promo.startDate | date:"dd MMM yyyy"}}</td>
+                <td class="date">{{promo.endDate | date:"dd MMM yyyy"}}</td>
+                <td class="price" ng-show="promo.IsPercentage">{{promo.PromotionAmount}} % OFF</td>
+                <td class="price" ng-hide="promo.IsPercentage">{{promo.PromotionAmount | currency : culture.CurrencySymbol : culture.DecimalPlaces}}</td>
+            </tr>
+        </tbody>
+        @if (ViewBag.ShowFooter)
+        {
+            <tfoot ng-show="AllowEdit">
+                <tr class="promotion-new new" ng-hide="creatingNewPromotion">
+                    <td class="action">
+                        <a class="glyphicons glyph-btn action-new plus" title="New" ng-click="showNewRow($event)"></a>
+                    </td>
+                    <td colspan="4"></td>
+                </tr>
+                <tr class="promotion-new create" ng-show="creatingNewPromotion">
+                    <td class="action">
+                        <a class="glyphicons glyph-btn action save floppy_disk click" ng-show="canSave(newPromotion)" title="Save" ng-click="createNewPromotion()"></a>
+                        <a class="glyphicons glyph-btn action save floppy_disk disabled" ng-hide="canSave(newPromotion)" title="Save"></a>
+                        <a class="glyphicons glyph-btn action cancel undo" title="Cancel" ng-click="cancelNewPromotion()"></a>
+                    </td>
+                    <td class="filters">
+                        <section class="filters warranty">
+                            <div class="field">
+                                <div>Warranty</div>
+                                <div ng-class="{'has-error': !newPromotion.Warranty}">
+                                    <input ui-select2="warrantySearchSetup()" ng-model="newPromotion.Warranty" data-placeholder="Warranty" style="width: 80%;" />
+                                </div>
+                            </div>
+                        </section>
+                        <section class="filters static">
+                            <div class="field">
+                                <div>Store Type</div>
+                                <select ui-select2="select2Options" ng-model="newPromotion.BranchType" data-placeholder="Store Type" style="width: 80%;">
+                                    <option></option>
+                                    <option value="{{value}}" ng-repeat="(value, branchType) in MasterData.BranchTypes">{{branchType}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <div>Store Location</div>
+                                <select ui-select2="select2Options" ng-model="newPromotion.BranchNumber" data-placeholder="Store Location" style="width: 80%;">
+                                    <option></option>
+                                    <option value="{{value}}" ng-repeat="(value, branch) in MasterData.Branches">{{branch}}</option>
+                                </select>
+                            </div>
+                        </section>
+                    </td>
+                    <td class="date">
+                        <div class="field date" ng-class="{'has-error': !newPromotion.startDate}">
+                            <input required ui-date="promtionDatePickerDate" readonly="true" ng-model="newPromotion.startDate" ng-change="startDateChanged()" id="promotionStartDate" placeholder="Start Date" class="date form-control" />
+                        </div>
+                    </td>
+                    <td class="date">
+                        <div class="field date" ng-class="{'has-error': !newPromotion.endDate}">
+                            <input required ui-date="promtionDatePickerDate" readonly="true" ng-model="newPromotion.endDate" ng-change="endDateChanged()" id="promotionEndDate" placeholder="End Date" class="date form-control" />
+                        </div>
+                    </td>
+                    <td class="price">
+                        <div class="field promo-action" ng-model="newPromotion.Action" ng-class="{'has-error': !newPromotion.Action}">
+                            <select required ui-select2="select2Options" ng-model="newPromotion.Action" ng-change="newLocationPromotionActionChanged()" data-placeholder="Promotion Type" style="width:120px;">
+                                <option></option>
+                                <option value="{{value}}" ng-repeat="(value, description) in MasterData.PromotionActions">{{description}}</option>
+                            </select>
+                        </div>
+                        <br />
+                        <div class="field price retail" ng-class="{'has-error': !newPromotion.PromotionAmount}">
+                            <input required ng-model="newPromotion.PromotionAmount" ng-change="newLocationPromotionRetailPriceChanged()" type="number" step="0.01"
+                                   placeholder="{{(newPromotion.Action == '%') && '% Discount' || 'Set Price'}}" ui-keypress="{enter:'createNewPromotion()'}" ui-keyup="{esc:'cancelNewPromotion()'}" ng-class="{true:'percentage', false:'currency'}[newPromotion.Action == '%']" class="form-control" />
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        }
+        </table>
+</section>

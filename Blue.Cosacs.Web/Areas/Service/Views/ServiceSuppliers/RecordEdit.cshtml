@@ -1,0 +1,20 @@
+﻿@model Blue.Cosacs.Web.Areas.Service.Models.ServiceSupplier
+<tr data-id="@Model.Id" class="edit">
+@if (Html.HasPermission(Blue.Service.ServicePermissionEnum.ServiceSupplierEdit))
+ {
+    <td class="actions"></td>
+ }
+    <td colspan="2">
+        @using (Html.BeginForm("RecordEdit", "ServiceSuppliers", FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <div class="form-group">
+                <div class="col-lg-1"></div>
+                <label for="Supplier" class="col col-lg-3 control-label">Supplier</label>
+                <div class="col-lg-7">
+                    @Html.TextBoxFor(m => m.Supplier, new { @class = "form-control form-horizontal", @maxlength = "20" })
+                </div>
+                <div class="col-lg-1"></div>
+            </div>
+        }
+    </td>
+</tr>

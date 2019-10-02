@@ -1,0 +1,37 @@
+﻿<div ng-controller="GenericReportController" class="ng-scope generic-report-results">
+    <div class="actions">
+        <button id="buttonClear" class="clear btn btn-default" ng-click="clear()">Clear</button>
+        <button type="submit" id="buttonSearch" class="search btn btn-primary" ng-click="search()">Run</button>
+        <button class="btn btn-default" ng-click="exportResults()">Export</button>
+    </div>
+    <div class="search row">
+        &nbsp;</div>
+    <div ng-show="!emptyResults">
+        <table class="main table table-striped table-bordered table-hover table-row-number" ng-show="!hideTableData">
+            <thead>
+                <tr ng-repeat="header in data.headers">
+                    <th class="row-number" ></th>
+                    <th ng-repeat="col in header" colspan="{{col.colspan || 1}}" ng-hide="$index == RowNoIndx || $index == TotalCountIndx">
+                        {{ col.title }}
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="row in data.rows">
+                    <td class="row-number">{{$index + 1}}</td>
+                    <td ng-repeat="cell in row" ng-hide="$index == RowNoIndx || $index == TotalCountIndx">
+                        <div ng-bind-html-unsafe="cell">
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div ng-show="hideTableData">
+            There are no values matching your search filter.
+        </div>
+    </div>
+    <div ng-show="hasPagination && !hideTableData">
+        <pagination num-pages="PageCount" max-size="250" current-page="PageIndex" on-select-page="selectPage(page)"></pagination>
+        <div class="print-pagination">Page {{PageIndex}}<span ng-show="PageCount > 1"> of {{PageCount}}</span></div>
+    </div>
+</div>

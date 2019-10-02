@@ -1,0 +1,8 @@
+﻿@model IEnumerable<Blue.Cosacs.Merchandising.Models.TicketingViewModel>
+@{
+     ViewBag.Title = "Price Ticketing";
+}
+
+<div data-module="merchandising/ticketing/init" ng-controller="ticketingCtrl" ng-init="vm=@Html.RawJson(Model)" ng-cloak>
+    <button class="btn btn-primary" ng-click="Download()">Download Extract</button>
+</div>

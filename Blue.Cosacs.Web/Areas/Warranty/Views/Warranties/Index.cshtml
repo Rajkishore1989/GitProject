@@ -1,0 +1,12 @@
+﻿@model string
+<div id="facetSearchContainer" data-module="warranty/warrantyPrices" ng-controller="SearchController" class="facetsearch-container"
+     data-view-permission="@ViewBag.viewPermission" data-edit-price-permission="@ViewBag.editPricePermission"
+     data-branches="@ViewBag.branches" data-branch-types="@ViewBag.branchTypes" data-default-tax-rate="@ViewBag.defaultTaxRate">
+    <facetsearch data-results="@Model"
+                 data-results-template="/Static/js/warranty/templates/warranties.html"
+                 data-search-url="warranty/warrantyAPI/Search"
+                 data-history-url="warranty/warranties/Index"
+                 data-field-labels="@ViewBag.labels"
+                 data-half-fields= '["Deleted", "BranchType", "Free", "WarrantyHasPrices"]'>
+    </facetsearch>
+</div>

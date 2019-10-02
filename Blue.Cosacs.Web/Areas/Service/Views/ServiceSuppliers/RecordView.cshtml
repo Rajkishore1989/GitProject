@@ -1,0 +1,8 @@
+﻿@model Blue.Cosacs.Web.Areas.Service.Models.ServiceSupplier
+<tr data-id=@Model.Id class=view>
+@if (Html.HasPermission(Blue.Service.ServicePermissionEnum.ServiceSupplierEdit))
+{
+    <td class="actions"></td>
+}
+    <td>@Model.Supplier</td>
+</tr>

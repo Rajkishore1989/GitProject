@@ -1,0 +1,171 @@
+{
+         "ServiceResolutions": ["Beyond Economic Repair", "Cosmetic Defect", "Damage On Delivery", "Electrical Defect", "Event or terms NOT covered", "Hardware", "Installation of New Product", "Mechanical Defect", "Misuse by the customer", "No Fault Found", "Rusting", "Save a Call", "Software", "Structure", "Upholstery Fabric Defect"],
+         "User": {
+             "UserId": "99999",
+             "UserName": "System Administrator",
+             "Branch": "900",
+             "Country": "B",
+             "Permissions": [null, null, null, null, "SaveServiceRequests", "EnableFoodLoss", "PrintServiceRequest", "EnableAllocation", "EnableResolution", "EnableFinalize", "PrintInvoice", "EnableDepositUpdate", "ViewTechDiary", null, null, "DeleteBooking", null, null, null, "AddBooking", "ChangeBranch", null, null, null, "EnableCustomer", "EnableProduct", null, null, null, null, null, "EnableEvaluation", null, null, null, null, null, null]
+         },
+         "Settings": {
+             "ServiceItemLabour": "7L0001",
+             "ServiceItemPartsCourts": "7SPA01",
+             "ServiceItemPartsOther": "7L0002",
+             "ServiceFaultTag": ["Rust", "Faulty hinge"],
+             "TaxRate": "17.5",
+             "TaxType": "E",
+             "BerThreshold": "75",
+             "BerMarkup": "10",
+             "BerReplacement": "false",
+             "PreviousRepairCostPercentage": "50",
+             "InstallationFurnitureAccount": null,
+             "InstallationElectricalAccount": null
+         },
+         "SupplierCostMatrix": "null",
+         "LabourCostMatrix": [],
+         "PartsCostMatrix": [],
+         "ResolutionCategories": "null",
+         "ServiceActions": {
+             "Collected": "Collected",
+             "Not Collected": "Not Collected",
+             "Send Technician": "Send Technician"
+         },
+         "ServiceChargeTos": {
+             "Customer": "Customer",
+             "Deliverer": "Deliverer",
+             "EW": "EW",
+             "FYW": "FYW",
+             "Internal": "Internal",
+             "Supplier": "Supplier"
+         },
+         "ServiceLocations": {
+             "SERVICE": "SERVICE"
+         },
+         "ServiceSuppliers": {
+             "ADMIRAL": "ADMIRAL",
+             "BLACK AND DECKER": "BLACK AND DECKER",
+             "BROTHER": "BROTHER",
+             "CASIO": "CASIO",
+             "COMPAQ": "COMPAQ",
+             "DELL": "DELL",
+             "ELECTROLUX / FRIGIDARE": "ELECTROLUX / FRIGIDARE",
+             "HP": "HP",
+             "LG PANAMA": "LG PANAMA",
+             "MABE GE": "MABE GE",
+             "MAYTAG": "MAYTAG",
+             "Other": "Other",
+             "PANASONIC": "PANASONIC",
+             "PHILLIPS": "PHILLIPS",
+             "PRECISION": "PRECISION",
+             "SAMSUNG": "SAMSUNG",
+             "SHARP": "SHARP",
+             "SONY": "SONY",
+             "TOSHIBA": "TOSHIBA",
+             "WHIRLPOOL": "WHIRLPOOL"
+         },
+         "ServiceZones": {
+             "BROWN": "BROWN",
+             "COMPUTER": "COMPUTER",
+             "FUNITURE": "FUNITURE",
+             "SDA": "SDA",
+             "WHITE": "WHITE"
+         },
+         "ServiceTechReasons": {
+             "Customer not comfortabl wt tech": "Customer not comfortabl wt tech",
+             "Customer migrated another area": "Customer migrated another area",
+             "Part availability taking too long": "Part availability taking too long",
+             "Technician taking too long": "Technician taking too long",
+             "Vehicle cannot go in area": "Vehicle cannot go in area"
+         },
+         "Branches": {
+             "900": "900 BRIDGETOWN",
+             "901": "901 SPEIGHTSTOWN",
+             "902": "902 OISTINS",
+             "903": "903 SHERATON",
+             "904": "904 CONTEMPO",
+             "905": "905 JULIE 'N",
+             "906": "906 COURTS AT CAVE SHEPH",
+             "907": "907 EMERALD CITY",
+             "908": "908 SPRING GARDEN W/HOUS",
+             "909": "909 WILDEY W/HOUSE",
+             "910": "910 SEVICE DEPARTMENT",
+             "911": "911 ELLERTON",
+             "912": "912 SHOP HILL",
+             "913": "913 CAVANS LANE",
+             "916": "916 BARGAIN CENTRE",
+             "917": "917 SHOPCOURTS",
+             "918": "918 COMMERCIAL SALES",
+             "919": "919 BRIDGETOWN OPTICAL",
+             "920": "920 SHERATON OPTICAL"
+         },
+         "ServiceDeliverer": {
+             "Update Code Category SRDELIVERER to add Service Deliverers": "Update Code Category SRDELIVERER to add Service Deliverers"
+         },
+         "ServiceSupplierAccount": {
+             "ADMIRAL": "ADMIRAL",
+             "BLACK AND DECKER": "BLACK AND DECKER",
+             "BROTHER": "BROTHER",
+             "CASIO": "CASIO",
+             "COMPAQ": "COMPAQ",
+             "DELL": "DELL",
+             "ELECTROLUX/FRIGIDARE": "ELECTROLUX/FRIGIDARE",
+             "HP": "HP",
+             "LG PANAMA": "LG PANAMA",
+             "MABE GE": "MABE GE",
+             "MAYTAG": "MAYTAG",
+             "Other": "Other",
+             "PANASONIC": "PANASONIC",
+             "PHILLIPS": "PHILLIPS",
+             "PRECISION": "PRECISION",
+             "SAMSUNG": "SAMSUNG",
+             "SHARP": "SHARP",
+             "SONY": "SONY",
+             "TOSHIBA": "TOSHIBA",
+             "WHIRLPOOL": "WHIRLPOOL"
+         },
+         "ContactTypes": {
+             "Email": "Email",
+             "Fax": "Fax",
+             "HomePhone": "HomePhone",
+             "MobilePhone": "MobilePhone",
+             "WorkPhone": "WorkPhone",
+             "Facebook": "Facebook",
+             "Twitter": "Twitter"
+         },
+         "ServiceQuestions": {
+             "1) Have you read the instruction manual?": "1) Have you read the instruction manual?",
+             "2) Is the item under warranty?": "2) Is the item under warranty?",
+             "3) Is the item in use domestically?": "3) Is the item in use domestically?",
+             "4) Was the item installed by qualified personnel?": "4) Was the item installed by qualified personnel?",
+             "5) Has the item been moved from the delivery address?": "5) Has the item been moved from the delivery address?"
+         },
+         "ServiceRetailers": {
+             "Other": "Other"
+         },
+         "ServiceRepairTypes": {
+             "Assessment": "Assessment",
+             "Minor": "Minor",
+             "Major": "Major"
+         },
+         "ServiceReasonForExchange": {
+             "Electrical Defect": "Electrical Defect",
+             "Hardware": "Hardware",
+             "Mechanical Defect": "Mechanical Defect",
+             "Rusting": "Rusting",
+             "Structure": "Structure"
+         },
+         "AvailableChargeTos": [{
+             "key": "Customer",
+             "authorisationRequired": "false"
+ }, {
+             "key": "Deliverer",
+             "authorisationRequired": "false"
+ }, {
+             "key": "Internal",
+             "authorisationRequired": "false"
+ }, {
+             "key": "Supplier",
+             "authorisationRequired": "false"
+ }],
+         "ServiceEvaluation": ["No Fault Found", "Misuse by the Customer", "Event or Terms Not Covered", "Warranty Covered", "Damage On Delivery", "Call Abandoned"]
+     }

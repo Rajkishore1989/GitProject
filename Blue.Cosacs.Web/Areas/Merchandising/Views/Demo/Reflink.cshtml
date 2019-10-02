@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Reference Link Technical Demonstration";
+}
+
+<style type="text/css">
+    textarea {
+        width: 400px;
+        height: 300px;
+    }
+</style>
+
+<div data-module="merchandising/demo/init" ng-controller="RefLinkCtrl" ng-cloak>
+    <textarea ng-model="data.message"></textarea>
+    <h1 pb-ref-link ng-model='data.message' class="bg-info"></h1>
+    <p pb-ref-link ng-model='data.message' class="bg-warning"></p>
+</div>

@@ -1,0 +1,53 @@
+<div class="panel panel-default result search-result" data-request-id="{{result.PurchaseOrderId}}" ng-repeat="result in displayResults">
+    <div class="Booking-Columnn panel-heading">
+        <div class="row">
+            <div class="col-lg-4">
+                <span class="resultType">Purchase Order</span>
+                <a class="refLink" ng-href="/Cosacs/Merchandising/Purchase/Detail/{{result.PurchaseOrderId}}">#{{result.PurchaseOrderId}}</a>
+            </div>
+            <div class="col-lg-4 pull-right">
+                <span>{{result.Status}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="panel-body centre-section">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <div><b>Estimated Delivery Date</b></div>
+                        <div><b>Expiry Date</b></div> 
+                        <div><b>Vendor</b></div>
+                        <div><b>Receiving Location</b></div>                        
+                        <div><b>Origin System</b></div>                        
+                        <div ng-show="result.OriginSystem != 'COSACS'"><b>Corporate PO Number</b></div>                        
+                    </div>
+                    <div class="col-lg-9 result-panel">
+                        <div>{{result.ExpectedDeliveryDate[0] | pbDate }}</div>
+                        <div>{{result.ExpiryDate | pbDate }}</div>
+                        <div>{{result.Vendor}}</div>
+                        <div>{{result.ReceivingLocation}}</div>
+                        <div>{{result.OriginSystem}}</div>
+                        <div ng-show="result.OriginSystem != 'COSACS'">{{result.CorporatePoNumber}}</div>
+                    </div>  
+                </div>
+                
+            </div>
+             <div class="col-lg-4">
+                    <div class="row contact-details">
+                        <div class="col-lg-6">
+                            <div class="contact-type" ng-repeat="type in result.ReferenceType">
+                                <b>{{type | humanize | titleize }}</b>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 contact-values">
+                            <div class="contact-value" ng-repeat="value in result.ReferenceValue">
+                                {{value}}
+                            </div>
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+    </div>
+</div>

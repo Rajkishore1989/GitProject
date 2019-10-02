@@ -1,0 +1,191 @@
+﻿@model SetViewModel
+@{
+    if (Model.Set.Id > 0)
+    {
+        ViewBag.Title = "Set - " + Model.Set.Sku;
+    }
+    else
+    {
+        ViewBag.Title = "Create Set";
+    }
+}
+
+<div data-module="merchandising/set/init" ng-controller="SetCtrl" ng-init="vm=@Html.RawJson(Model);" ng-cloak class="buffer-sm bottom">
+
+    <ng-form name="rootForm" class="set-form" novalidate>
+
+        <div class="buffer-sm top">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="form-group" ng-class="{'has-error': rootForm.longDescription.$invalid}">
+                        <label for="longDescription">Description</label>
+                        <input class="form-control" type="text" name="longDescription" placeholder="Enter a Description" ng-model="vm.set.longDescription" required ng-disabled="isLocked()">
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <div class="form-group" ng-class="{'has-error': rootForm.status.$invalid}">
+                        <label for="longDescription">Status</label>
+                        <select name="status" ng-model="vm.set.status" required ng-required="true" ng-disabled="isLocked() || !hasComponents()" class="form-control" placeholder="Select a status"
+                                ng-options="s.id as s.name for s in getStatuses()"
+                                pb-disabled-options="s.isAutomatic for s in getStatuses()"></select>
+                    </div>
+                </div>
+
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label for="priceTicket">Print Price Ticket</label>
+                        <input class="checkbox" type="checkbox" name="priceTicket" ng-model="vm.set.priceTicket" ng-disabled="isLocked()" />
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <button class="btn btn-primary pull-right" ng-click="save()" ng-disabled="isLocked() || rootForm.$invalid" ng-hide="isReadonly()">Save</button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3" ng-show="vm.set.createdDate">
+                    <div class="form-group">
+                        <label for="createdDate">Created</label>
+                        <p class="form-control-static aligned" name="createdDate">{{vm.set.createdDate | pbDate : true}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-3" ng-show="vm.set.lastUpdatedDate">
+                    <div class="form-group">
+                        <label for="lastUpdatedDate">Last Updated</label>
+                        <p class="form-control-static aligned" name="lastUpdatedDate">{{vm.set.lastUpdatedDate | pbDate : true}}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 buffer bottom" ng-hide="!vm.set.id || vm.set.id == '0'">
+                    <label>
+                        Hierarchy
+                    </label>
+                    <pb-hierarchy options="hierarchyOptions" selections="hierarchy" callback="saveHierarchySettings(tag, level)" editable="true" />
+                </div>
+            </div>
+        </div>
+
+        <div class="row buffer-sm top bottom" ng-hide="!vm.set.id">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Tags</label>
+                    <div class="well well-sm productRequired">
+                        <pb-tag-list tags="options.productTags"
+                                     selected-tags="selectedTags"
+                                     add-callback="saveProductTags()"
+                                     remove-callback="saveProductTags()" editable="!isReadonly()"
+                                     placeholder="Type to add product tags"></pb-tag-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row" ng-show="vm.set.id > 0">
+
+            <div class="col-lg-12">
+
+                <table class="table table-bordered table-striped pb-table">
+                    <thead>
+                        <tr>
+                            <th class="col-md component-controls">Components</th>
+                            <th class="col-sm">SKU</th>
+                            <th class="col-sm">Description</th>
+                            <th class="col-sm quantity">QTY</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="9" ng-show="canAddComponent() && uniqueComponents.length < 1"><span class="glyphicons glyph-btn plus" ng-click="addComponent()"></span></td>
+                        </tr>
+                        <tr ng-repeat="component in uniqueComponents" ng-form="componentForm" ng-controller="ComponentCtrl" ng-class="{'has-error': !validComponentPrices(component)}">
+                            <td class="component-controls">
+                                <span class="glyphicons glyph-btn bin" ng-click="removeComponent(component)" ng-show="canRemoveComponents()"></span>
+                                <span class="glyphicons glyph-btn pencil" ng-click="edit()" ng-show="canEdit()"></span>
+                                <span class="glyphicons glyph-btn undo" ng-click="cancel()" ng-show="canCancel()"></span>
+                                <span class="glyphicons glyph-btn ok_2" ng-click="accept(componentForm, uniqueComponents, component)" ng-show="canCancel()" ng-class="{'disabled': !canAccept(componentForm, uniqueComponents) }"></span>
+                            </td>
+                            <td ng-hide="isEditing(component)" class="sku"><a href="{{generateUrl('Merchandising/Products/Ref?sku=' + component.sku)}}">{{component.sku}}</a></td>
+                            <td ng-hide="!isEditing(component)" class="sku">
+                                <div>
+                                    <input ui-select2="searchProducts(component)" name="sku" ng-model="component.product" style="width: 100%" />
+                                </div>
+                            </td>
+                            <td>
+                                {{component.longDescription}}
+                                <span ng-show="!validComponentPrices(component)" class="has-error"> - Missing retail price data for specified locations</span>
+                            </td>
+                            <td class="quantity" ng-hide="isEditing(component)">{{component.quantity}}</td>
+                            <td class="quantity" ng-hide="!isEditing(component)">
+                                <div ng-class="{'has-error': componentForm.quantity.$invalid}">
+                                    <input pb-integer name="quantity" ng-model="component.quantity" class="form-control" ng-min="1" ng-required pb-keypress="{ enter: 'acceptEdit(component, componentForm)'}" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="addNew">
+                            <td class="component-controls" ng-show="canAddComponents()">
+                                <span class="glyphicons glyph-btn plus" ng-click="addComponent()"></span>
+                            </td>
+                            <td colspan="8" ng-show="canAddComponents()"></td>
+                            <td colspan="9" ng-show="!canAddComponents()"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row buffer-sm top">
+            <div class="col-md-12">
+                <div class="row" ng-show="canAddLocations()">
+                    <div class="col-md-12">
+                        <label>Add retail price for the set</label>
+                    </div>
+                </div>
+                <div class="row" ng-show="canAddLocations()">
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <input class="form-control effectiveDate" min="{{today}}" required type="date" id="effectiveDate" name="effectiveDate" required ng-required="locationSelection || fasciaSelection" placeholder="Select Effective Date" ng-model="effectiveDate" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <list name="fascia" ng-model="fasciaSelection" scope="options.fascia" placeholder="Select a Fascia" ng-disabled="isLocked() || locationSelection" tabindex="1"></list>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="form-group">
+                            <list name="locationOptions" ng-model="locationSelection" scope="listOptions.location" placeholder="Select a Location" ng-disabled="isLocked() || fasciaSelection"></list>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <button name="addLocation" class="btn btn-default btn-fixed" ng-click="addLocation(effectiveDate, fasciaSelection, locationSelection)" ng-disabled="isLocked()">Add</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12 buffer-xl bottom">
+                        <ng-form name="pricesForm">
+                            <div class="panel-group">
+                                <div class="panel panel-primary" ng-repeat="location in vm.set.locations" ng-controller="LocationCtrl" ng-form="locationForm">
+                                    <div class="panel-heading">
+                                        <span class="panel-title">{{(location.name || location.fascia) || "Any Location, Any Fascia" }} - {{location.effectiveDate | pbDate }}</span>
+                                        <span class="pull-right">
+                                            <span class="glyphicons glyph-btn pencil" ng-click="edit()" ng-show="canEdit()"></span>
+                                            <span class="glyphicons glyph-btn ok_2" ng-click="accept(locationForm)" ng-show="isEditing() && !pricesForm.$invalid"></span>
+                                            <span class="glyphicons glyph-btn undo" ng-click="cancel()" ng-show="canCancel()"></span>
+                                            <span class="glyphicons glyph-btn bin" ng-click="removeLocation(location.effectiveDate, location.fascia, location.locationId)" ng-show="canRemove(location.effectiveDate)"></span>
+                                        </span>
+                                    </div>
+                                    <price-panel panel-title="Cash Price" location="location" components="locationComponents" standard-price="cashPrice" price-model="location.cashPrice"
+                                                 total="total" total-inc-tax="totalIncTax" avg-tax="avgTax" is-editing="isEditing" show-margin="true" is-combo="false"></price-panel>
+
+                                    <price-panel panel-title="Regular Price" location="location" components="locationComponents" standard-price="regularPrice" price-model="location.regularPrice"
+                                                 total="total" total-inc-tax="totalIncTax" avg-tax="avgTax" is-editing="isEditing" show-margin="false" is-combo="false"></price-panel>
+
+                                    <price-panel panel-title="Duty Free Price" location="location" components="locationComponents" standard-price="dutyFreePrice" price-model="location.dutyFreePrice"
+                                                 total="total" total-inc-tax="totalIncTax" avg-tax="avgTax" is-editing="isEditing" show-margin="false" is-combo="false"></price-panel>
+
+                                </div>
+                            </div>
+                        </ng-form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-form>
+</div>

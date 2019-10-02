@@ -1,0 +1,45 @@
+﻿@using Blue.Cosacs.Web
+@using Blue.Glaucous.Client.Mvc
+@using Blue.Web
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>@ViewBag.Title</title>
+    <style type="text/css">
+        [ng-cloak] {
+            display: none !important;
+        }
+    </style>
+
+    @RenderSection("Head", false)
+
+    @if (!Html.IsBuilt())
+    {
+        <link href="@Url.Content("~/Static/css/print.less")" rel="stylesheet/less" />
+    }
+    else
+    {
+        @Html.Css("print")
+    }
+
+</head>
+<body data-base-url="/Cosacs/">
+    <div class="container_12">
+        @RenderBody()
+    </div>
+    <div>
+        @{
+            var user = HttpContext.Current.GetUser();
+            var userString = string.Format("{0}({1})", user.FullName, user.Login);
+        }
+        Printed by user: @userString on @DateTime.Now.DateToUIShortString()
+    </div>
+    @Html.Partial("Script")
+    <script>
+        require(['module-activator'], function (moduleActivator) {
+            moduleActivator.execute();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1625 @@
+﻿@{
+    ViewBag.Title = "Styles reference";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h1>Header 1</h1>
+<h2>Header 2</h2>
+<h3>Header 3</h3>
+<h4>Header 4</h4>
+<h5>Header 5</h5>
+<h6>Header 6</h6>
+<hr>
+
+<h3>Texts and Paragraphs</h3>
+<p>
+    Nullam quis risus eget urna mollis ornare vel eu leo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nullam id dolor id nibh ultricies vehicula.
+</p>
+<hr>
+
+<p class="lead">
+Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus.
+</p>
+<hr>
+
+<small>This line of text is meant to be treated as fine print.</small>
+<hr>
+The following snippet of text is <strong>rendered as bold text</strong>
+<hr>
+The following snippet of text is <em>rendered as italicized text</em>
+<hr>
+
+<h3>Text alignment</h3>
+<p class="text-left">Left aligned text.</p>
+<p class="text-center">Center aligned text.</p>
+<p class="text-right">Right aligned text.</p>
+
+<hr>
+<h3>Text style</h3>
+<p class="text-muted">Fusce dapibus, tellus ac cursus commodo, tortor mauris nibh.</p>
+<p class="text-warning">Etiam porta sem malesuada magna mollis euismod.</p>
+<p class="text-danger">Donec ullamcorper nulla non metus auctor fringilla.</p>
+<p class="text-success">Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+
+<hr>
+<h3>Text abbreviation</h3>
+An abbreviation of the word attribute is <abbr title="attribute">attr</abbr>
+
+<hr>
+<h3>Selects</h3>
+<select class="form-control">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+</select>
+<br />
+<select multiple class="form-control">
+    <option>1</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+    <option>5</option>
+</select>
+
+<hr>
+
+<div class="row">
+    <div class="col-lg-6">
+        <h3>Select2 dropdown</h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <select class="select2dropdown" data-placeholder="Select.." style="width: 100%;">
+                    <option value=""></option>
+                    <optgroup label="Alaskan/Hawaiian Time Zone">
+                        <option value="AK">Alaska</option>
+                        <option value="HI">Hawaii</option>
+                    </optgroup>
+                    <optgroup label="Pacific Time Zone">
+                        <option value="CA">California</option>
+                        <option value="NV">Nevada</option>
+                        <option value="OR">Oregon</option>
+                        <option value="WA">Washington</option>
+                    </optgroup>
+                    <optgroup label="Mountain Time Zone">
+                        <option value="AZ">Arizona</option>
+                        <option value="CO">Colorado</option>
+                        <option value="ID">Idaho</option>
+                        <option value="MT">Montana</option><option value="NE">Nebraska</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="UT">Utah</option>
+                        <option value="WY">Wyoming</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <input placeholder="Email" type="text" class="form-control">
+            </div>
+        </div>
+        <hr>
+        <pre>
+Inject the chosen library and call select2() on the select you want to turn into chzn select.
+
+&lt;select class="select2dropdown" data-placeholder="Select.." style="width: 100%;"&gt;
+    &lt;option value=""&gt;&lt;/option&gt;
+    &lt;option&gt;...&lt;/option&gt;
+&lt;/select&gt;
+&lt;script&gt;
+    $(function() {
+        $(".select2dropdown").select2({
+            allowClear: true
+        });
+    }); 
+&lt;/script&gt;
+        </pre>
+    </div>
+    <div class="col-lg-6">
+        <h3>Chosen dropdown</h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <select class="chosendropdown" data-placeholder="Select.." style="width: 100%;">
+                    <option value=""></option>
+                    <option>American Black Bear</option>
+                    <option>Asiatic Black Bear</option>
+                    <option>Brown Bear</option>
+                    <option>Giant Panda</option>
+                    <option>Sloth Bear</option>
+                    <option>Sun Bear</option>
+                    <option>Polar Bear</option>
+                    <option>Spectacled Bear</option>
+                </select>
+            </div>
+            <div class="col-lg-6">
+                <input placeholder="Email" type="text" class="form-control">
+            </div>
+        </div>
+        <hr>
+        <pre>
+Inject the chosen library and call chosen() on the select you want to turn into chzn select.
+            
+&lt;select class="chosendropdown" data-placeholder="Select.." style="width: 100%;"&gt;
+    &lt;option value=""&gt;&lt;/option&gt;
+    &lt;option&gt;...&lt;/option&gt;
+&lt;/select&gt;
+&lt;script&gt;
+    $(function() {
+        $(".chosendropdown").chosen({
+            allow_single_deselect: true
+        });
+    });
+&lt;/script&gt;
+        </pre>
+    </div>
+</div>
+
+<hr>
+<h3>Diego's (very very very nice) control</h3>
+<div data-module="warranty/listTest" ng-controller="ListTestCtrl">
+    <span>List with scope object {k1:v1,k2:v2, .. ,kn:vn} and already selected value</span>
+    <list ng-model="selected" scope="mylist" placeholder="Write this"></list>
+    <br />
+    <pre>
+To create this simply write:
+
+&lt;list ng-model="selected" scope="mylist" placeholder="Write this"&gt;&lt;/list&gt;
+Where selected is your scope variable, and mylist is your scope object {k1:v1,k2:v2, .. ,kn:vn}
+    </pre>
+    <br />
+    <span>List with scope array [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)] and already selected value</span>
+    <list ng-model="selected2" scope="mylist2" placeholder="Write this"></list>
+    <br />
+    <pre>
+To create this simply write:
+
+&lt;list ng-model="selected" scope="mylist" placeholder="Write this"&gt;&lt;/list&gt;
+Where selected is your scope variable, and mylist is your scope array [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)]
+    </pre>
+    <!--<br />-->
+    <!--<span>List with scope function that returns object {k1:v1,k2:v2, .. ,kn:vn} and already selected value</span>-->
+    <!--<list ng-model="selected3" scope="mylist3()" placeholder="Write this"></list>-->
+    <!--<br />-->
+    <!--<pre>-->
+<!--To create this simply write:-->
+
+<!--&lt;list ng-model="selected" scope="mylist()" placeholder="Write this"&gt;&lt;/list&gt;-->
+<!--Where selected is your scope variable, and mylist is your function that returns an object {k1:v1,k2:v2, .. ,kn:vn}-->
+    <!--</pre>-->
+    <!--<br />-->
+    <!--<span>List with scope function that returns an array [v1,v2, .. ,vn] or [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)] and already selected value</span>-->
+    <!--<list ng-model="selected4" scope="mylist4()" placeholder="Write this"></list>-->
+    <!--<br />-->
+    <!--<pre>-->
+<!--To create this simply write:-->
+
+<!--&lt;list ng-model="selected" scope="mylist()" placeholder="Write this"&gt;&lt;/list&gt;-->
+<!--Where selected is your scope variable, and mylist is your function that returns an array [v1,v2, .. ,vn] or [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)]-->
+    <!--</pre>-->
+    <!--<br />-->
+    <!--<span>List with scope promise, that resolves in object {k1:v1,k2:v2, .. ,kn:vn} or array [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)] or array [v1,v2, .. ,vn]</span>-->
+    <!--<list ng-model="selected5" scope="mylist5" placeholder="Write this"></list>-->
+    <!--<br />-->
+    <!--<pre>-->
+<!--To create this simply write:-->
+
+<!--&lt;list ng-model="selected" scope="mylist" placeholder="Write this"&gt;&lt;/list&gt;-->
+    <!--</pre>-->
+    <br />
+    <span>Automatically any change in parent scope model changes the selected item</span>
+    <list ng-model="selected6" scope="mylist6" placeholder="Write this"></list>
+    <br />
+    <pre>
+To create this simply write:
+
+&lt;list ng-model="selected" scope="mylist" placeholder="Write this"&gt;&lt;/list&gt;
+This to show that a change in the scope will reflect to the List selection
+    </pre>
+    <!--<br />-->
+    <!--<span>List with scope function that returns a promise, that resolves in object {k1:v1,k2:v2, .. ,kn:vn} or array [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)] or array [v1,v2, .. ,vn], and already selected value</span>-->
+    <!--<list ng-model="selected7" scope="mylist7()" placeholder="Write this"></list>-->
+    <!--<br />-->
+    <!--<pre>-->
+<!--To create this simply write:-->
+
+<!--&lt;list ng-model="selected" scope="mylist()" placeholder="Write this"&gt;&lt;/list&gt;-->
+<!--Where selected is your scope variable, and mylist is a function that return a promise. When the promise is resolved its data needs to be an object {k1:v1,k2:v2, .. ,kn:vn} or an array [v1,v2, .. ,vn] or [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)]-->
+    <!--</pre>-->
+    <br />
+    <span>List with items returned by the lookup service by list name</span>
+    <list ng-model="selected8" lookup="BRANCH" placeholder="Write this"></list>
+    <br />
+    <pre>
+To create this simply write:
+
+&lt;list ng-model="selected" lookup="BRANCH" placeholder="Write this"&gt;&lt;/list&gt;
+Where selected is your scope variable, and BRANCH is the name of the list you want to get from the lookup service
+    </pre>
+    <br />
+    <span>List with items returned by the lookup service by list name, with ng-required</span>
+    <div ng-class="{'has-error': !selected9}">
+        <label for="something" class="control-label">Item</label>
+        <div>
+            <list name="something" ng-model="selected9" ng-required lookup="BRANCH" placeholder="Write this"></list>
+        </div>
+    </div>
+    <br />
+    <pre>
+To create this simply write:
+
+&lt;div ng-class="{'has-error': !selected}"&gt;
+    &lt;label for="something" class="control-label"&gt;Item&lt;/label&gt;
+    &lt;div&gt;
+        &lt;list name="something" ng-model="selected" ng-required lookup="BRANCH" placeholder="Write this"&gt;&lt;/list&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+Where selected is your scope variable, and BRANCH is the name of the list you want to get from the lookup service.
+    </pre>
+    <br />
+    <span>List with items returned by the lookup service by list name, with ng-disabled</span>
+    <list name="something" ng-model="selected10" ng-disabled="disabled10" lookup="BRANCH" placeholder="Write this"></list>
+    <br />
+    <pre>
+To create this simply write:
+
+&lt;div ng-class="{'has-error': !selected}"&gt;
+    &lt;label for="something" class="control-label"&gt;Item&lt;/label&gt;
+    &lt;div&gt;
+        &lt;list name="something" ng-model="selected" ng-disabled="disabled" lookup="BRANCH" placeholder="Write this"&gt;&lt;/list&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+Where selected is your scope variable, BRANCH is the name of the list you want to get from the lookup service and disabled is your scope variable to get the disabled value from.
+    </pre>
+    <br />
+    <span>List with scope promise, that resolves in object {k1:v1,k2:v2, .. ,kn:vn} or array [(k:k1,v:v1),(k:k2,v:v2), .. ,(k:kn,v:vn)] or array [v1,v2, .. ,vn]</span>
+    <list ng-model="selected11" scope="mylist11" placeholder="Write this"></list>
+    <br />
+    <pre>
+To create this simply write:
+
+&lt;list ng-model="selected" scope="mylist" placeholder="Write this"&gt;&lt;/list&gt;
+    </pre>
+</div>
+
+<hr>
+<h3>Tables</h3>
+<table class="table table-striped table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Username</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr class="success">
+        <td>1</td>
+        <td>Mark</td>
+        <td>Otto</td>
+        <td>xxx</td>
+    </tr>
+    <tr class="active">
+        <td>2</td>
+        <td>Selected</td>
+        <td>Guy</td>
+        <td>sss</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Jacob</td>
+        <td>Thornton</td>
+        <td>yyy</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Larry</td>
+        <td>the Bird</td>
+        <td>zzz</td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<h3>Forms</h3>
+<form class="form-inline">
+    <legend>Legend (inline form)</legend>
+    <div class="col-lg-2">
+        <input placeholder="Email" type="text" class="form-control">
+    </div>
+    <div class="col-lg-2">
+        <input placeholder="Password" type="password" class="form-control">
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox"> Remember me
+        </label>
+    </div>
+    <button type="submit" class="btn btn-default">Sign in</button>
+</form>
+
+<hr>
+
+<form>
+    <legend>Legend (standard form)</legend>
+    <fieldset>
+        <label>Label name</label>
+        <input type="text" placeholder="Type something…" class="form-control">
+        <p class="help-block">Example block-level help text here.</p>
+        <br />
+        <label>Disabled input label name</label>
+        <input class="form-control" id="disabledInput" type="text" placeholder="Disabled input here..." disabled>
+        <br />
+        <label>Textarea label name</label>
+        <textarea class="form-control" rows="3"></textarea>
+        <br />
+        <div class="checkbox">
+            <label>
+                <input type="checkbox"> Check me out
+            </label>
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+    </fieldset>
+</form>
+
+<hr>
+
+<form class="form-horizontal">
+    <legend>Legend (horizontal form)</legend>
+    <div class="form-group">
+        <label for="inputEmail" class="col col-lg-2 control-label">Email</label>
+        <div class="col col-lg-10">
+            <input type="text" id="inputEmail" class="form-control" placeholder="Email">
+        </div>
+    </div>
+    <div class="form-group ">
+        <label for="inputPassword" class="col col-lg-2 control-label">Password</label>
+        <div class="col col-lg-10">
+            <input type="password" id="inputPassword" class="form-control" placeholder="Password">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox"> Remember me
+                </label>
+            </div>
+        </div>
+        <div class="col col-lg-10 col-lg-offset-2">
+            <button type="submit" class="btn btn-default">Sign in</button>
+        </div>
+    </div>
+</form>
+
+<hr>
+
+<form>
+    <legend>Checkbox and radios</legend>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" value="">
+        Option one is this and that&mdash;be sure to include why it's great
+      </label>
+    </div>
+    <br />
+    <div class="radio">
+      <label>
+        <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+        Option one is this and that&mdash;be sure to include why it's great
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+        Option two can be something else and selecting it will deselect option one
+      </label>
+    </div>
+
+    <hr>
+
+    <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox1" value="option1"> 1
+    </label>
+    <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox2" value="option2"> 2
+    </label>
+    <label class="checkbox-inline">
+        <input type="checkbox" id="inlineCheckbox3" value="option3"> 3
+    </label>
+</form>
+
+<hr>
+
+<div class="form-group has-warning">
+    <label class="control-label" for="inputWarning">Input with warning</label>
+    <input type="text" class="form-control" id="inputWarning">
+</div>
+<div class="form-group has-error">
+    <label class="control-label" for="inputError">Input with error</label>
+    <input type="text" class="form-control" id="inputError">
+</div>
+<div class="form-group has-success">
+    <label class="control-label" for="inputSuccess">Input with success</label>
+    <input type="text" class="form-control" id="inputSuccess">
+</div>
+
+<hr>
+
+<div class="input-group">
+    <span class="input-group-addon">AA</span>
+    <input type="text" class="form-control" placeholder="Username">
+</div>
+
+<div class="input-group">
+    <input type="text" class="form-control">
+    <span class="input-group-addon">.00</span>
+</div>
+
+<div class="input-group">
+    <span class="input-group-addon">$</span>
+    <input type="text" class="form-control">
+    <span class="input-group-addon">.00</span>
+</div>
+
+<hr>
+
+<h3>Buttons</h3>
+<!-- Standard gray button with gradient -->
+<button type="button" class="btn btn-default">Default</button>
+
+<!-- Provides extra visual weight and identifies the primary action in a set of buttons -->
+<button type="button" class="btn btn-primary">Primary</button>
+
+<!-- Indicates a successful or positive action -->
+<button type="button" class="btn btn-success">Success</button>
+
+<!-- Contextual button for informational alert messages -->
+<button type="button" class="btn btn-info">Info</button>
+
+<!-- Indicates caution should be taken with this action -->
+<button type="button" class="btn btn-warning">Warning</button>
+
+<!-- Indicates a dangerous or potentially negative action -->
+<button type="button" class="btn btn-danger">Danger</button>
+
+<!-- Deemphasize a button by making it look like a link while maintaining button behavior -->
+<button type="button" class="btn btn-link">Link</button>
+
+<hr>
+
+<a href="#" class="btn btn-primary disabled">Primary link</a>
+<a href="#" class="btn btn-default disabled">Link</a>
+
+<hr>
+
+<p>
+  <button type="button" class="btn btn-primary btn-lg">Large button</button>
+  <button type="button" class="btn btn-default btn-lg">Large button</button>
+</p>
+<p>
+  <button type="button" class="btn btn-primary">Default button</button>
+  <button type="button" class="btn btn-default">Default button</button>
+</p>
+<p>
+  <button type="button" class="btn btn-primary btn-sm">Small button</button>
+  <button type="button" class="btn btn-default btn-sm">Small button</button>
+</p>
+<p>
+  <button type="button" class="btn btn-primary btn-xs">Extra small button</button>
+  <button type="button" class="btn btn-default btn-xs">Extra small button</button>
+</p>
+
+<hr>
+
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3">
+        <button type="button" class="btn btn-primary btn-lg btn-block">Block level button</button>
+        <button type="button" class="btn btn-default btn-lg btn-block">Block level button</button>        
+    </div>
+</div>
+
+<hr>
+
+<h3>Images</h3>
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAACMCAYAAACuwEE+AAADe0lEQVR4nO3YW0sqcRSG8b7/R1lqJoqGmmWMZCUWOERBYBdamvb/Cu++atidYL8XHab9XPxuZGSJ6xnmsJNSEvCvdr77B6BcCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGlVMHMZjN1Oh1VKhVFhM7Ozt497ubmRhGhiNB4PC4+32w2Go1Gqtfrqlar6vV6uru7K838n6BUwYxGI3W7XbVarQ8XtlqttLe3Vyz174UdHx8rItRqtdTv9xURqtfrenx8LMX8n6BUwfy9uI8Wdnh4qGazqSzLXizs/v6+WOLDw4NSSur1eooITadTXV1dKSLUbre13W61WCxUrVZVq9W0WCw+ff53/6f/ZTCz2UyVSkXz+VwnJycvFvZ8mWg0GsXxp6eniggNh0OllHR0dKSI0GQyKZY5m82+bH4Z/JpgFouFarWazs/PlVJ6s7A8z4vLwfN3JpOJIkK9Xk8pJa3XazUajeL+YzAYfOn8Mvg1wVxeXioidHBwoMFgoGazqYhQs9nUeDz+5zP8eYkRodvb2y+f/9P9mmAuLi6KRb+2v7+v5XJZ3EOsViul9PYeYrlcqlarqVqtKiLU6XS03W6/bH4ZlCqYPM+VZVnxlNJut5Vlma6vr98c+/qSkNLLp5TBYKCI0O7urtbrtZ6entTtdhURyvNcw+HwTRSfOf+7/9tfGczzmf3ae08r7y1ss9koy7LiPUi32y3eg0ynU0WE+v2+Unr5eDyfzz99flmUKhh8P4KBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGD5A/C6IlaKRICZAAAAAElFTkSuQmCC" style="width: 140px; height: 140px;" alt="140x140" data-src="holder.js/140x140" class="img-rounded">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAACMCAYAAACuwEE+AAADe0lEQVR4nO3YW0sqcRSG8b7/R1lqJoqGmmWMZCUWOERBYBdamvb/Cu++atidYL8XHab9XPxuZGSJ6xnmsJNSEvCvdr77B6BcCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGlVMHMZjN1Oh1VKhVFhM7Ozt497ubmRhGhiNB4PC4+32w2Go1Gqtfrqlar6vV6uru7K838n6BUwYxGI3W7XbVarQ8XtlqttLe3Vyz174UdHx8rItRqtdTv9xURqtfrenx8LMX8n6BUwfy9uI8Wdnh4qGazqSzLXizs/v6+WOLDw4NSSur1eooITadTXV1dKSLUbre13W61WCxUrVZVq9W0WCw+ff53/6f/ZTCz2UyVSkXz+VwnJycvFvZ8mWg0GsXxp6eniggNh0OllHR0dKSI0GQyKZY5m82+bH4Z/JpgFouFarWazs/PlVJ6s7A8z4vLwfN3JpOJIkK9Xk8pJa3XazUajeL+YzAYfOn8Mvg1wVxeXioidHBwoMFgoGazqYhQs9nUeDz+5zP8eYkRodvb2y+f/9P9mmAuLi6KRb+2v7+v5XJZ3EOsViul9PYeYrlcqlarqVqtKiLU6XS03W6/bH4ZlCqYPM+VZVnxlNJut5Vlma6vr98c+/qSkNLLp5TBYKCI0O7urtbrtZ6entTtdhURyvNcw+HwTRSfOf+7/9tfGczzmf3ae08r7y1ss9koy7LiPUi32y3eg0ynU0WE+v2+Unr5eDyfzz99flmUKhh8P4KBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGD5A/C6IlaKRICZAAAAAElFTkSuQmCC" style="width: 140px; height: 140px;" alt="140x140" data-src="holder.js/140x140" class="img-circle">
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIwAAACMCAYAAACuwEE+AAADe0lEQVR4nO3YW0sqcRSG8b7/R1lqJoqGmmWMZCUWOERBYBdamvb/Cu++atidYL8XHab9XPxuZGSJ6xnmsJNSEvCvdr77B6BcCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGlVMHMZjN1Oh1VKhVFhM7Ozt497ubmRhGhiNB4PC4+32w2Go1Gqtfrqlar6vV6uru7K838n6BUwYxGI3W7XbVarQ8XtlqttLe3Vyz174UdHx8rItRqtdTv9xURqtfrenx8LMX8n6BUwfy9uI8Wdnh4qGazqSzLXizs/v6+WOLDw4NSSur1eooITadTXV1dKSLUbre13W61WCxUrVZVq9W0WCw+ff53/6f/ZTCz2UyVSkXz+VwnJycvFvZ8mWg0GsXxp6eniggNh0OllHR0dKSI0GQyKZY5m82+bH4Z/JpgFouFarWazs/PlVJ6s7A8z4vLwfN3JpOJIkK9Xk8pJa3XazUajeL+YzAYfOn8Mvg1wVxeXioidHBwoMFgoGazqYhQs9nUeDz+5zP8eYkRodvb2y+f/9P9mmAuLi6KRb+2v7+v5XJZ3EOsViul9PYeYrlcqlarqVqtKiLU6XS03W6/bH4ZlCqYPM+VZVnxlNJut5Vlma6vr98c+/qSkNLLp5TBYKCI0O7urtbrtZ6entTtdhURyvNcw+HwTRSfOf+7/9tfGczzmf3ae08r7y1ss9koy7LiPUi32y3eg0ynU0WE+v2+Unr5eDyfzz99flmUKhh8P4KBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGAhGFgIBhaCgYVgYCEYWAgGFoKBhWBgIRhYCAYWgoGFYGD5A/C6IlaKRICZAAAAAElFTkSuQmCC" style="width: 140px; height: 140px;" alt="140x140" data-src="holder.js/140x140" class="img-thumbnail">
+
+<hr>
+
+<h3>Responsive utilities</h3>
+<table class="table table-bordered table-striped responsive-utilities">
+    <thead>
+    <tr>
+        <th>Class</th>
+        <th>Browser</th>
+        <th>Print</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <th><code>.visible-print</code></th>
+        <td class="is-hidden">Hidden</td>
+        <td class="is-visible">Visible</td>
+    </tr>
+    <tr>
+        <th><code>.hidden-print</code></th>
+        <td class="is-visible">Visible</td>
+        <td class="is-hidden">Hidden</td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+
+<h3>Pull left/right</h3>
+<div class="row">
+    <div class="col-lg-12">
+        <p class="pull-left">.pull-left</p>
+
+        <p class="pull-right">.pull-right</p>
+    </div>
+</div>
+
+<hr>
+
+<h3>Icons</h3>
+<div class="alert">
+    <strong>Warning!</strong> When you look at the bootstrap guide and/or examples to recreate anything remember whenever you find <strong>glyphicon</strong> class you must change it with <strong>halflings</strong> class, and the proper icon name.
+</div>
+
+<legend>Halflings (Glyphicons)</legend>
+<div class="glyphicons-showcase" style="font-size: 16px;">
+    <ul>
+        <li><span class="halflings glass" data-name="glass" data-type="" data-prefix="halflings" data-utf="E001"></span></li>
+        <li><span class="halflings music" data-name="music" data-type="" data-prefix="halflings" data-utf="E002"></span></li>
+        <li><span class="halflings search" data-name="search" data-type="" data-prefix="halflings" data-utf="E003"></span></li>
+        <li><span class="halflings envelope" data-name="envelope" data-type="" data-prefix="halflings" data-utf="2709"></span></li>
+        <li><span class="halflings heart" data-name="heart" data-type="" data-prefix="halflings" data-utf="E005"></span></li>
+        <li><span class="halflings star" data-name="star" data-type="" data-prefix="halflings" data-utf="E006"></span></li>
+        <li><span class="halflings star-empty" data-name="star-empty" data-type="" data-prefix="halflings" data-utf="E007"></span></li>
+        <li><span class="halflings user" data-name="user" data-type="" data-prefix="halflings" data-utf="E008"></span></li>
+        <li><span class="halflings film" data-name="film" data-type="" data-prefix="halflings" data-utf="E009"></span></li>
+        <li><span class="halflings th-large" data-name="th-large" data-type="" data-prefix="halflings" data-utf="E010"></span></li>
+        <li><span class="halflings th" data-name="th" data-type="" data-prefix="halflings" data-utf="E011"></span></li>
+        <li><span class="halflings th-list" data-name="th-list" data-type="" data-prefix="halflings" data-utf="E012"></span></li>
+        <li><span class="halflings ok" data-name="ok" data-type="" data-prefix="halflings" data-utf="E013"></span></li>
+        <li><span class="halflings remove" data-name="remove" data-type="" data-prefix="halflings" data-utf="E014"></span></li>
+        <li><span class="halflings zoom-in" data-name="zoom-in" data-type="" data-prefix="halflings" data-utf="E015"></span></li>
+        <li><span class="halflings zoom-out" data-name="zoom-out" data-type="" data-prefix="halflings" data-utf="E016"></span></li>
+        <li><span class="halflings off" data-name="off" data-type="" data-prefix="halflings" data-utf="E017"></span></li>
+        <li><span class="halflings signal" data-name="signal" data-type="" data-prefix="halflings" data-utf="E018"></span></li>
+        <li><span class="halflings cog" data-name="cog" data-type="" data-prefix="halflings" data-utf="E019"></span></li>
+        <li><span class="halflings trash" data-name="trash" data-type="" data-prefix="halflings" data-utf="E020"></span></li>
+        <li><span class="halflings home" data-name="home" data-type="" data-prefix="halflings" data-utf="E021"></span></li>
+        <li><span class="halflings file" data-name="file" data-type="" data-prefix="halflings" data-utf="E022"></span></li>
+        <li><span class="halflings time" data-name="time" data-type="" data-prefix="halflings" data-utf="E023"></span></li>
+        <li><span class="halflings road" data-name="road" data-type="" data-prefix="halflings" data-utf="E024"></span></li>
+        <li><span class="halflings download-alt" data-name="download-alt" data-type="" data-prefix="halflings" data-utf="E025"></span></li>
+        <li><span class="halflings download" data-name="download" data-type="" data-prefix="halflings" data-utf="E026"></span></li>
+        <li><span class="halflings upload" data-name="upload" data-type="" data-prefix="halflings" data-utf="E027"></span></li>
+        <li><span class="halflings inbox" data-name="inbox" data-type="" data-prefix="halflings" data-utf="E028"></span></li>
+        <li><span class="halflings play-circle" data-name="play-circle" data-type="" data-prefix="halflings" data-utf="E029"></span></li>
+        <li><span class="halflings repeat" data-name="repeat" data-type="" data-prefix="halflings" data-utf="E030"></span></li>
+        <li><span class="halflings refresh" data-name="refresh" data-type="" data-prefix="halflings" data-utf="E031"></span></li>
+        <li><span class="halflings list-alt" data-name="list-alt" data-type="" data-prefix="halflings" data-utf="E032"></span></li>
+        <li><span class="halflings lock" data-name="lock" data-type="" data-prefix="halflings" data-utf="1F512"></span></li>
+        <li><span class="halflings flag" data-name="flag" data-type="" data-prefix="halflings" data-utf="E034"></span></li>
+        <li><span class="halflings headphones" data-name="headphones" data-type="" data-prefix="halflings" data-utf="E035"></span></li>
+        <li><span class="halflings volume-off" data-name="volume-off" data-type="" data-prefix="halflings" data-utf="E036"></span></li>
+        <li><span class="halflings volume-down" data-name="volume-down" data-type="" data-prefix="halflings" data-utf="E037"></span></li>
+        <li><span class="halflings volume-up" data-name="volume-up" data-type="" data-prefix="halflings" data-utf="E038"></span></li>
+        <li><span class="halflings qrcode" data-name="qrcode" data-type="" data-prefix="halflings" data-utf="E039"></span></li>
+        <li><span class="halflings barcode" data-name="barcode" data-type="" data-prefix="halflings" data-utf="E040"></span></li>
+        <li><span class="halflings tag" data-name="tag" data-type="" data-prefix="halflings" data-utf="E041"></span></li>
+        <li><span class="halflings tags" data-name="tags" data-type="" data-prefix="halflings" data-utf="E042"></span></li>
+        <li><span class="halflings book" data-name="book" data-type="" data-prefix="halflings" data-utf="E043"></span></li>
+        <li><span class="halflings bookmark" data-name="bookmark" data-type="" data-prefix="halflings" data-utf="1F516"></span></li>
+        <li><span class="halflings print" data-name="print" data-type="" data-prefix="halflings" data-utf="E045"></span></li>
+        <li><span class="halflings camera" data-name="camera" data-type="" data-prefix="halflings" data-utf="1F4F7"></span></li>
+        <li><span class="halflings font" data-name="font" data-type="" data-prefix="halflings" data-utf="E047"></span></li>
+        <li><span class="halflings bold" data-name="bold" data-type="" data-prefix="halflings" data-utf="E048"></span></li>
+        <li><span class="halflings italic" data-name="italic" data-type="" data-prefix="halflings" data-utf="E049"></span></li>
+        <li><span class="halflings text-height" data-name="text-height" data-type="" data-prefix="halflings" data-utf="E050"></span></li>
+        <li><span class="halflings text-width" data-name="text-width" data-type="" data-prefix="halflings" data-utf="E051"></span></li>
+        <li><span class="halflings align-left" data-name="align-left" data-type="" data-prefix="halflings" data-utf="E052"></span></li>
+        <li><span class="halflings align-center" data-name="align-center" data-type="" data-prefix="halflings" data-utf="E053"></span></li>
+        <li><span class="halflings align-right" data-name="align-right" data-type="" data-prefix="halflings" data-utf="E054"></span></li>
+        <li><span class="halflings align-justify" data-name="align-justify" data-type="" data-prefix="halflings" data-utf="E055"></span></li>
+        <li><span class="halflings list" data-name="list" data-type="" data-prefix="halflings" data-utf="E056"></span></li>
+        <li><span class="halflings indent-left" data-name="indent-left" data-type="" data-prefix="halflings" data-utf="E057"></span></li>
+        <li><span class="halflings indent-right" data-name="indent-right" data-type="" data-prefix="halflings" data-utf="E058"></span></li>
+        <li><span class="halflings facetime-video" data-name="facetime-video" data-type="" data-prefix="halflings" data-utf="E059"></span></li>
+        <li><span class="halflings picture" data-name="picture" data-type="" data-prefix="halflings" data-utf="E060"></span></li>
+        <li><span class="halflings pencil" data-name="pencil" data-type="" data-prefix="halflings" data-utf="270F"></span></li>
+        <li><span class="halflings map-marker" data-name="map-marker" data-type="" data-prefix="halflings" data-utf="E062"></span></li>
+        <li><span class="halflings adjust" data-name="adjust" data-type="" data-prefix="halflings" data-utf="E063"></span></li>
+        <li><span class="halflings tint" data-name="tint" data-type="" data-prefix="halflings" data-utf="E064"></span></li>
+        <li><span class="halflings edit" data-name="edit" data-type="" data-prefix="halflings" data-utf="E065"></span></li>
+        <li><span class="halflings share" data-name="share" data-type="" data-prefix="halflings" data-utf="E066"></span></li>
+        <li><span class="halflings check" data-name="check" data-type="" data-prefix="halflings" data-utf="E067"></span></li>
+        <li><span class="halflings move" data-name="move" data-type="" data-prefix="halflings" data-utf="E068"></span></li>
+        <li><span class="halflings step-backward" data-name="step-backward" data-type="" data-prefix="halflings" data-utf="E069"></span></li>
+        <li><span class="halflings fast-backward" data-name="fast-backward" data-type="" data-prefix="halflings" data-utf="E070"></span></li>
+        <li><span class="halflings backward" data-name="backward" data-type="" data-prefix="halflings" data-utf="E071"></span></li>
+        <li><span class="halflings play" data-name="play" data-type="" data-prefix="halflings" data-utf="E072"></span></li>
+        <li><span class="halflings pause" data-name="pause" data-type="" data-prefix="halflings" data-utf="E073"></span></li>
+        <li><span class="halflings stop" data-name="stop" data-type="" data-prefix="halflings" data-utf="E074"></span></li>
+        <li><span class="halflings forward" data-name="forward" data-type="" data-prefix="halflings" data-utf="E075"></span></li>
+        <li><span class="halflings fast-forward" data-name="fast-forward" data-type="" data-prefix="halflings" data-utf="E076"></span></li>
+        <li><span class="halflings step-forward" data-name="step-forward" data-type="" data-prefix="halflings" data-utf="E077"></span></li>
+        <li><span class="halflings eject" data-name="eject" data-type="" data-prefix="halflings" data-utf="E078"></span></li>
+        <li><span class="halflings chevron-left" data-name="chevron-left" data-type="" data-prefix="halflings" data-utf="E079"></span></li>
+        <li><span class="halflings chevron-right" data-name="chevron-right" data-type="" data-prefix="halflings" data-utf="E080"></span></li>
+        <li><span class="halflings plus-sign" data-name="plus-sign" data-type="" data-prefix="halflings" data-utf="E081"></span></li>
+        <li><span class="halflings minus-sign" data-name="minus-sign" data-type="" data-prefix="halflings" data-utf="E082"></span></li>
+        <li><span class="halflings remove-sign" data-name="remove-sign" data-type="" data-prefix="halflings" data-utf="E083"></span></li>
+        <li><span class="halflings ok-sign" data-name="ok-sign" data-type="" data-prefix="halflings" data-utf="E084"></span></li>
+        <li><span class="halflings question-sign" data-name="question-sign" data-type="" data-prefix="halflings" data-utf="E085"></span></li>
+        <li><span class="halflings info-sign" data-name="info-sign" data-type="" data-prefix="halflings" data-utf="E086"></span></li>
+        <li><span class="halflings screenshot" data-name="screenshot" data-type="" data-prefix="halflings" data-utf="E087"></span></li>
+        <li><span class="halflings remove-circle" data-name="remove-circle" data-type="" data-prefix="halflings" data-utf="E088"></span></li>
+        <li><span class="halflings ok-circle" data-name="ok-circle" data-type="" data-prefix="halflings" data-utf="E089"></span></li>
+        <li><span class="halflings ban-circle" data-name="ban-circle" data-type="" data-prefix="halflings" data-utf="E090"></span></li>
+        <li><span class="halflings arrow-left" data-name="arrow-left" data-type="" data-prefix="halflings" data-utf="E091"></span></li>
+        <li><span class="halflings arrow-right" data-name="arrow-right" data-type="" data-prefix="halflings" data-utf="E092"></span></li>
+        <li><span class="halflings arrow-up" data-name="arrow-up" data-type="" data-prefix="halflings" data-utf="E093"></span></li>
+        <li><span class="halflings arrow-down" data-name="arrow-down" data-type="" data-prefix="halflings" data-utf="E094"></span></li>
+        <li><span class="halflings share-alt" data-name="share-alt" data-type="" data-prefix="halflings" data-utf="E095"></span></li>
+        <li><span class="halflings resize-full" data-name="resize-full" data-type="" data-prefix="halflings" data-utf="E096"></span></li>
+        <li><span class="halflings resize-small" data-name="resize-small" data-type="" data-prefix="halflings" data-utf="E097"></span></li>
+        <li><span class="halflings plus" data-name="plus" data-type="" data-prefix="halflings" data-utf="002B"></span></li>
+        <li><span class="halflings minus" data-name="minus" data-type="" data-prefix="halflings" data-utf="2212"></span></li>
+        <li><span class="halflings asterisk" data-name="asterisk" data-type="" data-prefix="halflings" data-utf="002A"></span></li>
+        <li><span class="halflings exclamation-sign" data-name="exclamation-sign" data-type="" data-prefix="halflings" data-utf="E101"></span></li>
+        <li><span class="halflings gift" data-name="gift" data-type="" data-prefix="halflings" data-utf="E102"></span></li>
+        <li><span class="halflings leaf" data-name="leaf" data-type="" data-prefix="halflings" data-utf="E103"></span></li>
+        <li><span class="halflings fire" data-name="fire" data-type="" data-prefix="halflings" data-utf="1F525"></span></li>
+        <li><span class="halflings eye-open" data-name="eye-open" data-type="" data-prefix="halflings" data-utf="E105"></span></li>
+        <li><span class="halflings eye-close" data-name="eye-close" data-type="" data-prefix="halflings" data-utf="E106"></span></li>
+        <li><span class="halflings warning-sign" data-name="warning-sign" data-type="" data-prefix="halflings" data-utf="E107"></span></li>
+        <li><span class="halflings plane" data-name="plane" data-type="" data-prefix="halflings" data-utf="E108"></span></li>
+        <li><span class="halflings calendar" data-name="calendar" data-type="" data-prefix="halflings" data-utf="1F4C5"></span></li>
+        <li><span class="halflings random" data-name="random" data-type="" data-prefix="halflings" data-utf="E110"></span></li>
+        <li><span class="halflings comments" data-name="comments" data-type="" data-prefix="halflings" data-utf="E111"></span></li>
+        <li><span class="halflings magnet" data-name="magnet" data-type="" data-prefix="halflings" data-utf="E112"></span></li>
+        <li><span class="halflings chevron-up" data-name="chevron-up" data-type="" data-prefix="halflings" data-utf="E113"></span></li>
+        <li><span class="halflings chevron-down" data-name="chevron-down" data-type="" data-prefix="halflings" data-utf="E114"></span></li>
+        <li><span class="halflings retweet" data-name="retweet" data-type="" data-prefix="halflings" data-utf="E115"></span></li>
+        <li><span class="halflings shopping-cart" data-name="shopping-cart" data-type="" data-prefix="halflings" data-utf="E116"></span></li>
+        <li><span class="halflings folder-close" data-name="folder-close" data-type="" data-prefix="halflings" data-utf="E117"></span></li>
+        <li><span class="halflings folder-open" data-name="folder-open" data-type="" data-prefix="halflings" data-utf="E118"></span></li>
+        <li><span class="halflings resize-vertical" data-name="resize-vertical" data-type="" data-prefix="halflings" data-utf="E119"></span></li>
+        <li><span class="halflings resize-horizontal" data-name="resize-horizontal" data-type="" data-prefix="halflings" data-utf="E120"></span></li>
+        <li><span class="halflings hdd" data-name="hdd" data-type="" data-prefix="halflings" data-utf="E121"></span></li>
+        <li><span class="halflings bullhorn" data-name="bullhorn" data-type="" data-prefix="halflings" data-utf="E122"></span></li>
+        <li><span class="halflings bell" data-name="bell" data-type="" data-prefix="halflings" data-utf="1F514"></span></li>
+        <li><span class="halflings certificate" data-name="certificate" data-type="" data-prefix="halflings" data-utf="E124"></span></li>
+        <li><span class="halflings thumbs-up" data-name="thumbs-up" data-type="" data-prefix="halflings" data-utf="E125"></span></li>
+        <li><span class="halflings thumbs-down" data-name="thumbs-down" data-type="" data-prefix="halflings" data-utf="E126"></span></li>
+        <li><span class="halflings hand-right" data-name="hand-right" data-type="" data-prefix="halflings" data-utf="E127"></span></li>
+        <li><span class="halflings hand-left" data-name="hand-left" data-type="" data-prefix="halflings" data-utf="E128"></span></li>
+        <li><span class="halflings hand-top" data-name="hand-top" data-type="" data-prefix="halflings" data-utf="E129"></span></li>
+        <li><span class="halflings hand-down" data-name="hand-down" data-type="" data-prefix="halflings" data-utf="E130"></span></li>
+        <li><span class="halflings circle-arrow-right" data-name="circle-arrow-right" data-type="" data-prefix="halflings" data-utf="E131"></span></li>
+        <li><span class="halflings circle-arrow-left" data-name="circle-arrow-left" data-type="" data-prefix="halflings" data-utf="E132"></span></li>
+        <li><span class="halflings circle-arrow-top" data-name="circle-arrow-top" data-type="" data-prefix="halflings" data-utf="E133"></span></li>
+        <li><span class="halflings circle-arrow-down" data-name="circle-arrow-down" data-type="" data-prefix="halflings" data-utf="E134"></span></li>
+        <li><span class="halflings globe" data-name="globe" data-type="" data-prefix="halflings" data-utf="E135"></span></li>
+        <li><span class="halflings wrench" data-name="wrench" data-type="" data-prefix="halflings" data-utf="1F527"></span></li>
+        <li><span class="halflings tasks" data-name="tasks" data-type="" data-prefix="halflings" data-utf="E137"></span></li>
+        <li><span class="halflings filter" data-name="filter" data-type="" data-prefix="halflings" data-utf="E138"></span></li>
+        <li><span class="halflings briefcase" data-name="briefcase" data-type="" data-prefix="halflings" data-utf="1F4BC"></span></li>
+        <li><span class="halflings fullscreen" data-name="fullscreen" data-type="" data-prefix="halflings" data-utf="E140"></span></li>
+        <li><span class="halflings dashboard" data-name="dashboard" data-type="" data-prefix="halflings" data-utf="E141"></span></li>
+        <li><span class="halflings paperclip" data-name="paperclip" data-type="" data-prefix="halflings" data-utf="1F4CE"></span></li>
+        <li><span class="halflings heart-empty" data-name="heart-empty" data-type="" data-prefix="halflings" data-utf="E143"></span></li>
+        <li><span class="halflings link" data-name="link" data-type="" data-prefix="halflings" data-utf="E144"></span></li>
+        <li><span class="halflings phone" data-name="phone" data-type="" data-prefix="halflings" data-utf="E145"></span></li>
+        <li><span class="halflings pushpin" data-name="pushpin" data-type="" data-prefix="halflings" data-utf="1F4CC"></span></li>
+        <li><span class="halflings euro" data-name="euro" data-type="" data-prefix="halflings" data-utf="20AC"></span></li>
+        <li><span class="halflings usd" data-name="usd" data-type="" data-prefix="halflings" data-utf="E148"></span></li>
+        <li><span class="halflings gbp" data-name="gbp" data-type="" data-prefix="halflings" data-utf="E149"></span></li>
+        <li><span class="halflings sort" data-name="sort" data-type="" data-prefix="halflings" data-utf="E150"></span></li>
+        <li><span class="halflings sort-by-alphabet" data-name="sort-by-alphabet" data-type="" data-prefix="halflings" data-utf="E151"></span></li>
+        <li><span class="halflings sort-by-alphabet-alt" data-name="sort-by-alphabet-alt" data-type="" data-prefix="halflings" data-utf="E152"></span></li>
+        <li><span class="halflings sort-by-order" data-name="sort-by-order" data-type="" data-prefix="halflings" data-utf="E153"></span></li>
+        <li><span class="halflings sort-by-order-alt" data-name="sort-by-order-alt" data-type="" data-prefix="halflings" data-utf="E154"></span></li>
+        <li><span class="halflings sort-by-attributes" data-name="sort-by-attributes" data-type="" data-prefix="halflings" data-utf="E155"></span></li>
+        <li><span class="halflings sort-by-attributes-alt" data-name="sort-by-attributes-alt" data-type="" data-prefix="halflings" data-utf="E156"></span></li>
+        <li><span class="halflings unchecked" data-name="unchecked" data-type="" data-prefix="halflings" data-utf="E157"></span></li>
+        <li><span class="halflings expand" data-name="expand" data-type="" data-prefix="halflings" data-utf="E158"></span></li>
+        <li><span class="halflings collapse" data-name="collapse" data-type="" data-prefix="halflings" data-utf="E159"></span></li>
+        <li><span class="halflings collapse-top" data-name="collapse-top" data-type="" data-prefix="halflings" data-utf="E160"></span></li>
+        <li><span class="halflings log_in" data-name="log_in" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E161"></span></li>
+        <li><span class="halflings flash" data-name="flash" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E162"></span></li>
+        <li><span class="halflings log_out" data-name="log_out" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E163"></span></li>
+        <li><span class="halflings new_window" data-name="new_window" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E164"></span></li>
+        <li><span class="halflings record" data-name="record" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E165"></span></li>
+        <li><span class="halflings save" data-name="save" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E166"></span></li>
+        <li><span class="halflings open" data-name="open" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E167"></span></li>
+        <li><span class="halflings saved" data-name="saved" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E168"></span></li>
+        <li><span class="halflings import" data-name="import" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E169"></span></li>
+        <li><span class="halflings export" data-name="export" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E170"></span></li>
+        <li><span class="halflings send" data-name="send" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E171"></span></li>
+        <li><span class="halflings floppy_disk" data-name="floppy_disk" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E172"></span></li>
+        <li><span class="halflings floppy_saved" data-name="floppy_saved" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E173"></span></li>
+        <li><span class="halflings floppy_remove" data-name="floppy_remove" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E174"></span></li>
+        <li><span class="halflings floppy_save" data-name="floppy_save" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E175"></span></li>
+        <li><span class="halflings floppy_open" data-name="floppy_open" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E176"></span></li>
+        <li><span class="halflings credit_card" data-name="credit_card" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E177"></span></li>
+        <li><span class="halflings transfer" data-name="transfer" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E178"></span></li>
+        <li><span class="halflings cutlery" data-name="cutlery" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E179"></span></li>
+        <li><span class="halflings header" data-name="header" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E180"></span></li>
+        <li><span class="halflings compressed" data-name="compressed" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E181"></span></li>
+        <li><span class="halflings earphone" data-name="earphone" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E182"></span></li>
+        <li><span class="halflings phone_alt" data-name="phone_alt" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E183"></span></li>
+        <li><span class="halflings tower" data-name="tower" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E184"></span></li>
+        <li><span class="halflings stats" data-name="stats" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E185"></span></li>
+        <li><span class="halflings sd_video" data-name="sd_video" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E186"></span></li>
+        <li><span class="halflings hd_video" data-name="hd_video" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E187"></span></li>
+        <li><span class="halflings subtitles" data-name="subtitles" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E188"></span></li>
+        <li><span class="halflings sound_stereo" data-name="sound_stereo" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E189"></span></li>
+        <li><span class="halflings sound_dolby" data-name="sound_dolby" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E190"></span></li>
+        <li><span class="halflings sound_5_1" data-name="sound_5_1" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E191"></span></li>
+        <li><span class="halflings sound_6_1" data-name="sound_6_1" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E192"></span></li>
+        <li><span class="halflings sound_7_1" data-name="sound_7_1" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E193"></span></li>
+        <li><span class="halflings copyright_mark" data-name="copyright_mark" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E194"></span></li>
+        <li><span class="halflings registration_mark" data-name="registration_mark" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E195"></span></li>
+        <li><span class="halflings cloud" data-name="cloud" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="2601"></span></li>
+        <li><span class="halflings cloud_download" data-name="cloud_download" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E197"></span></li>
+        <li><span class="halflings cloud_upload" data-name="cloud_upload" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E198"></span></li>
+        <li><span class="halflings tree_conifer" data-name="tree_conifer" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E199"></span></li>
+        <li><span class="halflings tree_deciduous" data-name="tree_deciduous" data-type="NEW IN 1.8" data-prefix="halflings" data-utf="E200"></span></li>
+    </ul>
+</div>
+
+<legend>Glyphicons (Glyphicons)</legend>
+<div class="glyphicons-showcase" style="font-size: 20px;">
+    <ul>
+        <li><span class="glyphicons glass" data-name="glass" data-type="" data-prefix="glyphicons" data-utf="E001"></span></li>
+        <li><span class="glyphicons leaf" data-name="leaf" data-type="" data-prefix="glyphicons" data-utf="E002"></span></li>
+        <li><span class="glyphicons dog" data-name="dog" data-type="" data-prefix="glyphicons" data-utf="1F415"></span></li>
+        <li><span class="glyphicons user" data-name="user" data-type="" data-prefix="glyphicons" data-utf="E004"></span></li>
+        <li><span class="glyphicons girl" data-name="girl" data-type="" data-prefix="glyphicons" data-utf="1F467"></span></li>
+        <li><span class="glyphicons car" data-name="car" data-type="" data-prefix="glyphicons" data-utf="E006"></span></li>
+        <li><span class="glyphicons user_add" data-name="user_add" data-type="" data-prefix="glyphicons" data-utf="E007"></span></li>
+        <li><span class="glyphicons user_remove" data-name="user_remove" data-type="" data-prefix="glyphicons" data-utf="E008"></span></li>
+        <li><span class="glyphicons film" data-name="film" data-type="" data-prefix="glyphicons" data-utf="E009"></span></li>
+        <li><span class="glyphicons magic" data-name="magic" data-type="" data-prefix="glyphicons" data-utf="E010"></span></li>
+        <li><span class="glyphicons envelope" data-name="envelope" data-type="" data-prefix="glyphicons" data-utf="2709"></span></li>
+        <li><span class="glyphicons camera" data-name="camera" data-type="" data-prefix="glyphicons" data-utf="1F4F7"></span></li>
+        <li><span class="glyphicons heart" data-name="heart" data-type="" data-prefix="glyphicons" data-utf="E013"></span></li>
+        <li><span class="glyphicons beach_umbrella" data-name="beach_umbrella" data-type="" data-prefix="glyphicons" data-utf="E014"></span></li>
+        <li><span class="glyphicons train" data-name="train" data-type="" data-prefix="glyphicons" data-utf="1F686"></span></li>
+        <li><span class="glyphicons print" data-name="print" data-type="" data-prefix="glyphicons" data-utf="E016"></span></li>
+        <li><span class="glyphicons bin" data-name="bin" data-type="" data-prefix="glyphicons" data-utf="E017"></span></li>
+        <li><span class="glyphicons music" data-name="music" data-type="" data-prefix="glyphicons" data-utf="E018"></span></li>
+        <li><span class="glyphicons note" data-name="note" data-type="" data-prefix="glyphicons" data-utf="E019"></span></li>
+        <li><span class="glyphicons heart_empty" data-name="heart_empty" data-type="" data-prefix="glyphicons" data-utf="E020"></span></li>
+        <li><span class="glyphicons home" data-name="home" data-type="" data-prefix="glyphicons" data-utf="E021"></span></li>
+        <li><span class="glyphicons snowflake" data-name="snowflake" data-type="" data-prefix="glyphicons" data-utf="2744"></span></li>
+        <li><span class="glyphicons fire" data-name="fire" data-type="" data-prefix="glyphicons" data-utf="1F525"></span></li>
+        <li><span class="glyphicons magnet" data-name="magnet" data-type="" data-prefix="glyphicons" data-utf="E024"></span></li>
+        <li><span class="glyphicons parents" data-name="parents" data-type="" data-prefix="glyphicons" data-utf="E025"></span></li>
+        <li><span class="glyphicons binoculars" data-name="binoculars" data-type="" data-prefix="glyphicons" data-utf="E026"></span></li>
+        <li><span class="glyphicons road" data-name="road" data-type="" data-prefix="glyphicons" data-utf="E027"></span></li>
+        <li><span class="glyphicons search" data-name="search" data-type="" data-prefix="glyphicons" data-utf="E028"></span></li>
+        <li><span class="glyphicons cars" data-name="cars" data-type="" data-prefix="glyphicons" data-utf="E029"></span></li>
+        <li><span class="glyphicons notes_2" data-name="notes_2" data-type="" data-prefix="glyphicons" data-utf="E030"></span></li>
+        <li><span class="glyphicons pencil" data-name="pencil" data-type="" data-prefix="glyphicons" data-utf="270F"></span></li>
+        <li><span class="glyphicons bus" data-name="bus" data-type="" data-prefix="glyphicons" data-utf="1F68C"></span></li>
+        <li><span class="glyphicons wifi_alt" data-name="wifi_alt" data-type="" data-prefix="glyphicons" data-utf="E033"></span></li>
+        <li><span class="glyphicons luggage" data-name="luggage" data-type="" data-prefix="glyphicons" data-utf="E034"></span></li>
+        <li><span class="glyphicons old_man" data-name="old_man" data-type="" data-prefix="glyphicons" data-utf="E035"></span></li>
+        <li><span class="glyphicons woman" data-name="woman" data-type="" data-prefix="glyphicons" data-utf="1F469"></span></li>
+        <li><span class="glyphicons file" data-name="file" data-type="" data-prefix="glyphicons" data-utf="E037"></span></li>
+        <li><span class="glyphicons coins" data-name="coins" data-type="" data-prefix="glyphicons" data-utf="E038"></span></li>
+        <li><span class="glyphicons airplane" data-name="airplane" data-type="" data-prefix="glyphicons" data-utf="2708"></span></li>
+        <li><span class="glyphicons notes" data-name="notes" data-type="" data-prefix="glyphicons" data-utf="E040"></span></li>
+        <li><span class="glyphicons stats" data-name="stats" data-type="" data-prefix="glyphicons" data-utf="E041"></span></li>
+        <li><span class="glyphicons charts" data-name="charts" data-type="" data-prefix="glyphicons" data-utf="E042"></span></li>
+        <li><span class="glyphicons pie_chart" data-name="pie_chart" data-type="" data-prefix="glyphicons" data-utf="E043"></span></li>
+        <li><span class="glyphicons group" data-name="group" data-type="" data-prefix="glyphicons" data-utf="E044"></span></li>
+        <li><span class="glyphicons keys" data-name="keys" data-type="" data-prefix="glyphicons" data-utf="E045"></span></li>
+        <li><span class="glyphicons calendar" data-name="calendar" data-type="" data-prefix="glyphicons" data-utf="1F4C5"></span></li>
+        <li><span class="glyphicons router" data-name="router" data-type="" data-prefix="glyphicons" data-utf="E047"></span></li>
+        <li><span class="glyphicons camera_small" data-name="camera_small" data-type="" data-prefix="glyphicons" data-utf="E048"></span></li>
+        <li><span class="glyphicons dislikes" data-name="dislikes" data-type="" data-prefix="glyphicons" data-utf="E049"></span></li>
+        <li><span class="glyphicons star" data-name="star" data-type="" data-prefix="glyphicons" data-utf="E050"></span></li>
+        <li><span class="glyphicons link" data-name="link" data-type="" data-prefix="glyphicons" data-utf="E051"></span></li>
+        <li><span class="glyphicons eye_open" data-name="eye_open" data-type="" data-prefix="glyphicons" data-utf="E052"></span></li>
+        <li><span class="glyphicons eye_close" data-name="eye_close" data-type="" data-prefix="glyphicons" data-utf="E053"></span></li>
+        <li><span class="glyphicons alarm" data-name="alarm" data-type="" data-prefix="glyphicons" data-utf="E054"></span></li>
+        <li><span class="glyphicons clock" data-name="clock" data-type="" data-prefix="glyphicons" data-utf="E055"></span></li>
+        <li><span class="glyphicons stopwatch" data-name="stopwatch" data-type="" data-prefix="glyphicons" data-utf="E056"></span></li>
+        <li><span class="glyphicons projector" data-name="projector" data-type="" data-prefix="glyphicons" data-utf="E057"></span></li>
+        <li><span class="glyphicons history" data-name="history" data-type="" data-prefix="glyphicons" data-utf="E058"></span></li>
+        <li><span class="glyphicons truck" data-name="truck" data-type="" data-prefix="glyphicons" data-utf="E059"></span></li>
+        <li><span class="glyphicons cargo" data-name="cargo" data-type="" data-prefix="glyphicons" data-utf="E060"></span></li>
+        <li><span class="glyphicons compass" data-name="compass" data-type="" data-prefix="glyphicons" data-utf="E061"></span></li>
+        <li><span class="glyphicons keynote" data-name="keynote" data-type="" data-prefix="glyphicons" data-utf="E062"></span></li>
+        <li><span class="glyphicons paperclip" data-name="paperclip" data-type="" data-prefix="glyphicons" data-utf="1F4CE"></span></li>
+        <li><span class="glyphicons power" data-name="power" data-type="" data-prefix="glyphicons" data-utf="E064"></span></li>
+        <li><span class="glyphicons lightbulb" data-name="lightbulb" data-type="" data-prefix="glyphicons" data-utf="E065"></span></li>
+        <li><span class="glyphicons tag" data-name="tag" data-type="" data-prefix="glyphicons" data-utf="E066"></span></li>
+        <li><span class="glyphicons tags" data-name="tags" data-type="" data-prefix="glyphicons" data-utf="E067"></span></li>
+        <li><span class="glyphicons cleaning" data-name="cleaning" data-type="" data-prefix="glyphicons" data-utf="E068"></span></li>
+        <li><span class="glyphicons ruller" data-name="ruller" data-type="" data-prefix="glyphicons" data-utf="E069"></span></li>
+        <li><span class="glyphicons gift" data-name="gift" data-type="" data-prefix="glyphicons" data-utf="E070"></span></li>
+        <li><span class="glyphicons umbrella" data-name="umbrella" data-type="" data-prefix="glyphicons" data-utf="2602"></span></li>
+        <li><span class="glyphicons book" data-name="book" data-type="" data-prefix="glyphicons" data-utf="E072"></span></li>
+        <li><span class="glyphicons bookmark" data-name="bookmark" data-type="" data-prefix="glyphicons" data-utf="1F516"></span></li>
+        <li><span class="glyphicons wifi" data-name="wifi" data-type="" data-prefix="glyphicons" data-utf="E074"></span></li>
+        <li><span class="glyphicons cup" data-name="cup" data-type="" data-prefix="glyphicons" data-utf="E075"></span></li>
+        <li><span class="glyphicons stroller" data-name="stroller" data-type="" data-prefix="glyphicons" data-utf="E076"></span></li>
+        <li><span class="glyphicons headphones" data-name="headphones" data-type="" data-prefix="glyphicons" data-utf="E077"></span></li>
+        <li><span class="glyphicons headset" data-name="headset" data-type="" data-prefix="glyphicons" data-utf="E078"></span></li>
+        <li><span class="glyphicons warning_sign" data-name="warning_sign" data-type="" data-prefix="glyphicons" data-utf="E079"></span></li>
+        <li><span class="glyphicons signal" data-name="signal" data-type="" data-prefix="glyphicons" data-utf="E080"></span></li>
+        <li><span class="glyphicons retweet" data-name="retweet" data-type="" data-prefix="glyphicons" data-utf="E081"></span></li>
+        <li><span class="glyphicons refresh" data-name="refresh" data-type="" data-prefix="glyphicons" data-utf="E082"></span></li>
+        <li><span class="glyphicons roundabout" data-name="roundabout" data-type="" data-prefix="glyphicons" data-utf="E083"></span></li>
+        <li><span class="glyphicons random" data-name="random" data-type="" data-prefix="glyphicons" data-utf="E084"></span></li>
+        <li><span class="glyphicons heat" data-name="heat" data-type="" data-prefix="glyphicons" data-utf="E085"></span></li>
+        <li><span class="glyphicons repeat" data-name="repeat" data-type="" data-prefix="glyphicons" data-utf="E086"></span></li>
+        <li><span class="glyphicons display" data-name="display" data-type="" data-prefix="glyphicons" data-utf="E087"></span></li>
+        <li><span class="glyphicons log_book" data-name="log_book" data-type="" data-prefix="glyphicons" data-utf="E088"></span></li>
+        <li><span class="glyphicons address_book" data-name="address_book" data-type="" data-prefix="glyphicons" data-utf="E089"></span></li>
+        <li><span class="glyphicons building" data-name="building" data-type="" data-prefix="glyphicons" data-utf="E090"></span></li>
+        <li><span class="glyphicons eyedropper" data-name="eyedropper" data-type="" data-prefix="glyphicons" data-utf="E091"></span></li>
+        <li><span class="glyphicons adjust" data-name="adjust" data-type="" data-prefix="glyphicons" data-utf="E092"></span></li>
+        <li><span class="glyphicons tint" data-name="tint" data-type="" data-prefix="glyphicons" data-utf="E093"></span></li>
+        <li><span class="glyphicons crop" data-name="crop" data-type="" data-prefix="glyphicons" data-utf="E094"></span></li>
+        <li><span class="glyphicons vector_path_square" data-name="vector_path_square" data-type="" data-prefix="glyphicons" data-utf="E095"></span></li>
+        <li><span class="glyphicons vector_path_circle" data-name="vector_path_circle" data-type="" data-prefix="glyphicons" data-utf="E096"></span></li>
+        <li><span class="glyphicons vector_path_polygon" data-name="vector_path_polygon" data-type="" data-prefix="glyphicons" data-utf="E097"></span></li>
+        <li><span class="glyphicons vector_path_line" data-name="vector_path_line" data-type="" data-prefix="glyphicons" data-utf="E098"></span></li>
+        <li><span class="glyphicons vector_path_curve" data-name="vector_path_curve" data-type="" data-prefix="glyphicons" data-utf="E099"></span></li>
+        <li><span class="glyphicons vector_path_all" data-name="vector_path_all" data-type="" data-prefix="glyphicons" data-utf="E100"></span></li>
+        <li><span class="glyphicons font" data-name="font" data-type="" data-prefix="glyphicons" data-utf="E101"></span></li>
+        <li><span class="glyphicons italic" data-name="italic" data-type="" data-prefix="glyphicons" data-utf="E102"></span></li>
+        <li><span class="glyphicons bold" data-name="bold" data-type="" data-prefix="glyphicons" data-utf="E103"></span></li>
+        <li><span class="glyphicons text_underline" data-name="text_underline" data-type="" data-prefix="glyphicons" data-utf="E104"></span></li>
+        <li><span class="glyphicons text_strike" data-name="text_strike" data-type="" data-prefix="glyphicons" data-utf="E105"></span></li>
+        <li><span class="glyphicons text_height" data-name="text_height" data-type="" data-prefix="glyphicons" data-utf="E106"></span></li>
+        <li><span class="glyphicons text_width" data-name="text_width" data-type="" data-prefix="glyphicons" data-utf="E107"></span></li>
+        <li><span class="glyphicons text_resize" data-name="text_resize" data-type="" data-prefix="glyphicons" data-utf="E108"></span></li>
+        <li><span class="glyphicons left_indent" data-name="left_indent" data-type="" data-prefix="glyphicons" data-utf="E109"></span></li>
+        <li><span class="glyphicons right_indent" data-name="right_indent" data-type="" data-prefix="glyphicons" data-utf="E110"></span></li>
+        <li><span class="glyphicons align_left" data-name="align_left" data-type="" data-prefix="glyphicons" data-utf="E111"></span></li>
+        <li><span class="glyphicons align_center" data-name="align_center" data-type="" data-prefix="glyphicons" data-utf="E112"></span></li>
+        <li><span class="glyphicons align_right" data-name="align_right" data-type="" data-prefix="glyphicons" data-utf="E113"></span></li>
+        <li><span class="glyphicons justify" data-name="justify" data-type="" data-prefix="glyphicons" data-utf="E114"></span></li>
+        <li><span class="glyphicons list" data-name="list" data-type="" data-prefix="glyphicons" data-utf="E115"></span></li>
+        <li><span class="glyphicons text_smaller" data-name="text_smaller" data-type="" data-prefix="glyphicons" data-utf="E116"></span></li>
+        <li><span class="glyphicons text_bigger" data-name="text_bigger" data-type="" data-prefix="glyphicons" data-utf="E117"></span></li>
+        <li><span class="glyphicons embed" data-name="embed" data-type="" data-prefix="glyphicons" data-utf="E118"></span></li>
+        <li><span class="glyphicons embed_close" data-name="embed_close" data-type="" data-prefix="glyphicons" data-utf="E119"></span></li>
+        <li><span class="glyphicons table" data-name="table" data-type="" data-prefix="glyphicons" data-utf="E120"></span></li>
+        <li><span class="glyphicons message_full" data-name="message_full" data-type="" data-prefix="glyphicons" data-utf="E121"></span></li>
+        <li><span class="glyphicons message_empty" data-name="message_empty" data-type="" data-prefix="glyphicons" data-utf="E122"></span></li>
+        <li><span class="glyphicons message_in" data-name="message_in" data-type="" data-prefix="glyphicons" data-utf="E123"></span></li>
+        <li><span class="glyphicons message_out" data-name="message_out" data-type="" data-prefix="glyphicons" data-utf="E124"></span></li>
+        <li><span class="glyphicons message_plus" data-name="message_plus" data-type="" data-prefix="glyphicons" data-utf="E125"></span></li>
+        <li><span class="glyphicons message_minus" data-name="message_minus" data-type="" data-prefix="glyphicons" data-utf="E126"></span></li>
+        <li><span class="glyphicons message_ban" data-name="message_ban" data-type="" data-prefix="glyphicons" data-utf="E127"></span></li>
+        <li><span class="glyphicons message_flag" data-name="message_flag" data-type="" data-prefix="glyphicons" data-utf="E128"></span></li>
+        <li><span class="glyphicons message_lock" data-name="message_lock" data-type="" data-prefix="glyphicons" data-utf="E129"></span></li>
+        <li><span class="glyphicons message_new" data-name="message_new" data-type="" data-prefix="glyphicons" data-utf="E130"></span></li>
+        <li><span class="glyphicons inbox" data-name="inbox" data-type="" data-prefix="glyphicons" data-utf="E131"></span></li>
+        <li><span class="glyphicons inbox_plus" data-name="inbox_plus" data-type="" data-prefix="glyphicons" data-utf="E132"></span></li>
+        <li><span class="glyphicons inbox_minus" data-name="inbox_minus" data-type="" data-prefix="glyphicons" data-utf="E133"></span></li>
+        <li><span class="glyphicons inbox_lock" data-name="inbox_lock" data-type="" data-prefix="glyphicons" data-utf="E134"></span></li>
+        <li><span class="glyphicons inbox_in" data-name="inbox_in" data-type="" data-prefix="glyphicons" data-utf="E135"></span></li>
+        <li><span class="glyphicons inbox_out" data-name="inbox_out" data-type="" data-prefix="glyphicons" data-utf="E136"></span></li>
+        <li><span class="glyphicons cogwheel" data-name="cogwheel" data-type="" data-prefix="glyphicons" data-utf="E137"></span></li>
+        <li><span class="glyphicons cogwheels" data-name="cogwheels" data-type="" data-prefix="glyphicons" data-utf="E138"></span></li>
+        <li><span class="glyphicons picture" data-name="picture" data-type="" data-prefix="glyphicons" data-utf="E139"></span></li>
+        <li><span class="glyphicons adjust_alt" data-name="adjust_alt" data-type="" data-prefix="glyphicons" data-utf="E140"></span></li>
+        <li><span class="glyphicons database_lock" data-name="database_lock" data-type="" data-prefix="glyphicons" data-utf="E141"></span></li>
+        <li><span class="glyphicons database_plus" data-name="database_plus" data-type="" data-prefix="glyphicons" data-utf="E142"></span></li>
+        <li><span class="glyphicons database_minus" data-name="database_minus" data-type="" data-prefix="glyphicons" data-utf="E143"></span></li>
+        <li><span class="glyphicons database_ban" data-name="database_ban" data-type="" data-prefix="glyphicons" data-utf="E144"></span></li>
+        <li><span class="glyphicons folder_open" data-name="folder_open" data-type="" data-prefix="glyphicons" data-utf="E145"></span></li>
+        <li><span class="glyphicons folder_plus" data-name="folder_plus" data-type="" data-prefix="glyphicons" data-utf="E146"></span></li>
+        <li><span class="glyphicons folder_minus" data-name="folder_minus" data-type="" data-prefix="glyphicons" data-utf="E147"></span></li>
+        <li><span class="glyphicons folder_lock" data-name="folder_lock" data-type="" data-prefix="glyphicons" data-utf="E148"></span></li>
+        <li><span class="glyphicons folder_flag" data-name="folder_flag" data-type="" data-prefix="glyphicons" data-utf="E149"></span></li>
+        <li><span class="glyphicons folder_new" data-name="folder_new" data-type="" data-prefix="glyphicons" data-utf="E150"></span></li>
+        <li><span class="glyphicons edit" data-name="edit" data-type="" data-prefix="glyphicons" data-utf="E151"></span></li>
+        <li><span class="glyphicons new_window" data-name="new_window" data-type="" data-prefix="glyphicons" data-utf="E152"></span></li>
+        <li><span class="glyphicons check" data-name="check" data-type="" data-prefix="glyphicons" data-utf="E153"></span></li>
+        <li><span class="glyphicons unchecked" data-name="unchecked" data-type="" data-prefix="glyphicons" data-utf="E154"></span></li>
+        <li><span class="glyphicons more_windows" data-name="more_windows" data-type="" data-prefix="glyphicons" data-utf="E155"></span></li>
+        <li><span class="glyphicons show_big_thumbnails" data-name="show_big_thumbnails" data-type="" data-prefix="glyphicons" data-utf="E156"></span></li>
+        <li><span class="glyphicons show_thumbnails" data-name="show_thumbnails" data-type="" data-prefix="glyphicons" data-utf="E157"></span></li>
+        <li><span class="glyphicons show_thumbnails_with_lines" data-name="show_thumbnails_with_lines" data-type="" data-prefix="glyphicons" data-utf="E158"></span></li>
+        <li><span class="glyphicons show_lines" data-name="show_lines" data-type="" data-prefix="glyphicons" data-utf="E159"></span></li>
+        <li><span class="glyphicons playlist" data-name="playlist" data-type="" data-prefix="glyphicons" data-utf="E160"></span></li>
+        <li><span class="glyphicons imac" data-name="imac" data-type="" data-prefix="glyphicons" data-utf="E161"></span></li>
+        <li><span class="glyphicons macbook" data-name="macbook" data-type="" data-prefix="glyphicons" data-utf="E162"></span></li>
+        <li><span class="glyphicons ipad" data-name="ipad" data-type="" data-prefix="glyphicons" data-utf="E163"></span></li>
+        <li><span class="glyphicons iphone" data-name="iphone" data-type="" data-prefix="glyphicons" data-utf="E164"></span></li>
+        <li><span class="glyphicons iphone_transfer" data-name="iphone_transfer" data-type="" data-prefix="glyphicons" data-utf="E165"></span></li>
+        <li><span class="glyphicons iphone_exchange" data-name="iphone_exchange" data-type="" data-prefix="glyphicons" data-utf="E166"></span></li>
+        <li><span class="glyphicons ipod" data-name="ipod" data-type="" data-prefix="glyphicons" data-utf="E167"></span></li>
+        <li><span class="glyphicons ipod_shuffle" data-name="ipod_shuffle" data-type="" data-prefix="glyphicons" data-utf="E168"></span></li>
+        <li><span class="glyphicons ear_plugs" data-name="ear_plugs" data-type="" data-prefix="glyphicons" data-utf="E169"></span></li>
+        <li><span class="glyphicons record" data-name="record" data-type="" data-prefix="glyphicons" data-utf="E170"></span></li>
+        <li><span class="glyphicons step_backward" data-name="step_backward" data-type="" data-prefix="glyphicons" data-utf="E171"></span></li>
+        <li><span class="glyphicons fast_backward" data-name="fast_backward" data-type="" data-prefix="glyphicons" data-utf="E172"></span></li>
+        <li><span class="glyphicons rewind" data-name="rewind" data-type="" data-prefix="glyphicons" data-utf="E173"></span></li>
+        <li><span class="glyphicons play" data-name="play" data-type="" data-prefix="glyphicons" data-utf="E174"></span></li>
+        <li><span class="glyphicons pause" data-name="pause" data-type="" data-prefix="glyphicons" data-utf="E175"></span></li>
+        <li><span class="glyphicons stop" data-name="stop" data-type="" data-prefix="glyphicons" data-utf="E176"></span></li>
+        <li><span class="glyphicons forward" data-name="forward" data-type="" data-prefix="glyphicons" data-utf="E177"></span></li>
+        <li><span class="glyphicons fast_forward" data-name="fast_forward" data-type="" data-prefix="glyphicons" data-utf="E178"></span></li>
+        <li><span class="glyphicons step_forward" data-name="step_forward" data-type="" data-prefix="glyphicons" data-utf="E179"></span></li>
+        <li><span class="glyphicons eject" data-name="eject" data-type="" data-prefix="glyphicons" data-utf="E180"></span></li>
+        <li><span class="glyphicons facetime_video" data-name="facetime_video" data-type="" data-prefix="glyphicons" data-utf="E181"></span></li>
+        <li><span class="glyphicons download_alt" data-name="download_alt" data-type="" data-prefix="glyphicons" data-utf="E182"></span></li>
+        <li><span class="glyphicons mute" data-name="mute" data-type="" data-prefix="glyphicons" data-utf="E183"></span></li>
+        <li><span class="glyphicons volume_down" data-name="volume_down" data-type="" data-prefix="glyphicons" data-utf="E184"></span></li>
+        <li><span class="glyphicons volume_up" data-name="volume_up" data-type="" data-prefix="glyphicons" data-utf="E185"></span></li>
+        <li><span class="glyphicons screenshot" data-name="screenshot" data-type="" data-prefix="glyphicons" data-utf="E186"></span></li>
+        <li><span class="glyphicons move" data-name="move" data-type="" data-prefix="glyphicons" data-utf="E187"></span></li>
+        <li><span class="glyphicons more" data-name="more" data-type="" data-prefix="glyphicons" data-utf="E188"></span></li>
+        <li><span class="glyphicons brightness_reduce" data-name="brightness_reduce" data-type="" data-prefix="glyphicons" data-utf="E189"></span></li>
+        <li><span class="glyphicons brightness_increase" data-name="brightness_increase" data-type="" data-prefix="glyphicons" data-utf="E190"></span></li>
+        <li><span class="glyphicons circle_plus" data-name="circle_plus" data-type="" data-prefix="glyphicons" data-utf="E191"></span></li>
+        <li><span class="glyphicons circle_minus" data-name="circle_minus" data-type="" data-prefix="glyphicons" data-utf="E192"></span></li>
+        <li><span class="glyphicons circle_remove" data-name="circle_remove" data-type="" data-prefix="glyphicons" data-utf="E193"></span></li>
+        <li><span class="glyphicons circle_ok" data-name="circle_ok" data-type="" data-prefix="glyphicons" data-utf="E194"></span></li>
+        <li><span class="glyphicons circle_question_mark" data-name="circle_question_mark" data-type="" data-prefix="glyphicons" data-utf="E195"></span></li>
+        <li><span class="glyphicons circle_info" data-name="circle_info" data-type="" data-prefix="glyphicons" data-utf="E196"></span></li>
+        <li><span class="glyphicons circle_exclamation_mark" data-name="circle_exclamation_mark" data-type="" data-prefix="glyphicons" data-utf="E197"></span></li>
+        <li><span class="glyphicons remove" data-name="remove" data-type="" data-prefix="glyphicons" data-utf="E198"></span></li>
+        <li><span class="glyphicons ok" data-name="ok" data-type="" data-prefix="glyphicons" data-utf="E199"></span></li>
+        <li><span class="glyphicons ban" data-name="ban" data-type="" data-prefix="glyphicons" data-utf="E200"></span></li>
+        <li><span class="glyphicons download" data-name="download" data-type="" data-prefix="glyphicons" data-utf="E201"></span></li>
+        <li><span class="glyphicons upload" data-name="upload" data-type="" data-prefix="glyphicons" data-utf="E202"></span></li>
+        <li><span class="glyphicons shopping_cart" data-name="shopping_cart" data-type="" data-prefix="glyphicons" data-utf="E203"></span></li>
+        <li><span class="glyphicons lock" data-name="lock" data-type="" data-prefix="glyphicons" data-utf="1F512"></span></li>
+        <li><span class="glyphicons unlock" data-name="unlock" data-type="" data-prefix="glyphicons" data-utf="E205"></span></li>
+        <li><span class="glyphicons electricity" data-name="electricity" data-type="" data-prefix="glyphicons" data-utf="E206"></span></li>
+        <li><span class="glyphicons ok_2" data-name="ok_2" data-type="" data-prefix="glyphicons" data-utf="E207"></span></li>
+        <li><span class="glyphicons remove_2" data-name="remove_2" data-type="" data-prefix="glyphicons" data-utf="E208"></span></li>
+        <li><span class="glyphicons cart_out" data-name="cart_out" data-type="" data-prefix="glyphicons" data-utf="E209"></span></li>
+        <li><span class="glyphicons cart_in" data-name="cart_in" data-type="" data-prefix="glyphicons" data-utf="E210"></span></li>
+        <li><span class="glyphicons left_arrow" data-name="left_arrow" data-type="" data-prefix="glyphicons" data-utf="E211"></span></li>
+        <li><span class="glyphicons right_arrow" data-name="right_arrow" data-type="" data-prefix="glyphicons" data-utf="E212"></span></li>
+        <li><span class="glyphicons down_arrow" data-name="down_arrow" data-type="" data-prefix="glyphicons" data-utf="E213"></span></li>
+        <li><span class="glyphicons up_arrow" data-name="up_arrow" data-type="" data-prefix="glyphicons" data-utf="E214"></span></li>
+        <li><span class="glyphicons resize_small" data-name="resize_small" data-type="" data-prefix="glyphicons" data-utf="E215"></span></li>
+        <li><span class="glyphicons resize_full" data-name="resize_full" data-type="" data-prefix="glyphicons" data-utf="E216"></span></li>
+        <li><span class="glyphicons circle_arrow_left" data-name="circle_arrow_left" data-type="" data-prefix="glyphicons" data-utf="E217"></span></li>
+        <li><span class="glyphicons circle_arrow_right" data-name="circle_arrow_right" data-type="" data-prefix="glyphicons" data-utf="E218"></span></li>
+        <li><span class="glyphicons circle_arrow_top" data-name="circle_arrow_top" data-type="" data-prefix="glyphicons" data-utf="E219"></span></li>
+        <li><span class="glyphicons circle_arrow_down" data-name="circle_arrow_down" data-type="" data-prefix="glyphicons" data-utf="E220"></span></li>
+        <li><span class="glyphicons play_button" data-name="play_button" data-type="" data-prefix="glyphicons" data-utf="E221"></span></li>
+        <li><span class="glyphicons unshare" data-name="unshare" data-type="" data-prefix="glyphicons" data-utf="E222"></span></li>
+        <li><span class="glyphicons share" data-name="share" data-type="" data-prefix="glyphicons" data-utf="E223"></span></li>
+        <li><span class="glyphicons chevron-right" data-name="chevron-right" data-type="" data-prefix="glyphicons" data-utf="E224"></span></li>
+        <li><span class="glyphicons chevron-left" data-name="chevron-left" data-type="" data-prefix="glyphicons" data-utf="E225"></span></li>
+        <li><span class="glyphicons bluetooth" data-name="bluetooth" data-type="" data-prefix="glyphicons" data-utf="E226"></span></li>
+        <li><span class="glyphicons euro" data-name="euro" data-type="" data-prefix="glyphicons" data-utf="20AC"></span></li>
+        <li><span class="glyphicons usd" data-name="usd" data-type="" data-prefix="glyphicons" data-utf="E228"></span></li>
+        <li><span class="glyphicons gbp" data-name="gbp" data-type="" data-prefix="glyphicons" data-utf="E229"></span></li>
+        <li><span class="glyphicons retweet_2" data-name="retweet_2" data-type="" data-prefix="glyphicons" data-utf="E230"></span></li>
+        <li><span class="glyphicons moon" data-name="moon" data-type="" data-prefix="glyphicons" data-utf="E231"></span></li>
+        <li><span class="glyphicons sun" data-name="sun" data-type="" data-prefix="glyphicons" data-utf="2609"></span></li>
+        <li><span class="glyphicons cloud" data-name="cloud" data-type="" data-prefix="glyphicons" data-utf="2601"></span></li>
+        <li><span class="glyphicons direction" data-name="direction" data-type="" data-prefix="glyphicons" data-utf="E234"></span></li>
+        <li><span class="glyphicons brush" data-name="brush" data-type="" data-prefix="glyphicons" data-utf="E235"></span></li>
+        <li><span class="glyphicons pen" data-name="pen" data-type="" data-prefix="glyphicons" data-utf="E236"></span></li>
+        <li><span class="glyphicons zoom_in" data-name="zoom_in" data-type="" data-prefix="glyphicons" data-utf="E237"></span></li>
+        <li><span class="glyphicons zoom_out" data-name="zoom_out" data-type="" data-prefix="glyphicons" data-utf="E238"></span></li>
+        <li><span class="glyphicons pin" data-name="pin" data-type="" data-prefix="glyphicons" data-utf="E239"></span></li>
+        <li><span class="glyphicons albums" data-name="albums" data-type="" data-prefix="glyphicons" data-utf="E240"></span></li>
+        <li><span class="glyphicons rotation_lock" data-name="rotation_lock" data-type="" data-prefix="glyphicons" data-utf="E241"></span></li>
+        <li><span class="glyphicons flash" data-name="flash" data-type="" data-prefix="glyphicons" data-utf="E242"></span></li>
+        <li><span class="glyphicons google_maps" data-name="google_maps" data-type="" data-prefix="glyphicons" data-utf="E243"></span></li>
+        <li><span class="glyphicons anchor" data-name="anchor" data-type="" data-prefix="glyphicons" data-utf="2693"></span></li>
+        <li><span class="glyphicons conversation" data-name="conversation" data-type="" data-prefix="glyphicons" data-utf="E245"></span></li>
+        <li><span class="glyphicons chat" data-name="chat" data-type="" data-prefix="glyphicons" data-utf="E246"></span></li>
+        <li><span class="glyphicons male" data-name="male" data-type="" data-prefix="glyphicons" data-utf="E247"></span></li>
+        <li><span class="glyphicons female" data-name="female" data-type="" data-prefix="glyphicons" data-utf="E248"></span></li>
+        <li><span class="glyphicons asterisk" data-name="asterisk" data-type="" data-prefix="glyphicons" data-utf="002A"></span></li>
+        <li><span class="glyphicons divide" data-name="divide" data-type="" data-prefix="glyphicons" data-utf="00F7"></span></li>
+        <li><span class="glyphicons snorkel_diving" data-name="snorkel_diving" data-type="" data-prefix="glyphicons" data-utf="E251"></span></li>
+        <li><span class="glyphicons scuba_diving" data-name="scuba_diving" data-type="" data-prefix="glyphicons" data-utf="E252"></span></li>
+        <li><span class="glyphicons oxygen_bottle" data-name="oxygen_bottle" data-type="" data-prefix="glyphicons" data-utf="E253"></span></li>
+        <li><span class="glyphicons fins" data-name="fins" data-type="" data-prefix="glyphicons" data-utf="E254"></span></li>
+        <li><span class="glyphicons fishes" data-name="fishes" data-type="" data-prefix="glyphicons" data-utf="E255"></span></li>
+        <li><span class="glyphicons boat" data-name="boat" data-type="" data-prefix="glyphicons" data-utf="E256"></span></li>
+        <li><span class="glyphicons delete" data-name="delete" data-type="" data-prefix="glyphicons" data-utf="E257"></span></li>
+        <li><span class="glyphicons sheriffs_star" data-name="sheriffs_star" data-type="" data-prefix="glyphicons" data-utf="E258"></span></li>
+        <li><span class="glyphicons qrcode" data-name="qrcode" data-type="" data-prefix="glyphicons" data-utf="E259"></span></li>
+        <li><span class="glyphicons barcode" data-name="barcode" data-type="" data-prefix="glyphicons" data-utf="E260"></span></li>
+        <li><span class="glyphicons pool" data-name="pool" data-type="" data-prefix="glyphicons" data-utf="E261"></span></li>
+        <li><span class="glyphicons buoy" data-name="buoy" data-type="" data-prefix="glyphicons" data-utf="E262"></span></li>
+        <li><span class="glyphicons spade" data-name="spade" data-type="" data-prefix="glyphicons" data-utf="E263"></span></li>
+        <li><span class="glyphicons bank" data-name="bank" data-type="" data-prefix="glyphicons" data-utf="1F3E6"></span></li>
+        <li><span class="glyphicons vcard" data-name="vcard" data-type="" data-prefix="glyphicons" data-utf="E265"></span></li>
+        <li><span class="glyphicons electrical_plug" data-name="electrical_plug" data-type="" data-prefix="glyphicons" data-utf="E266"></span></li>
+        <li><span class="glyphicons flag" data-name="flag" data-type="" data-prefix="glyphicons" data-utf="E267"></span></li>
+        <li><span class="glyphicons credit_card" data-name="credit_card" data-type="" data-prefix="glyphicons" data-utf="E268"></span></li>
+        <li><span class="glyphicons keyboard-wireless" data-name="keyboard-wireless" data-type="" data-prefix="glyphicons" data-utf="E269"></span></li>
+        <li><span class="glyphicons keyboard-wired" data-name="keyboard-wired" data-type="" data-prefix="glyphicons" data-utf="E270"></span></li>
+        <li><span class="glyphicons shield" data-name="shield" data-type="" data-prefix="glyphicons" data-utf="E271"></span></li>
+        <li><span class="glyphicons ring" data-name="ring" data-type="" data-prefix="glyphicons" data-utf="02DA"></span></li>
+        <li><span class="glyphicons cake" data-name="cake" data-type="" data-prefix="glyphicons" data-utf="E273"></span></li>
+        <li><span class="glyphicons drink" data-name="drink" data-type="" data-prefix="glyphicons" data-utf="E274"></span></li>
+        <li><span class="glyphicons beer" data-name="beer" data-type="" data-prefix="glyphicons" data-utf="E275"></span></li>
+        <li><span class="glyphicons fast_food" data-name="fast_food" data-type="" data-prefix="glyphicons" data-utf="E276"></span></li>
+        <li><span class="glyphicons cutlery" data-name="cutlery" data-type="" data-prefix="glyphicons" data-utf="E277"></span></li>
+        <li><span class="glyphicons pizza" data-name="pizza" data-type="" data-prefix="glyphicons" data-utf="E278"></span></li>
+        <li><span class="glyphicons birthday_cake" data-name="birthday_cake" data-type="" data-prefix="glyphicons" data-utf="E279"></span></li>
+        <li><span class="glyphicons tablet" data-name="tablet" data-type="" data-prefix="glyphicons" data-utf="E280"></span></li>
+        <li><span class="glyphicons settings" data-name="settings" data-type="" data-prefix="glyphicons" data-utf="E281"></span></li>
+        <li><span class="glyphicons bullets" data-name="bullets" data-type="" data-prefix="glyphicons" data-utf="E282"></span></li>
+        <li><span class="glyphicons cardio" data-name="cardio" data-type="" data-prefix="glyphicons" data-utf="E283"></span></li>
+        <li><span class="glyphicons t-shirt" data-name="t-shirt" data-type="" data-prefix="glyphicons" data-utf="E284"></span></li>
+        <li><span class="glyphicons pants" data-name="pants" data-type="" data-prefix="glyphicons" data-utf="E285"></span></li>
+        <li><span class="glyphicons sweater" data-name="sweater" data-type="" data-prefix="glyphicons" data-utf="E286"></span></li>
+        <li><span class="glyphicons fabric" data-name="fabric" data-type="" data-prefix="glyphicons" data-utf="E287"></span></li>
+        <li><span class="glyphicons leather" data-name="leather" data-type="" data-prefix="glyphicons" data-utf="E288"></span></li>
+        <li><span class="glyphicons scissors" data-name="scissors" data-type="" data-prefix="glyphicons" data-utf="E289"></span></li>
+        <li><span class="glyphicons bomb" data-name="bomb" data-type="" data-prefix="glyphicons" data-utf="1F4A3"></span></li>
+        <li><span class="glyphicons skull" data-name="skull" data-type="" data-prefix="glyphicons" data-utf="1F480"></span></li>
+        <li><span class="glyphicons celebration" data-name="celebration" data-type="" data-prefix="glyphicons" data-utf="E292"></span></li>
+        <li><span class="glyphicons tea_kettle" data-name="tea_kettle" data-type="" data-prefix="glyphicons" data-utf="E293"></span></li>
+        <li><span class="glyphicons french_press" data-name="french_press" data-type="" data-prefix="glyphicons" data-utf="E294"></span></li>
+        <li><span class="glyphicons coffe_cup" data-name="coffe_cup" data-type="" data-prefix="glyphicons" data-utf="E295"></span></li>
+        <li><span class="glyphicons pot" data-name="pot" data-type="" data-prefix="glyphicons" data-utf="E296"></span></li>
+        <li><span class="glyphicons grater" data-name="grater" data-type="" data-prefix="glyphicons" data-utf="E297"></span></li>
+        <li><span class="glyphicons kettle" data-name="kettle" data-type="" data-prefix="glyphicons" data-utf="E298"></span></li>
+        <li><span class="glyphicons hospital" data-name="hospital" data-type="" data-prefix="glyphicons" data-utf="1F3E5"></span></li>
+        <li><span class="glyphicons hospital_h" data-name="hospital_h" data-type="" data-prefix="glyphicons" data-utf="E300"></span></li>
+        <li><span class="glyphicons microphone" data-name="microphone" data-type="" data-prefix="glyphicons" data-utf="1F3A4"></span></li>
+        <li><span class="glyphicons webcam" data-name="webcam" data-type="" data-prefix="glyphicons" data-utf="E302"></span></li>
+        <li><span class="glyphicons temple_christianity_church" data-name="temple_christianity_church" data-type="" data-prefix="glyphicons" data-utf="E303"></span></li>
+        <li><span class="glyphicons temple_islam" data-name="temple_islam" data-type="" data-prefix="glyphicons" data-utf="E304"></span></li>
+        <li><span class="glyphicons temple_hindu" data-name="temple_hindu" data-type="" data-prefix="glyphicons" data-utf="E305"></span></li>
+        <li><span class="glyphicons temple_buddhist" data-name="temple_buddhist" data-type="" data-prefix="glyphicons" data-utf="E306"></span></li>
+        <li><span class="glyphicons bicycle" data-name="bicycle" data-type="" data-prefix="glyphicons" data-utf="1F6B2"></span></li>
+        <li><span class="glyphicons life_preserver" data-name="life_preserver" data-type="" data-prefix="glyphicons" data-utf="E308"></span></li>
+        <li><span class="glyphicons share_alt" data-name="share_alt" data-type="" data-prefix="glyphicons" data-utf="E309"></span></li>
+        <li><span class="glyphicons comments" data-name="comments" data-type="" data-prefix="glyphicons" data-utf="E310"></span></li>
+        <li><span class="glyphicons flower" data-name="flower" data-type="" data-prefix="glyphicons" data-utf="2698"></span></li>
+        <li><span class="glyphicons baseball" data-name="baseball" data-type="" data-prefix="glyphicons" data-utf="26BE"></span></li>
+        <li><span class="glyphicons rugby" data-name="rugby" data-type="" data-prefix="glyphicons" data-utf="E313"></span></li>
+        <li><span class="glyphicons ax" data-name="ax" data-type="" data-prefix="glyphicons" data-utf="E314"></span></li>
+        <li><span class="glyphicons table_tennis" data-name="table_tennis" data-type="" data-prefix="glyphicons" data-utf="E315"></span></li>
+        <li><span class="glyphicons bowling" data-name="bowling" data-type="" data-prefix="glyphicons" data-utf="1F3B3"></span></li>
+        <li><span class="glyphicons tree_conifer" data-name="tree_conifer" data-type="" data-prefix="glyphicons" data-utf="E317"></span></li>
+        <li><span class="glyphicons tree_deciduous" data-name="tree_deciduous" data-type="" data-prefix="glyphicons" data-utf="E318"></span></li>
+        <li><span class="glyphicons more_items" data-name="more_items" data-type="" data-prefix="glyphicons" data-utf="E319"></span></li>
+        <li><span class="glyphicons sort" data-name="sort" data-type="" data-prefix="glyphicons" data-utf="E320"></span></li>
+        <li><span class="glyphicons filter" data-name="filter" data-type="" data-prefix="glyphicons" data-utf="E321"></span></li>
+        <li><span class="glyphicons gamepad" data-name="gamepad" data-type="" data-prefix="glyphicons" data-utf="E322"></span></li>
+        <li><span class="glyphicons playing_dices" data-name="playing_dices" data-type="" data-prefix="glyphicons" data-utf="E323"></span></li>
+        <li><span class="glyphicons calculator" data-name="calculator" data-type="" data-prefix="glyphicons" data-utf="E324"></span></li>
+        <li><span class="glyphicons tie" data-name="tie" data-type="" data-prefix="glyphicons" data-utf="E325"></span></li>
+        <li><span class="glyphicons wallet" data-name="wallet" data-type="" data-prefix="glyphicons" data-utf="E326"></span></li>
+        <li><span class="glyphicons piano" data-name="piano" data-type="" data-prefix="glyphicons" data-utf="E327"></span></li>
+        <li><span class="glyphicons sampler" data-name="sampler" data-type="" data-prefix="glyphicons" data-utf="E328"></span></li>
+        <li><span class="glyphicons podium" data-name="podium" data-type="" data-prefix="glyphicons" data-utf="E329"></span></li>
+        <li><span class="glyphicons soccer_ball" data-name="soccer_ball" data-type="" data-prefix="glyphicons" data-utf="E330"></span></li>
+        <li><span class="glyphicons blog" data-name="blog" data-type="" data-prefix="glyphicons" data-utf="E331"></span></li>
+        <li><span class="glyphicons dashboard" data-name="dashboard" data-type="" data-prefix="glyphicons" data-utf="E332"></span></li>
+        <li><span class="glyphicons certificate" data-name="certificate" data-type="" data-prefix="glyphicons" data-utf="E333"></span></li>
+        <li><span class="glyphicons bell" data-name="bell" data-type="" data-prefix="glyphicons" data-utf="1F514"></span></li>
+        <li><span class="glyphicons candle" data-name="candle" data-type="" data-prefix="glyphicons" data-utf="E335"></span></li>
+        <li><span class="glyphicons pushpin" data-name="pushpin" data-type="" data-prefix="glyphicons" data-utf="1F4CC"></span></li>
+        <li><span class="glyphicons iphone_shake" data-name="iphone_shake" data-type="" data-prefix="glyphicons" data-utf="E337"></span></li>
+        <li><span class="glyphicons pin_flag" data-name="pin_flag" data-type="" data-prefix="glyphicons" data-utf="E338"></span></li>
+        <li><span class="glyphicons turtle" data-name="turtle" data-type="" data-prefix="glyphicons" data-utf="1F422"></span></li>
+        <li><span class="glyphicons rabbit" data-name="rabbit" data-type="" data-prefix="glyphicons" data-utf="1F407"></span></li>
+        <li><span class="glyphicons globe" data-name="globe" data-type="" data-prefix="glyphicons" data-utf="E341"></span></li>
+        <li><span class="glyphicons briefcase" data-name="briefcase" data-type="" data-prefix="glyphicons" data-utf="1F4BC"></span></li>
+        <li><span class="glyphicons hdd" data-name="hdd" data-type="" data-prefix="glyphicons" data-utf="E343"></span></li>
+        <li><span class="glyphicons thumbs_up" data-name="thumbs_up" data-type="" data-prefix="glyphicons" data-utf="E344"></span></li>
+        <li><span class="glyphicons thumbs_down" data-name="thumbs_down" data-type="" data-prefix="glyphicons" data-utf="E345"></span></li>
+        <li><span class="glyphicons hand_right" data-name="hand_right" data-type="" data-prefix="glyphicons" data-utf="E346"></span></li>
+        <li><span class="glyphicons hand_left" data-name="hand_left" data-type="" data-prefix="glyphicons" data-utf="E347"></span></li>
+        <li><span class="glyphicons hand_up" data-name="hand_up" data-type="" data-prefix="glyphicons" data-utf="E348"></span></li>
+        <li><span class="glyphicons hand_down" data-name="hand_down" data-type="" data-prefix="glyphicons" data-utf="E349"></span></li>
+        <li><span class="glyphicons fullscreen" data-name="fullscreen" data-type="" data-prefix="glyphicons" data-utf="E350"></span></li>
+        <li><span class="glyphicons shopping_bag" data-name="shopping_bag" data-type="" data-prefix="glyphicons" data-utf="E351"></span></li>
+        <li><span class="glyphicons book_open" data-name="book_open" data-type="" data-prefix="glyphicons" data-utf="E352"></span></li>
+        <li><span class="glyphicons nameplate" data-name="nameplate" data-type="" data-prefix="glyphicons" data-utf="E353"></span></li>
+        <li><span class="glyphicons nameplate_alt" data-name="nameplate_alt" data-type="" data-prefix="glyphicons" data-utf="E354"></span></li>
+        <li><span class="glyphicons vases" data-name="vases" data-type="" data-prefix="glyphicons" data-utf="E355"></span></li>
+        <li><span class="glyphicons bullhorn" data-name="bullhorn" data-type="" data-prefix="glyphicons" data-utf="E356"></span></li>
+        <li><span class="glyphicons dumbbell" data-name="dumbbell" data-type="" data-prefix="glyphicons" data-utf="E357"></span></li>
+        <li><span class="glyphicons suitcase" data-name="suitcase" data-type="" data-prefix="glyphicons" data-utf="E358"></span></li>
+        <li><span class="glyphicons file_import" data-name="file_import" data-type="" data-prefix="glyphicons" data-utf="E359"></span></li>
+        <li><span class="glyphicons file_export" data-name="file_export" data-type="" data-prefix="glyphicons" data-utf="E360"></span></li>
+        <li><span class="glyphicons bug" data-name="bug" data-type="" data-prefix="glyphicons" data-utf="1F41B"></span></li>
+        <li><span class="glyphicons crown" data-name="crown" data-type="" data-prefix="glyphicons" data-utf="1F451"></span></li>
+        <li><span class="glyphicons smoking" data-name="smoking" data-type="" data-prefix="glyphicons" data-utf="E363"></span></li>
+        <li><span class="glyphicons cloud-upload" data-name="cloud-upload" data-type="" data-prefix="glyphicons" data-utf="E364"></span></li>
+        <li><span class="glyphicons cloud-download" data-name="cloud-download" data-type="" data-prefix="glyphicons" data-utf="E365"></span></li>
+        <li><span class="glyphicons restart" data-name="restart" data-type="" data-prefix="glyphicons" data-utf="E366"></span></li>
+        <li><span class="glyphicons security_camera" data-name="security_camera" data-type="" data-prefix="glyphicons" data-utf="E367"></span></li>
+        <li><span class="glyphicons expand" data-name="expand" data-type="" data-prefix="glyphicons" data-utf="E368"></span></li>
+        <li><span class="glyphicons collapse" data-name="collapse" data-type="" data-prefix="glyphicons" data-utf="E369"></span></li>
+        <li><span class="glyphicons collapse_top" data-name="collapse_top" data-type="" data-prefix="glyphicons" data-utf="E370"></span></li>
+        <li><span class="glyphicons globe_af" data-name="globe_af" data-type="" data-prefix="glyphicons" data-utf="E371"></span></li>
+        <li><span class="glyphicons global" data-name="global" data-type="" data-prefix="glyphicons" data-utf="E372"></span></li>
+        <li><span class="glyphicons spray" data-name="spray" data-type="" data-prefix="glyphicons" data-utf="E373"></span></li>
+        <li><span class="glyphicons nails" data-name="nails" data-type="" data-prefix="glyphicons" data-utf="E374"></span></li>
+        <li><span class="glyphicons claw_hammer" data-name="claw_hammer" data-type="" data-prefix="glyphicons" data-utf="E375"></span></li>
+        <li><span class="glyphicons classic_hammer" data-name="classic_hammer" data-type="" data-prefix="glyphicons" data-utf="E376"></span></li>
+        <li><span class="glyphicons hand_saw" data-name="hand_saw" data-type="" data-prefix="glyphicons" data-utf="E377"></span></li>
+        <li><span class="glyphicons riflescope" data-name="riflescope" data-type="" data-prefix="glyphicons" data-utf="E378"></span></li>
+        <li><span class="glyphicons electrical_socket_eu" data-name="electrical_socket_eu" data-type="" data-prefix="glyphicons" data-utf="E379"></span></li>
+        <li><span class="glyphicons electrical_socket_us" data-name="electrical_socket_us" data-type="" data-prefix="glyphicons" data-utf="E380"></span></li>
+        <li><span class="glyphicons message_forward" data-name="message_forward" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E381"></span></li>
+        <li><span class="glyphicons coat_hanger" data-name="coat_hanger" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E382"></span></li>
+        <li><span class="glyphicons dress" data-name="dress" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="1F457"></span></li>
+        <li><span class="glyphicons bathrobe" data-name="bathrobe" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E384"></span></li>
+        <li><span class="glyphicons shirt" data-name="shirt" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E385"></span></li>
+        <li><span class="glyphicons underwear" data-name="underwear" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E386"></span></li>
+        <li><span class="glyphicons log_in" data-name="log_in" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E387"></span></li>
+        <li><span class="glyphicons log_out" data-name="log_out" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E388"></span></li>
+        <li><span class="glyphicons exit" data-name="exit" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E389"></span></li>
+        <li><span class="glyphicons new_window_alt" data-name="new_window_alt" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E390"></span></li>
+        <li><span class="glyphicons video_sd" data-name="video_sd" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E391"></span></li>
+        <li><span class="glyphicons video_hd" data-name="video_hd" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E392"></span></li>
+        <li><span class="glyphicons subtitles" data-name="subtitles" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E393"></span></li>
+        <li><span class="glyphicons sound_stereo" data-name="sound_stereo" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E394"></span></li>
+        <li><span class="glyphicons sound_dolby" data-name="sound_dolby" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E395"></span></li>
+        <li><span class="glyphicons sound_5_1" data-name="sound_5_1" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E396"></span></li>
+        <li><span class="glyphicons sound_6_1" data-name="sound_6_1" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E397"></span></li>
+        <li><span class="glyphicons sound_7_1" data-name="sound_7_1" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E398"></span></li>
+        <li><span class="glyphicons copyright_mark" data-name="copyright_mark" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E399"></span></li>
+        <li><span class="glyphicons registration_mark" data-name="registration_mark" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E400"></span></li>
+        <li><span class="glyphicons radar" data-name="radar" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E401"></span></li>
+        <li><span class="glyphicons skateboard" data-name="skateboard" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E402"></span></li>
+        <li><span class="glyphicons golf_course" data-name="golf_course" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E403"></span></li>
+        <li><span class="glyphicons sorting" data-name="sorting" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E404"></span></li>
+        <li><span class="glyphicons sort-by-alphabet" data-name="sort-by-alphabet" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E405"></span></li>
+        <li><span class="glyphicons sort-by-alphabet-alt" data-name="sort-by-alphabet-alt" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E406"></span></li>
+        <li><span class="glyphicons sort-by-order" data-name="sort-by-order" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E407"></span></li>
+        <li><span class="glyphicons sort-by-order-alt" data-name="sort-by-order-alt" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E408"></span></li>
+        <li><span class="glyphicons sort-by-attributes" data-name="sort-by-attributes" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E409"></span></li>
+        <li><span class="glyphicons sort-by-attributes-alt" data-name="sort-by-attributes-alt" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E410"></span></li>
+        <li><span class="glyphicons compressed" data-name="compressed" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E411"></span></li>
+        <li><span class="glyphicons package" data-name="package" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="1F4E6"></span></li>
+        <li><span class="glyphicons cloud_plus" data-name="cloud_plus" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E413"></span></li>
+        <li><span class="glyphicons cloud_minus" data-name="cloud_minus" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E414"></span></li>
+        <li><span class="glyphicons disk_save" data-name="disk_save" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E415"></span></li>
+        <li><span class="glyphicons disk_open" data-name="disk_open" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E416"></span></li>
+        <li><span class="glyphicons disk_saved" data-name="disk_saved" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E417"></span></li>
+        <li><span class="glyphicons disk_remove" data-name="disk_remove" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E418"></span></li>
+        <li><span class="glyphicons disk_import" data-name="disk_import" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E419"></span></li>
+        <li><span class="glyphicons disk_export" data-name="disk_export" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E420"></span></li>
+        <li><span class="glyphicons tower" data-name="tower" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E421"></span></li>
+        <li><span class="glyphicons send" data-name="send" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E422"></span></li>
+        <li><span class="glyphicons git_branch" data-name="git_branch" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E423"></span></li>
+        <li><span class="glyphicons git_create" data-name="git_create" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E424"></span></li>
+        <li><span class="glyphicons git_private" data-name="git_private" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E425"></span></li>
+        <li><span class="glyphicons git_delete" data-name="git_delete" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E426"></span></li>
+        <li><span class="glyphicons git_merge" data-name="git_merge" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E427"></span></li>
+        <li><span class="glyphicons git_pull_request" data-name="git_pull_request" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E428"></span></li>
+        <li><span class="glyphicons git_compare" data-name="git_compare" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E429"></span></li>
+        <li><span class="glyphicons git_commit" data-name="git_commit" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E430"></span></li>
+        <li><span class="glyphicons construction_cone" data-name="construction_cone" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E431"></span></li>
+        <li><span class="glyphicons shoe_steps" data-name="shoe_steps" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E432"></span></li>
+        <li><span class="glyphicons plus" data-name="plus" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="002B"></span></li>
+        <li><span class="glyphicons minus" data-name="minus" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="2212"></span></li>
+        <li><span class="glyphicons redo" data-name="redo" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E435"></span></li>
+        <li><span class="glyphicons undo" data-name="undo" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E436"></span></li>
+        <li><span class="glyphicons golf" data-name="golf" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E437"></span></li>
+        <li><span class="glyphicons hockey" data-name="hockey" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E438"></span></li>
+        <li><span class="glyphicons pipe" data-name="pipe" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E439"></span></li>
+        <li><span class="glyphicons wrench" data-name="wrench" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="1F527"></span></li>
+        <li><span class="glyphicons folder_closed" data-name="folder_closed" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E441"></span></li>
+        <li><span class="glyphicons phone_alt" data-name="phone_alt" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E442"></span></li>
+        <li><span class="glyphicons earphone" data-name="earphone" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E443"></span></li>
+        <li><span class="glyphicons floppy_disk" data-name="floppy_disk" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E444"></span></li>
+        <li><span class="glyphicons floppy_saved" data-name="floppy_saved" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E445"></span></li>
+        <li><span class="glyphicons floppy_remove" data-name="floppy_remove" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E446"></span></li>
+        <li><span class="glyphicons floppy_save" data-name="floppy_save" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E447"></span></li>
+        <li><span class="glyphicons floppy_open" data-name="floppy_open" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E448"></span></li>
+        <li><span class="glyphicons translate" data-name="translate" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E449"></span></li>
+        <li><span class="glyphicons fax" data-name="fax" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E450"></span></li>
+        <li><span class="glyphicons factory" data-name="factory" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="1F3ED"></span></li>
+        <li><span class="glyphicons shop_window" data-name="shop_window" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E452"></span></li>
+        <li><span class="glyphicons shop" data-name="shop" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E453"></span></li>
+        <li><span class="glyphicons kiosk" data-name="kiosk" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E454"></span></li>
+        <li><span class="glyphicons kiosk_wheels" data-name="kiosk_wheels" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E455"></span></li>
+        <li><span class="glyphicons kiosk_light" data-name="kiosk_light" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E456"></span></li>
+        <li><span class="glyphicons kiosk_food" data-name="kiosk_food" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E457"></span></li>
+        <li><span class="glyphicons transfer" data-name="transfer" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E458"></span></li>
+        <li><span class="glyphicons money" data-name="money" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E459"></span></li>
+        <li><span class="glyphicons header" data-name="header" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E460"></span></li>
+        <li><span class="glyphicons blacksmith" data-name="blacksmith" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E461"></span></li>
+        <li><span class="glyphicons saw_blade" data-name="saw_blade" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E462"></span></li>
+        <li><span class="glyphicons basketball" data-name="basketball" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E463"></span></li>
+        <li><span class="glyphicons server" data-name="server" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E464"></span></li>
+        <li><span class="glyphicons server_plus" data-name="server_plus" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E465"></span></li>
+        <li><span class="glyphicons server_minus" data-name="server_minus" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E466"></span></li>
+        <li><span class="glyphicons server_ban" data-name="server_ban" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E467"></span></li>
+        <li><span class="glyphicons server_flag" data-name="server_flag" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E468"></span></li>
+        <li><span class="glyphicons server_lock" data-name="server_lock" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E469"></span></li>
+        <li><span class="glyphicons server_new" data-name="server_new" data-type="NEW IN 1.8" data-prefix="glyphicons" data-utf="E470"></span></li>
+    </ul>
+</div>
+
+<legend>Social (Glyphicons)</legend>
+<div class="glyphicons-showcase" style="font-size: 20px;">
+    <ul>
+        <li><span class="social pinterest" data-name="pinterest" data-type="" data-prefix="social" data-utf="E001"></span></li>
+        <li><span class="social dropbox" data-name="dropbox" data-type="" data-prefix="social" data-utf="E002"></span></li>
+        <li><span class="social google_plus" data-name="google_plus" data-type="" data-prefix="social" data-utf="E003"></span></li>
+        <li><span class="social jolicloud" data-name="jolicloud" data-type="" data-prefix="social" data-utf="E004"></span></li>
+        <li><span class="social yahoo" data-name="yahoo" data-type="" data-prefix="social" data-utf="E005"></span></li>
+        <li><span class="social blogger" data-name="blogger" data-type="" data-prefix="social" data-utf="E006"></span></li>
+        <li><span class="social picasa" data-name="picasa" data-type="" data-prefix="social" data-utf="E007"></span></li>
+        <li><span class="social amazon" data-name="amazon" data-type="" data-prefix="social" data-utf="E008"></span></li>
+        <li><span class="social tumblr" data-name="tumblr" data-type="" data-prefix="social" data-utf="E009"></span></li>
+        <li><span class="social wordpress" data-name="wordpress" data-type="" data-prefix="social" data-utf="E010"></span></li>
+        <li><span class="social instapaper" data-name="instapaper" data-type="" data-prefix="social" data-utf="E011"></span></li>
+        <li><span class="social evernote" data-name="evernote" data-type="" data-prefix="social" data-utf="E012"></span></li>
+        <li><span class="social xing" data-name="xing" data-type="" data-prefix="social" data-utf="E013"></span></li>
+        <li><span class="social zootool" data-name="zootool" data-type="" data-prefix="social" data-utf="E014"></span></li>
+        <li><span class="social dribbble" data-name="dribbble" data-type="" data-prefix="social" data-utf="E015"></span></li>
+        <li><span class="social deviantart" data-name="deviantart" data-type="" data-prefix="social" data-utf="E016"></span></li>
+        <li><span class="social read_it_later" data-name="read_it_later" data-type="" data-prefix="social" data-utf="E017"></span></li>
+        <li><span class="social linked_in" data-name="linked_in" data-type="" data-prefix="social" data-utf="E018"></span></li>
+        <li><span class="social forrst" data-name="forrst" data-type="" data-prefix="social" data-utf="E019"></span></li>
+        <li><span class="social pinboard" data-name="pinboard" data-type="" data-prefix="social" data-utf="E020"></span></li>
+        <li><span class="social behance" data-name="behance" data-type="" data-prefix="social" data-utf="E021"></span></li>
+        <li><span class="social github" data-name="github" data-type="" data-prefix="social" data-utf="E022"></span></li>
+        <li><span class="social youtube" data-name="youtube" data-type="" data-prefix="social" data-utf="E023"></span></li>
+        <li><span class="social skitch" data-name="skitch" data-type="" data-prefix="social" data-utf="E024"></span></li>
+        <li><span class="social foursquare" data-name="foursquare" data-type="" data-prefix="social" data-utf="E025"></span></li>
+        <li><span class="social quora" data-name="quora" data-type="" data-prefix="social" data-utf="E026"></span></li>
+        <li><span class="social badoo" data-name="badoo" data-type="" data-prefix="social" data-utf="E027"></span></li>
+        <li><span class="social spotify" data-name="spotify" data-type="" data-prefix="social" data-utf="E028"></span></li>
+        <li><span class="social stumbleupon" data-name="stumbleupon" data-type="" data-prefix="social" data-utf="E029"></span></li>
+        <li><span class="social readability" data-name="readability" data-type="" data-prefix="social" data-utf="E030"></span></li>
+        <li><span class="social facebook" data-name="facebook" data-type="" data-prefix="social" data-utf="E031"></span></li>
+        <li><span class="social twitter" data-name="twitter" data-type="" data-prefix="social" data-utf="E032"></span></li>
+        <li><span class="social instagram" data-name="instagram" data-type="" data-prefix="social" data-utf="E033"></span></li>
+        <li><span class="social posterous_spaces" data-name="posterous_spaces" data-type="" data-prefix="social" data-utf="E034"></span></li>
+        <li><span class="social vimeo" data-name="vimeo" data-type="" data-prefix="social" data-utf="E035"></span></li>
+        <li><span class="social flickr" data-name="flickr" data-type="" data-prefix="social" data-utf="E036"></span></li>
+        <li><span class="social last_fm" data-name="last_fm" data-type="" data-prefix="social" data-utf="E037"></span></li>
+        <li><span class="social rss" data-name="rss" data-type="" data-prefix="social" data-utf="E038"></span></li>
+        <li><span class="social skype" data-name="skype" data-type="" data-prefix="social" data-utf="E039"></span></li>
+        <li><span class="social e-mail" data-name="e-mail" data-type="" data-prefix="social" data-utf="E040"></span></li>
+        <li><span class="social vine" data-name="vine" data-type="NEW IN 1.8" data-prefix="social" data-utf="E041"></span></li>
+        <li><span class="social myspace" data-name="myspace" data-type="NEW IN 1.8" data-prefix="social" data-utf="E042"></span></li>
+        <li><span class="social goodreads" data-name="goodreads" data-type="NEW IN 1.8" data-prefix="social" data-utf="E043"></span></li>
+        <li><span class="social apple" data-name="apple" data-type="NEW IN 1.8" data-prefix="social" data-utf="F8FF"></span></li>
+        <li><span class="social windows" data-name="windows" data-type="NEW IN 1.8" data-prefix="social" data-utf="E045"></span></li>
+        <li><span class="social yelp" data-name="yelp" data-type="NEW IN 1.8" data-prefix="social" data-utf="E046"></span></li>
+        <li><span class="social playstation" data-name="playstation" data-type="NEW IN 1.8" data-prefix="social" data-utf="E047"></span></li>
+        <li><span class="social xbox" data-name="xbox" data-type="NEW IN 1.8" data-prefix="social" data-utf="E048"></span></li>
+        <li><span class="social android" data-name="android" data-type="NEW IN 1.8" data-prefix="social" data-utf="E049"></span></li>
+        <li><span class="social ios" data-name="ios" data-type="NEW IN 1.8" data-prefix="social" data-utf="E050"></span></li>
+    </ul>
+</div>
+
+<legend>Filetypes (Glyphicons)</legend>
+<div class="glyphicons-showcase" style="font-size: 24px;">
+    <ul>
+        <li><span class="filetype txt" data-name="txt" data-type="TEXT" data-prefix="filetype" data-utf="E001"></span></li>
+        <li><span class="filetype doc" data-name="doc" data-type="TEXT" data-prefix="filetype" data-utf="E002"></span></li>
+        <li><span class="filetype rtf" data-name="rtf" data-type="TEXT" data-prefix="filetype" data-utf="E003"></span></li>
+        <li><span class="filetype log" data-name="log" data-type="TEXT" data-prefix="filetype" data-utf="E004"></span></li>
+        <li><span class="filetype tex" data-name="tex" data-type="TEXT" data-prefix="filetype" data-utf="E005"></span></li>
+        <li><span class="filetype msg" data-name="msg" data-type="TEXT" data-prefix="filetype" data-utf="E006"></span></li>
+        <li><span class="filetype text" data-name="text" data-type="TEXT" data-prefix="filetype" data-utf="E007"></span></li>
+        <li><span class="filetype wpd" data-name="wpd" data-type="TEXT" data-prefix="filetype" data-utf="E008"></span></li>
+        <li><span class="filetype wps" data-name="wps" data-type="TEXT" data-prefix="filetype" data-utf="E009"></span></li>
+        <li><span class="filetype docx" data-name="docx" data-type="TEXT" data-prefix="filetype" data-utf="E010"></span></li>
+        <li><span class="filetype page" data-name="page" data-type="TEXT" data-prefix="filetype" data-utf="E011"></span></li>
+        <li><span class="filetype csv" data-name="csv" data-type="DATA" data-prefix="filetype" data-utf="E012"></span></li>
+        <li><span class="filetype dat" data-name="dat" data-type="DATA" data-prefix="filetype" data-utf="E013"></span></li>
+        <li><span class="filetype tar" data-name="tar" data-type="DATA" data-prefix="filetype" data-utf="E014"></span></li>
+        <li><span class="filetype xml" data-name="xml" data-type="DATA" data-prefix="filetype" data-utf="E015"></span></li>
+        <li><span class="filetype vcf" data-name="vcf" data-type="DATA" data-prefix="filetype" data-utf="E016"></span></li>
+        <li><span class="filetype pps" data-name="pps" data-type="DATA" data-prefix="filetype" data-utf="E017"></span></li>
+        <li><span class="filetype key" data-name="key" data-type="DATA" data-prefix="filetype" data-utf="1F511"></span></li>
+        <li><span class="filetype ppt" data-name="ppt" data-type="DATA" data-prefix="filetype" data-utf="E019"></span></li>
+        <li><span class="filetype pptx" data-name="pptx" data-type="DATA" data-prefix="filetype" data-utf="E020"></span></li>
+        <li><span class="filetype sdf" data-name="sdf" data-type="DATA" data-prefix="filetype" data-utf="E021"></span></li>
+        <li><span class="filetype gbr" data-name="gbr" data-type="DATA" data-prefix="filetype" data-utf="E022"></span></li>
+        <li><span class="filetype ged" data-name="ged" data-type="DATA" data-prefix="filetype" data-utf="E023"></span></li>
+        <li><span class="filetype mp3" data-name="mp3" data-type="AUDIO" data-prefix="filetype" data-utf="E024"></span></li>
+        <li><span class="filetype m4a" data-name="m4a" data-type="AUDIO" data-prefix="filetype" data-utf="E025"></span></li>
+        <li><span class="filetype waw" data-name="waw" data-type="AUDIO" data-prefix="filetype" data-utf="E026"></span></li>
+        <li><span class="filetype wma" data-name="wma" data-type="AUDIO" data-prefix="filetype" data-utf="E027"></span></li>
+        <li><span class="filetype mpa" data-name="mpa" data-type="AUDIO" data-prefix="filetype" data-utf="E028"></span></li>
+        <li><span class="filetype iff" data-name="iff" data-type="AUDIO" data-prefix="filetype" data-utf="E029"></span></li>
+        <li><span class="filetype aif" data-name="aif" data-type="AUDIO" data-prefix="filetype" data-utf="E030"></span></li>
+        <li><span class="filetype ra" data-name="ra" data-type="AUDIO" data-prefix="filetype" data-utf="E031"></span></li>
+        <li><span class="filetype mid" data-name="mid" data-type="AUDIO" data-prefix="filetype" data-utf="E032"></span></li>
+        <li><span class="filetype m3v" data-name="m3v" data-type="AUDIO" data-prefix="filetype" data-utf="E033"></span></li>
+        <li><span class="filetype e_3gp" data-name="e_3gp" data-type="VIDEO" data-prefix="filetype" data-utf="E034"></span></li>
+        <li><span class="filetype shf" data-name="shf" data-type="VIDEO" data-prefix="filetype" data-utf="E035"></span></li>
+        <li><span class="filetype avi" data-name="avi" data-type="VIDEO" data-prefix="filetype" data-utf="E036"></span></li>
+        <li><span class="filetype asx" data-name="asx" data-type="VIDEO" data-prefix="filetype" data-utf="E037"></span></li>
+        <li><span class="filetype mp4" data-name="mp4" data-type="VIDEO" data-prefix="filetype" data-utf="E038"></span></li>
+        <li><span class="filetype e_3g2" data-name="e_3g2" data-type="VIDEO" data-prefix="filetype" data-utf="E039"></span></li>
+        <li><span class="filetype mpg" data-name="mpg" data-type="VIDEO" data-prefix="filetype" data-utf="E040"></span></li>
+        <li><span class="filetype asf" data-name="asf" data-type="VIDEO" data-prefix="filetype" data-utf="E041"></span></li>
+        <li><span class="filetype vob" data-name="vob" data-type="VIDEO" data-prefix="filetype" data-utf="E042"></span></li>
+        <li><span class="filetype wmv" data-name="wmv" data-type="VIDEO" data-prefix="filetype" data-utf="E043"></span></li>
+        <li><span class="filetype mov" data-name="mov" data-type="VIDEO" data-prefix="filetype" data-utf="E044"></span></li>
+        <li><span class="filetype srt" data-name="srt" data-type="VIDEO" data-prefix="filetype" data-utf="E045"></span></li>
+        <li><span class="filetype m4v" data-name="m4v" data-type="VIDEO" data-prefix="filetype" data-utf="E046"></span></li>
+        <li><span class="filetype flv" data-name="flv" data-type="VIDEO" data-prefix="filetype" data-utf="E047"></span></li>
+        <li><span class="filetype rm" data-name="rm" data-type="VIDEO" data-prefix="filetype" data-utf="E048"></span></li>
+        <li><span class="filetype png" data-name="png" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E049"></span></li>
+        <li><span class="filetype psd" data-name="psd" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E050"></span></li>
+        <li><span class="filetype psp" data-name="psp" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E051"></span></li>
+        <li><span class="filetype jpg" data-name="jpg" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E052"></span></li>
+        <li><span class="filetype tif" data-name="tif" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E053"></span></li>
+        <li><span class="filetype tiff" data-name="tiff" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E054"></span></li>
+        <li><span class="filetype gif" data-name="gif" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E055"></span></li>
+        <li><span class="filetype bmp" data-name="bmp" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E056"></span></li>
+        <li><span class="filetype tga" data-name="tga" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E057"></span></li>
+        <li><span class="filetype thm" data-name="thm" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E058"></span></li>
+        <li><span class="filetype yuv" data-name="yuv" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E059"></span></li>
+        <li><span class="filetype dds" data-name="dds" data-type="RASTER IMAGE" data-prefix="filetype" data-utf="E060"></span></li>
+        <li><span class="filetype ai" data-name="ai" data-type="VECTOR IMAGE" data-prefix="filetype" data-utf="E061"></span></li>
+        <li><span class="filetype eps" data-name="eps" data-type="VECTOR IMAGE" data-prefix="filetype" data-utf="E062"></span></li>
+        <li><span class="filetype ps" data-name="ps" data-type="VECTOR IMAGE" data-prefix="filetype" data-utf="E063"></span></li>
+        <li><span class="filetype svg" data-name="svg" data-type="VECTOR IMAGE" data-prefix="filetype" data-utf="E064"></span></li>
+        <li><span class="filetype pdf" data-name="pdf" data-type="PAGE LAYOUT" data-prefix="filetype" data-utf="E065"></span></li>
+        <li><span class="filetype pct" data-name="pct" data-type="PAGE LAYOUT" data-prefix="filetype" data-utf="E066"></span></li>
+        <li><span class="filetype indd" data-name="indd" data-type="PAGE LAYOUT" data-prefix="filetype" data-utf="E067"></span></li>
+        <li><span class="filetype xlr" data-name="xlr" data-type="SPREADSHEET" data-prefix="filetype" data-utf="E068"></span></li>
+        <li><span class="filetype xls" data-name="xls" data-type="SPREADSHEET" data-prefix="filetype" data-utf="E069"></span></li>
+        <li><span class="filetype xlsx" data-name="xlsx" data-type="SPREADSHEET" data-prefix="filetype" data-utf="E070"></span></li>
+        <li><span class="filetype db" data-name="db" data-type="DATABASE" data-prefix="filetype" data-utf="E071"></span></li>
+        <li><span class="filetype dbf" data-name="dbf" data-type="DATABASE" data-prefix="filetype" data-utf="E072"></span></li>
+        <li><span class="filetype mdb" data-name="mdb" data-type="DATABASE" data-prefix="filetype" data-utf="E073"></span></li>
+        <li><span class="filetype pdb" data-name="pdb" data-type="DATABASE" data-prefix="filetype" data-utf="E074"></span></li>
+        <li><span class="filetype sql" data-name="sql" data-type="DATABASE" data-prefix="filetype" data-utf="E075"></span></li>
+        <li><span class="filetype aacd" data-name="aacd" data-type="DATABASE" data-prefix="filetype" data-utf="E076"></span></li>
+        <li><span class="filetype app" data-name="app" data-type="PROGRAM" data-prefix="filetype" data-utf="E077"></span></li>
+        <li><span class="filetype exe" data-name="exe" data-type="PROGRAM" data-prefix="filetype" data-utf="E078"></span></li>
+        <li><span class="filetype com" data-name="com" data-type="PROGRAM" data-prefix="filetype" data-utf="E079"></span></li>
+        <li><span class="filetype bat" data-name="bat" data-type="PROGRAM" data-prefix="filetype" data-utf="E080"></span></li>
+        <li><span class="filetype apk" data-name="apk" data-type="PROGRAM" data-prefix="filetype" data-utf="E081"></span></li>
+        <li><span class="filetype jar" data-name="jar" data-type="PROGRAM" data-prefix="filetype" data-utf="E082"></span></li>
+        <li><span class="filetype hsf" data-name="hsf" data-type="PROGRAM" data-prefix="filetype" data-utf="E083"></span></li>
+        <li><span class="filetype pif" data-name="pif" data-type="PROGRAM" data-prefix="filetype" data-utf="E084"></span></li>
+        <li><span class="filetype vb" data-name="vb" data-type="PROGRAM" data-prefix="filetype" data-utf="E085"></span></li>
+        <li><span class="filetype cgi" data-name="cgi" data-type="PROGRAM" data-prefix="filetype" data-utf="E086"></span></li>
+        <li><span class="filetype css" data-name="css" data-type="WEB" data-prefix="filetype" data-utf="E087"></span></li>
+        <li><span class="filetype js" data-name="js" data-type="WEB" data-prefix="filetype" data-utf="E088"></span></li>
+        <li><span class="filetype php" data-name="php" data-type="WEB" data-prefix="filetype" data-utf="E089"></span></li>
+        <li><span class="filetype xhtml" data-name="xhtml" data-type="WEB" data-prefix="filetype" data-utf="E090"></span></li>
+        <li><span class="filetype htm" data-name="htm" data-type="WEB" data-prefix="filetype" data-utf="E091"></span></li>
+        <li><span class="filetype html" data-name="html" data-type="WEB" data-prefix="filetype" data-utf="E092"></span></li>
+        <li><span class="filetype asp" data-name="asp" data-type="WEB" data-prefix="filetype" data-utf="E093"></span></li>
+        <li><span class="filetype cer" data-name="cer" data-type="WEB" data-prefix="filetype" data-utf="E094"></span></li>
+        <li><span class="filetype jsp" data-name="jsp" data-type="WEB" data-prefix="filetype" data-utf="E095"></span></li>
+        <li><span class="filetype cfm" data-name="cfm" data-type="WEB" data-prefix="filetype" data-utf="E096"></span></li>
+        <li><span class="filetype aspx" data-name="aspx" data-type="WEB" data-prefix="filetype" data-utf="E097"></span></li>
+        <li><span class="filetype rss" data-name="rss" data-type="WEB" data-prefix="filetype" data-utf="E098"></span></li>
+        <li><span class="filetype csr" data-name="csr" data-type="WEB" data-prefix="filetype" data-utf="E099"></span></li>
+        <li><span class="filetype less" data-name="less" data-type="WEB" data-prefix="filetype" data-utf="003C"></span></li>
+        <li><span class="filetype otf" data-name="otf" data-type="FONT" data-prefix="filetype" data-utf="E101"></span></li>
+        <li><span class="filetype ttf" data-name="ttf" data-type="FONT" data-prefix="filetype" data-utf="E102"></span></li>
+        <li><span class="filetype font" data-name="font" data-type="FONT" data-prefix="filetype" data-utf="E103"></span></li>
+        <li><span class="filetype fnt" data-name="fnt" data-type="FONT" data-prefix="filetype" data-utf="E104"></span></li>
+        <li><span class="filetype eot" data-name="eot" data-type="FONT" data-prefix="filetype" data-utf="E105"></span></li>
+        <li><span class="filetype woff" data-name="woff" data-type="FONT" data-prefix="filetype" data-utf="E106"></span></li>
+        <li><span class="filetype zip" data-name="zip" data-type="COMPRESSED" data-prefix="filetype" data-utf="E107"></span></li>
+        <li><span class="filetype zipx" data-name="zipx" data-type="COMPRESSED" data-prefix="filetype" data-utf="E108"></span></li>
+        <li><span class="filetype rar" data-name="rar" data-type="COMPRESSED" data-prefix="filetype" data-utf="E109"></span></li>
+        <li><span class="filetype targ" data-name="targ" data-type="COMPRESSED" data-prefix="filetype" data-utf="E110"></span></li>
+        <li><span class="filetype sitx" data-name="sitx" data-type="COMPRESSED" data-prefix="filetype" data-utf="E111"></span></li>
+        <li><span class="filetype deb" data-name="deb" data-type="COMPRESSED" data-prefix="filetype" data-utf="E112"></span></li>
+        <li><span class="filetype e_7z" data-name="e_7z" data-type="COMPRESSED" data-prefix="filetype" data-utf="E113"></span></li>
+        <li><span class="filetype pkg" data-name="pkg" data-type="COMPRESSED" data-prefix="filetype" data-utf="E114"></span></li>
+        <li><span class="filetype rpm" data-name="rpm" data-type="COMPRESSED" data-prefix="filetype" data-utf="E115"></span></li>
+        <li><span class="filetype cbr" data-name="cbr" data-type="COMPRESSED" data-prefix="filetype" data-utf="E116"></span></li>
+        <li><span class="filetype gz" data-name="gz" data-type="COMPRESSED" data-prefix="filetype" data-utf="E117"></span></li>
+        <li><span class="filetype dmg" data-name="dmg" data-type="DISK IMAGE" data-prefix="filetype" data-utf="E118"></span></li>
+        <li><span class="filetype cue" data-name="cue" data-type="DISK IMAGE" data-prefix="filetype" data-utf="E119"></span></li>
+        <li><span class="filetype bin" data-name="bin" data-type="DISK IMAGE" data-prefix="filetype" data-utf="E120"></span></li>
+        <li><span class="filetype iso" data-name="iso" data-type="DISK IMAGE" data-prefix="filetype" data-utf="E121"></span></li>
+        <li><span class="filetype hdf" data-name="hdf" data-type="DISK IMAGE" data-prefix="filetype" data-utf="E122"></span></li>
+        <li><span class="filetype vcd" data-name="vcd" data-type="DISK IMAGE" data-prefix="filetype" data-utf="E123"></span></li>
+        <li><span class="filetype bak" data-name="bak" data-type="MISC" data-prefix="filetype" data-utf="E124"></span></li>
+        <li><span class="filetype tmp" data-name="tmp" data-type="MISC" data-prefix="filetype" data-utf="E125"></span></li>
+        <li><span class="filetype ics" data-name="ics" data-type="MISC" data-prefix="filetype" data-utf="E126"></span></li>
+        <li><span class="filetype msi" data-name="msi" data-type="MISC" data-prefix="filetype" data-utf="E127"></span></li>
+        <li><span class="filetype cfg" data-name="cfg" data-type="MISC" data-prefix="filetype" data-utf="E128"></span></li>
+        <li><span class="filetype ini" data-name="ini" data-type="MISC" data-prefix="filetype" data-utf="E129"></span></li>
+        <li><span class="filetype prf" data-name="prf" data-type="MISC" data-prefix="filetype" data-utf="E130"></span></li>
+    </ul>
+</div>
+
+<hr>
+
+<div class="btn-toolbar">
+    <div class="btn-group">
+        <a class="btn btn-default" href="#"><span class="halflings align-left"></span></a>
+        <a class="btn btn-default" href="#"><span class="halflings align-center"></span></a>
+        <a class="btn btn-default" href="#"><span class="halflings align-right"></span></a>
+        <a class="btn btn-default" href="#"><span class="halflings align-justify"></span></a>
+    </div>
+</div>
+
+<hr>
+
+<div class="btn-group">
+    <a class="btn btn-default btn-primary" href="#"><span class="glyphicon glyphicon-user"></span> User</a>
+    <a class="btn btn-default btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+    <ul class="dropdown-menu">
+        <li><a href="#"><span class="halflings pencil"></span> Edit</a></li>
+        <li><a href="#"><span class="halflings trash"></span> Delete</a></li>
+        <li><a href="#"><span class="halflings ban-circle"></span> Ban</a></li>
+        <li class="divider"></li>
+        <li><a href="#"><span class="halflings user"></span> Make admin</a></li>
+    </ul>
+</div>
+
+<hr>
+
+<ul class="nav nav-pills nav-stacked">
+    <li class="active"><a href="#"><span class="halflings home"></span> Home</a></li>
+    <li><a href="#"><span class="halflings book"></span> Library</a></li>
+    <li><a href="#"><span class="halflings pencil"></span> Applications</a></li>
+</ul>
+
+<hr>
+
+
+
+<div class="control-group">
+    <label class="control-label" for="inputIcon">Email address</label>
+    <div class="controls">
+        <div class="input-group">
+            <span class="input-group-addon"><span class="halflings envelope"></span></span>
+            <input class="col col-lg-2 form-control" id="inputIcon" type="text">
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="dropdown">
+    <!-- Link or button to toggle dropdown -->
+    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
+        <li><a tabindex="-1" href="#">Action</a></li>
+        <li><a tabindex="-1" href="#">Another action</a></li>
+        <li><a tabindex="-1" href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li><a tabindex="-1" href="#">Separated link</a></li>
+    </ul>
+</div>
+
+<hr>
+
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Action <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        <li><a href="#">Action</a></li>
+        <li><a href="#">Another action</a></li>
+        <li><a href="#">Something else here</a></li>
+        <li class="divider"></li>
+        <li><a href="#">Separated link</a></li>
+    </ul>
+</div>
+
+<hr>
+
+<ul class="breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li><a href="#">Library</a></li>
+    <li class="active">Data</li>
+</ul>
+
+<hr>
+
+<ul class="pagination">
+    <li class="disabled"><a href="#">«</a></li>
+    <li class="active"><a href="#">1</a></li>
+    <li><a href="#">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li><a href="#">»</a></li>
+</ul>
+
+<hr>
+
+<a href="#">Inbox <span class="badge">42</span></a>
+
+<hr>
+
+<div class=row>
+    <div class="col col-lg-3">
+        <a href="#" class="thumbnail">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQQAAAC0CAYAAABytVLLAAAGUElEQVR4nO3a3VITyx6H4XX/lxJGiAIuFBEU1KigoiKWBETlIxGYW/jvg1X5VZCoG9xLrNrPwXPSaYauovqdSQ9/tW1bAG3b1l/XvQDgzyEIQAgCEIIAhCAAIQhACAIQggCEIAAhCEAIAhCCAIQgACEIQAgCEIIAhCAAIQhACAIQggCEIAAhCEAIAhCCAIQgACEIQAgCEIIAhCAAIQhACAIQggCEIAAhCEAIAhCCAIQgACEIQAgCEIIAhCAAIQhACAIQggCEIAAhCEAIAhCCAIQgACEIQAgCEIIAhCAAIQhACAIQggCEIAAhCEAIAhCCAIQgACEIQAgCEIIAhCAAIQhACAIQggCEIAAhCEAIAhCCAIQgACEIQAgCEIIAhCAAIQhACAIQggCEIAAhCNdgZ2en1tbWan5+vmZmZqppmpqbm6ter1eDwWDiz+zv79fKykp1u91qmqa63W4tLi7Whw8fzs0bDofV6/Xq1q1bmbe2tlZHR0dXWutgMKher1cLCwvVNE11Op3qdDr19u3bifP7/X4tLS3VzMxMTU1N1fT0dC0uLtb29vaFuf/rtfLrBOEa3L9/PxvrW91u90IUtra2ampqauL858+fZ97JyUnNz89/97pX2WifPn2aeL1JQdjZ2Tm3zhs3bpz7mTdv3vyra+XXCcI1WF5ertXV1er3+zUYDKrf79fNmzezIdbX1zP34OAgd+bZ2dnq9/t1enpaw+GwdnZ2amdnJ3OfPn2aazx69KgODw9rY2MjYysrK5de6+HhYfV6vdre3q5er/fDIKysrOTz169fV9v+88QwGvv777//1bXy6wThGgyHwwtjr169ymZ4+PBhxp88eZLxvb29H1632+1Wp9Oppmnq9PQ047du3apOp1NTU1M1HA5rd3c3d/Ll5eXMe/v2bX5Xr9e7cP0XL178MAhLS0v5fPwOP/pd8/Pzl17rdf+t/t8Iwh9i/O44/oQwNzeXjbO+vl63b9+ubrdbd+7cqa2trcw7OjrKz8/NzZ279vhG7ff71bZtPX/+PGNbW1t1fHxc09PTuZOPb9KRnwVhc3Mzn29sbNTp6WltbW1l7NmzZ1daK7+PIPwBjo6Ocsecnp6u4+PjfDZ+kDfJxsZGte0/h46jsYWFhXPXf/DgQT4bHe6dnZ3VnTt38jvv3r2b8BwcHExc58+C0LZtvXz5MmEZaZqmnj17VmdnZ1daK7+PIFyzL1++5DG5aZoLd8XxICwvL9fXr19rf38/B3ZN09RwOLzSJjs8PLyweccP/r71syAcHx/XvXv3Mmf0pmG0pi9fvlTbCsKfTBCu0d7eXs3MzOQuvbu7e2HO6Mmh0+mcO0BcXl7O+O7u7pUfw9fW1s5t4ElfFUZ+FoRRDKampnLecXBwkOiM1uUrw59LEK7J+/fvc/e/efNmff78eeK88VeU4xtk/ER/f3+/2vb7B3WjNxjfHtSNHy7+6DBx5GdBGH8bMj4+/tQweqV62bXyewjCNXjz5k024szMTL1//74+fvwYo0frtm1re3s7m2l1dbXOzs7q6OgoTxbjd/VJr/LW19cnvsobDofZfLOzs7W6ujrxSeTs7KwGg0ENBoNz19rc3Mz4aO5ok3/vCaFpmjo5Obn0Wvl9BOEajN8xJ1lcXDw3f/zrQdM05+7q428aLvPPPqMnjNHmPTk5qdnZ2cwdbfTDw8MfrrXT6SRIL1++PDf+7fnE48ePr7RWfh9BuAaXDcLp6Wm9ePGi5ufnq2mamp6ernv37k38jv3f/Dvw+P8bPH36NON7e3uJzdLSUrXt5YLQtm29e/euFhcXc6B448aNWlhYqM3NzbxluMxa+b0EAQhBAEIQgBAEIAQBCEEAQhCAEAQgBAEIQQBCEIAQBCAEAQhBAEIQgBAEIAQBCEEAQhCAEAQgBAEIQQBCEIAQBCAEAQhBAEIQgBAEIAQBCEEAQhCAEAQgBAEIQQBCEIAQBCAEAQhBAEIQgBAEIAQBCEEAQhCAEAQgBAEIQQBCEIAQBCAEAQhBAEIQgBAEIAQBCEEAQhCAEAQgBAEIQQBCEIAQBCAEAQhBAEIQgBAEIAQBCEEAQhCAEAQgBAEIQQBCEIAQBCAEAQhBAEIQgBAEIAQBCEEAQhCAEAQgBAEIQQBCEIAQBCAEAQhBAOI/kU/B21NMfy4AAAAASUVORK5CYII=" style="width: 260px; height: 180px;" data-src="holder.js/260x180" alt="260x180">
+        </a>
+    </div>
+</div>
+
+<hr>
+
+<div class="alert">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>Warning!</strong> Best check yo self, you're not looking too good.
+</div>
+
+<hr>
+
+<div class="alert alert-block">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4>Warning!</h4>
+    <p>...</p>
+</div>
+
+<hr>
+
+<div class="progress">
+    <div class="progress-bar" style="width: 60%;"></div>
+</div>
+
+<hr>
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <span class="halflings chevron-right"></span>
+        <span class="badge">14</span>
+        Cras justo odio
+    </li>
+    <li class="list-group-item">
+        <span class="halflings chevron-right"></span>
+        <span class="badge">2</span>
+        Dapibus ac facilisis in
+    </li>
+    <li class="list-group-item">
+        <span class="halflings chevron-right"></span>
+        <span class="badge">1</span>
+        Morbi leo risus
+    </li>
+</ul>
+
+<hr>
+
+<div class="panel panel-success">
+    <div class="panel-heading ">Panel heading</div>
+    Panel content
+    <div class="panel-footer">Panel footer</div>
+</div>
+
+<hr>
+<h3>Alert examples</h3>
+<div class="alert alert-success" role="alert">Well done! You successfully read this important alert message.</div>
+<div class="alert alert-info" role="alert">Heads up! This alert needs your attention, but it's not super important.</div>
+<div class="alert alert-warning" role="alert">Warning! Better check yourself, you're not looking too good.</div>
+<div class="alert alert-danger" role="alert">Oh snap! Change a few things up and try submitting again.</div>
+
+
+<hr>
+
+@section Script
+{
+    <script type="text/javascript" charset="utf-8" src="/Cosacs/static/js/lib/chosen.jquery.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/Cosacs/static/js/lib/select2.js"></script>
+    <script>
+        $(function() {
+            $(".chosendropdown").chosen({
+                allow_single_deselect: true
+            });
+            $(".select2dropdown").select2({
+                allowClear: true
+            });
+        });        
+    </script>
+}

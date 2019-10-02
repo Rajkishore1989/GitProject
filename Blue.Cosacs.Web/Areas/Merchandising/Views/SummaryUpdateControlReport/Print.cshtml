@@ -1,0 +1,344 @@
+﻿@{
+    ViewBag.Title = "Inventory Summary Control";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+@section Head
+{
+    <style type="text/css">
+        tbody.pageBreak td, tbody.pageNoBreak td {
+            width: 300px !important;
+        }
+
+        tfoot {
+            display: block;
+        }
+      
+        </style>
+}
+<div data-module="merchandising/reports/summaryUpdateControl/init" ng-controller="SummaryUpdateControlReportPrintCtrl" ng-cloak class="buffer-sm bottom">
+    <div ng-show="!results">
+        Loading results...
+    </div>
+    <table class="main bordered small" ng-hide="!results">
+        <tbody>
+            <tr>
+                <th>Inventory Summary Control</th>
+                <th colspan="2">Transaction</th>
+                <th colspan="2">Regular Inventory</th>
+                <th colspan="2">Repossessed Inventory</th>
+                <th colspan="2">Spare Parts</th>
+            </tr>
+            <tr>
+                <th class="col-sm"></th>
+                <th class="col-sm">ID</th>
+                <th class="col-sm">Date</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+            </tr>
+            <tr class="header-row">
+                <td>Opening Inventory</td>
+                <td></td>
+                <td></td>
+                <td>{{results.openingInventory.regularValue | pbCurrency}}</td>
+                <td>{{results.openingInventory.regularUnits || 0}}</td>
+                <td>{{results.openingInventory.repossessedValue | pbCurrency}}</td>
+                <td>{{results.openingInventory.repossessedUnits || 0}}</td>
+                <td>{{results.openingInventory.sparePartsValue | pbCurrency}}</td>
+                <td>{{results.openingInventory.sparePartsUnits || 0}}</td>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="pg in results.summaries['Goods Receipt'].rows" class="pageBreak">
+            <tr class="header-row" ng-show="!$index">
+                <td>{{rowName['Goods Receipt']}}</td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Goods Receipt'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Goods Receipt'].regUnits || 0}}</td>
+                <td>{{results.summaries['Goods Receipt'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Goods Receipt'].repUnits || 0}}</td>
+                <td>{{results.summaries['Goods Receipt'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Goods Receipt'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in pg | limitTo:rowLimit">
+                <td></td>
+                <td>{{x.transactionUrl}}</td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="pg in results.summaries['Stock Transfer'].rows" class="pageBreak">
+            <tr>
+                <th>Inventory Summary Control</th>
+                <th colspan="2">Transaction</th>
+                <th colspan="2">Regular Inventory</th>
+                <th colspan="2">Repossessed Inventory</th>
+                <th colspan="2">Spare Parts</th>
+            </tr>
+            <tr>
+                <th class="col-sm"></th>
+                <th class="col-sm">ID</th>
+                <th class="col-sm">Date</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+            </tr>
+            <tr class="header-row" ng-show="!$index">
+                <td>{{rowName['Stock Transfer']}}</td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Stock Transfer'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Stock Transfer'].regUnits || 0}}</td>
+                <td>{{results.summaries['Stock Transfer'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Stock Transfer'].repUnits || 0}}</td>
+                <td>{{results.summaries['Stock Transfer'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Stock Transfer'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in pg | limitTo:rowLimit">
+                <td></td>
+                <td>{{x.transactionUrl}}</td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="pg in results.summaries['Deliveries'].rows" class="pageBreak">
+            <tr>
+                <th>Inventory Summary Control</th>
+                <th colspan="2">Transaction</th>
+                <th colspan="2">Regular Inventory</th>
+                <th colspan="2">Repossessed Inventory</th>
+                <th colspan="2">Spare Parts</th>
+            </tr>
+            <tr>
+                <th class="col-sm"></th>
+                <th class="col-sm">ID</th>
+                <th class="col-sm">Date</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+            </tr>
+            <tr class="header-row" ng-show="!$index">
+                <td>{{rowName['Deliveries']}}</td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Deliveries'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Deliveries'].regUnits || 0}}</td>
+                <td>{{results.summaries['Deliveries'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Deliveries'].repUnits || 0}}</td>
+                <td>{{results.summaries['Deliveries'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Deliveries'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in pg | limitTo:rowLimit">
+                <td></td>
+                <td>{{x.transactionUrl}}</td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="pg in results.summaries['Collects'].rows" class="pageBreak">
+            <tr>
+                <th>Inventory Summary Control</th>
+                <th colspan="2">Transaction</th>
+                <th colspan="2">Regular Inventory</th>
+                <th colspan="2">Repossessed Inventory</th>
+                <th colspan="2">Spare Parts</th>
+            </tr>
+            <tr>
+                <th class="col-sm"></th>
+                <th class="col-sm">ID</th>
+                <th class="col-sm">Date</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+            </tr>
+            <tr class="header-row" ng-show="!$index">
+                <td>{{rowName['Collects']}}</td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Collects'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Collects'].regUnits || 0}}</td>
+                <td>{{results.summaries['Collects'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Collects'].repUnits || 0}}</td>
+                <td>{{results.summaries['Collects'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Collects'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in pg | limitTo:rowLimit">
+                <td></td>
+                <td>{{x.transactionUrl}}</td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="pg in results.summaries['Inventory Count Adjustments'].rows" class="pageBreak">
+            <tr>
+                <th>Inventory Summary Control</th>
+                <th colspan="2">Transaction</th>
+                <th colspan="2">Regular Inventory</th>
+                <th colspan="2">Repossessed Inventory</th>
+                <th colspan="2">Spare Parts</th>
+            </tr>
+            <tr>
+                <th class="col-sm"></th>
+                <th class="col-sm">ID</th>
+                <th class="col-sm">Date</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+            </tr>
+            <tr class="header-row" ng-show="!$index">
+                <td>{{rowName['Inventory Count Adjustments']}}</td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Inventory Count Adjustments'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].regUnits || 0}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].repUnits || 0}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Inventory Count Adjustments'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in pg | limitTo:rowLimit">
+                <td></td>
+                <td>{{x.transactionUrl}}</td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+        </tbody>
+        <tbody ng-repeat="pg in results.summaries['Adjustment Gains'].rows" class="pageBreak">
+            <tr>
+                <th>Inventory Summary Control</th>
+                <th colspan="2">Transaction</th>
+                <th colspan="2">Regular Inventory</th>
+                <th colspan="2">Repossessed Inventory</th>
+                <th colspan="2">Spare Parts</th>
+            </tr>
+            <tr>
+                <th class="col-sm"></th>
+                <th class="col-sm">ID</th>
+                <th class="col-sm">Date</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+                <th class="col-sm">Value</th>
+                <th class="col-sm">Units</th>
+            </tr>
+            <tr class="header-row" ng-show="!$index">
+                <td>{{rowName['Adjustment Gains']}}</td>
+                <td></td>
+                <td></td>
+                <td>{{results.summaries['Adjustment Gains'].regVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Gains'].regUnits || 0}}</td>
+                <td>{{results.summaries['Adjustment Gains'].repVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Gains'].repUnits || 0}}</td>
+                <td>{{results.summaries['Adjustment Gains'].spVal | pbCurrency}}</td>
+                <td>{{results.summaries['Adjustment Gains'].spUnits || 0}}</td>
+            </tr>
+            <tr ng-repeat="x in pg | limitTo:rowLimit">
+                <td></td>
+                <td>{{x.transactionUrl}}</td>
+                <td>{{x.transactionDate | pbDate }}</td>
+                <td>{{x.regVal | pbCurrency:null:true}}</td>
+                <td>{{x.regUnits || ''}}</td>
+                <td>{{x.repVal | pbCurrency:null:true}}</td>
+                <td>{{x.repUnits || ''}}</td>
+                <td>{{x.spVal | pbCurrency:null:true}}</td>
+                <td>{{x.spUnits || ''}}</td>
+            </tr>
+        </tbody>
+    <tbody ng-repeat="pg in results.summaries['Adjustment Losses'].rows" class="pageBreak">
+    <tr>
+        <th>Inventory Summary Control</th>
+        <th colspan="2">Transaction</th>
+        <th colspan="2">Regular Inventory</th>
+        <th colspan="2">Repossessed Inventory</th>
+        <th colspan="2">Spare Parts</th>
+    </tr>
+    <tr>
+        <th class="col-sm"></th>
+        <th class="col-sm">ID</th>
+        <th class="col-sm">Date</th>
+        <th class="col-sm">Value</th>
+        <th class="col-sm">Units</th>
+        <th class="col-sm">Value</th>
+        <th class="col-sm">Units</th>
+        <th class="col-sm">Value</th>
+        <th class="col-sm">Units</th>
+    </tr>
+    <tr class="header-row" ng-show="!$index">
+        <td>{{rowName['Adjustment Losses']}}</td>
+        <td></td>
+        <td></td>
+        <td>{{results.summaries['Adjustment Losses'].regVal | pbCurrency}}</td>
+        <td>{{results.summaries['Adjustment Losses'].regUnits || 0}}</td>
+        <td>{{results.summaries['Adjustment Losses'].repVal | pbCurrency}}</td>
+        <td>{{results.summaries['Adjustment Losses'].repUnits || 0}}</td>
+        <td>{{results.summaries['Adjustment Losses'].spVal | pbCurrency}}</td>
+        <td>{{results.summaries['Adjustment Losses'].spUnits || 0}}</td>
+    </tr>
+    <tr ng-repeat="x in pg | limitTo:rowLimit">
+        <td></td>
+        <td>{{x.transactionUrl}}</td>
+        <td>{{x.transactionDate | pbDate }}</td>
+        <td>{{x.regVal | pbCurrency:null:true}}</td>
+        <td>{{x.regUnits || ''}}</td>
+        <td>{{x.repVal | pbCurrency:null:true}}</td>
+        <td>{{x.repUnits || ''}}</td>
+        <td>{{x.spVal | pbCurrency:null:true}}</td>
+        <td>{{x.spUnits || ''}}</td>
+    </tr>
+    </tbody>
+    <tbody class="pageNoBreak">
+        <tr class="header-row">
+            <td><strong>Closing Inventory</strong></td>
+            <td></td>
+            <td></td>
+            <td>{{results.closingInventory.regularValue | pbCurrency}}</td>
+            <td>{{results.closingInventory.regularUnits || 0}}</td>
+            <td>{{results.closingInventory.repossessedValue | pbCurrency}}</td>
+            <td>{{results.closingInventory.repossessedUnits || 0}}</td>
+            <td>{{results.closingInventory.sparePartsValue | pbCurrency}}</td>
+            <td>{{results.closingInventory.sparePartsUnits || 0}}</td>
+        </tr>
+    </tbody>
+    </table>
+</div>

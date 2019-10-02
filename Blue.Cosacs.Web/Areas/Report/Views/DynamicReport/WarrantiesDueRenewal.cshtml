@@ -1,0 +1,54 @@
+﻿@{
+    ViewBag.Title = "Warranties Due Renewal Report";
+}
+<div data-module="report/WarrantiesDueRenewal" ng-controller="WarrantiesDueRenewalController"
+    class="ng-scope report" ng-cloak>
+    <div class="section">
+        Parameters
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group">
+            <label class="col col-lg-6 control-label">
+                {{ fasciaLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <select class="picklist" id="fascia" ui-select2 ng-model="fascia" placeholder="Select Fascia">
+                    <option></option>
+                    <option value="A">All</option>
+                    <option value="C">Courts</option>
+                     <option value="N">@ViewBag.NonCourts</option>
+                </select>
+            </div>
+        </div>
+        <div class="col col-lg-6 form-group">
+            <label class="col col-lg-6 control-label">
+                {{ branchLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <list name="listBranches" scope="branches" ng-model="branch" placeholder="Select branch"></list>
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    <div class="search row">
+        <div class="col col-lg-6 form-group" ng-class="{'has-error': !dateFrom }">
+            <label class="col col-lg-6 control-label">
+                {{ dateFromLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input ui-date="linkDatePicker" ng-model="dateFrom" placeholder="" class="date form-control" />
+            </div>
+        </div>
+        <div class="col col-lg-6 form-group" ng-class="{'has-error': !dateTo }">
+            <label class="col col-lg-6 control-label">
+                {{ dateToLabel }}
+            </label>
+            <div class="col col-lg-6">
+                <input ui-date="linkDatePicker" ng-model="dateTo" placeholder="" class="date form-control" />
+            </div>
+        </div>
+    </div>
+    <p class="searchrow" />
+    @{ Html.RenderPartial("GenericReportResult", ""); }
+</div>

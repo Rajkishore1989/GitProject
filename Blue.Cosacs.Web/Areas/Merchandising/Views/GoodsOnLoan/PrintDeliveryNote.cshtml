@@ -1,0 +1,163 @@
+﻿@model GoodsOnLoanPrintModel
+
+@{
+    ViewBag.Title = "Goods on Loan Delivery Note";
+    Layout = "~/Views/Shared/_Print.cshtml";
+    var pagesize = 5;
+}
+
+@section Head
+{
+    <style type="text/css">
+        .reject {
+            white-space: nowrap;
+        }
+
+            .reject span {
+                margin-left: 5px;
+            }
+
+        .rejection {
+            page-break-inside: avoid;
+        }
+
+        .block {
+            display: block;
+        }
+
+        .item td {
+            border-bottom: 1px solid black;
+            padding: 3px 2px;
+            vertical-align: top;
+        }
+
+        .watermark {
+            color: rgba(230, 230, 230, 0.3);
+            z-index: -100;
+            -webkit-transform: rotate(-45deg);
+            -moz-transform: rotate(-45deg);
+            position: absolute;
+            top: 400px;
+            left: 100px;
+            visibility: visible;
+        }
+
+        th.number, td.number {
+            text-align: right;
+        }
+
+        img {
+            vertical-align: middle;
+        }
+
+        .collection-attributes th {
+            text-align: left;
+            padding: 3px 2px;
+            width: 200px;
+        }
+
+        .collection-attributes td {
+            text-align: left;
+            padding: 3px 2px;
+        }
+
+        .larger {
+            font-size: 2.0em;
+        }
+    </style>
+}
+
+<div>
+    <header>
+        <div style="width:100%;display:inline-block;margin:0 0 20px 0;">
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    @if (Model.ServiceRequestId.HasValue)
+                    {
+                        <tr><th>Service Request No.:</th><td>@Model.ServiceRequestId</td></tr>
+                    }
+                    
+                    
+                   @if (Model.Type == "Customer")
+                   {
+                       <tr><th>Customer Id:</th><td>@Model.CustomerId</td></tr>
+                       <tr><th>Customer Name:</th><td>@string.Join(" ", Model.Title, Model.FirstName, Model.LastName)</td></tr>
+                        <tr><th>Contact Info:</th><td>@Html.Raw(string.Join("<br/>", Model.Contacts.Select(c => string.Format("{0} - {1}", c.Key, c.Value))))</td></tr> 
+                   }
+                   else
+                   {
+                       <tr><th>Buiness Name:</th><td>@Model.BusinessName</td></tr>
+                       <tr><th>Business Contact:</th><td>
+                           @string.Join("-", (new[] { Model.JobTitle, string.Join(" ", (new[] { Model.Title, Model.FirstName, Model.LastName }).Where(s => !string.IsNullOrWhiteSpace(s))) }).Where(s => !string.IsNullOrWhiteSpace(s)))
+                       </td></tr>
+                        <tr><th>Contact Info:</th><td>@Html.Raw(string.Join("<br/>", Model.DeliveryContactDetails.Select(c => string.Format("{0} - {1}", c.Key, c.Value))))</td></tr>
+                   }
+                    
+                    <tr><th>Address:</th><td>@Html.Raw(string.Join("<br/>", Model.AddressLine1, Model.AddressLine2, Model.TownCity))</td></tr>
+                    <tr><th>Postcode:</th><td>@Model.PostCode</td></tr>
+                    <tr><th>Stock Location:</th><td>@Model.StockLocation</td></tr>
+                </table>
+            </div>
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    <tr><th>Date Created:</th><td>@Model.CreatedOn</td></tr>
+                    <tr><th>Created By:</th><td>@Model.CreatedBy</td></tr>
+                </table>
+            </div>
+            <div style="display:inline-block;vertical-align:top;float:right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Goods on Loan #@Model.Id</div>
+                        <div class="barcode">@Html.Barcode("GLD$" + Model.Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@Model.CreatedOn</div>
+                        <div class="createdBy">@Model.CreatedBy</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    @for (var x = 0; x < Model.Products.Count; x += pagesize)
+    {
+        <div style="position: relative">
+            @if (Model.DeliveryPrinted)
+            {
+                <div class="copy-watermark">COPY</div>
+            }
+        </div>
+        @Html.Partial("PrintProduct", Model.Products.Skip(x).Take(pagesize).ToList())
+
+        <div class="sign" style="text-align: center">
+            <div>Customers Signature</div>
+            <div>Date and Time of Pick Up</div>
+        </div>
+
+        if (x + pagesize < Model.Products.Count)
+        {
+            <div class="leftFooter">
+                @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+            <div class="pageBreak"></div>
+        }
+        else
+        {
+            <div class="clear"></div>
+            <div class="larger" style="text-align:center;">
+                <div>@Model.Comments</div>
+            </div>
+            <div class="leftFooter">
+                @ViewBag.Title &nbsp;
+            </div>
+            <div class="rightFooter">
+                Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Products.Count / pagesize))
+            </div>
+            <div class="pageBreak"></div>
+        }
+    }
+</div>

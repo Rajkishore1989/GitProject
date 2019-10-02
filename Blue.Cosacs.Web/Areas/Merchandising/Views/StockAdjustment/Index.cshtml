@@ -1,0 +1,125 @@
+﻿@model object
+
+<div data-module="merchandising/stockAdjustment/init" ng-controller="StockAdjustmentSearchCtrl" ng-init="data=@Html.RawJson(Model)" ng-cloak class="buffer-sm bottom">
+
+    <div class="buffer-sm top" ng-form="stockAdjustmentSearchForm">
+
+        <div class="row buffer-sm bottom">
+            <div class="col-lg-12">
+                <div class="pull-right">
+                    <button id="buttonClear" class="clear btn btn-default" ng-click="clear()">Clear</button>
+                    <button class="btn btn-primary" ng-click="newSearch()" ng-enabled="canSearch()">Search</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">       
+            <div class="col-lg-3">
+                <label for="location">Location</label>
+                <list name="location" ng-model="param.locationId" scope="locations" placeholder="Select a Location"></list>
+            </div>
+            <div class="col-lg-3">
+           
+                <div class="form-group">
+                    <label for="primaryReason">Primary Reason</label>
+                    <list name="primaryReason" ng-model="param.primaryReasonId" scope="primaryReasons" placeholder="Select a Primary Reason"></list>
+            
+                </div>
+            </div>
+            <div class="col-lg-3">
+           
+                 <div class="form-group">
+                    <label for="secondaryReason">Secondary Reason</label>
+                    <list name="secondaryReason" ng-disabled="!secondaryReasons.length" ng-model="param.secondaryReasonId" scope="secondaryReasons" placeholder="Select a Secondary Reason"></list>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <label for="status">Status</label> 
+                    <list name="status" ng-model="param.approved" scope="statusOptions" placeholder="Select a Status"></list>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+           <div class="col-lg-3">           
+                <div class="form-group">
+                    <label for="minStockAdjustmentId">Stock Adjustment Id Min</label>
+                    <input class="form-control" pb-integer name="minStockAdjustmentId" ng-model="param.minStockAdjustmentId"/>    
+                </div>
+            </div>
+            <div class="col-lg-3">           
+                <div class="form-group">
+                    <label for="maxStockAdjustmentId">Stock Adjustment Id Max</label>
+                    <input class="form-control" pb-integer name="maxStockAdjustmentId" ng-model="param.maxStockAdjustmentId"/>    
+                </div>
+            </div>
+       
+           <div class="col-lg-3">           
+                <div class="form-group">
+                    <label for="minCreatedDate">Created From</label>
+                     <input class="form-control"  type="date" name="minCreatedDate" placeholder="Select Date" ng-model="param.minCreatedDate">
+                </div>
+            </div>
+            <div class="col-lg-3">           
+                <div class="form-group">
+                    <label for="maxCreatedDate">Created To</label> 
+                    <input class="form-control"  type="date" name="maxCreatedDate" placeholder="Select Date" ng-model="param.maxCreatedDate">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">                   
+        <table class="table table-striped table-bordered table-hover table-responsive active table-item" style=cursor:pointer ng-show="dataAvailable">
+            <thead>
+            <tr>
+                    <th>Stock Adjustment Id</th>
+                    <th>Status</th>  
+                    <th>Created Date</th>                                  
+                    <th>Location</th>
+                    <th>Primary Reason</th>
+                    <th>Secondary Reason</th>                   
+                    <th>Comments</th>
+                    <th>Total Cost</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in orderItemsResult">
+                    <td class="text-right">
+                            <a href="{{generateUrl('Merchandising/StockAdjustment/Detail/' + item.stockAdjustmentId)}}">#{{item.stockAdjustmentId}} </a>
+                    </td>
+                   <td>
+                            {{item.status}}
+                    </td>
+                    <td>
+                            {{item.createdDate | pbDate : true}}
+                    </td>
+                    <td>
+                        <a href="{{generateUrl('Merchandising/Locations/Detail/' + item.locationId)}}">{{item.location}}</a>
+                    </td>
+                    <td>
+                            <a href="{{generateUrl('Merchandising/StockAdjustmentReason')}}">{{item.primaryReason}}</a>
+                    </td>
+                    <td>
+                            <a href="{{generateUrl('Merchandising/StockAdjustmentReason')}}">{{item.secondaryReason}}</a>
+                    </td>
+                     
+                    
+                    <td>
+                            <span ng-model="item.comments" pb-ref-link></span>
+                    </td>
+                    <td  class="currency">
+                            {{item.totalCost | pbCurrency}}
+                    </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+           
+    <div ng-hide="dataAvailable">
+        There are no results matching your search filter.
+    </div>
+    <div ng-show="dataAvailable" class="text-center">
+            <pagination num-pages="pageCount" max-size="pageSize" current-page="pageIndex" on-select-page="selectPage(page)"></pagination>
+    </div>
+
+</div>

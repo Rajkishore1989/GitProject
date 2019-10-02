@@ -1,0 +1,113 @@
+﻿@model NegativeStockPrintModel
+
+@{
+    var rows = Model.Results;
+    var query = Model.Query;
+    var cols = Model.Query.ColIndices;
+    ViewBag.Title = "Negative Stock Report";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+@section Head
+{
+    <style type="text/css">
+        table {
+            margin: 10px !important;
+        }
+
+        td, th {
+            border: 1px solid #333 !important;
+            padding: 5px !important;
+        }
+
+            td.clear {
+                border: none !important;
+            }
+
+        tbody::before {
+            content: none !important;
+            display: none !important;
+            height: 0 !important;
+        }
+    </style>
+}
+
+<h3>Negative Stock Report @DateTime.Now.ToString("yyyy-MM-dd")</h3>
+
+<table class="noborder">
+    <tbody>
+        <tr>
+            <th class="col-sm">Period End: </th>
+            <td>@query.PeriodEndDate.ToPrintDateString()</td>
+        </tr>
+        @if (query.LocationId != null)
+        {
+            <tr>
+                <th class="col-sm">Location: </th>
+                <td>@(query.LocationId.ToString())</td>
+            </tr>
+        }
+        @if (!string.IsNullOrEmpty(query.Division))
+        {
+            <tr>
+                <th class="col-sm">Division: </th>
+                <td>@query.Division</td>
+            </tr>
+        }
+        @if (!string.IsNullOrEmpty(query.Department))
+        {
+            <tr>
+                <th class="col-sm">Department: </th>
+                <td>@query.Department</td>
+            </tr>
+        }
+        @if (!string.IsNullOrEmpty(query.Class))
+        {
+            <tr>
+                <th class="col-sm">Class: </th>
+                <td>@query.Class</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (rows.Any())
+{
+    <table class="main print">
+        <tbody>
+            <tr>
+                <th class="col-sm" @if (!cols.Contains(0)) { <text> style="display: none;" </text>  }>Division</th>
+                <th class="col-sm" @if (!cols.Contains(1)) { <text> style="display: none;" </text>  }>Department</th>
+                <th class="col-sm" @if (!cols.Contains(2)) { <text> style="display: none;" </text>  }>Class</th>
+                <th class="col-sm" @if (!cols.Contains(3)) { <text> style="display: none;" </text>  }>Sku</th>
+                <th class="col-sm" @if (!cols.Contains(3)) { <text> style="display: none;" </text>  }>Description</th>
+                <th class="col-sm" @if (!cols.Contains(4)) { <text> style="display: none;" </text>  }>Location</th>
+                <th class="col-sm" @if (!cols.Contains(5)) { <text> style="display: none;" </text>  }>Stock On Hand</th>
+                <th class="col-sm" @if (!cols.Contains(6)) { <text> style="display: none;" </text>  }>Unit Cost</th>
+                <th class="col-sm" @if (!cols.Contains(7)) { <text> style="display: none;" </text>  }>Stock Value</th>
+                <th class="col-sm" @if (!cols.Contains(8)) { <text> style="display: none;" </text>  }>Last Received Date</th>
+                <th class="col-sm" @if (!cols.Contains(9)) { <text> style="display: none;" </text>  }>Last Transaction Type</th>
+                <th class="col-sm" @if (!cols.Contains(10)) { <text> style="display: none;" </text>  }>Last Transaction Id</th>
+                <th class="col-sm" @if (!cols.Contains(11)) { <text> style="display: none;" </text>  }>Last Transaction Narration</th>
+                <th class="col-sm" @if (!cols.Contains(12)) { <text> style="display: none;" </text>  }>Last Transaction Date</th>
+            </tr>
+            @foreach (var row in rows)
+            {
+                <tr>
+                    <td @if (!cols.Contains(0)) { <text> style="display: none;" </text>  }>@row.Division</td>
+                    <td @if (!cols.Contains(1)) { <text> style="display: none;" </text>  }>@row.Department</td>
+                    <td @if (!cols.Contains(2)) { <text> style="display: none;" </text>  }>@row.Class</td>
+                    <td @if (!cols.Contains(3)) { <text> style="display: none;" </text>  }>@row.Sku</td>
+                    <td @if (!cols.Contains(3)) { <text> style="display: none;" </text>  }>@row.Description</td>
+                    <td @if (!cols.Contains(4)) { <text> style="display: none;" </text>  }>@row.Location</td>
+                    <td @if (!cols.Contains(5)) { <text> style="display: none;" </text>  }>@row.StockOnHandQuantity</td>
+                    <td @if (!cols.Contains(6)) { <text> style="display: none;" </text>  }>@row.AverageWeightedCost</td>
+                    <td @if (!cols.Contains(7)) { <text> style="display: none;" </text>  }>@row.StockOnHandValue</td>
+                    <td @if (!cols.Contains(8)) { <text> style="display: none;" </text>  }>@row.DateLastReceived.ToPrintDateString()</td>
+                    <td @if (!cols.Contains(9)) { <text> style="display: none;" </text>  }>@row.LastTransactionType</td>
+                    <td @if (!cols.Contains(10)) { <text> style="display: none;" </text>  }>@row.LastTransactionId</td>
+                    <td @if (!cols.Contains(11)) { <text> style="display: none;" </text>  }>@row.LastTransactionNarration</td>
+                    <td @if (!cols.Contains(12)) { <text> style="display: none;" </text>  }>@row.LastTransactionDate.ToPrintDateString()</td>
+                </tr>            }
+        </tbody>
+    </table>}

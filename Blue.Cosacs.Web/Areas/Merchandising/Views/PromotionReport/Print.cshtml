@@ -1,0 +1,98 @@
+﻿@model object
+
+@{
+    ViewBag.Title = "Promotions Report";
+    Layout = "~/Views/Shared/_Print.cshtml";
+}
+
+@section Head
+{
+    <style type="text/css">
+       
+        td {
+            border: 1px solid #333 !important;
+            padding: 5px !important;
+        }
+        
+        tbody::before {
+            content: none !important;
+            display: none !important;
+            height: 0 !important;
+        }
+
+        .buffer {
+            padding: 10px;
+        }
+
+    </style>
+}
+<div data-module="merchandising/reports/promotionReport/init" ng-controller="PromotionReportPrintCtrl" ng-init="result=@Html.RawJson(Model)" class="ng-scope" ng-cloak>
+
+    <div class="buffer header-info">
+        <h2>@ViewBag.Title</h2>
+        <table>
+            <tr>
+                <td>
+                    <label for="perfType">Location: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="perfType">{{vm.query.locationName}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fascia">Fascia: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="fascia">{{vm.query.fascia}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="fascia">Promotions: </label>
+                </td>
+                <td>
+                    <span class="form-control-static" id="tags">{{vm.query.promotions}}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <div class="buffer">
+        <table class="main buffer bordered">
+            <tbody ng-repeat="pg in vm.pages" ng-class="{true: 'pageBreak', false: 'pageNoBreak'}[vm.pages.length > 1]">
+                <tr ng-show="pg.length > 0">
+                    <th>Location</th>
+                    <th>SKU</th>
+                    <th>Item Description</th>
+                    <th class="quantity">Quantity Sold</th>
+                    <th>Promotion</th>
+                    <th class="currency">AWC</th>
+                    <th class="currency">Promotional Cash Price</th>
+                    <th class="currency">Total Promo Cash Value</th>
+                    <th class="currency">Promotional Margin</th>
+                    <th class="currency">Total Promo Margin Value</th>
+                    <th class="currency">Cash Price</th>
+                    <th class="currency">Cash Margin</th>
+                </tr>
+                <tr ng-repeat="x in pg" ng-show="pg.length > 0">
+                    <td>{{x.locationName}}</td>
+                    <td>{{x.sku}}</td>
+                    <td>{{x.longDescription}}</td>
+                    <td class="quantity">{{x.quantity}}</td>
+                    <td>{{x.promotionName}}</td>
+                    <td class="currency">{{x.averageWeightedCost | pbCurrency}}</td>
+                    <td class="currency">{{x.price | pbCurrency}}</td>
+                    <td class="currency">{{x.netTotal | pbCurrency}}</td>
+                    <td class="currency">{{x.promotionalMargin | pbPercentage}}</td>
+                    <td class="currency">{{x.promotionalTotal | pbCurrency}}</td>
+                    <td class="currency">{{x.cashPrice | pbCurrency}}</td>
+                    <td class="currency">{{x.cashMargin | pbPercentage }}</td>
+                </tr>
+                <tr ng-hide="vm.pages">
+                    <td colspan="12">There are no results matching the query.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

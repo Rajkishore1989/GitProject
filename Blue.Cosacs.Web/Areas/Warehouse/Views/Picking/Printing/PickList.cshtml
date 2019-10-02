@@ -1,0 +1,58 @@
+﻿@model IList<Blue.Cosacs.Warehouse.PickListView>
+@using Blue.Cosacs.Warehouse.Utils
+@using Blue.Cosacs
+@using Blue.Cosacs.Web.Areas.Warehouse.Models
+
+<div class="pick-list" data-module="warehouse/picklistPrinting">
+   @{var now = DateTime.Now;}
+    <header>
+        <div style="width:100%;display:inline-block;margin:0px 0px 20px 0px;">
+            <div style="display:inline-block;vertical-align:top;">
+                <table class="header-info">
+                    <tr><th>Picking Branch:</th><td class="branchNo">@Model[0].DeliveryBranch</td></tr>
+                    <tr><th>Picked By:</th><td class="pickedBy">@Model[0].PickedByLogin</td></tr>
+                    <tr><th>Checked By:</th><td class="checkedBy">@Model[0].CheckedByLogin</td></tr>
+                    <!-- tr><th>Picked By:</th><td class="PickedBy"> {((Blue.Cosacs.Warehouse.PickListView)Model[0].PickedByLogin; } </td></tr -->
+                    <tr><th>Number of Items:</th><td>@Model.Sum(s => s.Quantity)</td></tr>
+                </table>
+            </div>
+            <div style="display:inline-block;vertical-align:top;float:right;">
+                <div class="document-id">
+                    <div>
+                        <div class="ref">Pick List #@Model[0].Id.ToString("D8")</div>
+                        <div class="barcode">@Html.Barcode("PL$" + Model[0].Id, BarcodeLib.TYPE.CODE128, 150, 30, false, BarcodeLib.AlignmentPositions.CENTER)</div>
+                    </div>
+                    <div>
+                        <div class="createdOn">@Model[0].CreatedOn.ToLocalTime().ToString("f")</div>        
+                        <div class="createdBy">@Model[0].CreatedByLogin - @Model[0].CreatedByName</div>     
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </header>
+
+    @{var pagesize = 6;}
+    @for (var x = 0; x < Model.Count; x += pagesize)
+    {
+        <div style="position:relative">
+            <div class="watermark">COPY</div>
+        </div>
+        @Html.Partial("Printing/PickListPage", new PickListViewPrint(Model
+			.Skip(x)
+			.Take(pagesize)
+			.ToList()));
+        <div class="leftFooter">
+            Pick List #@Model[0].Id.ToString("D8") &nbsp;
+        </div>
+        <div class="rightFooter">
+            Page @((x / pagesize) + 1) of @(Math.Ceiling((decimal)Model.Count / (decimal)pagesize))
+        </div>
+        if (x + pagesize < Model.Count)
+        {
+            <div class="pageBreak"></div>
+        }
+    }
+</div>
+
+   
